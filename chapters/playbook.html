@@ -1,0 +1,854 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="icon" href="../favicon.ico" sizes="any">
+<link rel="icon" href="../favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="../apple-touch-icon.png">
+<title>AX 플레이북: 우리 팀 설계하기 · AXBook</title>
+<meta name="description" content="1장 자가진단 결과와 팀 프로필, 고통점, 정보 거주지를 입력해 첫 유스케이스 캔버스와 주차별 90일 계획, 성공 지표, 리스크 통제, 이해관계자 표를 자동으로 만드는 AX 플래너.">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+<link rel="stylesheet" href="../css/style.css">
+<script src="../js/common.js"></script>
+<style>
+  [hidden] { display: none !important; }
+  .pb-tabs { display: flex; flex-wrap: wrap; gap: 6px; padding: 12px 18px; border-bottom: 1px solid var(--border); background: var(--surface); }
+  .pb-tabs button { font: inherit; font-size: 13px; border: 1px solid var(--border); background: var(--bg-elev); color: var(--text-dim); padding: 5px 10px; border-radius: 999px; cursor: pointer; }
+  .pb-tabs button .n { font-family: var(--mono); font-weight: 700; margin-right: 4px; color: var(--text-faint); }
+  .pb-tabs button.on { border-color: var(--accent); color: var(--accent); font-weight: 700; background: var(--accent-soft); }
+  .pb-tabs button.on .n { color: var(--accent); }
+  .pb-tabs button.filled .n { color: var(--ok); }
+  .pb-panel { padding: 16px 18px; background: var(--canvas-bg); }
+  .pb-panel > h4 { margin: 0 0 4px; font-size: 16px; }
+  .pb-panel > p.hint { margin: 0 0 14px; font-size: 14px; color: var(--text-dim); }
+  .pb-grid { display: grid; gap: 14px 22px; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); }
+  .pb-checks { display: grid; gap: 8px; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); }
+  .pb-checks .check { color: var(--text); padding: 8px 10px; border: 1px solid var(--border); border-radius: 9px; background: var(--bg-elev); align-items: flex-start; line-height: 1.45; }
+  .pb-checks .check small { display: block; color: var(--text-faint); font-size: 12px; }
+  .pb-checks .check input { margin-top: 2px; flex: none; }
+  .pb-status { font-size: 14px; padding: 10px 12px; border-radius: 8px; margin-bottom: 14px; background: var(--surface); color: var(--text-dim); }
+  .pb-status.ok { background: color-mix(in srgb, var(--ok) 12%, transparent); color: var(--text); }
+  .pb-radar { max-width: 360px; margin: 0 auto 10px; }
+  .pb-uc { display: grid; gap: 8px; }
+  .pb-uc label { display: grid; grid-template-columns: 20px 1fr; gap: 8px; padding: 10px 12px; border: 1px solid var(--border); border-radius: 10px; background: var(--bg-elev); cursor: pointer; font-size: 14.5px; line-height: 1.5; }
+  .pb-uc label:has(input:checked) { border-color: var(--accent); background: var(--accent-soft); }
+  .pb-uc input { accent-color: var(--accent); margin-top: 3px; }
+  .pb-uc .meta { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 4px; }
+  .pb-uc .desc { color: var(--text-dim); font-size: 13.5px; }
+  .pb-nav { display: flex; justify-content: space-between; gap: 8px; padding: 12px 18px; border-top: 1px solid var(--border); }
+  .pb-result { margin: 28px 0; border: 1px solid var(--border); border-radius: var(--radius); background: var(--bg-elev); box-shadow: var(--shadow); overflow: hidden; }
+  .pb-actions { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; padding: 12px 18px; border-bottom: 1px solid var(--border); background: var(--surface); }
+  .pb-actions .msg { font-size: 13px; color: var(--text-dim); }
+  #pb-out { padding: 18px; font-size: 15px; }
+  #pb-out h3 { margin: 26px 0 10px; font-size: 18px; }
+  #pb-out h3:first-child { margin-top: 0; }
+  #pb-out .empty { color: var(--text-dim); text-align: center; padding: 24px; border: 1px dashed var(--border); border-radius: 10px; }
+  .pb-canvas { display: grid; gap: 8px; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); }
+  .pb-canvas > div { border: 1px solid var(--border); border-radius: 9px; padding: 10px 12px; background: var(--surface); font-size: 14px; }
+  .pb-canvas > div b { display: block; font-size: 12px; letter-spacing: .04em; color: var(--accent); margin-bottom: 4px; }
+  .pb-canvas > div.wide { grid-column: 1 / -1; }
+  .pb-weeks td ul { margin: 0; padding-left: 16px; }
+  .pb-weeks td li { margin: 2px 0; }
+  .pb-weeks td.wk { font-family: var(--mono); white-space: nowrap; font-weight: 700; }
+  .pb-weeks li.add { color: var(--accent-2); }
+  @media (max-width: 640px) {
+    .pb-weeks thead { display: none; }
+    .pb-weeks tr { display: block; border-bottom: 1px solid var(--border); padding: 8px 0; }
+    .pb-weeks td { display: block; border: 0; padding: 2px 12px; }
+    .pb-weeks td.wk { display: inline-block; padding-right: 4px; }
+    .pb-weeks td:nth-child(2) { display: inline-block; color: var(--accent); font-weight: 700; }
+    .pb-weeks td:nth-child(4):not(:empty)::before { content: "산출물: "; color: var(--text-faint); }
+    #pb-out table:not(.pb-weeks) { min-width: 520px; }
+  }
+  .pb-one { border: 1px solid var(--border); border-radius: 10px; padding: 14px 16px; background: var(--surface); font-size: 14.5px; }
+  .pb-one dl { margin: 0; display: grid; grid-template-columns: minmax(0, 1fr); gap: 2px 14px; }
+  @media (min-width: 640px) { .pb-one dl { grid-template-columns: 130px minmax(0, 1fr); } }
+  .pb-one dt { font-weight: 700; color: var(--text); }
+  .pb-one dd { margin: 0 0 8px; color: var(--text-dim); }
+  .pb-copybox { width: 100%; min-height: 160px; font-family: var(--mono); font-size: 12px; margin: 10px 18px 0; max-width: calc(100% - 36px); background: var(--surface); color: var(--text); border: 1px solid var(--border); border-radius: 8px; }
+  @media print {
+    .chapter-hero, main.chapter > section:not(#planner), #planner > :not(.pb-result), .pb-actions, .pb-copybox, figure { display: none !important; }
+    .pb-result { box-shadow: none; border: 0; }
+    #pb-out { padding: 0; }
+    #pb-out table { font-size: 11px; }
+  }
+</style>
+<!-- Cloudflare Web Analytics -->
+<script type='module' src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "3d6151a0abc94ede89285d462527fa80"}'></script>
+<!-- End Cloudflare Web Analytics -->
+</head>
+<body data-chapter="playbook">
+<main class="chapter">
+  <header class="chapter-hero">
+    <div class="eyebrow">Chapter 14</div>
+    <h1>AX 플레이북: 우리 팀 설계하기</h1>
+    <p class="lead">책 전체의 내용을 우리 팀의 다음 90일로 바꾸는 장이다. 1장의 자가진단 점수, 팀의 업무와 규모, 지금 가장 아픈 곳, 정보가 사는 곳을 입력하면 첫 유스케이스 캔버스와 주차별 실행 계획, 성공 지표, 리스크 통제, 이해관계자 표가 초안으로 만들어진다. 초안은 출발점일 뿐이다. 팀과 함께 고치고, 스폰서와 합의하는 데 쓰자.</p>
+    <ul class="objectives">
+      <li>진단 → 팀 프로필 → 고통점 → 정보 거주지 → 첫 유스케이스 순서로 우리 팀의 AX 출발점을 정의할 수 있다.</li>
+      <li>"가시화 → 표준화 → 데이터 준비 → 구축 → 파일럿 → 측정 → 결정"으로 이어지는 90일 계획의 구조와 각 주차의 산출물을 설명할 수 있다.</li>
+      <li>리더가 착수 전에 던져야 할 질문과 경영진 보고용 한 장 요약의 구성을 안다.</li>
+      <li>파일럿 연옥, 기대 과잉, 측정 부재 같은 흔한 실패 패턴을 미리 알아보고 처방을 계획에 넣을 수 있다.</li>
+    </ul>
+  </header>
+
+  <!-- ============================================================ 1 -->
+  <section id="howto">
+    <h2>플레이북 사용법</h2>
+    <p>이 장의 플래너는 정답을 주는 도구가 아니라 <b>첫 회의의 초안</b>을 만드는 도구다. 팀장이나 AX 담당자가 혼자 30분 동안 채워 보고, 결과를 출력해 팀원·스폰서와 함께 고치는 방식을 권한다. 입력값은 이 브라우저에 저장되므로 언제든 돌아와 수정할 수 있다.</p>
+    <figure class="diagram">
+      <svg viewBox="0 0 720 200" role="img" aria-label="플래너 흐름: 진단, 팀 프로필, 고통점, 정보 거주지, 첫 유스케이스를 입력하면 90일 계획, 유스케이스 캔버스, 지표, 리스크, 이해관계자가 생성된다">
+        <g>
+          <rect x="10" y="20" width="104" height="56" rx="10" class="f-surface"/><text x="62" y="44" text-anchor="middle" class="t">① 진단</text><text x="62" y="63" text-anchor="middle" class="t-mono">1장 8개 차원</text>
+          <rect x="124" y="20" width="104" height="56" rx="10" class="f-surface"/><text x="176" y="44" text-anchor="middle" class="t">② 팀 프로필</text><text x="176" y="63" text-anchor="middle" class="t-mono">기능·규모</text>
+          <rect x="238" y="20" width="104" height="56" rx="10" class="f-surface"/><text x="290" y="44" text-anchor="middle" class="t">③ 고통점</text><text x="290" y="63" text-anchor="middle" class="t-mono">지금 아픈 곳</text>
+          <rect x="352" y="20" width="104" height="56" rx="10" class="f-surface"/><text x="404" y="44" text-anchor="middle" class="t">④ 정보 거주지</text><text x="404" y="63" text-anchor="middle" class="t-mono">2장</text>
+          <rect x="466" y="20" width="104" height="56" rx="10" class="f-surface"/><text x="518" y="44" text-anchor="middle" class="t">⑤ 유스케이스</text><text x="518" y="63" text-anchor="middle" class="t-mono">7장</text>
+          <rect x="580" y="20" width="130" height="56" rx="10" class="f-acc-soft"/><text x="645" y="44" text-anchor="middle" class="t-acc">⑥ 생성</text><text x="645" y="63" text-anchor="middle" class="t-mono">초안 → 팀 검토</text>
+        </g>
+        <g class="s-line"><path d="M114 48 H124"/><path d="M228 48 H238"/><path d="M342 48 H352"/><path d="M456 48 H466"/><path d="M570 48 H580"/><path d="M645 76 V110"/></g>
+        <g>
+          <rect x="40" y="120" width="120" height="50" rx="9" class="f-acc2-soft"/><text x="100" y="150" text-anchor="middle" class="t">90일 주차 계획</text>
+          <rect x="172" y="120" width="120" height="50" rx="9" class="f-acc2-soft"/><text x="232" y="150" text-anchor="middle" class="t">유스케이스 캔버스</text>
+          <rect x="304" y="120" width="120" height="50" rx="9" class="f-acc2-soft"/><text x="364" y="150" text-anchor="middle" class="t">성공 지표(KPI)</text>
+          <rect x="436" y="120" width="120" height="50" rx="9" class="f-acc2-soft"/><text x="496" y="150" text-anchor="middle" class="t">리스크·통제</text>
+          <rect x="568" y="120" width="142" height="50" rx="9" class="f-acc2-soft"/><text x="639" y="142" text-anchor="middle" class="t">이해관계자</text><text x="639" y="160" text-anchor="middle" class="t-mono">+ 한 장 요약</text>
+        </g>
+        <path d="M100 110 H645" class="s-axis"/>
+        <text x="10" y="194" class="t-dim">입력은 브라우저에 저장된다. 진단 점수는 1장과 같은 저장소("assessment")를 쓴다.</text>
+      </svg>
+      <figcaption><b>그림 14-1.</b> 플래너의 흐름. 다섯 가지 입력이 여섯 가지 산출물로 바뀐다. 각 산출물은 앞 장들의 도구를 우리 팀 크기로 줄인 것이다.</figcaption>
+    </figure>
+    <ol class="ladder">
+      <li><b>진단 불러오기</b><a href="why.html">1장</a>에서 자가진단을 했다면 점수가 자동으로 들어온다. 하지 않았다면 여기서 8개 차원을 1~5점으로 입력하고 저장한다. 가장 낮은 두 차원이 계획의 "기반 작업"으로 들어간다.</li>
+      <li><b>팀 프로필</b>기능(품질, 생산, 설비 …)에 따라 유스케이스 후보와 인접 부서가 달라진다. 인원은 파일럿 사용자 수와 챔피언 수를 정하는 데 쓰인다.</li>
+      <li><b>고통점과 정보 거주지</b>체크한 항목마다 해당 주차에 처방 작업이 추가된다. 예를 들어 "메일 속 데이터"를 고르면 3주차에 메일 샘플 구조화 실습이 들어간다.</li>
+      <li><b>첫 유스케이스</b>기능별 후보 중 하나를 고른다. 진단 평균이 낮으면 난이도가 낮은 후보에 "추천" 표시가 붙는다.</li>
+      <li><b>생성·검토·공유</b>결과를 텍스트로 복사해 메일·문서에 붙이거나 인쇄한다. 숫자 목표는 일부러 비워 두었다. 기준값을 잰 뒤 팀이 정해야 하기 때문이다.</li>
+    </ol>
+  </section>
+
+  <!-- ============================================================ 2 -->
+  <section id="planner">
+    <h2>플래너: 우리 팀의 90일 만들기</h2>
+    <p>90일 계획의 뼈대는 <a href="roadmap.html">12장</a>의 여섯 단계를 한 업무에 압축한 "얇은 수직 슬라이스"다. 첫 3주는 보고 재고, 다음 3주는 맞추고 모으고, 그다음 4주는 만들고 써 보고, 마지막 3주는 재고 결정한다. 플래너는 이 뼈대 위에 우리 팀의 약점과 고통점에 맞춘 작업을 끼워 넣는다.</p>
+    <figure class="diagram">
+      <svg viewBox="0 0 720 150" role="img" aria-label="90일 계획의 단계: 1주 정렬, 2~3주 가시화, 4~5주 표준화, 6주 데이터 준비, 7~8주 구축·평가, 9~10주 파일럿, 11~12주 측정, 13주 결정">
+        <g>
+          <rect x="10" y="40" width="50" height="44" rx="6" class="f-acc-soft"/><text x="35" y="67" text-anchor="middle" class="t">정렬</text>
+          <rect x="62" y="40" width="102" height="44" rx="6" class="f-surface"/><text x="113" y="67" text-anchor="middle" class="t">가시화</text>
+          <rect x="166" y="40" width="102" height="44" rx="6" class="f-surface"/><text x="217" y="67" text-anchor="middle" class="t">표준화</text>
+          <rect x="270" y="40" width="50" height="44" rx="6" class="f-surface"/><text x="295" y="67" text-anchor="middle" class="t">데이터</text>
+          <rect x="322" y="40" width="102" height="44" rx="6" class="f-acc2-soft"/><text x="373" y="67" text-anchor="middle" class="t">구축·평가</text>
+          <rect x="426" y="40" width="102" height="44" rx="6" class="f-acc2-soft"/><text x="477" y="67" text-anchor="middle" class="t">파일럿</text>
+          <rect x="530" y="40" width="102" height="44" rx="6" class="f-surface"/><text x="581" y="67" text-anchor="middle" class="t">측정·안정화</text>
+          <rect x="634" y="40" width="76" height="44" rx="6" class="f-acc-soft"/><text x="672" y="67" text-anchor="middle" class="t-acc">결정</text>
+        </g>
+        <g class="t-mono">
+          <text x="35" y="30" text-anchor="middle" class="t-mono">W1</text><text x="113" y="30" text-anchor="middle" class="t-mono">W2–3</text><text x="217" y="30" text-anchor="middle" class="t-mono">W4–5</text><text x="295" y="30" text-anchor="middle" class="t-mono">W6</text>
+          <text x="373" y="30" text-anchor="middle" class="t-mono">W7–8</text><text x="477" y="30" text-anchor="middle" class="t-mono">W9–10</text><text x="581" y="30" text-anchor="middle" class="t-mono">W11–12</text><text x="672" y="30" text-anchor="middle" class="t-mono">W13</text>
+        </g>
+        <path d="M10 104 H320" class="s-acc"/><text x="165" y="124" text-anchor="middle" class="t-dim">기반: 보고, 재고, 맞추고, 모은다 (6주)</text>
+        <path d="M322 104 H710" class="s-line"/><text x="516" y="124" text-anchor="middle" class="t-dim">AI: 만들고, 써 보고, 재고, 결정한다 (7주)</text>
+        <text x="10" y="146" class="t-mono">기준값 측정은 W2에 시작해야 W11에 비교할 수 있다</text>
+      </svg>
+      <figcaption><b>그림 14-2.</b> 90일 계획의 기본 뼈대. 절반 가까이가 AI 이전의 기반 작업이다. 이 비율은 <a href="cases.html">13장</a>의 사례들이 첫 3개월에 실제로 한 일과 같다.</figcaption>
+    </figure>
+
+    <div class="sim" id="sim-pb">
+      <div class="sim-head"><span class="sim-tag">INTERACTIVE</span><h3>AX 플래너 — 진단에서 90일 계획까지</h3></div>
+      <div class="pb-tabs" id="pb-tabs">
+        <button type="button" data-step="1"><span class="n">1</span>진단</button>
+        <button type="button" data-step="2"><span class="n">2</span>팀 프로필</button>
+        <button type="button" data-step="3"><span class="n">3</span>고통점</button>
+        <button type="button" data-step="4"><span class="n">4</span>정보 거주지</button>
+        <button type="button" data-step="5"><span class="n">5</span>첫 유스케이스</button>
+        <button type="button" data-step="6"><span class="n">6</span>생성</button>
+      </div>
+
+      <div class="pb-panel" data-step="1">
+        <h4>1. 자가진단 점수</h4>
+        <p class="hint">1점 = 거의 없음, 3점 = 일부 팀에서 시작, 5점 = 전사적으로 정착. 가장 낮은 두 차원이 계획의 기반 작업이 된다.</p>
+        <div class="pb-status" id="pb-as-status">—</div>
+        <div class="pb-radar"><canvas id="cv-pb-radar"></canvas></div>
+        <div class="pb-grid" id="pb-dims"></div>
+        <div class="ctrl-row" style="margin-top:14px"><button type="button" class="btn" id="pb-as-save">이 점수로 진단 저장</button><span class="pb-status" id="pb-as-saved" style="margin:0;padding:4px 10px" hidden>저장했다</span></div>
+      </div>
+
+      <div class="pb-panel" data-step="2" hidden>
+        <h4>2. 팀 프로필</h4>
+        <p class="hint">기능에 따라 유스케이스 후보와 인접 이해관계자가 달라진다.</p>
+        <div class="pb-grid">
+          <label class="ctrl"><span>팀 이름</span><input type="text" class="ax-input" id="pb-name" placeholder="예: 품질보증 2파트" maxlength="40"></label>
+          <label class="ctrl"><span>기능</span><select id="pb-fn">
+            <option value="quality">품질</option><option value="production">생산</option><option value="equipment">설비</option><option value="rnd">R&amp;D</option><option value="scm">구매·SCM</option><option value="sales">영업·고객</option><option value="support">경영지원</option>
+          </select></label>
+          <label class="ctrl"><span>팀 인원 <output id="pb-size-out"></output></span><input type="range" id="pb-size" min="3" max="150" value="20"></label>
+          <label class="ctrl"><span>핵심 멤버 주당 참여 시간 <output id="pb-hours-out"></output></span><input type="range" id="pb-hours" min="1" max="12" value="4"></label>
+        </div>
+      </div>
+
+      <div class="pb-panel" data-step="3" hidden>
+        <h4>3. 지금 가장 아픈 곳</h4>
+        <p class="hint">해당하는 것을 모두 고른다. 각 항목에 맞는 처방 작업이 계획에 추가된다.</p>
+        <div class="pb-checks" id="pb-pains"></div>
+      </div>
+
+      <div class="pb-panel" data-step="4" hidden>
+        <h4>4. 우리 팀 정보는 주로 어디에 사는가</h4>
+        <p class="hint"><a href="legacy.html">2장</a>의 정보 거주지 지도를 떠올리자. 대상 업무의 정보가 많이 사는 곳을 고른다. 인벤토리와 데이터 준비 작업의 대상이 된다.</p>
+        <div class="pb-checks" id="pb-homes"></div>
+      </div>
+
+      <div class="pb-panel" data-step="5" hidden>
+        <h4>5. 첫 유스케이스</h4>
+        <p class="hint" id="pb-uc-hint">기능별 후보 중 하나를 고른다.</p>
+        <div class="pb-uc" id="pb-uc"></div>
+      </div>
+
+      <div class="pb-panel" data-step="6" hidden>
+        <h4>6. 계획 생성</h4>
+        <p class="hint">아래 버튼을 누르면 이 카드 아래에 계획 초안이 만들어진다. 입력을 바꾼 뒤 다시 누르면 갱신된다.</p>
+        <button type="button" class="btn primary" id="pb-gen">90일 계획 생성</button>
+      </div>
+
+      <div class="pb-nav"><button type="button" class="btn" id="pb-prev">← 이전</button><button type="button" class="btn primary" id="pb-next">다음 →</button></div>
+      <div class="sim-readout">
+        <div class="stat"><span class="k">진단 평균</span><span class="v" id="pb-o-avg">—</span></div>
+        <div class="stat"><span class="k">가장 약한 고리</span><span class="v" id="pb-o-weak" style="font-size:14px">—</span></div>
+        <div class="stat"><span class="k">고통점</span><span class="v" id="pb-o-pains">—</span></div>
+        <div class="stat"><span class="k">첫 유스케이스</span><span class="v" id="pb-o-uc" style="font-size:14px">—</span></div>
+      </div>
+      <div class="sim-note">입력값은 이 브라우저에만 저장된다(서버로 전송되지 않음). 진단 점수를 저장하면 1장 자가진단 결과도 같은 값으로 바뀐다. 생성된 계획의 주차·작업은 교육용 기본 틀이며, 목표 수치는 기준값을 잰 뒤 팀이 정한다.</div>
+    </div>
+
+    <div class="pb-result" id="pb-result">
+      <div class="pb-actions">
+        <button type="button" class="btn" id="pb-copy">텍스트로 복사</button>
+        <button type="button" class="btn" id="pb-print">인쇄</button>
+        <span class="msg" id="pb-msg"></span>
+      </div>
+      <div id="pb-out"><div class="empty">플래너 6단계에서 "90일 계획 생성"을 누르면 여기에 계획이 나타난다.</div></div>
+    </div>
+  </section>
+
+  <!-- ============================================================ 3 -->
+  <section id="questions">
+    <h2>리더를 위한 질문 리스트</h2>
+    <p>플래너가 만든 초안을 들고 첫 회의에 들어가기 전에, 팀장·파트장이 스스로 답해 봐야 할 질문들이다. 답이 "모르겠다"인 질문이 바로 계획의 첫 작업이다.</p>
+    <div class="cards">
+      <div class="card"><span class="k">방향</span><h4>왜, 무엇을</h4><ul class="checklist">
+        <li>이 업무가 1년 뒤 어떻게 달라져 있으면 성공인가? 한 문장으로 말할 수 있는가?</li>
+        <li>왜 이 업무부터인가? 빈도·고통·데이터 준비도로 설명할 수 있는가?</li>
+        <li>하지 않을 일(범위 밖)을 정했는가?</li></ul></div>
+      <div class="card"><span class="k">데이터</span><h4>무엇으로</h4><ul class="checklist">
+        <li>이 업무의 "1건"은 무엇이고, 그 필드를 적을 수 있는가?</li>
+        <li>최근 50건의 과거 사례를 하루 안에 모을 수 있는가?</li>
+        <li>그 데이터의 오너는 누구이고, 외부 AI 도구에 넣어도 되는 등급인가?</li></ul></div>
+      <div class="card"><span class="k">프로세스</span><h4>어떻게</h4><ul class="checklist">
+        <li>지금 이 업무를 팀원 세 명이 같은 순서로 처리하는가?</li>
+        <li>AI가 끼어들 지점과 사람이 승인할 지점을 그림으로 그릴 수 있는가?</li>
+        <li>예외 상황은 누가, 어떤 기준으로 판단하는가?</li></ul></div>
+      <div class="card"><span class="k">사람</span><h4>누구와</h4><ul class="checklist">
+        <li>현업 주인(프로덕트 오너)이 이름으로 정해져 있고, 시간을 낼 수 있는가?</li>
+        <li>가장 회의적인 팀원은 누구이며, 그 사람의 우려는 무엇인가?</li>
+        <li>절약된 시간을 무엇에 쓸지 팀원과 이야기했는가?</li></ul></div>
+      <div class="card"><span class="k">리스크</span><h4>무엇을 조심</h4><ul class="checklist">
+        <li>AI가 틀렸을 때 누가 언제 알아채는가? 그 비용은 얼마인가?</li>
+        <li>정보보안·법무와 언제 처음 이야기하는가? (마지막 주가 아니어야 한다)</li>
+        <li>고객·외부로 나가는 산출물이 있는가?</li></ul></div>
+      <div class="card"><span class="k">측정</span><h4>어떻게 알까</h4><ul class="checklist">
+        <li>기준값을 언제, 어떤 정의로 재는가?</li>
+        <li>90일 뒤 "확산 / 수정 / 중단" 결정을 무엇으로 내리는가?</li>
+        <li>사용량(채택)과 성과를 따로 재고 있는가?</li></ul></div>
+    </div>
+    <div class="callout"><strong>질문의 순서</strong><p>리더들이 가장 먼저 묻는 질문은 보통 "어떤 AI 도구를 쓸까?"다. 이 리스트에는 그 질문이 없다. 도구 선택은 데이터 등급(<a href="governance.html">10장</a>)과 유스케이스 유형(<a href="usecases.html">7장</a>)이 정해지면 대부분 저절로 좁혀진다.</p></div>
+  </section>
+
+  <!-- ============================================================ 4 -->
+  <section id="onepager">
+    <h2>경영진 보고용 한 장 요약 템플릿</h2>
+    <p>90일이 끝나면 경영진에게 결정을 요청해야 한다. 이때 30쪽짜리 PPT는 <a href="legacy.html">2장</a>에서 본 "그림으로 저장된 데이터"를 하나 더 만드는 일이다. 한 장에 다음 일곱 칸만 채우자. 플래너의 결과에도 같은 구조의 초안이 포함된다.</p>
+    <figure class="diagram">
+      <svg viewBox="0 0 560 330" role="img" aria-label="한 장 요약 레이아웃: 제목과 결정 요청, 문제, 한 일, 결과, 배운 것, 리스크, 다음 90일">
+        <rect x="10" y="10" width="540" height="310" rx="10" class="f-elev"/>
+        <rect x="26" y="24" width="508" height="44" rx="6" class="f-acc-soft"/>
+        <text x="40" y="44" class="t-acc">제목: [팀] [업무] AX 90일 결과</text>
+        <text x="40" y="60" class="t-dim">결정 요청: 확산 / 수정 후 계속 / 중단 — 한 줄</text>
+        <rect x="26" y="80" width="248" height="70" rx="6" class="f-surface"/><text x="38" y="100" class="t">① 문제</text><text x="38" y="120" class="t-dim">무엇이, 얼마나 아팠나</text><text x="38" y="138" class="t-dim">(기준값 포함)</text>
+        <rect x="286" y="80" width="248" height="70" rx="6" class="f-surface"/><text x="298" y="100" class="t">② 한 일</text><text x="298" y="120" class="t-dim">데이터·프로세스·AI 각 1줄</text>
+        <rect x="26" y="162" width="248" height="70" rx="6" class="f-acc2-soft"/><text x="38" y="182" class="t">③ 결과</text><text x="38" y="202" class="t-dim">기준값 → 현재, 측정 정의</text><text x="38" y="220" class="t-dim">채택(사용량) 따로</text>
+        <rect x="286" y="162" width="248" height="70" rx="6" class="f-surface"/><text x="298" y="182" class="t">④ 배운 것</text><text x="298" y="202" class="t-dim">예상과 달랐던 것 2~3개</text>
+        <rect x="26" y="244" width="248" height="62" rx="6" class="f-surface"/><text x="38" y="264" class="t">⑤ 리스크와 통제</text><text x="38" y="284" class="t-dim">남은 리스크, 필요한 승인</text>
+        <rect x="286" y="244" width="248" height="62" rx="6" class="f-surface"/><text x="298" y="264" class="t">⑥ 다음 90일</text><text x="298" y="284" class="t-dim">범위, 필요한 자원·사람</text>
+      </svg>
+      <figcaption><b>그림 14-3.</b> 한 장 요약의 레이아웃. 맨 위에 결정 요청을 둔다. 경영진이 첫 줄만 읽어도 무엇을 결정해야 하는지 알 수 있어야 한다.</figcaption>
+    </figure>
+    <div class="mock">
+      <div class="mock-head">문서: [품질보증 2파트] 클레임 유사사례 검색 — AX 90일 결과 (작성 예)</div>
+      <div class="mock-body">
+        <b>결정 요청</b> 사업부 품질 3개 팀으로 확산(추가 인력 0.5명, 사내 도구 라이선스) — <mark>승인 요청</mark><br>
+        <b>① 문제</b> 클레임 1건당 유사 사례 탐색 평균 <mark class="w">[기준값]시간</mark>, 담당자 이동 시 단서 소실<br>
+        <b>② 한 일</b> 이슈 카드 필드 합의(데이터) · 단일 대응 흐름(프로세스) · 과거 8D RAG 검색(AI)<br>
+        <b>③ 결과</b> 탐색 시간 <mark>[기준값] → [현재값]</mark>(측정 정의: 카드 생성 → 유사 사례 확정), 파일럿 사용자 주간 활성 <mark class="b">[n]명 중 [m]명</mark><br>
+        <b>④ 배운 것</b> 효과의 상당 부분은 카드 표준화에서 나왔다 · 근거 링크가 없으면 엔지니어가 쓰지 않는다<br>
+        <b>⑤ 리스크</b> 고객 정보 포함 문서의 권한 관리 → 정보보안 검토 완료, 월 1회 접근 로그 점검<br>
+        <b>⑥ 다음 90일</b> 3개 팀 확산, 8D 초안 기능 파일럿, 불량 코드 정준화 범위 확대
+      </div>
+    </div>
+    <div class="callout tip"><strong>숫자는 대괄호로 남겨 두자</strong><p>템플릿의 [기준값]·[현재값] 칸을 미리 그럴듯한 숫자로 채우지 않는다. 측정하지 않은 숫자가 한 번 보고서에 들어가면 그 숫자가 목표가 되고, 다음 분기의 기대 과잉으로 돌아온다.</p></div>
+  </section>
+
+  <!-- ============================================================ 5 -->
+  <section id="failures">
+    <h2>흔한 실패 패턴과 처방</h2>
+    <p>앞 장들에서 흩어져 나온 실패 패턴을 플레이북의 관점에서 다시 모았다. 계획을 검토할 때 이 표를 옆에 두고 "우리 계획에 이 처방이 들어 있는가?"를 확인하자.</p>
+    <div class="table-wrap"><table>
+      <thead><tr><th>패턴</th><th>현장에서 보이는 모습</th><th>처방(계획에 넣을 것)</th><th>관련 장</th></tr></thead>
+      <tbody>
+        <tr><td>도구 먼저</td><td>"좋은 AI 도구를 샀는데 쓸 데가 없다"</td><td>업무의 "1건"과 표준 단위부터 정의(W4)</td><td><a href="why.html">1장</a></td></tr>
+        <tr><td>파일럿 연옥</td><td>데모는 성공, 1년째 파일럿</td><td>시작 전에 졸업 기준·운영 오너·예산을 정의(W1, W12)</td><td><a href="roadmap.html">12장</a></td></tr>
+        <tr><td>기대 과잉</td><td>"전사 업무 50% 자동화" 같은 목표가 위에서 내려옴</td><td>90일 목표는 "증명"으로, 성공 기준을 1쪽으로 합의(W1)</td><td><a href="people.html">11장</a></td></tr>
+        <tr><td>측정 부재</td><td>"좋아진 것 같다"만 있고 기준값이 없음</td><td>W2에 측정 정의서와 기준값 측정 시작</td><td><a href="usecases.html">7장</a></td></tr>
+        <tr><td>현업 소외</td><td>IT·혁신팀이 만들고 현업은 "또 시스템 하나"</td><td>현업 주인 지정, 사용자 인터뷰, 챔피언(W1, W6, W9)</td><td><a href="people.html">11장</a></td></tr>
+        <tr><td>보안 막판 차단</td><td>오픈 직전 정보보안 검토에서 중단</td><td>W2에 데이터 등급·허용 도구 확인</td><td><a href="governance.html">10장</a></td></tr>
+        <tr><td>범위 확장</td><td>"이왕 하는 김에 저것도"로 과제가 3배</td><td>범위 밖 목록을 헌장에 명시, 변경은 W13 결정으로</td><td><a href="roadmap.html">12장</a></td></tr>
+        <tr><td>평가 없는 출시</td><td>몇 번 시연해 보고 "잘 되네"로 오픈</td><td>평가 세트 30~50건, 근거 일치율 측정(W8)</td><td><a href="knowledge.html">6장</a>, <a href="agents.html">8장</a></td></tr>
+      </tbody>
+    </table></div>
+    <div class="callout warn"><strong>가장 위험한 실패는 조용한 실패다</strong><p>공식적으로 중단된 과제는 교훈이라도 남긴다. 위험한 것은 아무도 쓰지 않는데 아무도 중단을 선언하지 않는 과제다. 그래서 90일 계획의 마지막 주에는 반드시 "중단"도 선택지로 올린다.</p></div>
+  </section>
+
+  <!-- ============================================================ 6 -->
+  <section id="after90">
+    <h2>90일 이후: 확산·수정·중단을 가르는 기준</h2>
+    <p>13주차의 결정은 감이 아니라 미리 정한 기준으로 내린다. 아래 표는 기준의 예시다. 숫자 문턱값은 팀과 업무에 맞게 W1에 정해 두어야 한다.</p>
+    <div class="table-wrap"><table>
+      <thead><tr><th>결정</th><th>채택(사용량)</th><th>성과(기준값 대비)</th><th>품질·리스크</th><th>다음 행동</th></tr></thead>
+      <tbody>
+        <tr><td><span class="chip ok">확산</span></td><td>파일럿 사용자 대부분이 업무 흐름 안에서 꾸준히 사용</td><td>사전에 합의한 목표 달성</td><td>평가 세트 기준 충족, 중대 사고 없음</td><td>인접 팀 2~3곳, 운영 오너·예산 확정</td></tr>
+        <tr><td><span class="chip warn">수정 후 계속</span></td><td>일부만 사용, 이유가 파악됨</td><td>개선은 있으나 목표 미달</td><td>보완 가능한 문제</td><td>원인 1~2개에 집중한 다음 60일</td></tr>
+        <tr><td><span class="chip bad">중단</span></td><td>사용이 거의 없고 이유가 근본적</td><td>기준값 대비 의미 있는 변화 없음</td><td>통제 비용이 효과보다 큼</td><td>배운 것을 기록하고 기반 작업(카드·코드)은 남긴다</td></tr>
+      </tbody>
+    </table></div>
+    <p>중단하더라도 앞 6주 동안 만든 <b>표준 단위, 매핑표, 인벤토리, 측정 정의</b>는 다음 과제의 자산으로 남는다. 이것이 "기반 먼저" 계획의 숨은 장점이다. AI 부분이 실패해도 조직은 한 칸 올라가 있다.</p>
+  </section>
+
+  <section class="keypoints" id="summary">
+    <h2>핵심 정리</h2>
+    <ol>
+      <li>플레이북은 진단 → 팀 프로필 → 고통점 → 정보 거주지 → 첫 유스케이스를 입력해 90일 계획 초안을 만드는 도구다. 초안은 팀과 스폰서가 함께 고친다.</li>
+      <li>90일의 절반 가까이는 AI 이전의 기반 작업(정렬, 가시화, 표준화, 데이터 준비)이다. 가장 약한 진단 차원과 고통점에 대한 처방이 이 구간에 들어간다.</li>
+      <li>기준값 측정은 2주차에 시작해야 11주차에 비교할 수 있다. 채택(사용량)과 성과를 따로 잰다.</li>
+      <li>리더는 도구보다 "1건의 정의, 현업 주인, 승인 지점, 데이터 등급, 측정 정의"를 먼저 묻는다.</li>
+      <li>13주차에는 확산·수정·중단 중 하나를 미리 정한 기준으로 결정하고, 한 장 요약으로 보고한다. 중단해도 기반 산출물은 남는다.</li>
+    </ol>
+  </section>
+
+  <section class="quiz-sec" id="quiz">
+    <h2>확인 퀴즈</h2>
+    <div class="quiz">
+      <div class="quiz-q"><p>90일 계획에서 기준값(baseline) 측정을 2주차에 시작하는 가장 큰 이유는?</p><div class="opts">
+        <button class="opt">보고서 양식을 일찍 확정하기 위해</button>
+        <button class="opt" data-correct>파일럿 이후(11주차)에 같은 정의로 비교해 효과를 증명하기 위해</button>
+        <button class="opt">AI 모델의 학습 데이터를 늘리기 위해</button>
+        <button class="opt">팀원의 업무 성과를 평가하기 위해</button>
+      </div><div class="quiz-exp">기준값이 없으면 "좋아진 것 같다"만 남는다. 측정 정의와 기준값은 개선 이전에 잡아야 한다.</div></div>
+
+      <div class="quiz-q"><p>플래너가 자가진단에서 가장 낮은 두 차원을 쓰는 방식으로 옳은 것은?</p><div class="opts">
+        <button class="opt">해당 차원은 이번 90일 범위에서 제외한다</button>
+        <button class="opt">해당 차원 점수가 오를 때까지 계획을 보류한다</button>
+        <button class="opt" data-correct>초반 주차에 그 약점을 보완하는 기반 작업을 넣는다</button>
+        <button class="opt">가장 높은 차원에 맞는 유스케이스만 고른다</button>
+      </div><div class="quiz-exp">가장 약한 고리는 피하는 것이 아니라 첫 유스케이스에 필요한 만큼만 좁게 보강한다.</div></div>
+
+      <div class="quiz-q"><p>경영진 보고용 한 장 요약에서 맨 위에 두어야 할 것은?</p><div class="opts">
+        <button class="opt">사용한 AI 모델과 아키텍처</button>
+        <button class="opt">프로젝트 참여자 명단</button>
+        <button class="opt" data-correct>결정 요청(확산·수정·중단)</button>
+        <button class="opt">향후 3년 비전</button>
+      </div><div class="quiz-exp">경영진이 첫 줄만 읽어도 무엇을 결정해야 하는지 알 수 있어야 한다.</div></div>
+
+      <div class="quiz-q"><p>"파일럿 연옥"을 피하기 위해 플레이북이 권하는 처방은?</p><div class="opts">
+        <button class="opt">파일럿을 여러 개 동시에 시작해 성공 확률을 높인다</button>
+        <button class="opt" data-correct>시작 전에 졸업 기준, 운영 오너, 예산을 정의한다</button>
+        <button class="opt">파일럿 기간을 1년 이상으로 넉넉히 잡는다</button>
+        <button class="opt">시연 횟수를 늘려 경영진의 관심을 유지한다</button>
+      </div><div class="quiz-exp">운영으로 넘어갈 조건이 미리 없으면 파일럿은 끝나지 않는다(<a href="roadmap.html">12장</a>).</div></div>
+
+      <div class="quiz-q"><p>90일 결과가 기대에 못 미쳐 "중단"을 결정했다. 이 장의 관점에서 옳은 설명은?</p><div class="opts">
+        <button class="opt">90일이 모두 낭비이므로 산출물을 폐기한다</button>
+        <button class="opt">중단을 선언하지 않고 조용히 유지하는 것이 낫다</button>
+        <button class="opt" data-correct>표준 단위·매핑표·인벤토리·측정 정의는 다음 과제의 자산으로 남는다</button>
+        <button class="opt">다른 AI 도구로 바꿔 같은 계획을 즉시 다시 시작한다</button>
+      </div><div class="quiz-exp">기반 먼저 계획의 장점은 AI 부분이 실패해도 조직이 한 칸 올라가 있다는 것이다. 가장 위험한 것은 조용한 실패다.</div></div>
+    </div>
+  </section>
+</main>
+<script>
+(function () {
+  "use strict";
+  var esc = AX.esc;
+  var $ = function (id) { return document.getElementById(id); };
+
+  /* ------------------------------------------------ 기본 데이터 */
+  var DIMS = [
+    { k: "data", n: "데이터", s: "데이터", d: "핵심 데이터가 시스템에 구조화되어 있고 품질을 관리한다" },
+    { k: "process", n: "프로세스", s: "프로세스", d: "같은 문제는 같은 흐름과 양식으로 처리한다" },
+    { k: "language", n: "공통 언어·표준", s: "언어·표준", d: "용어·코드·단위·ID가 팀 간에 맞춰져 있다" },
+    { k: "tools", n: "도구·시스템", s: "도구", d: "업무 시스템과 승인된 AI 도구를 쓸 수 있다" },
+    { k: "people", n: "사람·역량", s: "사람", d: "AI 리터러시와 챔피언, 현업 참여가 있다" },
+    { k: "governance", n: "거버넌스·보안", s: "거버넌스", d: "데이터 등급과 AI 사용 기준이 정해져 있다" },
+    { k: "leadership", n: "리더십", s: "리더십", d: "스폰서가 있고 기대치·자원이 합의되어 있다" },
+    { k: "usecase", n: "유스케이스 관리", s: "유스케이스", d: "과제를 가치·실현성으로 고르고 측정한다" },
+  ];
+  var DIM_TASK = {
+    data: ["대상 업무 핵심 데이터 1종의 품질 점검(완전성·일관성)과 데이터 오너 지정", "데이터 품질 점검표", "foundation"],
+    process: ["대상 업무의 현재 흐름 그리기(변종·재작업 지점 표시)", "현재 흐름도(As-Is)", "process"],
+    language: ["불량명·설비명·품번 등 용어·코드 매핑표 초안과 정준 코드 합의", "용어·코드 매핑표", "semantics"],
+    tools: ["관련 시스템·파일 위치 정리, 사내 승인된 AI 도구·환경 확보", "도구·환경 목록", "foundation"],
+    people: ["파일럿 사용자 대상 AI 리터러시 기초 교육 1회와 챔피언 지정", "교육 자료·챔피언 명단", "people"],
+    governance: ["데이터 등급 확인, 허용 도구·배포 방식 확인(정보보안 협의)", "데이터 등급·도구 확인서", "governance"],
+    leadership: ["스폰서 1:1 — 기대치·성공 기준·결정 일정 합의", "1쪽 합의서", "people"],
+    usecase: ["유스케이스 후보 목록과 가치–실현성 평가 기록", "후보 평가표", "usecases"],
+  };
+  var PAINS = [
+    { k: "files", n: "레거시 파일", d: "공유 폴더·개인 PC의 엑셀/PPT, 최종_v3_진짜최종", tasks: [[2, "대상 업무 관련 파일 인벤토리(상위 50개)와 '최신본' 기준 정의", "파일 인벤토리 표"]], risk: ["원본 파일과 버전 혼동으로 잘못된 데이터 학습·검색", "원본 보존 위치와 최신본 기준을 정하고 인덱싱 대상을 그 목록으로 한정"] },
+    { k: "email", n: "메일 속 데이터", d: "결정·수치·기한이 메일 본문·첨부에만 있다", tasks: [[3, "대상 업무 메일 20건을 레코드(결정·수치·기한·담당·근거)로 구조화해 보기", "메일 구조화 샘플"], [5, "공동 접수함 또는 메일→카드 전환 규칙 정하기", "접수 규칙"]], risk: ["메일 원문의 개인정보·고객 정보가 AI 입력에 섞임", "추출 대상 필드를 한정하고 개인정보는 마스킹, 원문 접근은 권한자만"] },
+    { k: "variance", n: "이슈마다 다른 프로세스", d: "같은 문제인데 담당자마다 다른 절차·산출물", tasks: [[3, "최근 사례 10~20건의 실제 처리 흐름 비교(변종·재작업 확인)", "변종 비교표"], [5, "표준 대응 흐름 1개와 산출물 템플릿 1개 합의", "표준 흐름·템플릿"]], risk: ["표준 흐름에 맞지 않는 예외 사례가 AI 결과를 왜곡", "예외 처리 규칙과 '표준 밖' 표시 필드를 둔다"] },
+    { k: "formats", n: "팀마다 다른 포맷", d: "같은 것을 다른 이름·코드·단위로 부른다", tasks: [[4, "같은 대상을 부르는 이름들을 모아 정준 코드로 매핑(인접 팀 1곳 포함)", "매핑표 v1"]], risk: ["매핑표가 개인 엑셀로 남아 다시 갈라짐", "매핑표 오너(데이터 스튜어드)와 변경 절차 지정"] },
+    { k: "stdgap", n: "표준 공백", d: "부서 간 인계·임시 TF처럼 ISO·IATF가 덮지 않는 영역", tasks: [[5, "부서 간 인계 지점의 RACI 정의(누가 넘기고, 받고, 무엇을 넘기나)", "인계 RACI"]], risk: ["인계 지점에서 책임 공백으로 AI 산출물이 방치됨", "인계 지점마다 수신 확인 단계와 담당 역할 명시"] },
+    { k: "knowledge", n: "지식 유출·퇴직", d: "노하우가 몇 사람 머릿속에, 이동·퇴직 시 사라짐", tasks: [[4, "숙련자 인터뷰 일정 확정, 후배들의 실제 질문 목록 수집", "질문 목록"], [8, "인터뷰 기반 지식 카드 작성과 숙련자 검수", "검수된 지식 카드"]], risk: ["핵심 노하우가 정리되기 전에 담당자 이동", "숙련자 인터뷰를 W4에 우선 배치, 카드 검수 서명"] },
+    { k: "security", n: "보안 우려", d: "섀도 AI, 기술 유출, 외부 도구 사용 금지 분위기", tasks: [[2, "데이터 등급 확인과 허용 도구·배포 방식 확인(정보보안 조기 협의)", "보안 검토 메모"]], risk: ["개인 계정 외부 AI에 사내 문서 입력(섀도 AI)", "사내 승인 도구 제공, 사용 가이드 1쪽, 접근 로그 점검"] },
+    { k: "hype", n: "경영진 기대 과잉", d: "\"AI 붙이면 바로 된다\", 과도한 목표", tasks: [[1, "스폰서와 90일 성공 기준·범위를 1쪽 문서로 합의('증명'이 목표)", "성공 기준 합의서"]], risk: ["과도한 목표 → 성과 부풀리기 → 신뢰 하락", "목표 수치는 기준값 측정 후 설정, 중간 보고에 측정 정의를 함께 표기"] },
+    { k: "purgatory", n: "파일럿만 반복", d: "데모는 성공, 운영으로 넘어가지 못함", tasks: [[12, "운영 이관 조건(운영 오너·예산·모니터링) 정의 — 졸업 기준", "운영 이관 체크리스트"]], risk: ["파일럿 종료 후 운영 오너 부재로 방치", "W1에 졸업 기준 합의, W12에 운영 오너 확정"] },
+    { k: "measure", n: "효과 측정 부재", d: "좋아졌는지 숫자로 말할 수 없다", tasks: [[2, "측정 정의서 작성과 기준값 측정 시작", "측정 정의서"]], risk: ["효과를 증명하지 못해 예산 중단", "측정 정의서를 스폰서와 함께 확정"] },
+    { k: "adoption", n: "현업 무관심·저항", d: "\"또 시스템 하나\", 일자리·추가 업무 우려", tasks: [[6, "현업 사용자 인터뷰 5명: 실제 불편과 업무 흐름 속 사용 지점 확인", "사용자 인터뷰 메모"]], risk: ["사용률 저조로 효과 미발생", "업무 흐름 안에 배치, 챔피언 운영, 절약 시간의 사용처를 팀과 합의"] },
+  ];
+  var HOMES = [
+    { k: "mail", n: "메일·메신저", prep: "대상 메일 폴더·기간을 정해 샘플 추출(권한자 동의)" },
+    { k: "excel", n: "공유 폴더 엑셀", prep: "시트 구조·매크로 로직 확인, 표준 열 정의" },
+    { k: "ppt", n: "PPT 보고서", prep: "보고서 속 표·수치를 원천 데이터와 연결" },
+    { k: "pdf", n: "PDF·스캔·종이", prep: "OCR·파싱 품질 점검(표 깨짐 확인)" },
+    { k: "system", n: "업무 시스템(MES·ERP·PLM·QMS 등)", prep: "필요 테이블·필드와 조회 권한 확인" },
+    { k: "pc", n: "개인 PC", prep: "업무 관련 파일을 공유 위치로 이전하는 기준 합의" },
+    { k: "head", n: "사람 머릿속", prep: "숙련자 인터뷰와 지식 카드화" },
+  ];
+  var FN = {
+    quality: { n: "품질", adj: "영업(고객 창구)·생산·공정기술" },
+    production: { n: "생산", adj: "품질·설비·생산관리" },
+    equipment: { n: "설비", adj: "생산·안전환경·설비 공급사(외부)" },
+    rnd: { n: "R&D", adj: "생산기술·품질·구매" },
+    scm: { n: "구매·SCM", adj: "개발·품질·생산관리" },
+    sales: { n: "영업·고객", adj: "품질·개발·법무" },
+    support: { n: "경영지원", adj: "각 부서 서무·IT·인사" },
+  };
+  // 유스케이스: n 이름, t 유형, u 표준 단위, i 입력, a AI 역할, h 사람 판단, o 산출물, k KPI[[이름, 정의]], r 위험(1~3), df 난이도(1~3), rn 위험 메모
+  var UCS = {
+    quality: [
+      { id: "q1", n: "고객 클레임 유사 사례 검색", t: "검색·요약(RAG)", u: "이슈 카드", i: "과거 8D 보고서, 종결된 클레임, 검사 성적서", a: "새 클레임과 유사한 과거 사례 3건을 근거 문서 링크와 함께 제시", h: "원인 판단과 사례 채택 여부", o: "유사 사례 목록 + 근거", k: [["유사 사례 탐색 시간", "이슈 카드 생성 → 유사 사례 확정"], ["근거 일치율", "평가 세트에서 제시된 근거가 실제 관련 문서인 비율"]], r: 2, df: 2, rn: "고객 정보 포함 문서의 권한 관리" },
+      { id: "q2", n: "8D 보고서 초안 작성", t: "작성·변환", u: "이슈 카드", i: "이슈 카드 필드, 검사 데이터, 고객 양식", a: "카드 데이터로 고객 양식의 8D 초안 생성", h: "원인·대책 문장 검토와 발송 승인", o: "8D 초안", k: [["8D 1건 작성 공수", "데이터 취합 → 최종 승인, 검토 포함"], ["초안 수정 비율", "초안 문장 중 엔지니어가 고친 비율"]], r: 3, df: 2, rn: "외부(고객) 발송 문서" },
+      { id: "q3", n: "불량명 정준 코드 자동 분류", t: "분류·추출", u: "불량 레코드", i: "검사 기록의 자유 텍스트 불량명, 불량 코드 체계", a: "자유 텍스트 불량명에 정준 코드 후보 제안", h: "코드 확정(신뢰도 낮은 건)", o: "코드가 붙은 불량 레코드", k: [["정준 코드 부여율", "월간 불량 레코드 중 정준 코드가 붙은 비율"], ["분류 정확도", "검수 샘플에서 제안 코드가 맞은 비율"]], r: 1, df: 1, rn: "낮음(내부 데이터)" },
+    ],
+    production: [
+      { id: "p1", n: "교대 인수인계 요약", t: "작성·변환", u: "인계 레코드", i: "작업일보, MES 이벤트, 교대 메신저 대화", a: "교대 중 이슈·조치·미결 사항을 표준 인계 양식으로 요약", h: "미결 사항 확인과 우선순위", o: "표준 인계서", k: [["인계 소요 시간", "교대 시작 → 인계 완료"], ["인계 누락 이슈", "다음 교대에서 뒤늦게 발견된 미결 건"]], r: 2, df: 1, rn: "누락 시 현장 안전·품질 영향" },
+      { id: "p2", n: "작업 표준서(SOP) Q&A", t: "검색·요약(RAG)", u: "문서 청크", i: "작업 표준서, 작업 지도서, 변경 이력", a: "작업자 질문에 해당 표준서 구절을 근거로 답변", h: "안전 관련 답은 원문 확인", o: "근거 포함 답변", k: [["질문 해결 시간", "질문 → 납득할 답(관찰·설문)"], ["근거 제시율", "답변 중 표준서 출처가 붙은 비율"]], r: 2, df: 1, rn: "구버전 표준서 인용 위험" },
+      { id: "p3", n: "생산 계획 변경 영향 알림", t: "분류·추출 + 규칙", u: "계획 변경 레코드", i: "계획 변경 메일, MES 작업지시, 자재 재고", a: "변경 메일에서 품목·수량·일정을 추출해 영향 라인·자재 표시", h: "계획 확정과 현장 지시", o: "영향 범위 표", k: [["변경 반영 지연", "변경 통보 → 현장 반영"], ["영향 누락 건", "사후 발견된 영향 라인·자재"]], r: 2, df: 2, rn: "잘못된 추출이 계획에 반영될 위험" },
+    ],
+    equipment: [
+      { id: "e1", n: "정비 이력 검색", t: "검색·요약(RAG)", u: "정비 레코드", i: "작업일지, CMMS 이력, 설비 매뉴얼", a: "알람·설비 ID로 과거 조치와 효과 요약", h: "조치 결정과 작업 지시", o: "과거 조치 요약", k: [["과거 조치 검색 시간", "알람 확인 → 관련 과거 조치 확인"], ["평균 수리 시간(MTTR)", "정지 → 재가동, 계획 정지 제외"]], r: 1, df: 1, rn: "낮음(내부 데이터)" },
+      { id: "e2", n: "고장코드 자동 분류", t: "분류·추출", u: "정비 레코드", i: "정비 기록 자유 텍스트, 고장코드 체계", a: "현상–원인–조치 코드 후보 제안", h: "정비사가 코드 확정", o: "코드가 붙은 정비 기록", k: [["표준 코드 기록 비율", "월간 정비 기록 중 3단 코드가 채워진 비율"], ["코드 제안 정확도", "검수 샘플 기준"]], r: 1, df: 1, rn: "낮음" },
+      { id: "e3", n: "설비 알람 트리아지", t: "에이전트형(제안까지)", u: "알람 레코드", i: "SCADA 알람, 정비 이력, 센서 추이", a: "알람 묶음을 분류하고 우선순위·점검 항목 제안", h: "작업 지시와 정지 판단은 사람", o: "트리아지 제안", k: [["알람 → 조치 착수 시간", "알람 발생 → 정비 착수"], ["오분류율", "사후 판정 대비 우선순위가 틀린 비율"]], r: 3, df: 3, rn: "현장 안전, 오분류 비용" },
+    ],
+    rnd: [
+      { id: "r1", n: "시험·실험 보고서 검색", t: "검색·요약(RAG)", u: "시험 레코드", i: "시험 보고서, 실험 노트, 사양서", a: "조건·결과로 과거 시험을 찾아 요약", h: "재시험 여부 판단", o: "관련 시험 목록 + 요약", k: [["과거 시험 탐색 시간", "질문 → 관련 시험 확인"], ["중복 시험 건수", "과거 결과로 대체 가능했던 시험"]], r: 2, df: 2, rn: "기술 정보 등급·권한" },
+      { id: "r2", n: "설계 변경(ECN) 영향 분석 지원", t: "검색·요약 + 그래프", u: "ECN 레코드", i: "BOM, 도면, 작업 표준서·검사 기준서 메타데이터", a: "영향 대상 목록과 근거 구절 요약", h: "회람자별 항목 확인", o: "영향 분석표", k: [["영향 분석 기간", "ECN 등록 → 검토 완료"], ["누락 영향 문서", "변경 후 발견된 개정 필요 문서"]], r: 2, df: 3, rn: "품번 정준화 선행 필요" },
+      { id: "r3", n: "고객 사양 비교표 작성", t: "작성·변환", u: "사양 항목", i: "고객 사양서, 자사 데이터시트", a: "사양 항목을 추출해 비교표 초안 작성", h: "불일치 항목 판단", o: "사양 비교표", k: [["비교표 작성 시간", "사양서 수신 → 비교표 확정"], ["누락·오기 항목", "검토에서 발견된 오류 수"]], r: 2, df: 1, rn: "고객 기밀 문서" },
+    ],
+    scm: [
+      { id: "s1", n: "공급사 공지(PCN·EOL) 분류·추출", t: "분류·추출", u: "공지 레코드", i: "공급사 공지 메일·PDF, 품번 교차표, BOM", a: "공지 유형·품번·기한·대체품 추출, 영향 품목 매칭", h: "대응 경로 결정", o: "공지 레코드 + 영향표", k: [["접수 → 1차 분류 시간", "메일 수신 → 레코드 확정"], ["매칭 누락", "사후 발견된 영향 품번"]], r: 2, df: 2, rn: "품번 교차표 선행 필요" },
+      { id: "s2", n: "견적 비교표 작성", t: "작성·변환", u: "견적 항목", i: "공급사 견적서(PDF·엑셀), 과거 구매 단가", a: "견적 항목을 정규화해 비교표 작성", h: "공급사 선정", o: "견적 비교표", k: [["비교표 작성 시간", "견적 수신 → 비교표 완료"], ["단가·조건 오기", "검토에서 발견된 오류"]], r: 2, df: 1, rn: "단가 정보 기밀" },
+      { id: "s3", n: "납기 지연 메일 추출·현황표", t: "분류·추출", u: "납기 레코드", i: "공급사 납기 회신 메일, 발주 데이터", a: "지연 품목·변경 납기·사유 추출", h: "대응 우선순위", o: "납기 현황표", k: [["지연 인지 시점", "공급사 통보 → 사내 현황 반영"], ["누락 건", "현황표에 없던 지연"]], r: 1, df: 1, rn: "낮음" },
+    ],
+    sales: [
+      { id: "c1", n: "고객 문의 분류·답변 초안", t: "작성·변환", u: "문의 레코드", i: "고객 문의 메일, 제품 자료, 과거 답변", a: "문의 유형 분류와 답변 초안", h: "발송 전 검토·승인", o: "답변 초안", k: [["1차 응답 시간", "문의 수신 → 1차 회신"], ["초안 수정 비율", "담당자가 고친 비율"]], r: 3, df: 2, rn: "외부 발송, 약속·보증 표현" },
+      { id: "c2", n: "RFQ 요구사항 추출", t: "분류·추출", u: "요구사항 항목", i: "고객 RFQ 문서, 사양서", a: "요구사항을 항목별로 추출·분류", h: "대응 가능 여부 판단", o: "요구사항 체크리스트", k: [["RFQ 검토 시간", "수신 → 체크리스트 확정"], ["누락 요구사항", "사후 발견된 항목"]], r: 2, df: 1, rn: "고객 기밀 문서" },
+      { id: "c3", n: "고객 요구 이력 검색", t: "검색·요약(RAG)", u: "고객 요구 레코드", i: "회의록, 메일, 합의 문서", a: "고객별 과거 요구·합의 사항 검색", h: "해석과 대응 판단", o: "이력 요약 + 근거", k: [["이력 확인 시간", "질문 → 근거 확인"], ["근거 제시율", "답변 중 출처가 붙은 비율"]], r: 2, df: 2, rn: "고객 정보 권한" },
+    ],
+    support: [
+      { id: "g1", n: "사내 규정·절차 Q&A", t: "검색·요약(RAG)", u: "규정 청크", i: "사내 규정, 절차서, FAQ", a: "질문에 규정 원문을 근거로 답변", h: "해석이 필요한 질문은 담당자", o: "근거 포함 답변", k: [["반복 문의 건수", "담당자에게 온 같은 유형 문의"], ["근거 제시율", "답변 중 규정 출처가 붙은 비율"]], r: 1, df: 1, rn: "구버전 규정 인용" },
+      { id: "g2", n: "회의록 요약·액션 추출", t: "작성·변환", u: "액션 아이템", i: "회의 녹취·메모", a: "결정·액션·담당·기한 추출", h: "참석자 확인", o: "표준 회의록 + 액션 목록", k: [["회의록 작성 시간", "회의 종료 → 배포"], ["액션 추적율", "기한 내 상태가 갱신된 액션 비율"]], r: 2, df: 1, rn: "민감 회의 녹취 관리" },
+      { id: "g3", n: "월간 보고 데이터 취합", t: "작성·변환", u: "보고 지표", i: "각 부서 제출 엑셀, 시스템 데이터", a: "지표를 정의대로 취합하고 불일치 표시", h: "지표 해석과 보고", o: "월간 보고 초안", k: [["취합 소요 시간", "자료 요청 → 초안 완성"], ["수치 불일치 건", "부서 간 다른 값"]], r: 2, df: 2, rn: "지표 정의 불일치" },
+    ],
+  };
+
+  /* ------------------------------------------------ 상태 */
+  var saved = AX.store.get("playbook", {}) || {};
+  var S = {
+    step: saved.step || 1,
+    name: saved.name || "",
+    fn: FN[saved.fn] ? saved.fn : "quality",
+    size: saved.size || 20,
+    hours: saved.hours || 4,
+    pains: Array.isArray(saved.pains) ? saved.pains : [],
+    homes: Array.isArray(saved.homes) ? saved.homes : [],
+    uc: saved.uc || null,
+    generated: !!saved.generated,
+  };
+  var assess = AX.store.get("assessment", null);
+  var dims = {};
+  var hasAssess = !!(assess && assess.dims);
+  DIMS.forEach(function (d) {
+    var v = hasAssess ? Number(assess.dims[d.k]) : NaN;
+    dims[d.k] = isFinite(v) ? AX.clamp(Math.round(v), 1, 5) : 3;
+  });
+  function persist() {
+    AX.store.set("playbook", { step: S.step, name: S.name, fn: S.fn, size: S.size, hours: S.hours, pains: S.pains, homes: S.homes, uc: S.uc, generated: S.generated });
+  }
+
+  /* ------------------------------------------------ 1. 진단 */
+  function asStatus() {
+    var el = $("pb-as-status");
+    if (hasAssess) {
+      var t = assess.ts ? new Date(assess.ts) : null;
+      el.className = "pb-status ok";
+      el.innerHTML = "1장 자가진단 결과를 불러왔다" + (t && !isNaN(t) ? " (" + t.toLocaleDateString("ko-KR") + " 저장)" : "") + ". 필요하면 아래에서 고친 뒤 저장할 수 있다.";
+    } else {
+      el.className = "pb-status";
+      el.innerHTML = '저장된 자가진단이 없다. <a href="why.html">1장</a>에서 진단하거나, 아래 슬라이더로 바로 입력하고 "진단 저장"을 누르자.';
+    }
+  }
+  $("pb-dims").innerHTML = DIMS.map(function (d) {
+    return '<label class="ctrl"><span>' + esc(d.n) + ' <output id="pb-d-' + d.k + '-out"></output></span><input type="range" id="pb-d-' + d.k + '" min="1" max="5" step="1" value="' + dims[d.k] + '"><small style="color:var(--text-faint);font-size:12px">' + esc(d.d) + "</small></label>";
+  }).join("");
+  var radar = AX.canvas("#cv-pb-radar", function (ctx, w, h) {
+    var P = AX.palette(), cx = w / 2, cy = h / 2 + 4, R = Math.min(w, h) / 2 - (w < 330 ? 40 : 34), n = DIMS.length;
+    var ang = function (i) { return -Math.PI / 2 + (i * 2 * Math.PI) / n; };
+    ctx.strokeStyle = P.grid; ctx.lineWidth = 1;
+    for (var lv = 1; lv <= 5; lv++) {
+      ctx.beginPath();
+      for (var i = 0; i <= n; i++) { var r = (R * lv) / 5, a = ang(i % n), x = cx + r * Math.cos(a), y = cy + r * Math.sin(a); i ? ctx.lineTo(x, y) : ctx.moveTo(x, y); }
+      ctx.stroke();
+    }
+    var weak = weakest();
+    ctx.font = "11.5px " + AX.color("font"); ctx.textBaseline = "middle";
+    DIMS.forEach(function (d, i) {
+      var a = ang(i);
+      ctx.strokeStyle = P.grid; ctx.beginPath(); ctx.moveTo(cx, cy); ctx.lineTo(cx + R * Math.cos(a), cy + R * Math.sin(a)); ctx.stroke();
+      var lx = cx + (R + 16) * Math.cos(a), ly = cy + (R + 14) * Math.sin(a);
+      var lab = w < 420 ? d.s : d.n, tw = ctx.measureText(lab).width;
+      var al = Math.abs(Math.cos(a)) < 0.2 ? "center" : Math.cos(a) > 0 ? "left" : "right";
+      var x0 = al === "center" ? lx - tw / 2 : al === "left" ? lx : lx - tw;
+      x0 = AX.clamp(x0, 2, w - tw - 2);
+      ctx.textAlign = "left";
+      ctx.fillStyle = weak.indexOf(d.k) >= 0 ? P.bad : P.dim;
+      ctx.fillText(lab, x0, ly);
+    });
+    ctx.beginPath();
+    DIMS.forEach(function (d, i) { var r = (R * dims[d.k]) / 5, a = ang(i), x = cx + r * Math.cos(a), y = cy + r * Math.sin(a); i ? ctx.lineTo(x, y) : ctx.moveTo(x, y); });
+    ctx.closePath(); ctx.fillStyle = AX.color("accent-soft"); ctx.fill(); ctx.strokeStyle = P.accent; ctx.lineWidth = 2; ctx.stroke();
+    DIMS.forEach(function (d, i) { var r = (R * dims[d.k]) / 5, a = ang(i); ctx.fillStyle = weak.indexOf(d.k) >= 0 ? P.bad : P.accent; ctx.beginPath(); ctx.arc(cx + r * Math.cos(a), cy + r * Math.sin(a), 3.5, 0, 7); ctx.fill(); });
+  }, { height: 260 });
+  DIMS.forEach(function (d) {
+    AX.range("pb-d-" + d.k, function (v) { return v + "점"; }, function (v) { dims[d.k] = v; $("pb-as-saved").hidden = true; radar.redraw(); readout(); });
+  });
+  $("pb-as-save").addEventListener("click", function () {
+    var out = {}; DIMS.forEach(function (d) { out[d.k] = dims[d.k]; });
+    assess = { dims: out, ts: Date.now() }; hasAssess = true;
+    AX.store.set("assessment", assess);
+    asStatus(); $("pb-as-saved").hidden = false;
+  });
+  function avg() { var s = 0; DIMS.forEach(function (d) { s += dims[d.k]; }); return s / DIMS.length; }
+  function weakest() {
+    return DIMS.map(function (d, i) { return { k: d.k, v: dims[d.k], i: i }; }).sort(function (a, b) { return a.v - b.v || a.i - b.i; }).slice(0, 2).map(function (x) { return x.k; });
+  }
+  function dimName(k) { for (var i = 0; i < DIMS.length; i++) if (DIMS[i].k === k) return DIMS[i].n; return k; }
+  function stageOf(a) {
+    if (a < 2) return "가시화 단계";
+    if (a < 2.8) return "표준화 단계";
+    if (a < 3.5) return "디지털화·데이터화 단계";
+    if (a < 4.3) return "지능화 단계";
+    return "자율화 준비 단계";
+  }
+
+  /* ------------------------------------------------ 2. 프로필 */
+  $("pb-name").value = S.name;
+  $("pb-fn").value = S.fn;
+  $("pb-size").value = S.size; $("pb-hours").value = S.hours;
+  $("pb-name").addEventListener("input", function () { S.name = this.value; persist(); });
+  $("pb-fn").addEventListener("change", function () { S.fn = this.value; S.uc = null; renderUC(); persist(); readout(); });
+  AX.range("pb-size", function (v) { return v + "명"; }, function (v) { S.size = v; persist(); });
+  AX.range("pb-hours", function (v) { return v + "시간"; }, function (v) { S.hours = v; persist(); });
+
+  /* ------------------------------------------------ 3·4. 체크 목록 */
+  function checks(boxId, list, key) {
+    $(boxId).innerHTML = list.map(function (p) {
+      return '<label class="check"><input type="checkbox" value="' + p.k + '"' + (S[key].indexOf(p.k) >= 0 ? " checked" : "") + "><span>" + esc(p.n) + (p.d ? "<small>" + esc(p.d) + "</small>" : "") + "</span></label>";
+    }).join("");
+    [].forEach.call($(boxId).querySelectorAll("input"), function (inp) {
+      inp.addEventListener("change", function () {
+        S[key] = [].filter.call($(boxId).querySelectorAll("input"), function (x) { return x.checked; }).map(function (x) { return x.value; });
+        persist(); readout();
+      });
+    });
+  }
+  checks("pb-pains", PAINS, "pains");
+  checks("pb-homes", HOMES.map(function (h) { return { k: h.k, n: h.n, d: "" }; }), "homes");
+
+  /* ------------------------------------------------ 5. 유스케이스 */
+  var RISK = ["", "낮음", "중간", "높음"], DIFF = ["", "쉬움", "보통", "어려움"];
+  function recommendedId() {
+    var list = UCS[S.fn], a = avg();
+    var target = a < 2.6 ? 1 : a < 3.6 ? 2 : 3;
+    var best = list[0], bs = 99;
+    list.forEach(function (u) { var s = Math.abs(u.df - target) * 2 + u.r * 0.5; if (s < bs) { bs = s; best = u; } });
+    return best.id;
+  }
+  function ucObj() {
+    var list = UCS[S.fn];
+    for (var i = 0; i < list.length; i++) if (list[i].id === S.uc) return list[i];
+    return null;
+  }
+  function renderUC() {
+    var rec = recommendedId();
+    $("pb-uc-hint").textContent = FN[S.fn].n + " 기능의 후보다. 진단 평균 " + avg().toFixed(1) + "점 기준으로 난이도가 맞는 후보에 '추천'을 붙였다.";
+    $("pb-uc").innerHTML = UCS[S.fn].map(function (u) {
+      return '<label><input type="radio" name="pb-uc" value="' + u.id + '"' + (S.uc === u.id ? " checked" : "") + '><span><b>' + esc(u.n) + "</b>" + (u.id === rec ? ' <span class="chip acc">추천</span>' : "") +
+        '<div class="desc">' + esc(u.a) + '</div><div class="meta"><span class="chip">' + esc(u.t) + '</span><span class="chip">표준 단위: ' + esc(u.u) + '</span><span class="chip ' + (u.df === 1 ? "ok" : u.df === 2 ? "warn" : "bad") + '">난이도 ' + DIFF[u.df] + '</span><span class="chip ' + (u.r === 1 ? "ok" : u.r === 2 ? "warn" : "bad") + '">위험 ' + RISK[u.r] + "</span></div></span></label>";
+    }).join("");
+    [].forEach.call($("pb-uc").querySelectorAll("input"), function (inp) {
+      inp.addEventListener("change", function () { S.uc = this.value; persist(); readout(); });
+    });
+  }
+
+  /* ------------------------------------------------ 단계 이동 */
+  var tabs = [].slice.call($("pb-tabs").querySelectorAll("button"));
+  var panels = [].slice.call(document.querySelectorAll("#sim-pb .pb-panel"));
+  function filled(step) {
+    if (step === 1) return true;
+    if (step === 2) return !!S.name;
+    if (step === 3) return S.pains.length > 0;
+    if (step === 4) return S.homes.length > 0;
+    if (step === 5) return !!ucObj();
+    return S.generated;
+  }
+  function go(step) {
+    S.step = AX.clamp(step, 1, 6);
+    panels.forEach(function (p) { p.hidden = Number(p.dataset.step) !== S.step; });
+    tabs.forEach(function (b) { var n = Number(b.dataset.step); b.classList.toggle("on", n === S.step); b.classList.toggle("filled", filled(n) && n !== S.step); b.setAttribute("aria-current", n === S.step ? "step" : "false"); });
+    $("pb-prev").disabled = S.step === 1;
+    $("pb-next").hidden = S.step === 6;
+    if (S.step === 5) renderUC();
+    if (S.step === 1) radar.resize();
+    persist();
+  }
+  tabs.forEach(function (b) { b.addEventListener("click", function () { go(Number(b.dataset.step)); }); });
+  $("pb-prev").addEventListener("click", function () { go(S.step - 1); });
+  $("pb-next").addEventListener("click", function () { go(S.step + 1); });
+
+  function readout() {
+    AX.stat("pb-o-avg", avg().toFixed(1) + "<small> / 5</small>");
+    AX.stat("pb-o-weak", weakest().map(dimName).join(", "));
+    AX.stat("pb-o-pains", S.pains.length + "<small>개</small>");
+    var u = ucObj();
+    AX.stat("pb-o-uc", u ? esc(u.n) : "미선택");
+    tabs.forEach(function (b) { var n = Number(b.dataset.step); b.classList.toggle("filled", filled(n) && n !== S.step); });
+  }
+
+  /* ------------------------------------------------ 계획 생성 */
+  function buildPlan() {
+    var u = ucObj() || UCS[S.fn].filter(function (x) { return x.id === recommendedId(); })[0];
+    var a = avg(), weak = weakest(), fn = FN[S.fn];
+    var team = S.name.trim() || fn.n + "팀";
+    var pilotN = Math.min(S.size, AX.clamp(Math.round(S.size * 0.3), 3, 20));
+    var champs = Math.max(1, Math.ceil(S.size / 15));
+    var homes = HOMES.filter(function (h) { return S.homes.indexOf(h.k) >= 0; });
+    var homeNames = homes.length ? homes.map(function (h) { return h.n; }).join(", ") : "(정보 거주지 미선택)";
+    var lowHours = S.hours < 3;
+    var isRag = /RAG|검색/.test(u.t), isExtract = /분류|추출/.test(u.t), isAgent = /에이전트/.test(u.t);
+    var proto = isRag ? "과거 문서 색인(청킹·메타데이터·권한)과 검색 프로토타입 v0" : isAgent ? "제안까지만 하는 워크플로 프로토타입 v0(실행 권한 없음, 로그 기록)" : isExtract ? "추출·분류 프로토타입 v0(필드 정의 + 규칙 + 모델)" : "초안 생성 프로토타입 v0(표준 단위 데이터 → 양식)";
+    var evalTxt = isRag ? "평가 세트 30~50문항(질문·정답 근거)으로 검색 재현율·근거 일치율 측정" : isExtract ? "검수 샘플 50건으로 필드별 정확도 측정, 신뢰도 문턱값 설정" : "평가 세트 30건으로 수정 비율·오류 유형 측정";
+
+    var W = [];
+    for (var i = 1; i <= 13; i++) W.push({ w: i, acts: [], outs: [] });
+    var PH = ["", "정렬", "가시화", "가시화", "표준화", "표준화", "데이터 준비", "구축·평가", "구축·평가", "파일럿", "파일럿", "측정·안정화", "측정·안정화", "결정"];
+    function add(w, act, out, extra) { W[w - 1].acts.push({ t: act, x: !!extra }); if (out) W[w - 1].outs.push(out); }
+    add(1, "킥오프: 스폰서·현업 주인(프로덕트 오너) 지정, 범위 1문장과 범위 밖 목록 정의", "프로젝트 헌장 1쪽");
+    add(1, "졸업 기준(확산·수정·중단 판단 기준) 초안 합의", "결정 기준표");
+    add(2, "정보 인벤토리: " + homeNames, "정보 인벤토리");
+    add(2, "측정 정의서 작성 — " + u.k.map(function (k) { return k[0]; }).join(", "), "측정 정의서");
+    add(3, "기준값 측정 시작(최근 사례 20건 이상 또는 2주 관찰)", "기준값 기록");
+    add(3, "현재 업무 흐름 관찰과 고통 지점 표시", "As-Is 메모");
+    add(4, "표준 단위 '" + u.u + "'의 필드 정의(필수·선택, 코드 체계)", "필드 정의서");
+    add(5, "표준 흐름에서 AI가 끼는 지점과 사람 승인 지점 확정: " + u.h, "To-Be 흐름도");
+    homes.forEach(function (h) { add(6, h.n + " — " + h.prep, null); });
+    add(6, "과거 데이터 수집·정제(입력: " + u.i + "), 접근 권한 확인", "정제 데이터셋 v1");
+    add(7, proto + (lowHours ? " — 참여 시간이 적으므로 기능 1개로 제한" : ""), "프로토타입 v0");
+    add(8, evalTxt, "평가 결과 v0");
+    add(9, "파일럿 사용자 " + pilotN + "명 투입, 챔피언 " + champs + "명 지정, 사용 안내 30분", "파일럿 운영 계획");
+    add(10, "주간 피드백 반영 v1, 사용 로그·오류 사례 수집", "v1 + 오류 사례 목록");
+    add(11, "KPI 측정(기준값과 같은 정의로)과 사용자 설문", "KPI 결과표");
+    add(12, "리스크 점검·통제 확인, 운영 이관 조건(운영 오너·모니터링·예산) 정리", "운영 이관 체크리스트");
+    add(13, "경영진 한 장 요약 보고, 확산·수정·중단 결정, 다음 90일 범위", "한 장 요약 + 결정 기록");
+    var placeWeak = [2, 4];
+    weak.forEach(function (k, j) { var t = DIM_TASK[k]; add(placeWeak[j], "[약점 보완: " + dimName(k) + "] " + t[0], t[1], true); });
+    var seen = {};
+    PAINS.forEach(function (p) {
+      if (S.pains.indexOf(p.k) < 0) return;
+      p.tasks.forEach(function (t) { var key = t[1]; if (seen[key]) return; seen[key] = 1; add(t[0], "[고통점: " + p.n + "] " + t[1], t[2], true); });
+    });
+
+    var kpis = [
+      ["성과", u.k[0][0], u.k[0][1], "W3 기준값 → W11 측정", "기준값 측정 후 팀이 설정"],
+      ["성과", u.k[1][0], u.k[1][1], "W8 평가 세트 / W11 운영", "기준값 측정 후 팀이 설정"],
+      ["채택", "주간 활성 사용자 비율", "파일럿 사용자 중 주 1회 이상 업무에 사용한 비율", "W9부터 매주", "W1에 합의(예: 과반)"],
+      ["품질", "근거·검토 통과율", "AI 산출물 중 사람 검토에서 수정 없이 또는 경미한 수정으로 통과한 비율", "W8, W11", "W8 결과를 보고 설정"],
+      ["기반", "'" + u.u + "' 표준 기록 비율", "대상 업무 건 중 표준 단위 필드가 모두 채워진 비율", "W5부터 매주", "W5에 설정"],
+    ];
+
+    var risks = [
+      ["근거 없는 답·환각이 판단에 섞임", "출처 표시 필수, 평가 세트 운영, 승인 지점: " + u.h],
+      ["사용률 저조", "업무 흐름 안에 배치, 챔피언 " + champs + "명, 주간 사용 지표 공유"],
+      ["유스케이스 고유 위험: " + u.rn, u.r >= 3 ? "외부 발송·현장 지시 전 2단계 승인, 자동 실행 금지" : u.r === 2 ? "권한별 접근 통제와 검토 로그" : "정기 샘플 검수"],
+    ];
+    PAINS.forEach(function (p) { if (S.pains.indexOf(p.k) >= 0) risks.push(p.risk); });
+    if (dims.governance <= 2 && S.pains.indexOf("security") < 0) risks.push(["AI 사용 기준 부재(거버넌스 점수 낮음)", "AI 사용 가이드 1쪽 배포, 데이터 등급별 허용 도구 명시"]);
+    if (dims.data <= 2) risks.push(["데이터 품질 미달로 결과 신뢰 하락", "W6 데이터 품질 게이트 — 필수 필드 완전성 확인 후 구축 착수"]);
+    if (lowHours) risks.push(["핵심 멤버 참여 시간 부족(주 " + S.hours + "시간)", "범위를 기능 1개로 축소, 스폰서에게 시간 확보 요청"]);
+
+    var people = [
+      ["스폰서", "담당 임원 또는 사업부장", "A", "W1 성공 기준 합의, W13 결정"],
+      ["현업 주인(프로덕트 오너)", team + " 팀장·파트장", "A/R", "범위·우선순위 결정, 주간 점검"],
+      ["도메인 전문가", "숙련 담당자 2~3명", "R", "표준 단위 필드, 평가 세트, 결과 검수"],
+      ["파일럿 사용자·챔피언", "사용자 " + pilotN + "명, 챔피언 " + champs + "명", "R/C", "W9~10 실사용, 피드백"],
+      ["데이터 스튜어드", "팀 내 지정 1명", "R", "코드·매핑표·필드 정의 관리"],
+      ["IT·데이터 담당", "IT 또는 디지털 조직", "R", "데이터 연동, 도구 환경, 권한"],
+      ["정보보안·법무", "정보보호 조직", "C", "W2 데이터 등급·도구 확인, W12 점검"],
+      ["인접 부서", fn.adj, "C/I", "용어·인계 지점 합의, 결과 공유"],
+    ];
+    if (dims.people <= 2) people.push(["인사·교육(HRD)", "교육 담당", "C", "AI 리터러시 교육 지원"]);
+
+    var painNames = PAINS.filter(function (p) { return S.pains.indexOf(p.k) >= 0; }).map(function (p) { return p.n; });
+    var one = [
+      ["결정 요청", "확산 / 수정 후 계속 / 중단 — [W13에 기입]"],
+      ["문제", (painNames.length ? painNames.join(", ") : "[고통점]") + " — '" + u.n + "' 업무에서 " + u.k[0][0] + " [기준값]"],
+      ["한 일", "데이터: '" + u.u + "' 표준 단위 / 프로세스: 승인 지점(" + u.h + ") / AI: " + u.a],
+      ["결과", u.k[0][0] + " [기준값] → [현재값], 주간 활성 사용자 [m]/" + pilotN + "명"],
+      ["배운 것", "[예상과 달랐던 것 2~3개]"],
+      ["리스크·통제", risks[0][0] + " → " + risks[0][1]],
+      ["다음 90일", "[범위·필요 자원]"],
+    ];
+    return { team: team, fn: fn, u: u, a: a, weak: weak, stage: stageOf(a), pilotN: pilotN, champs: champs, W: W, PH: PH, kpis: kpis, risks: risks, people: people, one: one, homes: homeNames, painNames: painNames };
+  }
+
+  var lastPlan = null;
+  function renderPlan() {
+    var p = buildPlan(), u = p.u;
+    lastPlan = p;
+    var h = "";
+    h += "<h3>" + esc(p.team) + " · AX 90일 계획 (초안)</h3>";
+    h += '<p style="margin:0 0 8px;color:var(--text-dim);font-size:14px">작성일 ' + new Date().toLocaleDateString("ko-KR") + " · 기능: " + esc(p.fn.n) + " · 인원 " + S.size + "명 · 진단 평균 " + p.a.toFixed(1) + "점(" + esc(p.stage) + ")</p>";
+    h += '<p style="margin:0 0 4px"><span class="chip bad">약한 고리: ' + esc(p.weak.map(dimName).join(", ")) + "</span> " + p.painNames.map(function (n) { return '<span class="chip warn">' + esc(n) + "</span>"; }).join(" ") + "</p>";
+
+    h += "<h3>1. 유스케이스 캔버스</h3><div class=\"pb-canvas\">" +
+      '<div class="wide"><b>유스케이스</b>' + esc(u.n) + " — " + esc(u.t) + "</div>" +
+      "<div><b>문제(고통점)</b>" + esc(p.painNames.join(", ") || "[기입]") + "</div>" +
+      "<div><b>사용자</b>" + esc(p.team) + " 파일럿 사용자 " + p.pilotN + "명</div>" +
+      "<div><b>표준 단위(1건)</b>" + esc(u.u) + "</div>" +
+      "<div><b>입력 데이터</b>" + esc(u.i) + "</div>" +
+      "<div><b>정보 거주지</b>" + esc(p.homes) + "</div>" +
+      "<div><b>AI의 역할</b>" + esc(u.a) + "</div>" +
+      "<div><b>사람의 판단</b>" + esc(u.h) + "</div>" +
+      "<div><b>산출물</b>" + esc(u.o) + "</div>" +
+      "<div><b>성공 지표</b>" + esc(u.k.map(function (k) { return k[0]; }).join(", ")) + "</div>" +
+      "<div><b>위험 수준</b>" + RISK[u.r] + " — " + esc(u.rn) + "</div>" +
+      "<div><b>필요한 기반 작업</b>" + esc(p.weak.map(function (k) { return DIM_TASK[k][1]; }).join(", ")) + "</div></div>";
+
+    h += '<h3>2. 주차별 90일 계획</h3><div class="table-wrap"><table class="pb-weeks"><thead><tr><th>주</th><th>단계</th><th>활동</th><th>산출물</th></tr></thead><tbody>' +
+      p.W.map(function (w) {
+        return '<tr><td class="wk">W' + w.w + "</td><td>" + esc(p.PH[w.w]) + "</td><td><ul>" + w.acts.map(function (a) { return '<li class="' + (a.x ? "add" : "") + '">' + esc(a.t) + "</li>"; }).join("") + "</ul></td><td>" + esc(w.outs.join(", ")) + "</td></tr>";
+      }).join("") + "</tbody></table></div>" +
+      '<p style="font-size:13px;color:var(--text-dim)">보라색 항목은 진단의 약한 고리와 선택한 고통점에 맞춰 추가된 작업이다.</p>';
+
+    h += '<h3>3. 성공 지표(KPI)</h3><div class="table-wrap"><table><thead><tr><th>구분</th><th>지표</th><th>측정 정의</th><th>측정 시점</th><th>목표</th></tr></thead><tbody>' +
+      p.kpis.map(function (k) { return "<tr>" + k.map(function (c) { return "<td>" + esc(c) + "</td>"; }).join("") + "</tr>"; }).join("") + "</tbody></table></div>";
+
+    h += '<h3>4. 리스크와 통제</h3><div class="table-wrap"><table><thead><tr><th>리스크</th><th>통제</th></tr></thead><tbody>' +
+      p.risks.map(function (r) { return "<tr><td>" + esc(r[0]) + "</td><td>" + esc(r[1]) + "</td></tr>"; }).join("") + "</tbody></table></div>";
+
+    h += '<h3>5. 이해관계자</h3><div class="table-wrap"><table><thead><tr><th>역할</th><th>누구</th><th>RACI</th><th>90일 동안 할 일</th></tr></thead><tbody>' +
+      p.people.map(function (r) { return "<tr>" + r.map(function (c) { return "<td>" + esc(c) + "</td>"; }).join("") + "</tr>"; }).join("") + "</tbody></table></div>" +
+      '<p style="font-size:13px;color:var(--text-dim)">RACI: R 실행, A 최종 책임, C 협의, I 통보.</p>';
+
+    h += '<h3>6. 경영진 한 장 요약 (W13용 초안)</h3><div class="pb-one"><dl>' +
+      p.one.map(function (r) { return "<dt>" + esc(r[0]) + "</dt><dd>" + esc(r[1]) + "</dd>"; }).join("") + "</dl></div>";
+    $("pb-out").innerHTML = h;
+    S.generated = true; persist(); readout();
+  }
+
+  function planText(p) {
+    var L = [], u = p.u;
+    L.push("■ " + p.team + " · AX 90일 계획 (초안)");
+    L.push("작성일 " + new Date().toLocaleDateString("ko-KR") + " / 기능 " + p.fn.n + " / 인원 " + S.size + "명 / 진단 평균 " + p.a.toFixed(1) + "점(" + p.stage + ")");
+    L.push("약한 고리: " + p.weak.map(dimName).join(", ") + (p.painNames.length ? " / 고통점: " + p.painNames.join(", ") : ""));
+    L.push("", "1. 유스케이스 캔버스");
+    [["유스케이스", u.n + " (" + u.t + ")"], ["표준 단위", u.u], ["입력 데이터", u.i], ["정보 거주지", p.homes], ["AI의 역할", u.a], ["사람의 판단", u.h], ["산출물", u.o], ["성공 지표", u.k.map(function (k) { return k[0]; }).join(", ")], ["위험", RISK[u.r] + " — " + u.rn]].forEach(function (r) { L.push("- " + r[0] + ": " + r[1]); });
+    L.push("", "2. 주차별 계획");
+    p.W.forEach(function (w) {
+      L.push("W" + w.w + " [" + p.PH[w.w] + "]");
+      w.acts.forEach(function (a) { L.push("  · " + a.t); });
+      if (w.outs.length) L.push("  → 산출물: " + w.outs.join(", "));
+    });
+    L.push("", "3. 성공 지표");
+    p.kpis.forEach(function (k) { L.push("- [" + k[0] + "] " + k[1] + ": " + k[2] + " / 측정 " + k[3] + " / 목표 " + k[4]); });
+    L.push("", "4. 리스크와 통제");
+    p.risks.forEach(function (r) { L.push("- " + r[0] + " → " + r[1]); });
+    L.push("", "5. 이해관계자");
+    p.people.forEach(function (r) { L.push("- " + r[0] + " (" + r[1] + ", " + r[2] + "): " + r[3]); });
+    L.push("", "6. 경영진 한 장 요약 초안");
+    p.one.forEach(function (r) { L.push("- " + r[0] + ": " + r[1]); });
+    return L.join("\n");
+  }
+
+  function flash(msg) { $("pb-msg").textContent = msg; }
+  function fallbackCopy(text) {
+    var ta = document.createElement("textarea");
+    ta.value = text; ta.setAttribute("readonly", ""); ta.style.position = "fixed"; ta.style.top = "-1000px";
+    document.body.appendChild(ta); ta.select();
+    var ok = false;
+    try { ok = document.execCommand("copy"); } catch (e) { ok = false; }
+    document.body.removeChild(ta);
+    if (ok) { flash("복사했다. 메일이나 문서에 붙여 넣자."); return; }
+    var box = document.querySelector(".pb-copybox");
+    if (!box) { box = document.createElement("textarea"); box.className = "pb-copybox"; box.setAttribute("aria-label", "복사할 계획 텍스트"); $("pb-out").before(box); }
+    box.value = text; box.focus(); box.select();
+    flash("자동 복사가 막혀 있다. 위 상자의 텍스트를 직접 복사하자.");
+  }
+  $("pb-copy").addEventListener("click", function () {
+    if (!lastPlan) renderPlan();
+    var text = planText(lastPlan);
+    if (navigator.clipboard && window.isSecureContext) {
+      navigator.clipboard.writeText(text).then(function () { flash("복사했다. 메일이나 문서에 붙여 넣자."); }, function () { fallbackCopy(text); });
+    } else fallbackCopy(text);
+  });
+  $("pb-print").addEventListener("click", function () {
+    if (!lastPlan) renderPlan();
+    window.print();
+  });
+  $("pb-gen").addEventListener("click", function () {
+    if (!ucObj()) { S.uc = recommendedId(); }
+    renderPlan(); go(6);
+    $("pb-result").scrollIntoView({ behavior: "smooth", block: "start" });
+  });
+
+  asStatus();
+  renderUC();
+  go(S.step);
+  readout();
+  if (S.generated && ucObj()) renderPlan();
+})();
+</script>
+</body>
+</html>

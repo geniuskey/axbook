@@ -1,0 +1,773 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="icon" href="../favicon.ico" sizes="any">
+<link rel="icon" href="../favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="../apple-touch-icon.png">
+<title>사례로 보는 AX · AXBook</title>
+<meta name="description" content="가상의 제조사 다섯 곳(A사~E사)의 고객 클레임, 설비 보전, 설계 변경, 공급망 공지, 퇴직자 지식 사례를 레거시 방식과 AX 방식으로 나란히 비교하고, 같은 사건을 두 방식으로 직접 대응해 본다.">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+<link rel="stylesheet" href="../css/style.css">
+<script src="../js/common.js"></script>
+<style>
+  .case-meta { display: flex; flex-wrap: wrap; gap: 6px; margin: -6px 0 16px; }
+  .result-box { margin: 18px 0; padding: 14px 18px; border: 1px dashed var(--border); border-radius: var(--radius-sm); background: var(--bg-elev); font-size: 15px; }
+  .result-box > b { display: block; margin-bottom: 6px; }
+  .result-box ul { margin: 0; padding-left: 18px; }
+  .rp-card { border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 14px 16px; background: var(--bg-elev); }
+  .rp-card .rp-step { font-family: var(--mono); font-size: 12px; color: var(--accent); font-weight: 600; letter-spacing: .06em; }
+  .rp-card h4 { margin: 4px 0 6px; font-size: 16px; }
+  .rp-card p { margin: 0 0 10px; color: var(--text-dim); font-size: 14.5px; }
+  .rp-opts { display: grid; gap: 8px; }
+  .rp-opts button { text-align: left; font: inherit; font-size: 14.5px; padding: 9px 12px; border-radius: 9px; border: 1px solid var(--border); background: var(--surface); color: var(--text); cursor: pointer; line-height: 1.5; }
+  .rp-opts button:hover { border-color: var(--accent); }
+  .rp-opts button small { display: block; color: var(--text-faint); font-family: var(--mono); font-size: 11.5px; }
+  .rp-log { margin: 12px 0 0; padding: 0; list-style: none; font-size: 13.5px; color: var(--text-dim); display: grid; gap: 4px; }
+  .rp-log li { margin: 0 !important; padding-left: 14px; position: relative; }
+  .rp-log li::before { content: ""; position: absolute; left: 0; top: .65em; width: 6px; height: 6px; border-radius: 50%; background: var(--accent); }
+  .rp-log li.risky::before { background: var(--warn); }
+  .rp-tl { border-top: 1px solid var(--border); }
+  .mb-group { margin: 0 0 16px; }
+  .mb-group h5 { margin: 0 0 2px; font-size: 14.5px; }
+  .mb-group .def { font-size: 12.5px; color: var(--text-faint); margin-bottom: 4px; }
+  .mb-group .bar-row .track i.legacy { background: var(--bad); opacity: .75; }
+  .mb-group .bar-row { grid-template-columns: 64px 1fr 44px; }
+  .mb-group .delta { font-family: var(--mono); font-size: 12px; color: var(--ok); }
+  .lm-grid { display: grid; gap: 12px; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); }
+  .lm-card { border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 14px 16px; background: var(--bg-elev); font-size: 14.5px; }
+  .lm-card .sit { font-weight: 600; margin-bottom: 8px; line-height: 1.55; }
+  .lm-card .lm-opts { display: grid; gap: 6px; }
+  .lm-card .lm-opts button { text-align: left; font: inherit; font-size: 13.5px; padding: 7px 10px; border-radius: 8px; border: 1px solid var(--border); background: var(--surface); color: var(--text); cursor: pointer; line-height: 1.45; }
+  .lm-card .lm-opts button:hover:not(:disabled) { border-color: var(--accent); }
+  .lm-card .lm-opts button.right { border-color: var(--ok); background: color-mix(in srgb, var(--ok) 15%, transparent); font-weight: 600; }
+  .lm-card .lm-opts button.wrong { border-color: var(--bad); background: color-mix(in srgb, var(--bad) 12%, transparent); }
+  .lm-card .lm-opts button:disabled { cursor: default; }
+  .lm-card .lm-exp { display: none; margin-top: 8px; font-size: 13.5px; color: var(--text-dim); }
+  .lm-card.done .lm-exp { display: block; }
+  .mock .table-wrap { margin: 6px 0; }
+  .mock table { font-size: 13px; }
+</style>
+<!-- Cloudflare Web Analytics -->
+<script type='module' src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "3d6151a0abc94ede89285d462527fa80"}'></script>
+<!-- End Cloudflare Web Analytics -->
+</head>
+<body data-chapter="cases">
+<main class="chapter">
+  <header class="chapter-hero">
+    <div class="eyebrow">Chapter 13</div>
+    <h1>사례로 보는 AX</h1>
+    <p class="lead">앞의 열두 장에서 데이터·프로세스·공통 언어·사람을 정리하고 그 위에 AI를 얹는 법을 배웠다. 이 장에서는 그 원리가 실제 업무 한 건에서 어떻게 맞물리는지 본다. 다섯 개의 가상 제조사가 각자 겪는 익숙한 장면을 레거시 방식과 AX 방식으로 나란히 놓고, 무엇이 바뀌었는지, 그리고 무엇은 AI가 아니라 사람과 구조가 바꿨는지 구분해 본다.</p>
+    <ul class="objectives">
+      <li>사례를 "레거시 방식 → 문제 → AX 방식(데이터·프로세스·AI) → 결과 → 교훈"의 틀로 분해해 읽을 수 있다.</li>
+      <li>고객 클레임, 설비 보전, 설계 변경, 공급망 공지, 퇴직자 지식이라는 다섯 장면에서 AI 이전에 필요한 구조(이슈 카드, 고장코드, 연결된 BOM, 공지 레코드, 지식 카드)를 짚어 낼 수 있다.</li>
+      <li>같은 사건을 두 방식으로 대응해 보고, AI를 잘못 쓰면 오히려 재발 위험이 커지는 지점을 설명할 수 있다.</li>
+      <li>사례의 성과 지표를 "무엇을, 어떻게 측정했는가"의 관점에서 읽고 우리 팀 지표로 옮길 수 있다.</li>
+    </ul>
+  </header>
+
+  <!-- ============================================================ 1 -->
+  <section id="frame">
+    <h2>사례를 읽는 법: 다섯 칸짜리 틀</h2>
+    <p>AI 도입 사례를 읽을 때 가장 흔한 실수는 결과 숫자만 보는 것이다. "보고서 작성 시간 70% 단축" 같은 문장은 그 회사가 <strong>어떤 구조를 먼저 깔았는지</strong>, <strong>무엇을 어떻게 측정했는지</strong>를 빼면 우리 팀에 옮길 수 없다. 이 장의 모든 사례는 같은 다섯 칸으로 쪼개서 쓴다.</p>
+    <figure class="diagram">
+      <svg viewBox="0 0 720 250" role="img" aria-label="사례 분석 틀: 레거시 방식, 문제, AX 방식(데이터·프로세스·AI), 결과, 교훈">
+        <g>
+          <rect x="10" y="40" width="120" height="70" rx="10" class="f-surface"/>
+          <text x="70" y="70" text-anchor="middle" class="t">레거시 방식</text>
+          <text x="70" y="90" text-anchor="middle" class="t-dim">지금 일하는 모습</text>
+          <rect x="150" y="40" width="120" height="70" rx="10" class="f-surface"/>
+          <text x="210" y="70" text-anchor="middle" class="t">무엇이 문제인가</text>
+          <text x="210" y="90" text-anchor="middle" class="t-dim">근본 원인</text>
+          <rect x="290" y="20" width="160" height="200" rx="12" class="f-acc-soft"/>
+          <text x="370" y="44" text-anchor="middle" class="t-acc">AX 방식</text>
+          <rect x="305" y="58" width="130" height="40" rx="8" class="f-elev"/>
+          <text x="370" y="83" text-anchor="middle" class="t">① 데이터</text>
+          <rect x="305" y="106" width="130" height="40" rx="8" class="f-elev"/>
+          <text x="370" y="131" text-anchor="middle" class="t">② 프로세스</text>
+          <rect x="305" y="154" width="130" height="40" rx="8" class="f-acc2-soft"/>
+          <text x="370" y="179" text-anchor="middle" class="t">③ AI</text>
+          <text x="370" y="211" text-anchor="middle" class="t-mono">아래에서 위로 쌓는다</text>
+          <rect x="470" y="40" width="110" height="70" rx="10" class="f-surface"/>
+          <text x="525" y="70" text-anchor="middle" class="t">결과</text>
+          <text x="525" y="90" text-anchor="middle" class="t-dim">예시 수치 + 측정 정의</text>
+          <rect x="600" y="40" width="110" height="70" rx="10" class="f-surface"/>
+          <text x="655" y="70" text-anchor="middle" class="t">교훈</text>
+          <text x="655" y="90" text-anchor="middle" class="t-dim">옮겨 갈 원칙</text>
+        </g>
+        <g class="s-line">
+          <path d="M130 75 H150"/><path d="M270 75 H290"/><path d="M450 75 H470"/><path d="M580 75 H600"/>
+        </g>
+        <text x="10" y="150" class="t-dim">순서 주의: ③ AI를 ①·② 없이 얹으면</text>
+        <text x="10" y="170" class="t-dim">혼란도 함께 증폭된다(1장).</text>
+        <text x="470" y="150" class="t-dim">결과는 항상 "무엇을 어떻게</text>
+        <text x="470" y="170" class="t-dim">쟀는가"와 함께 읽는다.</text>
+      </svg>
+      <figcaption><b>그림 13-1.</b> 이 장의 사례 분석 틀. AX 방식 칸은 데이터 → 프로세스 → AI 순서로 아래부터 쌓인다. 대부분의 사례에서 효과의 절반 이상은 ①·②에서 나온다는 점을 눈여겨보자.</figcaption>
+    </figure>
+    <div class="callout warn">
+      <strong>모든 회사와 수치는 가상이다</strong>
+      <p>A사~E사는 업종과 규모만 빌린 가상의 회사이며, 결과에 나오는 숫자는 모두 <b>예시 수치</b>다. 현실의 효과는 데이터 상태, 업무 빈도, 채택률에 따라 크게 달라진다. 숫자 자체보다 "어떤 지표를 어떤 정의로 쟀는가"를 보자.</p>
+    </div>
+    <div class="table-wrap"><table>
+      <thead><tr><th>회사(가상)</th><th>업종</th><th>장면</th><th>핵심 구조</th><th>AI의 역할</th><th>관련 장</th></tr></thead>
+      <tbody>
+        <tr><td>A사</td><td>글로벌 전자부품</td><td>고객 품질 클레임</td><td>이슈 카드, 표준 8D 흐름</td><td>유사 사례 RAG, 8D 초안</td><td><a href="process.html">3장</a>, <a href="knowledge.html">6장</a></td></tr>
+        <tr><td>B사</td><td>자동차 부품</td><td>설비 알람·보전</td><td>표준 고장코드, 정비 이력 DB</td><td>이력 검색, 예지 보전</td><td><a href="semantics.html">4장</a>, <a href="shopfloor.html">9장</a></td></tr>
+        <tr><td>C사</td><td>산업용 장비</td><td>설계 변경(ECN) 영향 분석</td><td>BOM·도면·문서 연결</td><td>지식 그래프 탐색, 영향 요약</td><td><a href="semantics.html">4장</a>, <a href="knowledge.html">6장</a></td></tr>
+        <tr><td>D사</td><td>디스플레이 모듈</td><td>부품 단종·납기 지연 공지</td><td>공지 레코드, 정준 부품번호</td><td>공지 분류·추출, 영향 부품 매칭</td><td><a href="legacy.html">2장</a>, <a href="foundation.html">5장</a></td></tr>
+        <tr><td>E사</td><td>정밀화학 소재</td><td>퇴직자 지식 손실</td><td>지식 카드, 문서 인벤토리, 권한</td><td>권한 기반 문서 RAG</td><td><a href="knowledge.html">6장</a>, <a href="people.html">11장</a></td></tr>
+      </tbody>
+    </table></div>
+  </section>
+
+  <!-- ============================================================ 2 -->
+  <section id="case-a">
+    <h2>A사: 고객 품질 클레임, 메일 스레드에서 이슈 카드로</h2>
+    <div class="case-meta"><span class="chip acc">글로벌 전자부품</span><span class="chip">품질보증팀</span><span class="chip">클레임 연 수백 건(예시)</span></div>
+    <h3>레거시 방식</h3>
+    <p>A사는 해외 완성품 고객사에 커넥터와 수동부품을 납품한다. 클레임은 언제나 메일로 온다. 고객사 품질 담당자가 사진 몇 장과 함께 "LOT 몇 번에서 불량 몇 건"이라고 쓰면, 영업 담당이 품질보증팀에 전달하고, 품질보증팀은 다시 생산·검사·공정기술에 메일을 돌린다. 스레드는 금세 세 갈래로 갈라지고, 숫자는 본문·첨부 엑셀·회신 인용문에 흩어진다.</p>
+    <div class="mock">
+      <div class="mock-head">From: 고객사 SQE / To: A사 영업 / Cc: (5명)<br>Subject: RE: RE: FW: [긴급] 커넥터 접촉 불량 — 출하 LOT 확인 요청</div>
+      <div class="mock-body">
+        안녕하세요, 지난주 입고분 중 <mark>LOT 24-0917-B</mark>에서 <mark class="w">접촉 저항 불량 3건</mark>이 확인되었습니다(사진 첨부).<br>
+        <mark class="b">이번 주 금요일까지</mark> 임시 조치 계획과 영향 범위를 회신 부탁드립니다. 지난번(3월) 건과 유사해 보입니다.<br>
+        &gt; (영업) 품질팀 확인 중입니다. 3월 건 담당자는 현재 다른 부서로…<br>
+        &gt;&gt; (품질) 검사 데이터는 첨부 <mark>검사결과_0917_최종(2).xlsx</mark> 참고 바랍니다.
+      </div>
+    </div>
+    <p>메일 한 통 안에 LOT 번호, 불량 수, 기한, 과거 유사 사례에 대한 힌트, 검사 데이터 위치가 모두 들어 있다. 문제는 이 정보가 <strong>레코드가 아니라 문장</strong>이라는 점이다. 3월 건을 찾으려면 그때 담당자의 메일함을 뒤져야 하고, 8D 보고서는 지난번 파일을 복사해 고치기 때문에 고객마다, 담당자마다 양식이 다르다.</p>
+    <h3>무엇이 문제였나</h3>
+    <ul>
+      <li><b>정보 단위가 없다.</b> "클레임 1건"을 담는 표준 레코드가 없어서 집계·검색·재사용이 모두 불가능했다(<a href="legacy.html">2장</a>의 메일 속 데이터).</li>
+      <li><b>이슈마다 다른 절차.</b> 같은 접촉 불량인데 누가 맡느냐에 따라 조사 순서와 보고서가 달랐다(<a href="process.html">3장</a>의 프로세스 부채).</li>
+      <li><b>과거 사례가 사람에게 묶여 있다.</b> 유사 사례 검색이 "누가 기억하느냐"에 달려 있었고, 담당자 이동과 함께 단서가 사라졌다.</li>
+    </ul>
+    <h3>AX 방식</h3>
+    <ol class="ladder">
+      <li><b>데이터 — 이슈 카드</b>고객, 제품, LOT, 현상(정준 불량 코드), 수량, 기한, 첨부를 필드로 갖는 표준 레코드를 만들었다. 메일이 오면 AI가 필드를 추출해 카드를 미리 채우고 담당자가 확인한다.</li>
+      <li><b>프로세스 — 하나의 대응 흐름</b>접수 → 봉쇄 → 원인 → 대책 → 검증 → 종결을 8D 단계에 맞춘 단일 흐름으로 정하고, 각 단계의 산출물을 카드의 필드로 고정했다. "같은 문제는 같은 양식으로."</li>
+      <li><b>AI — 유사 사례 RAG</b>과거 8D 보고서와 종결된 이슈 카드를 색인해, 새 카드의 현상·제품군으로 유사 사례를 근거(문서 링크)와 함께 찾아 준다(<a href="knowledge.html">6장</a>).</li>
+      <li><b>AI — 8D 초안</b>카드에 쌓인 데이터로 고객 양식에 맞춘 8D 초안을 만들고, 엔지니어가 원인·대책 문장을 검토·수정한 뒤 승인한다(<a href="agents.html">8장</a>의 사람 승인 지점).</li>
+    </ol>
+    <div class="compare">
+      <div class="before"><h4>레거시</h4><ul><li>메일 스레드 3갈래, 첨부 엑셀 여러 버전</li><li>"3월 건" 찾기 = 사람 수소문</li><li>8D 양식은 담당자 수만큼</li><li>종결 후 보고서는 개인 폴더로</li></ul></div>
+      <div class="after"><h4>AX 이후</h4><ul><li>클레임 1건 = 이슈 카드 1장</li><li>유사 사례는 근거 문서와 함께 검색</li><li>8D 초안은 카드 데이터에서 생성 → 사람이 승인</li><li>종결 시 원인 코드·대책이 FMEA와 지식 베이스로</li></ul></div>
+    </div>
+    <div class="result-box"><b>결과 <span class="chip warn">예시 수치</span></b>
+      <ul><li>고객 1차 회신까지 걸린 시간: 평균 약 30영업시간 → 약 6영업시간</li><li>8D 1건당 작성 공수: 약 40인·시 → 약 10인·시(검토 시간 포함)</li><li>8D 양식 종류: 14종 → 1종(고객별 출력 서식만 다름)</li></ul>
+    </div>
+    <div class="callout tip"><strong>교훈</strong><p>A사의 첫 6개월 효과 대부분은 AI가 아니라 <b>이슈 카드와 단일 흐름</b>에서 나왔다. AI는 카드가 쌓인 뒤에야 "검색할 과거"를 갖게 됐다. 처음부터 RAG만 붙였다면 메일 스레드 조각을 검색하는 수준에 머물렀을 것이다.</p></div>
+
+    <div class="sim" id="sim-rp">
+      <div class="sim-head"><span class="sim-tag">INTERACTIVE</span><h3>이슈 발생! — 같은 클레임을 두 방식으로 대응하기</h3></div>
+      <div class="sim-body">
+        <div class="sim-view">
+          <div class="sim-html" id="rp-stage"></div>
+          <div class="rp-tl"><canvas id="cv-rp"></canvas></div>
+        </div>
+        <div class="sim-controls">
+          <div class="ctrl"><span>대응 방식</span><div class="seg" id="rp-mode"><button data-value="legacy" class="on">레거시로 대응</button><button data-value="ax">AX로 대응</button></div></div>
+          <div class="ctrl"><span>빠른 실행</span><div class="ctrl-row"><button class="btn" id="rp-auto">대표 선택으로 채우기</button><button class="btn" id="rp-reset">처음부터</button></div></div>
+        </div>
+      </div>
+      <div class="sim-readout">
+        <div class="stat"><span class="k">소요 시간 (레거시 / AX)</span><span class="v" id="rp-o-time">—</span></div>
+        <div class="stat"><span class="k">투입 공수 인·시 (레거시 / AX)</span><span class="v" id="rp-o-ph">—</span></div>
+        <div class="stat"><span class="k">고객 1차 회신 시점</span><span class="v" id="rp-o-cont">—</span></div>
+        <div class="stat"><span class="k">재발 위험 지수 (레거시 / AX)</span><span class="v" id="rp-o-risk">—</span></div>
+      </div>
+      <div class="sim-note">상황: 금요일 오후, 고객사에서 커넥터 접촉 불량 클레임 메일이 왔다. 각 단계에서 선택지를 고르면 아래 타임라인에 소요 시간(영업시간)이 쌓인다. 두 방식을 모두 끝까지 진행해 비교해 보자. AX 방식에서 "근거 확인 없이 채택" 같은 선택을 하면 시간은 줄지만 재발 위험이 올라간다. 시간·공수·위험은 모두 교육용 예시 수치다.</div>
+    </div>
+  </section>
+
+  <!-- ============================================================ 3 -->
+  <section id="case-b">
+    <h2>B사: 설비 알람과 보전, 작업일지 엑셀에서 표준 고장코드로</h2>
+    <div class="case-meta"><span class="chip acc">자동차 부품</span><span class="chip">프레스·용접 라인</span><span class="chip">IATF 16949 인증 공장</span></div>
+    <h3>레거시 방식</h3>
+    <p>B사의 보전 기록은 라인마다 있는 "작업일지" 엑셀이다. 야간 조 정비사가 설비를 고치고 한 줄을 남긴다. 설비 이름은 사람마다 다르게 쓰고(3호기, P3, #3 프레스), 현상·원인·조치가 한 칸에 섞인다. 설비 알람은 SCADA 화면에 뜨지만, 알람 코드와 작업일지 기록은 서로 연결되어 있지 않다.</p>
+    <div class="mock">
+      <div class="mock-head">파일: \\공유\생산2팀\보전\작업일지_2라인_2026_최종_수정.xlsx · 시트 "9월"</div>
+      <div class="mock-body">
+        <div class="table-wrap"><table>
+          <thead><tr><th>일자</th><th>설비</th><th>내용</th><th>작업자</th></tr></thead>
+          <tbody>
+            <tr><td>09-03</td><td><mark class="w">3호기</mark></td><td>소리 이상 → <mark>그리스 보충</mark> 함, 계속 보기로</td><td>김</td></tr>
+            <tr><td>09-11</td><td><mark class="w">P3</mark></td><td>정지. <mark>베어링 교체?</mark> 부품 없어서 임시조치</td><td>이</td></tr>
+            <tr><td>09-12</td><td><mark class="w">#3 프레스</mark></td><td>알람 E-214 반복. 센서 청소 후 재가동</td><td>박</td></tr>
+            <tr><td>09-19</td><td><mark class="w">3호</mark></td><td>베어링 교체 완료(2시간 정지)</td><td>김</td></tr>
+          </tbody>
+        </table></div>
+        네 줄 모두 같은 설비, 같은 열화 과정이다. 하지만 "같은 설비"라는 사실조차 사람이 읽어야 안다.
+      </div>
+    </div>
+    <h3>무엇이 문제였나</h3>
+    <ul>
+      <li><b>이름이 맞지 않는다.</b> 설비 ID와 고장 분류가 없으니 MTBF·MTTR을 설비별로 계산할 수 없었다(<a href="semantics.html">4장</a>).</li>
+      <li><b>알람과 조치가 끊겨 있다.</b> 같은 알람 E-214가 반복되어도, 그때 무엇을 했고 효과가 있었는지 찾으려면 엑셀을 줄 단위로 읽어야 했다.</li>
+      <li><b>예지 보전의 학습 데이터가 없다.</b> 진동 센서는 있었지만 "언제 실제로 고장 났는가"라는 라벨이 자유 텍스트 속에 묻혀 있었다(<a href="shopfloor.html">9장</a>).</li>
+    </ul>
+    <h3>AX 방식</h3>
+    <figure class="diagram">
+      <svg viewBox="0 0 720 260" role="img" aria-label="B사 보전 데이터 흐름: 작업일지와 알람을 표준 고장코드로 정리하고 정비 이력 검색과 예지 보전에 쓰는 구조">
+        <rect x="10" y="30" width="150" height="56" rx="10" class="f-surface"/>
+        <text x="85" y="54" text-anchor="middle" class="t">작업일지 자유 텍스트</text>
+        <text x="85" y="72" text-anchor="middle" class="t-mono">"P3 소리 이상…"</text>
+        <rect x="10" y="110" width="150" height="56" rx="10" class="f-surface"/>
+        <text x="85" y="134" text-anchor="middle" class="t">SCADA 알람</text>
+        <text x="85" y="152" text-anchor="middle" class="t-mono">E-214, 타임스탬프</text>
+        <rect x="10" y="190" width="150" height="56" rx="10" class="f-surface"/>
+        <text x="85" y="214" text-anchor="middle" class="t">진동·전류 센서</text>
+        <text x="85" y="232" text-anchor="middle" class="t-mono">1 kHz 샘플(예시)</text>
+        <rect x="220" y="60" width="200" height="140" rx="12" class="f-acc-soft"/>
+        <text x="320" y="86" text-anchor="middle" class="t-acc">정비 이력 레코드</text>
+        <text x="236" y="112" class="t-dim">설비 ID: PRS-L2-03</text>
+        <text x="236" y="132" class="t-dim">현상: 이음 / 원인: 베어링 마모</text>
+        <text x="236" y="152" class="t-dim">조치: 교체 / 정지: 120분</text>
+        <text x="236" y="172" class="t-dim">관련 알람: E-214 ×3</text>
+        <text x="320" y="192" text-anchor="middle" class="t-mono">AI 제안 → 정비사 확인</text>
+        <rect x="490" y="40" width="220" height="64" rx="10" class="f-acc2-soft"/>
+        <text x="600" y="66" text-anchor="middle" class="t">정비 이력 검색</text>
+        <text x="600" y="86" text-anchor="middle" class="t-dim">"E-214 지난번엔 뭐 했지?"</text>
+        <rect x="490" y="150" width="220" height="64" rx="10" class="f-acc2-soft"/>
+        <text x="600" y="176" text-anchor="middle" class="t">예지 보전 모델</text>
+        <text x="600" y="196" text-anchor="middle" class="t-dim">라벨 = 정비 이력의 고장 시점</text>
+        <g class="s-line">
+          <path d="M160 58 L220 100"/><path d="M160 138 L220 138"/><path d="M160 218 L490 190"/>
+          <path d="M420 110 L490 74"/><path d="M420 160 L490 176"/>
+        </g>
+        <text x="455" y="250" text-anchor="middle" class="t-mono">고장코드 체계: 현상–원인–조치 3단 코드</text>
+      </svg>
+      <figcaption><b>그림 13-2.</b> B사의 AX 구조. 핵심은 가운데의 정비 이력 레코드다. 자유 텍스트와 알람이 설비 ID·표준 고장코드로 묶이면, 검색과 예지 보전이 같은 데이터에서 동시에 나온다. 예지 보전 모델의 "정답 라벨"도 이 레코드에서 나온다.</figcaption>
+    </figure>
+    <ol class="ladder">
+      <li><b>데이터 — 설비 마스터와 고장코드</b>ISA-95 계층(사이트–영역–작업센터–작업단위)에 맞춘 설비 ID를 정하고, 현상–원인–조치 3단 고장코드를 보전팀과 함께 50개 남짓(예시)으로 합의했다.</li>
+      <li><b>프로세스 — 기록 방식 변경</b>정비사는 태블릿에서 말로 입력하거나 짧게 쓰고, AI가 코드 후보를 제안하면 정비사가 고른다. 자유 텍스트는 버리지 않고 함께 저장한다.</li>
+      <li><b>AI — 이력 검색과 트리아지</b>알람이 뜨면 같은 설비·같은 코드의 과거 조치와 효과를 요약해 보여 준다. 판단과 작업 지시는 사람이 한다.</li>
+      <li><b>AI — 예지 보전 파일럿</b>정비 이력 6개월분이 쌓인 뒤, 핵심 설비 몇 대에서 진동 특성과 고장 시점을 연결한 모델을 시험했다.</li>
+    </ol>
+    <div class="compare">
+      <div class="before"><h4>레거시</h4><ul><li>설비 이름 표기 4가지 이상</li><li>알람과 조치 기록이 분리</li><li>MTTR은 월말에 수작업 추정</li><li>센서 데이터는 있으나 라벨 없음</li></ul></div>
+      <div class="after"><h4>AX 이후</h4><ul><li>설비 ID와 3단 고장코드</li><li>알람 → 과거 조치 요약이 즉시</li><li>MTBF·MTTR 자동 집계</li><li>정비 이력이 예지 보전의 라벨이 됨</li></ul></div>
+    </div>
+    <div class="result-box"><b>결과 <span class="chip warn">예시 수치</span></b>
+      <ul><li>표준 고장코드가 붙은 정비 기록 비율: 약 10% → 약 90%</li><li>평균 수리 시간(MTTR): 약 95분 → 약 55분</li><li>예지 보전 대상 설비의 돌발 정지: 월 22회 → 월 13회(파일럿 설비 한정)</li></ul>
+    </div>
+    <div class="callout tip"><strong>교훈</strong><p>예지 보전은 센서보다 <b>라벨</b>이 먼저다. B사가 "예지 보전 AI"부터 샀다면 학습시킬 고장 이력이 없었을 것이다. 또한 코드 체계는 IT가 아니라 정비사와 함께 만들어야 현장에서 쓰인다.</p></div>
+  </section>
+
+  <!-- ============================================================ 4 -->
+  <section id="case-c">
+    <h2>C사: 설계 변경(ECN) 영향 분석, 메일 결재에서 연결된 지식으로</h2>
+    <div class="case-meta"><span class="chip acc">산업용 장비</span><span class="chip">설계·생산기술·구매·품질</span><span class="chip">다품종 소량</span></div>
+    <h3>레거시 방식</h3>
+    <p>C사는 고객 사양에 맞춰 장비를 조금씩 바꿔 만든다. 설계 변경 통지(ECN, Engineering Change Notice)는 PLM에 등록되지만, 실제 영향 검토는 메일 회람으로 이뤄진다. 설계자가 "브래킷 재질 변경"을 올리면 구매·생산기술·품질·서비스 담당이 각자 자기 엑셀과 기억으로 영향을 확인하고 "이상 없음"이라고 회신한다.</p>
+    <p>문제는 이상 없음의 근거가 없다는 것이다. 이 브래킷이 다른 세 모델의 하위 조립품에도 쓰이는지, 관련 작업 표준서와 검사 기준서가 몇 개인지, 서비스용 예비품 재고는 얼마인지는 각 시스템과 문서에 흩어져 있었다. 변경 후에 "이 부품이 그 모델에도 들어가는 줄 몰랐다"는 일이 반복됐다.</p>
+    <h3>무엇이 문제였나</h3>
+    <ul>
+      <li><b>연결이 없다.</b> BOM은 ERP·PLM에, 도면은 PLM에, 작업 표준서와 검사 기준서는 공유 폴더에 있었고, 서로를 가리키는 링크가 없었다.</li>
+      <li><b>품번 체계가 둘 이상.</b> 설계 품번과 구매 품번이 달라 사람이 매핑표(엑셀)를 들고 다녔다(<a href="semantics.html">4장</a>의 점대점 매핑).</li>
+      <li><b>검토가 기억에 의존.</b> 회람 단계가 많아도, 각 단계가 무엇을 확인했는지는 기록되지 않았다.</li>
+    </ul>
+    <h3>AX 방식</h3>
+    <figure class="diagram">
+      <svg viewBox="0 0 720 300" role="img" aria-label="C사 지식 그래프 예시: ECN이 부품, 상위 조립품, 완제품 모델, 도면, 작업 표준서, 검사 기준서, 공급사, 예비품 재고와 연결된 모습">
+        <g class="s-line">
+          <path d="M360 150 L200 70"/><path d="M360 150 L520 70"/><path d="M360 150 L180 230"/><path d="M360 150 L540 230"/>
+          <path d="M200 70 L80 40"/><path d="M200 70 L80 110"/><path d="M520 70 L650 40"/><path d="M520 70 L650 110"/>
+          <path d="M540 230 L660 270"/><path d="M180 230 L70 270"/>
+        </g>
+        <g style="fill:var(--bg-elev)"><circle cx="360" cy="150" r="56"/><rect x="10" y="22" width="120" height="36" rx="8"/><rect x="10" y="92" width="120" height="36" rx="8"/></g>
+        <circle cx="360" cy="150" r="56" class="f-acc-soft"/>
+        <text x="360" y="146" text-anchor="middle" class="t-acc">ECN-1187</text>
+        <text x="360" y="164" text-anchor="middle" class="t-dim">브래킷 재질 변경</text>
+        <rect x="140" y="50" width="120" height="40" rx="8" class="f-elev"/><text x="200" y="75" text-anchor="middle" class="t">부품 BRK-220</text>
+        <rect x="460" y="50" width="120" height="40" rx="8" class="f-elev"/><text x="520" y="75" text-anchor="middle" class="t">도면 Rev.D</text>
+        <rect x="110" y="210" width="140" height="40" rx="8" class="f-elev"/><text x="180" y="235" text-anchor="middle" class="t">검사 기준서 QI-31</text>
+        <rect x="470" y="210" width="140" height="40" rx="8" class="f-elev"/><text x="540" y="235" text-anchor="middle" class="t">공급사 S-14</text>
+        <rect x="10" y="22" width="120" height="36" rx="8" class="f-acc2-soft"/><text x="70" y="45" text-anchor="middle" class="t">조립품 ASM-7</text>
+        <rect x="10" y="92" width="120" height="36" rx="8" class="f-acc2-soft"/><text x="70" y="115" text-anchor="middle" class="t">조립품 ASM-12</text>
+        <rect x="590" y="22" width="120" height="36" rx="8" class="f-surface"/><text x="650" y="45" text-anchor="middle" class="t">작업표준서 WI-88</text>
+        <rect x="590" y="92" width="120" height="36" rx="8" class="f-surface"/><text x="650" y="115" text-anchor="middle" class="t">설계 검토록</text>
+        <rect x="600" y="252" width="110" height="36" rx="8" class="f-surface"/><text x="655" y="275" text-anchor="middle" class="t">예비품 재고</text>
+        <rect x="10" y="252" width="120" height="36" rx="8" class="f-surface"/><text x="70" y="275" text-anchor="middle" class="t">완제품 모델 3종</text>
+        <text x="200" y="110" text-anchor="middle" class="t-mono">사용됨(used_in)</text>
+        <text x="545" y="190" text-anchor="middle" class="t-mono">공급(supplied_by)</text>
+        <text x="185" y="198" text-anchor="middle" class="t-mono">검사 대상(inspects)</text>
+      </svg>
+      <figcaption><b>그림 13-3.</b> C사의 지식 그래프 일부. ECN 하나에서 출발해 "이 부품이 쓰이는 조립품 → 완제품 모델", "이 부품을 다루는 문서", "공급사와 재고"까지 관계를 따라간다. 관계의 이름(used_in, inspects, supplied_by)을 정하는 일이 곧 온톨로지 설계다(<a href="semantics.html">4장</a>).</figcaption>
+    </figure>
+    <ol class="ladder">
+      <li><b>데이터 — 품번 정준화</b>설계·구매 품번을 하나의 정준 품번으로 묶는 기준정보(MDM)를 만들고, 매핑 엑셀을 폐기했다.</li>
+      <li><b>데이터 — 문서에 품번 메타데이터</b>작업 표준서·검사 기준서·설계 검토록을 인벤토리하고, 문서마다 다루는 품번·공정을 메타데이터로 붙였다. 대부분은 AI가 본문에서 후보를 뽑고 문서 오너가 확인했다.</li>
+      <li><b>프로세스 — 영향 검토 체크 항목 고정</b>회람자는 "이상 없음" 대신 그래프가 보여 준 영향 대상 목록에 대해 항목별로 확인·의견을 남긴다.</li>
+      <li><b>AI — 영향 요약</b>ECN이 등록되면 그래프를 탐색해 영향 대상 목록을 만들고, 관련 문서의 해당 구절을 근거로 붙인 요약을 회람자에게 보낸다.</li>
+    </ol>
+    <div class="compare">
+      <div class="before"><h4>레거시</h4><ul><li>회람자 9명이 각자 확인, 근거 없음</li><li>품번 매핑은 개인 엑셀</li><li>누락은 변경 후에 발견</li></ul></div>
+      <div class="after"><h4>AX 이후</h4><ul><li>그래프가 영향 대상 목록을 먼저 제시</li><li>회람자는 해당 항목만 확인·기록</li><li>검토 기록이 다음 ECN의 근거로 남음</li></ul></div>
+    </div>
+    <div class="result-box"><b>결과 <span class="chip warn">예시 수치</span></b>
+      <ul><li>ECN 영향 분석 기간: 평균 약 12일 → 약 3일</li><li>변경 후 발견된 누락 영향 문서: 분기 약 7건 → 약 1건</li><li>회람 단계: 9단계 → 5단계(영향 없는 부서는 자동 제외)</li></ul>
+    </div>
+    <div class="callout tip"><strong>교훈</strong><p>그래프는 그리기보다 <b>관계 이름을 합의하기</b>가 어렵다. C사는 처음에 모든 문서를 그래프에 넣으려다 멈췄고, "ECN 영향 분석에 필요한 관계 6개"로 범위를 좁힌 뒤에야 완성했다. 넓게가 아니라 한 업무를 끝까지.</p></div>
+  </section>
+
+  <!-- ============================================================ 5 -->
+  <section id="case-d">
+    <h2>D사: 공급망 공지 메일, 받은편지함에서 영향 부품 매칭으로</h2>
+    <div class="case-meta"><span class="chip acc">디스플레이 모듈</span><span class="chip">구매·SCM</span><span class="chip">공급사 수백 곳(예시)</span></div>
+    <h3>레거시 방식</h3>
+    <p>D사 구매팀은 매주 공급사로부터 부품 단종(EOL, End of Life) 통지, 제품 변경 통지(PCN, Product Change Notification), 납기 지연 안내를 받는다. 형식은 공급사마다 다르다. PDF 첨부, 본문 표, 포털 링크, 심지어 이미지 캡처까지 있다. 담당 바이어가 읽고, 해당 부품이 우리 제품 어디에 쓰이는지 ERP에서 찾고, 영향이 있으면 개발·품질에 메일을 보낸다.</p>
+    <div class="mock">
+      <div class="mock-head">From: 공급사 S-31 Sales / To: D사 구매(바이어 개인 메일) <br>Subject: Product Discontinuation Notice — Series XC</div>
+      <div class="mock-body">
+        Dear valued customer, please be informed that the following parts will be discontinued: <mark>XC-1040-T, XC-1060-T</mark> (see attached list for 14 more).<br>
+        <mark class="b">Last Time Buy: 2027-03-31</mark> / Last shipment: 2027-09-30.<br>
+        Recommended replacement: <mark>XC2-1040</mark> (<mark class="w">pin compatible, not form-fit identical</mark>).
+      </div>
+    </div>
+    <p>이 메일에는 단종 품번, 최종 주문 기한(LTB, Last Time Buy), 대체품, 호환성 단서라는 네 가지 핵심 정보가 있다. 하지만 받은 사람이 휴가 중이었다면? 첨부의 나머지 14개 품번은 누가 확인했을까? 공급사 품번과 D사 사내 품번은 어떻게 연결할까?</p>
+    <h3>무엇이 문제였나</h3>
+    <ul>
+      <li><b>개인 메일함이 접수 창구.</b> 공지가 개인에게 오니 부재·이동 시 누락됐다(<a href="legacy.html">2장</a>).</li>
+      <li><b>공급사 품번 ↔ 사내 품번 매핑 부재.</b> 같은 부품이 여러 사내 품번으로 등록된 경우도 있었다(<a href="foundation.html">5장</a>의 유일성 문제).</li>
+      <li><b>영향 판단 기준이 사람마다 다름.</b> "핀 호환"이면 바로 대체 가능한지, 재승인(PPAP 등 고객 승인 절차)이 필요한지 판단이 들쭉날쭉했다.</li>
+    </ul>
+    <h3>AX 방식</h3>
+    <ol class="ladder">
+      <li><b>데이터 — 공동 접수함과 공지 레코드</b>공급사 공지는 팀 공동 주소로 받도록 공급사에 요청하고, 공지 1건을 공급사·품번 목록·공지 유형·기한·대체품·호환성 필드를 가진 레코드로 정의했다.</li>
+      <li><b>데이터 — 공급사 품번 교차표</b>사내 정준 품번과 공급사 품번의 교차 참조를 기준정보로 관리하고, 중복 등록된 사내 품번을 정리했다.</li>
+      <li><b>AI — 분류와 추출</b>들어온 메일과 첨부(PDF·표)를 유형별로 분류하고 필드를 추출한다. 추출 신뢰도가 낮거나 기한이 가까운 건은 바이어 확인 대기열로 보낸다.</li>
+      <li><b>AI + 규칙 — 영향 매칭</b>추출된 품번을 교차표와 BOM으로 연결해 영향 받는 모델·재고·진행 중 주문을 표로 만들고, 호환성 수준에 따라 미리 정한 대응 경로(재고 확보, 대체품 평가, 고객 통보)를 제안한다.</li>
+    </ol>
+    <div class="compare">
+      <div class="before"><h4>레거시</h4><ul><li>개인 메일함 → 부재 시 누락</li><li>첨부 목록은 사람이 하나씩 확인</li><li>영향 판단 기준이 사람마다 다름</li></ul></div>
+      <div class="after"><h4>AX 이후</h4><ul><li>공동 접수함 → 공지 레코드 자동 생성</li><li>품번 교차표 + BOM으로 영향 범위 표</li><li>호환성 수준별 표준 대응 경로</li></ul></div>
+    </div>
+    <div class="result-box"><b>결과 <span class="chip warn">예시 수치</span></b>
+      <ul><li>공지 접수 → 1차 분류: 평균 약 48시간 → 약 2시간</li><li>영향 부품 매칭 누락: 분기 약 6건 → 약 1건</li><li>대체품 검토 착수까지: 약 10일 → 약 3일</li></ul>
+    </div>
+    <div class="callout tip"><strong>교훈</strong><p>AI의 추출 정확도보다 <b>접수 창구와 기준정보</b>가 먼저였다. 추출이 아무리 정확해도 공급사 품번을 사내 품번으로 바꿀 수 없으면 영향 매칭은 0이다. 그리고 "자동 처리"와 "사람 확인" 경계를 신뢰도와 기한으로 명시해 두었기 때문에 현장이 결과를 믿었다.</p></div>
+  </section>
+
+  <!-- ============================================================ 6 -->
+  <section id="case-e">
+    <h2>E사: 퇴직자 지식, 사람 머릿속에서 검색 가능한 지식으로</h2>
+    <div class="case-meta"><span class="chip acc">정밀화학 소재</span><span class="chip">공정기술·품질·연구소</span><span class="chip">숙련자 은퇴 집중 시기</span></div>
+    <h3>레거시 방식</h3>
+    <p>E사의 반응 공정에는 "이 원료 LOT는 점도가 높게 나오니 승온을 천천히"처럼 문서에 없는 판단이 많다. 이런 노하우는 20년 차 공정 엔지니어 몇 명의 머릿속에 있었다. 후배들은 막히면 메신저로 물었고, 답은 메신저에 남았다가 사라졌다. 이 엔지니어들의 정년이 몇 년 안에 몰려 있다는 사실이 확인되자, 회사는 "문서화하라"는 지시를 내렸다. 결과는 수백 쪽짜리 PPT 몇 개였고, 아무도 열어 보지 않았다.</p>
+    <h3>무엇이 문제였나</h3>
+    <ul>
+      <li><b>지식의 단위가 너무 크다.</b> "전부 정리하라"는 지시는 읽히지 않는 대형 문서를 낳았다.</li>
+      <li><b>질문과 답이 만나지 않는다.</b> 후배가 실제로 묻는 질문과 선배가 쓴 문서의 목차가 달랐다.</li>
+      <li><b>권한과 민감도.</b> 배합·공정 조건은 핵심 기술 정보라서 아무 도구에나 넣을 수 없었다(<a href="governance.html">10장</a>).</li>
+    </ul>
+    <h3>AX 방식</h3>
+    <ol class="ladder">
+      <li><b>사람 — 질문에서 출발한 인터뷰</b>메신저·메일에서 후배들이 실제로 물었던 질문을 모아 유형화하고, 숙련자와 30분짜리 인터뷰를 여러 번 진행했다. 녹취는 AI가 받아 적고 요약한다.</li>
+      <li><b>데이터 — 지식 카드</b>인터뷰를 "상황 → 판단 → 이유 → 예외 → 관련 문서" 형식의 짧은 카드로 쪼개고, 숙련자가 직접 검수해 서명했다. 카드마다 공정·설비·원료 코드를 붙였다.</li>
+      <li><b>데이터 — 문서 인벤토리와 권한</b>기존 SOP·실험 노트·이상 보고서를 인벤토리하고 보안 등급과 열람 권한을 정리했다.</li>
+      <li><b>AI — 권한 기반 RAG</b>사내에 배포한 모델로 지식 카드와 문서를 검색해 답하되, 질문자의 권한 범위 문서만 근거로 쓰고 출처를 반드시 표시한다. 답이 없으면 "카드 없음"으로 기록해 다음 인터뷰 주제로 넘긴다.</li>
+    </ol>
+    <div class="compare">
+      <div class="before"><h4>레거시</h4><ul><li>노하우는 숙련자 몇 명의 머릿속</li><li>메신저 문답은 흩어지고 사라짐</li><li>대형 PPT 문서화 → 아무도 안 읽음</li></ul></div>
+      <div class="after"><h4>AX 이후</h4><ul><li>실제 질문에서 출발한 지식 카드</li><li>숙련자 검수·서명으로 신뢰 확보</li><li>권한 기반 검색 + 출처 표시, "답 없음"도 기록</li></ul></div>
+    </div>
+    <div class="result-box"><b>결과 <span class="chip warn">예시 수치</span></b>
+      <ul><li>신입 공정 엔지니어의 질문 해결 시간: 평균 약 2시간 → 약 15분</li><li>같은 질문의 반복 문의(월): 약 60건 → 약 20건</li><li>핵심 판단 노하우 중 카드로 구조화된 비율(자체 평가): 약 15% → 약 70%</li></ul>
+    </div>
+    <div class="callout tip"><strong>교훈</strong><p>지식 이전은 기술 문제가 아니라 <b>사람과 시간</b>의 문제다. 숙련자가 은퇴하기 전에, 그들이 검수할 수 있을 때 시작해야 한다. 또 "답 없음" 로그가 다음에 무엇을 채워야 하는지 알려 주는 가장 정직한 지표가 됐다.</p></div>
+  </section>
+
+  <!-- ============================================================ 7 -->
+  <section id="metrics">
+    <h2>사례를 가로질러 보기: 전후 지표와 측정 정의</h2>
+    <p>다섯 사례의 결과를 한자리에 놓아 보자. 막대의 길이보다 막대 위의 <b>측정 정의</b>가 더 중요하다. "보고서 작성 시간"을 첫 타이핑부터 쟀는지, 데이터 취합부터 쟀는지에 따라 같은 개선도 두 배 차이가 난다. <a href="usecases.html">7장</a>에서 말한 대로, 지표는 시작 전에 정의하고 기준값(baseline)을 먼저 재야 한다.</p>
+    <div class="sim" id="sim-metrics">
+      <div class="sim-head"><span class="sim-tag">INTERACTIVE</span><h3>사례별 전후 지표 비교</h3></div>
+      <div class="sim-body side">
+        <div class="sim-view"><div class="sim-html" id="mb-out"></div></div>
+        <div class="sim-controls">
+          <div class="ctrl"><span>사례 선택</span><div class="seg" id="mb-case"><button data-value="A" class="on">A사</button><button data-value="B">B사</button><button data-value="C">C사</button><button data-value="D">D사</button><button data-value="E">E사</button></div></div>
+          <label class="check"><input type="checkbox" id="mb-def" checked> 측정 정의 보기</label>
+          <div class="legend" style="padding:0"><span><i style="background:var(--bad)"></i>레거시</span><span><i style="background:var(--accent)"></i>AX 이후</span></div>
+        </div>
+      </div>
+      <div class="sim-readout">
+        <div class="stat"><span class="k">사례</span><span class="v" id="mb-o-name">—</span></div>
+        <div class="stat"><span class="k">평균 개선률</span><span class="v" id="mb-o-avg">—</span></div>
+        <div class="stat"><span class="k">가장 큰 개선 지표</span><span class="v" id="mb-o-top" style="font-size:14px">—</span></div>
+      </div>
+      <div class="sim-note">모든 값은 교육용 예시 수치다. 각 지표의 막대는 두 값 중 큰 값을 100%로 놓고 그렸다. "높을수록 좋은" 지표(표준코드 비율 등)는 개선률을 증가율로 계산한다.</div>
+    </div>
+    <h3>다섯 사례의 공통 구조</h3>
+    <p>사례를 나란히 놓으면 업종도 업무도 다른데 뼈대가 같다는 것이 보인다. 모두 <b>정보의 표준 단위</b>를 먼저 정의했고, 그 단위를 <b>정준 ID</b>로 연결했으며, AI는 그 위에서 <b>추출·검색·초안</b>을 맡고 최종 판단은 사람이 했다.</p>
+    <figure class="diagram">
+      <svg viewBox="0 0 720 270" role="img" aria-label="다섯 사례의 공통 구조: 표준 단위, 정준 ID 연결, AI 역할, 사람의 판단">
+        <text x="10" y="30" class="t-acc">① 표준 단위</text>
+        <text x="10" y="102" class="t-acc">② 정준 ID로 연결</text>
+        <text x="10" y="174" class="t-acc">③ AI의 역할</text>
+        <text x="10" y="246" class="t-acc">④ 사람의 판단</text>
+        <g>
+          <rect x="150" y="12" width="104" height="30" rx="7" class="f-elev"/><text x="202" y="32" text-anchor="middle" class="t">이슈 카드</text>
+          <rect x="264" y="12" width="104" height="30" rx="7" class="f-elev"/><text x="316" y="32" text-anchor="middle" class="t">정비 레코드</text>
+          <rect x="378" y="12" width="104" height="30" rx="7" class="f-elev"/><text x="430" y="32" text-anchor="middle" class="t">ECN 레코드</text>
+          <rect x="492" y="12" width="104" height="30" rx="7" class="f-elev"/><text x="544" y="32" text-anchor="middle" class="t">공지 레코드</text>
+          <rect x="606" y="12" width="104" height="30" rx="7" class="f-elev"/><text x="658" y="32" text-anchor="middle" class="t">지식 카드</text>
+          <rect x="150" y="84" width="104" height="30" rx="7" class="f-surface"/><text x="202" y="104" text-anchor="middle" class="t-dim">불량코드·LOT</text>
+          <rect x="264" y="84" width="104" height="30" rx="7" class="f-surface"/><text x="316" y="104" text-anchor="middle" class="t-dim">설비 ID·고장코드</text>
+          <rect x="378" y="84" width="104" height="30" rx="7" class="f-surface"/><text x="430" y="104" text-anchor="middle" class="t-dim">정준 품번</text>
+          <rect x="492" y="84" width="104" height="30" rx="7" class="f-surface"/><text x="544" y="104" text-anchor="middle" class="t-dim">품번 교차표</text>
+          <rect x="606" y="84" width="104" height="30" rx="7" class="f-surface"/><text x="658" y="104" text-anchor="middle" class="t-dim">공정·원료 코드</text>
+          <rect x="150" y="156" width="104" height="30" rx="7" class="f-acc2-soft"/><text x="202" y="176" text-anchor="middle" class="t">RAG·8D 초안</text>
+          <rect x="264" y="156" width="104" height="30" rx="7" class="f-acc2-soft"/><text x="316" y="176" text-anchor="middle" class="t">검색·예지</text>
+          <rect x="378" y="156" width="104" height="30" rx="7" class="f-acc2-soft"/><text x="430" y="176" text-anchor="middle" class="t">그래프 요약</text>
+          <rect x="492" y="156" width="104" height="30" rx="7" class="f-acc2-soft"/><text x="544" y="176" text-anchor="middle" class="t">분류·추출</text>
+          <rect x="606" y="156" width="104" height="30" rx="7" class="f-acc2-soft"/><text x="658" y="176" text-anchor="middle" class="t">권한 RAG</text>
+          <rect x="150" y="228" width="560" height="30" rx="7" class="f-acc-soft"/><text x="430" y="248" text-anchor="middle" class="t">승인·작업 지시·고객 통보·검수 서명은 언제나 사람</text>
+        </g>
+        <g class="s-axis">
+          <path d="M202 42 V84"/><path d="M316 42 V84"/><path d="M430 42 V84"/><path d="M544 42 V84"/><path d="M658 42 V84"/>
+          <path d="M202 114 V156"/><path d="M316 114 V156"/><path d="M430 114 V156"/><path d="M544 114 V156"/><path d="M658 114 V156"/>
+          <path d="M202 186 V228"/><path d="M316 186 V228"/><path d="M430 186 V228"/><path d="M544 186 V228"/><path d="M658 186 V228"/>
+        </g>
+      </svg>
+      <figcaption><b>그림 13-4.</b> 다섯 사례의 공통 구조. 위 두 줄(표준 단위, 정준 ID)이 <a href="legacy.html">2장</a>~<a href="foundation.html">5장</a>의 내용이고, 셋째 줄이 <a href="knowledge.html">6장</a>~<a href="shopfloor.html">9장</a>, 마지막 줄이 <a href="agents.html">8장</a>·<a href="governance.html">10장</a>의 사람 승인 지점이다.</figcaption>
+    </figure>
+    <div class="table-wrap"><table>
+      <thead><tr><th>사례</th><th>첫 3개월에 한 일</th><th>AI가 등장한 시점</th><th>현업 주인</th></tr></thead>
+      <tbody>
+        <tr><td>A사</td><td>이슈 카드 필드 합의, 단일 대응 흐름</td><td>카드 수백 장이 쌓인 뒤</td><td>품질보증 팀장</td></tr>
+        <tr><td>B사</td><td>설비 ID, 3단 고장코드, 입력 방식 변경</td><td>추출은 즉시, 예지 보전은 6개월 후</td><td>보전 파트장</td></tr>
+        <tr><td>C사</td><td>정준 품번, 문서 메타데이터, 관계 6개 합의</td><td>그래프 완성 후 요약</td><td>설계 변경 관리자</td></tr>
+        <tr><td>D사</td><td>공동 접수함, 품번 교차표</td><td>분류·추출은 초기부터(사람 확인 대기열 포함)</td><td>구매 파트장</td></tr>
+        <tr><td>E사</td><td>질문 수집, 숙련자 인터뷰, 권한 정리</td><td>카드 수십 장이 검수된 뒤</td><td>공정기술 팀장</td></tr>
+      </tbody>
+    </table></div>
+  </section>
+
+  <!-- ============================================================ 8 -->
+  <section id="lessons">
+    <h2>교훈 정리와 업계 흐름</h2>
+    <p>다섯 사례에서 반복된 교훈을 일곱 문장으로 줄이면 다음과 같다.</p>
+    <div class="cards">
+      <div class="card"><span class="k">LESSON 1</span><h4>구조가 먼저, 모델은 나중</h4><p>표준 단위(카드·레코드)와 정준 ID가 없으면 AI가 검색·학습할 대상이 없다.</p></div>
+      <div class="card"><span class="k">LESSON 2</span><h4>같은 문제는 같은 양식으로</h4><p>대응 흐름과 산출물을 고정해야 데이터가 쌓이고 비교된다.</p></div>
+      <div class="card"><span class="k">LESSON 3</span><h4>근거 없는 답은 채택하지 않는다</h4><p>출처 표시와 사람 승인 지점을 설계에 넣는다.</p></div>
+      <div class="card"><span class="k">LESSON 4</span><h4>좁게 시작해 끝까지 관통</h4><p>한 업무의 접수부터 종결까지 얇은 수직 슬라이스로 완성한다.</p></div>
+      <div class="card"><span class="k">LESSON 5</span><h4>현업이 주인</h4><p>코드 체계와 판단 기준은 그 일을 하는 사람이 정한다.</p></div>
+      <div class="card"><span class="k">LESSON 6</span><h4>측정 정의를 먼저</h4><p>기준값 없이 시작하면 효과를 증명할 수 없다.</p></div>
+      <div class="card"><span class="k">LESSON 7</span><h4>지식은 떠나기 전에</h4><p>숙련자가 검수할 수 있을 때 구조화한다.</p></div>
+    </div>
+    <div class="sim" id="sim-lessons">
+      <div class="sim-head"><span class="sim-tag">INTERACTIVE</span><h3>교훈 매칭 카드 — 이 상황에 필요한 원칙은?</h3></div>
+      <div class="sim-body">
+        <div class="sim-view"><div class="sim-html"><div class="lm-grid" id="lm-grid"></div></div></div>
+      </div>
+      <div class="sim-readout">
+        <div class="stat"><span class="k">맞힌 카드</span><span class="v" id="lm-o-score">0 / 0</span></div>
+        <div class="stat"><span class="k">남은 카드</span><span class="v" id="lm-o-left">—</span></div>
+        <div class="stat"><span class="k">다시 하기</span><span class="v"><button class="btn" id="lm-reset" style="font-size:13px;padding:4px 10px">섞어서 다시</button></span></div>
+      </div>
+      <div class="sim-note">각 카드는 다른 회사(가상)에서 실제로 흔히 들리는 상황이다. 위 일곱 교훈 중 가장 직접적인 처방을 고르자.</div>
+    </div>
+    <h3>공개적으로 알려진 업계 흐름</h3>
+    <p>세계경제포럼(WEF)은 첨단 제조 기술을 대규모로 적용한 공장을 선정해 <span class="term">글로벌 등대 네트워크</span><span class="en">(Global Lighthouse Network)</span>로 소개하고 있으며, 여러 나라·업종의 제조사가 이름을 올렸다. 공개된 소개 자료에서 반복되는 주제는 단일 기술보다 여러 유스케이스를 하나의 데이터 기반 위에서 확산하는 운영 방식, 그리고 현장 인력의 역량 개발이다. 또 산업용 소프트웨어 업계 전반에서는 MES·PLM·ERP와 생성형 AI를 연결하는 "산업용 AI 플랫폼"과 코파일럿 기능을 내놓는 흐름이 뚜렷하다.</p>
+    <p>이런 흐름은 참고가 되지만, 이 장의 사례가 보여 주듯 플랫폼이 우리 회사의 고장코드나 이슈 카드를 대신 정해 주지는 않는다. 어떤 플랫폼을 고르든 <a href="roadmap.html">12장</a>의 가시화·표준화 단계는 우리가 해야 한다.</p>
+    <h3>우리 회사 사례로 옮길 때 체크리스트</h3>
+    <ul class="checklist">
+      <li>우리 업무의 "1건"은 무엇인가? (클레임 1건, 정비 1건, 공지 1건 …) 그 1건의 필드를 적을 수 있는가?</li>
+      <li>그 1건을 다른 시스템과 연결할 정준 ID(LOT, 설비 ID, 품번)가 있는가?</li>
+      <li>대응 흐름이 하나로 정해져 있는가, 담당자마다 다른가?</li>
+      <li>AI가 틀렸을 때 누가, 어느 시점에 알아챌 수 있는가?</li>
+      <li>시작 전 기준값을 쟀는가? 측정 정의를 문서로 남겼는가?</li>
+      <li>현업 주인(팀장·파트장)이 이름으로 정해져 있는가?</li>
+    </ul>
+    <p>이 체크리스트를 우리 팀 계획으로 바꾸는 작업은 다음 장 <a href="playbook.html">14장 플레이북</a>에서 한다.</p>
+  </section>
+
+  <section class="keypoints" id="summary">
+    <h2>핵심 정리</h2>
+    <ol>
+      <li>사례는 "레거시 방식 → 문제 → AX 방식(데이터·프로세스·AI) → 결과 → 교훈"으로 분해해 읽어야 우리 팀으로 옮길 수 있다.</li>
+      <li>다섯 사례 모두 AI 이전에 <b>정보의 표준 단위</b>(이슈 카드, 정비 레코드, ECN 레코드, 공지 레코드, 지식 카드)와 <b>정준 ID</b>를 먼저 만들었다.</li>
+      <li>AI의 역할은 추출·검색·요약·초안이었고, 승인·작업 지시·고객 통보 같은 판단은 사람이 맡았다. 근거 확인 없이 AI 답을 채택하면 시간은 줄어도 재발 위험은 커진다.</li>
+      <li>예지 보전은 라벨(정비 이력)이, 영향 분석은 관계 합의가, 공지 처리는 접수 창구와 기준정보가, 지식 이전은 숙련자의 시간이 병목이었다.</li>
+      <li>결과 수치는 측정 정의·기준값과 함께 읽는다. 이 장의 수치는 모두 예시 수치다.</li>
+    </ol>
+  </section>
+
+  <section class="quiz-sec" id="quiz">
+    <h2>확인 퀴즈</h2>
+    <div class="quiz">
+      <div class="quiz-q"><p>A사 사례에서 첫 6개월 효과의 대부분을 만든 요인으로 이 장이 강조한 것은?</p><div class="opts">
+        <button class="opt">최신 대형 언어 모델의 도입</button>
+        <button class="opt" data-correct>이슈 카드라는 표준 단위와 단일 대응 흐름</button>
+        <button class="opt">8D 보고서 자동 발송</button>
+        <button class="opt">고객사 품질 담당자 교체</button>
+      </div><div class="quiz-exp">유사 사례 RAG와 8D 초안은 이슈 카드가 쌓인 뒤에야 의미가 생겼다. 구조가 먼저, 모델은 나중이다.</div></div>
+
+      <div class="quiz-q"><p>B사가 예지 보전 모델을 만들기 전에 반드시 필요했던 것은?</p><div class="opts">
+        <button class="opt">더 높은 샘플링 주파수의 진동 센서</button>
+        <button class="opt">클라우드 GPU 서버</button>
+        <button class="opt" data-correct>설비 ID와 표준 고장코드가 붙은 정비 이력(고장 시점 라벨)</button>
+        <button class="opt">설비 공급사의 원격 접속 권한</button>
+      </div><div class="quiz-exp">센서 데이터는 이미 있었다. 부족했던 것은 "언제 실제로 고장 났는가"라는 라벨이었고, 그 라벨은 구조화된 정비 이력에서 나온다.</div></div>
+
+      <div class="quiz-q"><p>C사가 지식 그래프 구축 초기에 멈춘 뒤 다시 성공한 방법은?</p><div class="opts">
+        <button class="opt">모든 사내 문서를 한꺼번에 그래프에 넣었다</button>
+        <button class="opt" data-correct>ECN 영향 분석에 필요한 관계 몇 개로 범위를 좁혔다</button>
+        <button class="opt">그래프 대신 회람 단계를 늘렸다</button>
+        <button class="opt">설계 품번과 구매 품번을 각각 유지했다</button>
+      </div><div class="quiz-exp">관계의 이름을 합의하는 것이 어렵기 때문에, 한 업무에 필요한 관계로 좁혀 끝까지 관통하는 것이 효과적이다.</div></div>
+
+      <div class="quiz-q"><p>D사에서 AI의 추출 정확도가 높아도 영향 매칭이 불가능해지는 경우는?</p><div class="opts">
+        <button class="opt">공지 메일이 영어로 올 때</button>
+        <button class="opt">PDF 첨부가 있을 때</button>
+        <button class="opt" data-correct>공급사 품번을 사내 정준 품번으로 바꾸는 교차표가 없을 때</button>
+        <button class="opt">바이어가 공지를 직접 읽을 때</button>
+      </div><div class="quiz-exp">추출된 품번이 BOM과 연결되지 않으면 영향 범위를 계산할 수 없다. 기준정보(MDM)가 먼저다.</div></div>
+
+      <div class="quiz-q"><p>"이슈 발생!" 롤플레이에서 AX 방식인데도 재발 위험이 높아지는 선택은?</p><div class="opts">
+        <button class="opt">LOT ID로 검사 데이터를 자동 조회한다</button>
+        <button class="opt">이슈 카드를 종결하며 FMEA와 연결한다</button>
+        <button class="opt" data-correct>AI가 찾은 유사 사례를 근거 확인 없이 원인으로 채택한다</button>
+        <button class="opt">영향 LOT를 자동 식별해 선별한다</button>
+      </div><div class="quiz-exp">AI는 시간을 줄여 주지만, 근거 확인과 사람 승인 지점을 건너뛰면 잘못된 원인이 대책으로 굳어진다.</div></div>
+
+      <div class="quiz-q"><p>사례의 결과 수치를 읽을 때 가장 먼저 확인해야 할 것은?</p><div class="opts">
+        <button class="opt">개선률이 50%를 넘는지</button>
+        <button class="opt" data-correct>무엇을 어떤 정의로, 어떤 기준값과 비교해 측정했는지</button>
+        <button class="opt">어떤 AI 모델을 썼는지</button>
+        <button class="opt">프로젝트 예산 규모</button>
+      </div><div class="quiz-exp">측정 정의와 기준값이 없으면 같은 개선도 몇 배로 다르게 보인다. 이 장의 수치도 모두 예시 수치다.</div></div>
+    </div>
+  </section>
+</main>
+<script>
+(function () {
+  "use strict";
+  var esc = AX.esc;
+
+  /* ------------------------------------------------ ① 이슈 발생! 롤플레이 */
+  var STAGES = [
+    { name: "접수·공유", sit: "고객 메일이 영업 담당에게 도착했다. 정보를 누구에게, 어떤 형태로 넘길까?",
+      legacy: [{ t: "메일을 팀 전체에 전달하고 긴급 회의 소집", h: 3, p: 6, r: 0 }, { t: "한 명에게 전달하고 상황을 엑셀로 정리하게 함", h: 5, p: 2, r: 0.05 }],
+      ax: [{ t: "이슈 카드 생성 — AI가 고객·LOT·현상·기한을 추출, 담당자가 확인", h: 0.5, p: 2, r: 0 }, { t: "카드만 만들고 추출 필드는 확인하지 않음", h: 0.3, p: 1, r: 0.05 }] },
+    { name: "정보 수집", sit: "해당 LOT의 생산 이력과 검사 데이터가 필요하다.",
+      legacy: [{ t: "생산·검사 담당에게 메일로 이력 요청 후 회신 대기", h: 16, p: 3, r: 0 }, { t: "공유 폴더에서 검사 엑셀을 직접 찾아 취합", h: 10, p: 1, r: 0.05 }],
+      ax: [{ t: "LOT ID로 MES·검사 데이터 자동 조회", h: 1, p: 1, r: 0 }, { t: "자동 조회 + 현장 실물 확인 요청 1건 추가", h: 3, p: 2, r: 0 }] },
+    { name: "원인 추정", sit: "\"3월 건과 비슷해 보인다\"는 고객 코멘트가 있다. 과거 사례를 어떻게 찾을까?",
+      legacy: [{ t: "선배 엔지니어의 기억에 의존해 수소문", h: 12, p: 3, r: 0.15 }, { t: "과거 보고서 폴더를 파일명으로 검색", h: 8, p: 1, r: 0.2 }],
+      ax: [{ t: "과거 8D·클레임 RAG 검색 → 유사 사례 3건의 근거 문서 확인", h: 1.5, p: 2, r: 0.05 }, { t: "AI가 제시한 원인을 근거 확인 없이 그대로 채택", h: 0.5, p: 1, r: 0.25, risky: true }] },
+    { name: "봉쇄(임시 조치)", sit: "출하 대기 재고와 고객 재고를 어떻게 막을까? 이 단계가 끝나면 고객에게 1차 회신한다.",
+      legacy: [{ t: "재고 전수 선별 지시(메일·전화)", h: 10, p: 5, r: 0 }, { t: "고객 회신을 먼저 하고 선별은 다음 날", h: 6, p: 3, r: 0.1, risky: true }],
+      ax: [{ t: "영향 LOT를 자동 식별해 해당 재고만 선별", h: 4, p: 3, r: 0 }, { t: "영향 LOT 자동 식별 + 전수 선별 병행(보수적)", h: 7, p: 4, r: 0 }] },
+    { name: "8D 보고서", sit: "고객 양식의 8D 보고서를 제출해야 한다.",
+      legacy: [{ t: "지난번 보고서 파일을 복사해 수정", h: 12, p: 2, r: 0.05 }, { t: "고객사 양식에 맞춰 처음부터 작성", h: 16, p: 2, r: 0 }],
+      ax: [{ t: "카드 데이터로 8D 초안 생성 → 엔지니어 검토·수정 후 승인", h: 3, p: 2, r: 0 }, { t: "초안을 검토 없이 그대로 발송", h: 0.5, p: 1, r: 0.2, risky: true }] },
+    { name: "재발 방지·지식화", sit: "대책이 검증됐다. 이번 경험을 어디에 남길까?",
+      legacy: [{ t: "보고서를 메일로 발송하고 개인 폴더에 보관", h: 1, p: 1, r: 0.35, risky: true }, { t: "FMEA 업데이트는 '다음에' 하기로 함", h: 0.5, p: 1, r: 0.3, risky: true }],
+      ax: [{ t: "카드 종결: 원인 코드·대책을 FMEA와 지식 베이스에 연결", h: 2, p: 2, r: 0 }, { t: "카드만 종결하고 FMEA 연결은 생략", h: 0.5, p: 1, r: 0.15, risky: true }] },
+  ];
+  var BASE_RISK = 0.1;
+  var rp = { mode: "legacy", picks: { legacy: [], ax: [] } };
+
+  function laneStats(mode) {
+    var picks = rp.picks[mode], t = 0, ph = 0, risk = BASE_RISK, cont = null, segs = [];
+    picks.forEach(function (k, i) {
+      var o = STAGES[i][mode][k];
+      segs.push({ x0: t, x1: t + o.h, i: i, risky: !!o.risky });
+      t += o.h; ph += o.h * o.p; risk += o.r;
+      if (i === 3) cont = t;
+    });
+    return { t: t, ph: ph, risk: Math.min(0.95, risk), cont: cont, segs: segs, done: picks.length === STAGES.length, n: picks.length };
+  }
+
+  function renderStage() {
+    var mode = rp.mode, picks = rp.picks[mode], box = document.getElementById("rp-stage");
+    var label = mode === "legacy" ? "레거시" : "AX";
+    var log = picks.map(function (k, i) {
+      var o = STAGES[i][mode][k];
+      return '<li class="' + (o.risky ? "risky" : "") + '"><b>' + esc(STAGES[i].name) + "</b> — " + esc(o.t) + " (" + o.h + "h)</li>";
+    }).join("");
+    if (picks.length < STAGES.length) {
+      var s = STAGES[picks.length];
+      box.innerHTML = '<div class="rp-card"><div class="rp-step">' + label + " 방식 · 단계 " + (picks.length + 1) + " / " + STAGES.length + "</div><h4>" + esc(s.name) + "</h4><p>" + esc(s.sit) + '</p><div class="rp-opts">' +
+        s[mode].map(function (o, k) {
+          return '<button type="button" data-k="' + k + '">' + esc(o.t) + "<small>예상 " + o.h + "h · " + o.p + "명 관여</small></button>";
+        }).join("") + "</div>" + (log ? '<ul class="rp-log">' + log + "</ul>" : "") + "</div>";
+      [].forEach.call(box.querySelectorAll(".rp-opts button"), function (b) {
+        b.addEventListener("click", function () { rp.picks[mode].push(Number(b.dataset.k)); update(); });
+      });
+    } else {
+      var st = laneStats(mode), other = mode === "legacy" ? "ax" : "legacy";
+      var otherDone = laneStats(other).done;
+      box.innerHTML = '<div class="rp-card"><div class="rp-step">' + label + " 방식 · 완료</div><h4>대응 종료: 약 " + (st.t / 8).toFixed(1) + " 영업일, 투입 " + Math.round(st.ph) + " 인·시</h4><p>" +
+        (otherDone ? "두 방식을 모두 마쳤다. 아래 타임라인과 수치를 비교해 보자. 재발 위험 지수는 마지막 단계(지식화)의 선택에 특히 민감하다."
+                   : "이제 위쪽에서 '" + (other === "ax" ? "AX로 대응" : "레거시로 대응") + "'을 눌러 같은 사건을 다른 방식으로 대응해 보자.") +
+        '</p><ul class="rp-log">' + log + "</ul></div>";
+    }
+  }
+
+  var cvRp = AX.canvas("#cv-rp", function (ctx, w, h) {
+    var P = AX.palette(), L = laneStats("legacy"), A = laneStats("ax");
+    var maxT = Math.max(L.t, A.t, 8) * 1.08;
+    var left = 64, right = 14, top = 18, laneH = 40, gap = 22;
+    var X = function (v) { return left + (v / maxT) * (w - left - right); };
+    ctx.font = "12px " + AX.color("font");
+    // grid
+    var step = maxT > 60 ? 16 : maxT > 30 ? 8 : 4;
+    ctx.strokeStyle = P.grid; ctx.fillStyle = P.dim; ctx.textAlign = "center"; ctx.textBaseline = "top";
+    for (var v = 0; v <= maxT; v += step) {
+      ctx.beginPath(); ctx.moveTo(X(v), top - 6); ctx.lineTo(X(v), top + 2 * laneH + gap + 4); ctx.stroke();
+      ctx.fillText(v + "h", X(v), top + 2 * laneH + gap + 8);
+    }
+    ctx.textBaseline = "bottom"; ctx.fillStyle = P.faint; ctx.textAlign = "right";
+    ctx.fillText("영업시간 (8h = 1일)", w - right, h - 2);
+    [["레거시", L, 0], ["AX", A, 1]].forEach(function (row) {
+      var st = row[1], y = top + row[2] * (laneH + gap);
+      ctx.fillStyle = P.text; ctx.textAlign = "right"; ctx.textBaseline = "middle";
+      ctx.fillText(row[0], left - 10, y + laneH / 2);
+      ctx.fillStyle = P.surface; ctx.fillRect(left, y, w - left - right, laneH);
+      st.segs.forEach(function (s) {
+        var x0 = X(s.x0), x1 = X(s.x1), col = P.series[s.i % P.series.length];
+        ctx.fillStyle = col; ctx.globalAlpha = 0.85;
+        ctx.fillRect(x0, y + 4, Math.max(2, x1 - x0 - 1), laneH - 8);
+        ctx.globalAlpha = 1;
+        if (s.risky) { ctx.strokeStyle = P.bad; ctx.lineWidth = 2; ctx.setLineDash([4, 3]); ctx.strokeRect(x0 + 1, y + 2, Math.max(2, x1 - x0 - 3), laneH - 4); ctx.setLineDash([]); }
+        if (x1 - x0 > 22) { ctx.fillStyle = P.bg; ctx.textAlign = "center"; ctx.textBaseline = "middle"; ctx.font = "bold 12px " + AX.color("mono"); ctx.fillText(String(s.i + 1), (x0 + x1) / 2, y + laneH / 2); ctx.font = "12px " + AX.color("font"); }
+      });
+      if (st.cont != null) {
+        var cx = X(st.cont);
+        ctx.strokeStyle = P.text; ctx.lineWidth = 1.5; ctx.beginPath(); ctx.moveTo(cx, y - 4); ctx.lineTo(cx, y + laneH + 4); ctx.stroke();
+        ctx.fillStyle = P.text; ctx.textAlign = cx > w - 90 ? "right" : "left"; ctx.textBaseline = "bottom";
+        ctx.fillText("1차 회신", cx + (cx > w - 90 ? -4 : 4), y - 2);
+      }
+      if (!st.n) { ctx.fillStyle = P.faint; ctx.textAlign = "left"; ctx.textBaseline = "middle"; ctx.fillText("아직 진행 전", left + 10, y + laneH / 2); }
+    });
+  }, { height: 170 });
+
+  function update() {
+    renderStage();
+    var L = laneStats("legacy"), A = laneStats("ax");
+    var f = function (s, fn) { return s.n ? fn(s) : "—"; };
+    AX.stat("rp-o-time", f(L, function (s) { return s.t.toFixed(1) + "h"; }) + " / " + f(A, function (s) { return s.t.toFixed(1) + "h"; }));
+    AX.stat("rp-o-ph", f(L, function (s) { return Math.round(s.ph); }) + " / " + f(A, function (s) { return Math.round(s.ph); }));
+    AX.stat("rp-o-cont", (L.cont != null ? "L " + L.cont.toFixed(1) + "h" : "L —") + " · " + (A.cont != null ? "AX " + A.cont.toFixed(1) + "h" : "AX —"));
+    var rf = function (s) { return s.done ? Math.round(s.risk * 100) : "—"; };
+    AX.stat("rp-o-risk", rf(L) + " / " + rf(A));
+    cvRp.redraw();
+  }
+  AX.seg("rp-mode", function (v) { rp.mode = v; update(); });
+  document.getElementById("rp-auto").addEventListener("click", function () {
+    rp.picks.legacy = STAGES.map(function () { return 0; });
+    rp.picks.ax = STAGES.map(function () { return 0; });
+    update();
+  });
+  document.getElementById("rp-reset").addEventListener("click", function () {
+    rp.picks = { legacy: [], ax: [] }; update();
+  });
+  update();
+
+  /* ------------------------------------------------ ② 사례별 전후 지표 */
+  var METRICS = {
+    A: { name: "A사 · 고객 클레임", m: [
+      { k: "고객 1차 회신까지 시간", u: "영업시간", b: 30, a: 6, lower: true, def: "클레임 메일 수신 시각 → 봉쇄 계획 포함 첫 회신 발송 시각" },
+      { k: "8D 1건 작성 공수", u: "인·시", b: 40, a: 10, lower: true, def: "데이터 취합부터 최종 승인까지, 검토 시간 포함" },
+      { k: "유사 클레임 재발(연)", u: "건", b: 9, a: 3, lower: true, def: "같은 고객·같은 정준 불량 코드로 12개월 안에 재접수된 건" },
+      { k: "8D 양식 종류", u: "종", b: 14, a: 1, lower: true, def: "최근 1년 제출 보고서의 서로 다른 구조(섹션 구성) 수" } ] },
+    B: { name: "B사 · 설비 보전", m: [
+      { k: "표준 고장코드 기록 비율", u: "%", b: 10, a: 90, lower: false, def: "월간 정비 기록 중 현상–원인–조치 코드가 모두 채워진 비율" },
+      { k: "평균 수리 시간(MTTR)", u: "분", b: 95, a: 55, lower: true, def: "정지 알람 발생 → 재가동까지, 계획 정지 제외" },
+      { k: "돌발 정지(파일럿 설비)", u: "회/월", b: 22, a: 13, lower: true, def: "예지 보전 파일럿 대상 설비의 비계획 정지 횟수" },
+      { k: "과거 조치 검색 시간", u: "분", b: 40, a: 3, lower: true, def: "알람 확인 → 같은 설비·같은 코드 과거 조치를 찾기까지(관찰 측정)" } ] },
+    C: { name: "C사 · 설계 변경", m: [
+      { k: "ECN 영향 분석 기간", u: "일", b: 12, a: 3, lower: true, def: "ECN 등록 → 모든 회람자 검토 완료" },
+      { k: "누락 영향 문서(분기)", u: "건", b: 7, a: 1, lower: true, def: "변경 적용 후에 발견된, 개정이 필요했던 문서 수" },
+      { k: "회람 단계 수", u: "단계", b: 9, a: 5, lower: true, def: "ECN 1건당 평균 검토 부서 수" } ] },
+    D: { name: "D사 · 공급망 공지", m: [
+      { k: "접수 → 1차 분류", u: "시간", b: 48, a: 2, lower: true, def: "공지 메일 수신 → 유형·품번·기한이 레코드로 확정" },
+      { k: "영향 부품 매칭 누락(분기)", u: "건", b: 6, a: 1, lower: true, def: "사후에 영향이 확인됐으나 초기 매칭에서 빠진 사내 품번 수" },
+      { k: "대체품 검토 착수까지", u: "일", b: 10, a: 3, lower: true, def: "공지 수신 → 개발·품질에 대체품 평가 요청 발송" } ] },
+    E: { name: "E사 · 퇴직자 지식", m: [
+      { k: "질문 해결 시간", u: "분", b: 120, a: 15, lower: true, def: "신입 엔지니어 설문·관찰: 질문 발생 → 납득할 답 획득" },
+      { k: "반복 문의(월)", u: "건", b: 60, a: 20, lower: true, def: "숙련자에게 들어온 같은 유형 질문 수(메신저 집계)" },
+      { k: "노하우 구조화 비율", u: "%", b: 15, a: 70, lower: false, def: "핵심 판단 목록 중 검수된 지식 카드가 있는 비율(자체 평가)" } ] },
+  };
+  var defBox = document.getElementById("mb-def");
+  var mbCase = AX.seg("mb-case", renderMetrics);
+  defBox.addEventListener("change", function () { renderMetrics(); });
+  function renderMetrics() {
+    var c = METRICS[mbCase()], showDef = defBox.checked, sum = 0, top = null;
+    var html = c.m.map(function (m) {
+      var mx = Math.max(m.b, m.a), imp = m.lower ? (m.b - m.a) / m.b : (m.a - m.b) / m.b;
+      sum += m.lower ? imp : Math.min(imp, 1);
+      if (!top || imp > top.imp) top = { k: m.k, imp: imp };
+      var pct = m.lower ? "−" + Math.round(imp * 100) + "%" : "×" + (m.a / m.b).toFixed(1);
+      return '<div class="mb-group"><h5>' + esc(m.k) + ' <span class="delta">' + pct + "</span></h5>" +
+        (showDef ? '<div class="def">측정 정의: ' + esc(m.def) + "</div>" : "") +
+        '<div class="bar-row"><span>레거시</span><span class="track"><i class="legacy" style="width:' + (m.b / mx * 100).toFixed(1) + '%"></i></span><span class="val">' + m.b + "</span></div>" +
+        '<div class="bar-row"><span>AX 이후</span><span class="track"><i style="width:' + (m.a / mx * 100).toFixed(1) + '%"></i></span><span class="val">' + m.a + "</span></div>" +
+        '<div class="def" style="text-align:right">단위: ' + esc(m.u) + (m.lower ? " · 낮을수록 좋음" : " · 높을수록 좋음") + "</div></div>";
+    }).join("");
+    document.getElementById("mb-out").innerHTML = html + '<p style="margin:0;font-size:12.5px;color:var(--text-faint)">모든 값은 예시 수치</p>';
+    AX.stat("mb-o-name", esc(c.name.split(" · ")[0]));
+    AX.stat("mb-o-avg", "약 " + Math.round((sum / c.m.length) * 100) + "%");
+    AX.stat("mb-o-top", esc(top.k));
+  }
+  renderMetrics();
+
+  /* ------------------------------------------------ ③ 교훈 매칭 카드 */
+  var LESSONS = ["구조가 먼저, 모델은 나중", "같은 문제는 같은 양식으로", "근거 없는 답은 채택하지 않는다", "좁게 시작해 끝까지 관통", "현업이 주인", "측정 정의를 먼저", "지식은 떠나기 전에"];
+  var CARDS = [
+    { s: "\"AI 검색을 붙였는데 결과가 엉망이다.\" 알고 보니 검색 대상이 메일 스레드 조각과 파일명뿐이다.", a: 0, d: [2, 5], e: "검색할 표준 단위(카드·레코드)가 없으면 어떤 모델도 좋은 결과를 내기 어렵다." },
+    { s: "공정기술 팀장이 \"IT가 만든 불량코드 체계라서 현장은 안 쓴다\"고 말한다.", a: 4, d: [0, 1], e: "코드 체계와 판단 기준은 그 일을 하는 사람이 함께 정해야 현장에서 쓰인다." },
+    { s: "파일럿이 끝났는데 \"좋아진 것 같다\"는 말만 있고 숫자가 없다.", a: 5, d: [3, 6], e: "시작 전에 측정 정의와 기준값을 정해야 효과를 증명할 수 있다." },
+    { s: "8D 초안 기능을 켠 뒤, 검토 없이 그대로 고객에게 나간 보고서에서 원인이 틀린 것이 발견됐다.", a: 2, d: [1, 4], e: "출처 확인과 사람 승인 지점을 흐름에 넣어야 한다." },
+    { s: "AX 과제 12개를 동시에 시작했는데 1년 뒤 운영 중인 것은 하나도 없다.", a: 3, d: [0, 5], e: "한 업무를 접수부터 종결까지 끝까지 관통하는 얇은 수직 슬라이스가 확산의 출발점이다." },
+    { s: "같은 설비 고장인데 A조와 B조의 보고서 구성이 완전히 달라 비교가 안 된다.", a: 1, d: [4, 6], e: "대응 흐름과 산출물을 고정해야 데이터가 쌓이고 비교된다." },
+    { s: "핵심 공정 엔지니어 세 명이 2년 안에 정년을 맞는다. 문서는 거의 없다.", a: 6, d: [3, 2], e: "숙련자가 검수할 수 있을 때, 실제 질문에서 출발해 지식 카드로 쪼개야 한다." },
+  ];
+  var lm = { order: [], score: 0, answered: 0 };
+  function shuffle(a) { for (var i = a.length - 1; i > 0; i--) { var j = Math.floor(Math.random() * (i + 1)); var t = a[i]; a[i] = a[j]; a[j] = t; } return a; }
+  function renderLessons(doShuffle) {
+    lm.score = 0; lm.answered = 0;
+    var idx = CARDS.map(function (_, i) { return i; });
+    if (doShuffle) shuffle(idx);
+    var grid = document.getElementById("lm-grid");
+    grid.innerHTML = idx.map(function (ci) {
+      var c = CARDS[ci], opts = [c.a].concat(c.d);
+      if (doShuffle) shuffle(opts); else opts = [c.d[0], c.a, c.d[1]];
+      return '<div class="lm-card" data-ci="' + ci + '"><div class="sit">' + esc(c.s) + '</div><div class="lm-opts">' +
+        opts.map(function (li) { return '<button type="button" data-li="' + li + '">' + esc(LESSONS[li]) + "</button>"; }).join("") +
+        '</div><div class="lm-exp">' + esc(c.e) + "</div></div>";
+    }).join("");
+    [].forEach.call(grid.querySelectorAll(".lm-card"), function (card) {
+      var c = CARDS[Number(card.dataset.ci)], btns = [].slice.call(card.querySelectorAll("button"));
+      btns.forEach(function (b) {
+        b.addEventListener("click", function () {
+          var li = Number(b.dataset.li);
+          btns.forEach(function (o) { o.disabled = true; if (Number(o.dataset.li) === c.a) o.classList.add("right"); });
+          if (li !== c.a) b.classList.add("wrong"); else lm.score++;
+          lm.answered++; card.classList.add("done"); lmStats();
+        });
+      });
+    });
+    lmStats();
+  }
+  function lmStats() {
+    AX.stat("lm-o-score", lm.score + " / " + lm.answered);
+    AX.stat("lm-o-left", String(CARDS.length - lm.answered));
+  }
+  document.getElementById("lm-reset").addEventListener("click", function () { renderLessons(true); });
+  renderLessons(false);
+})();
+</script>
+</body>
+</html>
