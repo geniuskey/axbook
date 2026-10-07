@@ -19,10 +19,11 @@
     { slug: "shopfloor",  num: "09", title: "현장 AI: 설비·공정·품질",          desc: "OT와 IT의 경계, SPC와 이상 탐지, 예지 보전, 비전 검사, 가상 계측과 디지털 트윈.", tags: ["제조", "sim"] },
     { slug: "governance", num: "10", title: "AI 거버넌스·보안·리스크",          desc: "ISO/IEC 42001, EU AI Act, NIST AI RMF. 기술 유출, 섀도 AI, 환각과 책임 소재를 관리하는 체계.", tags: ["거버넌스", "sim"] },
     { slug: "people",     num: "11", title: "사람과 조직: 변화 관리",            desc: "CoE와 허브-스포크, 도메인 전문가와 AI 엔지니어의 협업, 확산 곡선과 저항 관리, 역량 체계.", tags: ["조직", "sim"] },
-    { slug: "roadmap",    num: "12", title: "단계별 로드맵: 레거시에서 AX까지",  desc: "가시화 → 표준화 → 디지털화 → 데이터화 → 지능화 → 자율화. 의존 관계를 지키며 순서를 짜는 법.", tags: ["실행", "sim"] },
-    { slug: "cases",      num: "13", title: "사례로 보는 AX",                  desc: "품질 이슈 대응, 고객 클레임, 설비 보전, 설계 변경. 레거시 방식과 AX 방식을 같은 사건으로 비교한다.", tags: ["사례", "sim"] },
-    { slug: "playbook",   num: "14", title: "AX 플레이북: 우리 팀 설계하기",     desc: "진단 결과를 입력해 우리 팀의 90일 실행 계획과 첫 유스케이스 캔버스를 만든다.", tags: ["종합", "sim"] },
-    { slug: "glossary",   num: "15", title: "용어집 & 종합 퀴즈",               desc: "AX 핵심 용어를 검색하고, 종합 퀴즈로 실력을 점검하자.", tags: ["정리"] },
+    { slug: "goals",      num: "12", title: "AX 목표 체계: 계층별 목표 설계",   desc: "팀 목표를 취합만 해서는 AX가 움직이지 않는다. 부문·사업부·실·팀·파트가 각자 '그 계층만 할 수 있는 일'을 목표로 삼는 법.", tags: ["경영", "sim"] },
+    { slug: "roadmap",    num: "13", title: "단계별 로드맵: 레거시에서 AX까지",  desc: "가시화 → 표준화 → 디지털화 → 데이터화 → 지능화 → 자율화. 의존 관계를 지키며 순서를 짜는 법.", tags: ["실행", "sim"] },
+    { slug: "cases",      num: "14", title: "사례로 보는 AX",                  desc: "품질 이슈 대응, 고객 클레임, 설비 보전, 설계 변경. 레거시 방식과 AX 방식을 같은 사건으로 비교한다.", tags: ["사례", "sim"] },
+    { slug: "playbook",   num: "15", title: "AX 플레이북: 우리 팀 설계하기",     desc: "진단 결과를 입력해 우리 팀의 90일 실행 계획과 첫 유스케이스 캔버스를 만든다.", tags: ["종합", "sim"] },
+    { slug: "glossary",   num: "16", title: "용어집 & 종합 퀴즈",               desc: "AX 핵심 용어를 검색하고, 종합 퀴즈로 실력을 점검하자.", tags: ["정리"] },
   ];
 
   const SB = (window.AX = {});

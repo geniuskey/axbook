@@ -1,0 +1,943 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="icon" href="../favicon.ico" sizes="any">
+<link rel="icon" href="../favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="../apple-touch-icon.png">
+<title>AX 목표 체계: 계층별 목표 설계 · AXBook</title>
+<meta name="description" content="팀 목표를 취합해 사업부·부문 목표로 삼는 방식이 왜 AX에서 실패하는지, 부문·사업부·실·팀·그룹·파트가 각자 무엇을 목표로 가져야 하는지, 캐치볼과 공동 목표, 지표 설계와 평가·보상 운영까지 계층별 AX 목표 체계를 설계한다.">
+<link rel="canonical" href="https://axbook.euiyun.com/chapters/goals.html">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="AXBook">
+<meta property="og:title" content="AX 목표 체계: 계층별 목표 설계 · AXBook">
+<meta property="og:description" content="팀 목표를 취합해 사업부·부문 목표로 삼는 방식이 왜 AX에서 실패하는지, 부문·사업부·실·팀·그룹·파트가 각자 무엇을 목표로 가져야 하는지, 캐치볼과 공동 목표, 지표 설계와 평가·보상 운영까지 계층별 AX 목표 체계를 설계한다.">
+<meta property="og:url" content="https://axbook.euiyun.com/chapters/goals.html">
+<meta property="og:image" content="https://axbook.euiyun.com/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:locale" content="ko_KR">
+<meta name="twitter:card" content="summary_large_image">
+<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"TechArticle","headline":"AX 목표 체계: 계층별 목표 설계","name":"AX 목표 체계: 계층별 목표 설계 · AXBook","url":"https://axbook.euiyun.com/chapters/goals.html","mainEntityOfPage":"https://axbook.euiyun.com/chapters/goals.html","inLanguage":"ko","isAccessibleForFree":true,"learningResourceType":"interactive textbook chapter","position":12,"image":"https://axbook.euiyun.com/og.png","dateModified":"2026-10-07","isPartOf":{"@type":"Book","@id":"https://axbook.euiyun.com/#book","name":"AXBook — 제조 현장을 위한 인터랙티브 AI 전환 교과서","url":"https://axbook.euiyun.com/"},"publisher":{"@type":"Organization","name":"AXBook","url":"https://axbook.euiyun.com/"},"description":"팀 목표를 취합해 사업부·부문 목표로 삼는 방식이 왜 AX에서 실패하는지, 부문·사업부·실·팀·그룹·파트가 각자 무엇을 목표로 가져야 하는지, 캐치볼과 공동 목표, 지표 설계와 평가·보상 운영까지 계층별 AX 목표 체계를 설계한다."},{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"AXBook","item":"https://axbook.euiyun.com/"},{"@type":"ListItem","position":2,"name":"12 AX 목표 체계: 계층별 목표 설계","item":"https://axbook.euiyun.com/chapters/goals.html"}]}]}</script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+<link rel="stylesheet" href="../css/style.css">
+<script src="../js/common.js"></script>
+<style>
+  svg .s-acc2 { stroke: var(--accent-2); fill: none; stroke-width: 2; }
+  svg .s-bad { stroke: var(--bad); fill: none; stroke-width: 2; }
+  svg .f-warn-soft { fill: color-mix(in srgb, var(--warn) 14%, transparent); stroke: var(--warn); }
+  svg .f-bad-soft { fill: color-mix(in srgb, var(--bad) 12%, transparent); stroke: var(--bad); }
+  svg .f-ok-soft { fill: color-mix(in srgb, var(--ok) 14%, transparent); stroke: var(--ok); }
+  svg .t-acc2 { fill: var(--accent-2); font-family: var(--font); font-size: 13px; font-weight: 700; }
+  svg .t-bad { fill: var(--bad); font-family: var(--font); font-size: 13px; font-weight: 700; }
+  svg .t-ok { fill: var(--ok); font-family: var(--font); font-size: 12px; font-weight: 700; }
+  svg .t-sm { fill: var(--text-dim); font-family: var(--font); font-size: 11px; }
+  svg .t-b { fill: var(--text); font-family: var(--font); font-size: 14px; font-weight: 700; }
+  /* 히트맵 표 */
+  .hm td.c { text-align: center; font-weight: 700; white-space: nowrap; }
+  .hm .h0 { color: var(--text-faint); }
+  .hm .h1 { background: color-mix(in srgb, var(--accent) 10%, transparent); }
+  .hm .h2 { background: color-mix(in srgb, var(--accent) 24%, transparent); }
+  .hm .h3 { background: color-mix(in srgb, var(--accent) 42%, transparent); }
+  .hm small { display: block; font-weight: 400; font-size: 12px; color: var(--text-dim); white-space: normal; }
+  /* 목표 설계기 */
+  .gd-meta { font-size: 13.5px; color: var(--text-dim); margin: 0 0 10px; }
+  .gd-meta b { color: var(--text); }
+  .gd-goal { border: 1px solid var(--border); border-radius: 10px; padding: 9px 12px; margin: 8px 0; background: var(--bg-elev); }
+  .gd-goal.badg { border-color: color-mix(in srgb, var(--bad) 45%, var(--border)); }
+  .gd-goal .gt { font-weight: 600; font-size: 14.5px; }
+  .gd-goal .gm { font-size: 13px; color: var(--text-dim); margin-top: 3px; }
+  .gd-goal .chips { display: flex; flex-wrap: wrap; gap: 4px; margin-bottom: 4px; }
+  .gd-h { font-size: 13px; color: var(--text-dim); margin: 14px 0 2px; font-weight: 600; }
+  /* 점검기 */
+  .gc-list { list-style: none; padding: 0 !important; margin: 10px 0 !important; }
+  .gc-list li { display: grid; grid-template-columns: 54px 1fr; gap: 10px; align-items: start; padding: 7px 0; border-bottom: 1px dashed var(--border); font-size: 14px; margin: 0 !important; }
+  .gc-list li .chip { text-align: center; }
+  .gc-list small { display: block; color: var(--text-dim); font-size: 12.5px; }
+  .gc-rewrite { margin-top: 10px; padding: 10px 12px; border-radius: 10px; background: var(--surface); border: 1px solid var(--border); font-size: 14px; }
+  .gc-samples { display: flex; flex-wrap: wrap; gap: 6px; }
+  .gc-samples .btn { font-size: 12.5px; padding: 5px 9px; }
+  /* 캐스케이드 트리 */
+  .ct-tree, .ct-tree ul { list-style: none; margin: 0 !important; padding: 0 !important; }
+  .ct-tree ul { margin-left: 12px !important; padding-left: 10px !important; border-left: 2px solid var(--border); }
+  .ct-tree li { margin: 6px 0 !important; }
+  .ct-node { display: block; width: 100%; text-align: left; font: inherit; font-size: 13.5px; line-height: 1.45; border: 1px solid var(--border); background: var(--bg-elev); color: var(--text); border-radius: 9px; padding: 7px 10px; cursor: pointer; }
+  .ct-node:hover { border-color: var(--accent); }
+  .ct-node .lv { font-family: var(--mono); font-size: 11px; color: var(--text-faint); margin-right: 6px; }
+  .ct-node.on { border-color: var(--accent); background: var(--accent-soft); }
+  .ct-node.sel { border-color: var(--accent); box-shadow: 0 0 0 2px var(--accent) inset; }
+  .ct-node.dim { opacity: .45; }
+  .ct-detail { margin-top: 12px; padding: 12px 14px; border-radius: 10px; background: var(--surface); border: 1px solid var(--border); font-size: 14px; }
+  .ct-detail h4 { margin: 0 0 6px; font-size: 15.5px; }
+  .ct-detail dl { margin: 0; display: grid; grid-template-columns: 84px 1fr; gap: 4px 10px; }
+  .ct-detail dt { color: var(--text-dim); font-size: 13px; }
+  .ct-detail dd { margin: 0; }
+</style>
+<!-- Cloudflare Web Analytics -->
+<script type='module' src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "3d6151a0abc94ede89285d462527fa80"}'></script>
+<!-- End Cloudflare Web Analytics -->
+</head>
+<body data-chapter="goals">
+<main class="chapter">
+  <header class="chapter-hero">
+    <div class="eyebrow">Chapter 12</div>
+    <h1>AX 목표 체계: 계층별 목표 설계</h1>
+    <p class="lead">많은 대기업 제조사에서 AX 목표는 팀 단위로만 세워지고 관리된다. 실·사업부·부문은 팀 목표를 모아 더한 표를 자기 목표라고 부른다. 그런데 AX가 만드는 가치의 상당 부분은 팀과 팀 사이, 여러 팀이 함께 쓰는 데이터와 표준, 예산과 사람을 옮기는 결정에서 나온다. 이것들은 팀 목표를 아무리 더해도 나오지 않는다. 이 장은 취합형 목표가 왜 실패하는지 보이고, 각 계층이 <strong>그 계층만 할 수 있는 일</strong>을 목표로 갖는 체계를 설계한다.</p>
+    <ul class="objectives">
+      <li>취합형 AX 목표가 실패하는 여섯 가지 기제(합≠전체, 중복, 활동 지표 표류, 시간 지평 불일치, 기여 귀속, 본업 단절)를 설명할 수 있다.</li>
+      <li>부문·사업부·실·팀·그룹·파트를 결정권·범위·시간 지평으로 정의하고, 계층별 목표 유형(결과·기반·확산·역량·가드레일) 구성을 설계할 수 있다.</li>
+      <li>캐스케이드, 캐치볼, 공동 목표, 매트릭스 목표, 기여 귀속 규칙으로 하나의 사업부 결과 목표를 파트까지 연결할 수 있다.</li>
+      <li>활동 지표를 결과·채택 지표로 바꾸고, 기준선과 측정 정의가 있는 다년 목표와 분기 점검·평가 체계를 운영할 수 있다.</li>
+    </ul>
+  </header>
+
+  <!-- ============================================================ 1 -->
+  <section id="scene">
+    <h2>목표 시트는 꽉 찼는데, 리드타임은 그대로다</h2>
+    <p>A사(글로벌 전자부품 제조사)의 한 사업부. 연말 AX 성과 보고회에서 사업부 기획 담당이 올린 목표 달성 현황은 화려했다. 숫자는 모두 열두 개 팀이 연초에 낸 목표를 더한 것이다(아래 수치는 모두 예시).</p>
+    <div class="mock">
+      <div class="mock-head">파일: ○○사업부_AX목표_취합_최종_v5.xlsx / 시트: 사업부 합계 (12개 팀 취합)</div>
+      <div class="mock-body">
+        1. AI 과제 추진: <mark>87건</mark> (목표 80건, 달성률 109%)<br>
+        2. 전 구성원 AI 교육 이수율: <mark>95%</mark> (목표 90%)<br>
+        3. 생성형 AI 활용 사용자: <mark>1,200명</mark> (목표 1,000명)<br>
+        4. 챗봇·RAG 구축: <mark class="w">12건</mark> (팀별 1건)<br>
+        5. PoC 완료: <mark class="w">31건</mark><br>
+        <span style="color:var(--text-dim)">비고: 고객 클레임 초기 대응 리드타임(사업부 경영 KPI) — 전년과 동일 수준, AX 목표 대상 아님</span>
+      </div>
+    </div>
+    <p>보고회가 끝나고 사업부장이 물었다. "그래서 고객 클레임 대응은 빨라졌습니까?" 아무도 답하지 못했다. 고객 클레임의 초기 대응, 즉 접수부터 출하 보류·선별 같은 임시조치까지는 고객지원팀, 고객품질팀, 품질분석팀, 공정기술팀, 제조팀의 <strong>다섯 팀을 거친다</strong>. 다섯 팀은 모두 자기 AX 목표를 달성했다. 고객품질팀은 8D 초안 챗봇을 만들었고, 공정기술팀은 공정 문서 검색 RAG를 만들었고, 품질분석팀은 시험 보고서 요약 도구를 만들었다. 그런데 리드타임의 대부분은 팀 <strong>안</strong>이 아니라 팀 <strong>사이</strong>에서 쓰였다. 메일로 LOT 이력을 요청하고, 엑셀 양식을 다시 채우고, 불량 이름이 서로 달라 확인 전화를 하는 시간이다.</p>
+    <p>더 아픈 사실도 있다. 열두 개 팀이 각자 만든 챗봇과 RAG는 상당 부분 <strong>같은 문서</strong>를 색인하고 있었다. 품질 규격서, 고객 요구사항, 과거 8D 보고서. 문서 파싱, 권한 설정, 평가 세트 구축을 열두 번 했고, 운영 비용도 열두 번 낸다. 어느 팀의 목표에도 "사업부 공통 지식 검색 하나로 통합"은 없었다. 그것은 <strong>누구의 목표도 아니었기</strong> 때문이다.</p>
+
+    <figure class="diagram">
+      <svg viewBox="0 0 800 300" role="img" aria-label="다섯 팀을 거치는 클레임 대응 흐름과 팀 사이의 대기 시간">
+        <rect x="20" y="14" width="760" height="34" rx="8" class="f-surface"/>
+        <text x="400" y="36" text-anchor="middle" class="t">사업부 AX 목표 = Σ 팀 목표 &#160;→&#160; 과제 87건 · 교육 95% · 사용자 1,200명 (예시)</text>
+        <g>
+          <rect x="20" y="100" width="124" height="70" rx="10" class="f-elev"/>
+          <text x="82" y="126" text-anchor="middle" class="t">고객지원팀</text>
+          <text x="82" y="146" text-anchor="middle" class="t-ok">팀 목표 달성</text>
+          <rect x="179" y="100" width="124" height="70" rx="10" class="f-elev"/>
+          <text x="241" y="126" text-anchor="middle" class="t">고객품질팀</text>
+          <text x="241" y="146" text-anchor="middle" class="t-ok">8D 챗봇 구축</text>
+          <rect x="338" y="100" width="124" height="70" rx="10" class="f-elev"/>
+          <text x="400" y="126" text-anchor="middle" class="t">품질분석팀</text>
+          <text x="400" y="146" text-anchor="middle" class="t-ok">요약 도구 구축</text>
+          <rect x="497" y="100" width="124" height="70" rx="10" class="f-elev"/>
+          <text x="559" y="126" text-anchor="middle" class="t">공정기술팀</text>
+          <text x="559" y="146" text-anchor="middle" class="t-ok">문서 RAG 구축</text>
+          <rect x="656" y="100" width="124" height="70" rx="10" class="f-elev"/>
+          <text x="718" y="126" text-anchor="middle" class="t">제조팀</text>
+          <text x="718" y="146" text-anchor="middle" class="t-ok">팀 목표 달성</text>
+        </g>
+        <g class="s-bad">
+          <path d="M144 135 H179"/><path d="M303 135 H338"/><path d="M462 135 H497"/><path d="M621 135 H656"/>
+        </g>
+        <g>
+          <rect x="140" y="64" width="44" height="22" rx="6" class="f-bad-soft"/><text x="162" y="80" text-anchor="middle" class="t-sm">대기</text>
+          <rect x="299" y="64" width="44" height="22" rx="6" class="f-bad-soft"/><text x="321" y="80" text-anchor="middle" class="t-sm">재입력</text>
+          <rect x="458" y="64" width="44" height="22" rx="6" class="f-bad-soft"/><text x="480" y="80" text-anchor="middle" class="t-sm">메일</text>
+          <rect x="617" y="64" width="44" height="22" rx="6" class="f-bad-soft"/><text x="639" y="80" text-anchor="middle" class="t-sm">확인</text>
+        </g>
+        <rect x="20" y="196" width="760" height="40" rx="10" class="f-bad-soft"/>
+        <text x="400" y="221" text-anchor="middle" class="t-bad">누구의 목표도 아닌 영역: 인계·대기·재입력·용어 불일치 · 공통 데이터 · 중복 RAG 통합</text>
+        <text x="400" y="266" text-anchor="middle" class="t-dim">리드타임 10일(예시) 중 팀 안의 작업은 일부, 나머지는 팀 사이에서 흐른다</text>
+        <text x="400" y="288" text-anchor="middle" class="t-sm">각 팀의 개선은 자기 상자 안만 줄인다. 상자 사이의 빨간 구간은 어느 팀 목표 시트에도 없다.</text>
+      </svg>
+      <figcaption><b>그림 12-1.</b> 다섯 팀을 거치는 클레임 초기 대응 흐름. 팀 목표를 모두 달성해도 팀 사이의 인계·대기·재입력은 줄지 않는다. 취합형 목표 체계에서 이 구간은 구조적으로 "주인 없는 영역"이 된다. 수치는 예시다.</figcaption>
+    </figure>
+
+    <p>이 장면은 특정 회사의 이야기가 아니다. 목표 관리(MBO) 체계를 팀 단위로 운영하는 조직이라면 AX 목표도 자연스럽게 팀 단위로 내려가고, 상위 조직은 이를 모으는 역할만 하게 된다. 목표 양식이 그렇게 생겼기 때문이다. 이 장은 그 양식을 바꾸는 이야기다.</p>
+    <div class="callout">
+      <strong>이 장에서 쓰는 조직 계층</strong>
+      <p>부문(또는 전사) &gt; 사업부 &gt; 실 &gt; 팀 &gt; 그룹 &gt; 파트. 회사마다 이름과 크기가 다르다. 어떤 회사의 "본부"가 다른 회사의 "사업부"이고, 그룹이 없는 회사도 많다. 그래서 이 장은 계층을 인원수가 아니라 <strong>결정권</strong>(무엇을 바꿀 수 있나), <strong>범위</strong>(어디까지 걸쳐 있나), <strong>시간 지평</strong>(얼마나 먼 미래를 책임지나)으로 정의한다. 자기 조직에 맞춰 읽으면 된다.</p>
+    </div>
+  </section>
+
+  <!-- ============================================================ 2 -->
+  <section id="why-fail">
+    <h2>왜 취합형 목표는 실패하는가</h2>
+    <p>취합형 목표 체계는 운영하기 쉽다. 팀이 목표를 내고, 상위 조직은 엑셀을 합치고, 연말에 달성률을 평균 낸다. 책임 소재도 분명해 보인다. 그러나 AX에서는 이 방식이 여섯 가지 경로로 실패한다.</p>
+    <div class="cards">
+      <div class="card"><span class="k">① SUM ≠ WHOLE</span><h4>합은 전체가 아니다</h4><p>팀 간 흐름(인계·대기), 공유 기반(데이터·플랫폼), 공통 표준(코드·용어·양식), 예산·인력 재배치, 규정 변경은 어느 한 팀이 혼자 할 수 없다. 팀 목표의 합에는 이 항목들이 아예 존재하지 않는다.</p></div>
+      <div class="card"><span class="k">② LOCAL OPTIMUM</span><h4>국지 최적과 중복</h4><p>팀마다 자기 문제를 자기 도구로 푼다. 열두 팀이 같은 문서로 열두 개의 RAG를 만들고, 팀마다 다른 프롬프트와 다른 평가 기준이 생긴다. 각자는 합리적이지만 전체는 비싸고 파편화된다.</p></div>
+      <div class="card"><span class="k">③ GOODHART</span><h4>활동 지표로 표류</h4><p>팀이 1년 안에 확실히 달성할 수 있는 숫자는 과제 수, 교육 시간, 사용자 수 같은 활동 지표다. 이것을 목표로 삼는 순간 과제는 쪼개지고, 교육은 이수만 하고, 사용자는 로그인만 한다.</p></div>
+      <div class="card"><span class="k">④ HORIZON</span><h4>시간 지평 불일치</h4><p>데이터 표준, 공통 플랫폼, 레거시 시스템 정리는 MBO 1년을 넘긴다. 1년 단위 팀 목표만 있으면 아무도 2년짜리 기반 공사를 시작하지 않는다. 시작해도 연말에 "미달성"으로 찍힌다.</p></div>
+      <div class="card"><span class="k">⑤ ATTRIBUTION</span><h4>기여 귀속 문제</h4><p>공통 데이터를 정리한 팀의 성과는 그 데이터를 쓴 다른 팀의 리드타임에서 나타난다. 기반을 만든 쪽은 보상받지 못하고, 그래서 아무도 기반을 만들지 않는다.</p></div>
+      <div class="card"><span class="k">⑥ SEPARATE BOX</span><h4>본업 KPI와 단절</h4><p>AX 목표가 "AX 항목"이라는 별도 칸에 있으면 본업 KPI(리드타임, 품질 비용, 수율)와 연결되지 않는다. AX는 연말에 몰아서 채우는 부가 업무가 된다.</p></div>
+    </div>
+    <h3>굿하트의 법칙: 측정치가 목표가 될 때</h3>
+    <p>영국 경제학자 찰스 굿하트<span class="en">(Charles Goodhart)</span>가 1975년 통화정책 맥락에서 지적한 현상은, 오늘날 인류학자 마릴린 스트래선<span class="en">(Marilyn Strathern)</span>이 정리한 문장으로 더 널리 알려져 있다. <strong>"측정치가 목표가 되면 더 이상 좋은 측정치가 아니게 된다."</strong> AX 과제 수는 원래 조직이 AI를 얼마나 시도하는지 보여 주는 괜찮은 신호였다. 그러나 과제 수가 평가 항목이 되면 하나의 과제가 셋으로 쪼개지고, 이미 하던 엑셀 매크로 개선이 "AI 과제"로 이름을 바꾼다. 숫자는 오르고 신호는 사라진다.</p>
+    <p>그렇다고 활동 지표를 버리라는 말은 아니다. 활동 지표는 <strong>진단용</strong>으로 보고, <strong>평가용</strong> 목표는 결과와 실제 채택으로 잡으라는 것이다. 이 구분은 <a href="#metrics">지표 설계</a>에서 다시 다룬다.</p>
+
+    <h3>얼마나 손해인가: 단순 모델로 보기</h3>
+    <p>취합형과 계층형의 차이를 숫자 감각으로 보기 위해 아주 단순한 모델을 만들었다. 사업부가 AX로 얻을 수 있는 잠재 가치(월 100으로 지수화)를 <strong>팀 안에서 완결되는 가치</strong>와 <strong>팀 간 흐름·공유 기반이 있어야 나오는 가치</strong>로 나눈다. 취합형에서는 팀 간 가치를 거의 얻지 못하고, 중복 구축의 운영비와 통합 부채(팀마다 다른 포맷·도구가 쌓여 나중에 유지·통합을 어렵게 만드는 끌림)가 붙는다. 계층형에서는 사업부·실이 기반 목표를 갖고 초기 기반 비용을 치르는 대신, 기반이 완성된 뒤 팀 간 가치를 얻고 중복이 줄어든다.</p>
+    <div class="formula">$$ V_{\text{취합}}(t) = 100\Big[(1-s)\,r(t)\,\big(1-g(t)\big) + s\,c_0\,r(t)\Big] - \kappa N d, \qquad g(t)=\min\!\big(0.35,\ \lambda N d\, t\big) $$
+      $$ V_{\text{계층}}(t) = 100\Big[(1-s)\,r(t)\,\big(1-0.2\,g(t)\big) + s\,h\,r(t-L)\Big] - 0.2\,\kappa N d - F(t) $$
+      <div class="where">\(r(t)=1-e^{-t/6}\): 도입 후 가치가 차오르는 곡선(\(t<0\)이면 0), \(s\): 팀 간·공유 기반이 필요한 가치 비중, \(c_0=0.1\): 주인 없이 비공식 협업으로 얻는 팀 간 가치 비율, \(N\): 팀 수, \(d\): 중복률, \(\kappa=0.5\): 중복 솔루션 1개당 월 운영비, \(g(t)\): 통합 부채로 인한 가치 손실(\(\lambda=0.0012\)), \(L\): 기반 완성 기간(개월), \(h\): 상위 계층이 기반 목표를 가진 정도(실만 0.55, 사업부·실 1.0), \(F(t)\): 기반 비용(구축 중 월 5, 이후 운영 월 1.5). 모든 계수는 교육용 예시 가정이며 실제 조직의 값이 아니다.</div>
+    </div>
+
+    <div class="sim" id="sim-trap">
+      <div class="sim-head"><span class="sim-tag">INTERACTIVE</span><h3>취합의 함정 시뮬레이터: 36개월 누적 가치</h3></div>
+      <div class="sim-body side">
+        <div class="sim-view"><canvas id="cv-trap"></canvas></div>
+        <div class="sim-controls">
+          <label class="ctrl"><span>팀 수 N <output id="tr-n-out"></output></span><input type="range" id="tr-n" min="3" max="20" step="1" value="12"></label>
+          <label class="ctrl"><span>중복률 d <output id="tr-d-out"></output></span><input type="range" id="tr-d" min="0" max="80" step="5" value="50"></label>
+          <label class="ctrl"><span>팀 간·공유 기반 가치 비중 s <output id="tr-s-out"></output></span><input type="range" id="tr-s" min="0" max="80" step="5" value="50"></label>
+          <label class="ctrl"><span>기반 완성 기간 L <output id="tr-l-out"></output></span><input type="range" id="tr-l" min="3" max="24" step="1" value="12"></label>
+          <div class="ctrl"><span>계층형에서 기반 목표 보유</span><div class="seg" id="tr-h"><button data-value="0.55">실만</button><button data-value="1" class="on">사업부·실</button></div></div>
+        </div>
+      </div>
+      <div class="legend"><span><i style="background:var(--bad)"></i>팀 목표만(취합형)</span><span><i style="background:var(--accent)"></i>계층형(상위 계층 기반 목표)</span><span><i style="background:var(--text-faint)"></i>기반 완성 시점 L</span></div>
+      <div class="sim-readout">
+        <div class="stat"><span class="k">36개월 누적 · 취합형</span><span class="v" id="tr-o1">—</span></div>
+        <div class="stat"><span class="k">36개월 누적 · 계층형</span><span class="v" id="tr-o2">—</span></div>
+        <div class="stat"><span class="k">누적 역전 시점</span><span class="v" id="tr-o3">—</span></div>
+        <div class="stat"><span class="k">취합형 중복 비용 누계</span><span class="v" id="tr-o4">—</span></div>
+      </div>
+      <div class="sim-note">교육용 예시 모델이다. 해볼 것: ① s와 중복률 d를 모두 10% 이하로 낮춰 보자. 두 곡선의 차이가 거의 사라지고, 기반 완성 기간 L까지 길면 취합형이 오히려 앞선다. 팀 안에서 끝나는 업무라면 팀 목표로 충분하다. ② s를 50% 이상, L을 18개월 이상으로 올리면 계층형은 1년 넘게 뒤처진다. MBO 1년만 보는 조직이 기반 공사를 시작하지 못하는 이유다. ③ 중복률을 올리면 취합형 곡선이 아래로 휜다. 통합 부채는 시간이 갈수록 커진다.</div>
+    </div>
+    <div class="callout warn">
+      <strong>"그럼 팀 목표를 없애자"가 아니다</strong>
+      <p>팀 목표는 여전히 가장 중요하다. 업무는 팀에서 실제로 바뀐다. 문제는 팀 목표<strong>만</strong> 있는 것, 그리고 상위 조직이 팀 목표를 <strong>더하는 것 외에 아무것도 하지 않는 것</strong>이다. 상위 계층은 팀이 혼자 할 수 없는 일을 자기 목표로 떠안아야 한다.</p>
+    </div>
+  </section>
+
+  <!-- ============================================================ 3 -->
+  <section id="altitude">
+    <h2>고도의 원칙: 각 계층은 그 계층만 할 수 있는 것을 목표로</h2>
+    <p>계층별 목표 설계의 원칙은 한 문장이다. <strong>각 계층은 그 계층의 결정권으로만 바꿀 수 있는 것을 목표로 삼는다.</strong> 이를 이 장에서는 고도의 원칙<span class="en">(altitude principle)</span>이라고 부른다. 높이 올라갈수록 시야가 넓고 길어지는 대신, 손으로 직접 바꿀 수 있는 것은 줄어든다. 사업부장은 8D 보고서를 직접 쓰지 않지만, 다섯 팀에 걸친 클레임 흐름의 주인을 정하고 예산을 옮길 수 있다. 파트장은 예산을 옮기지 못하지만, 이슈 카드가 매일 제대로 채워지는지는 파트장만 챙길 수 있다.</p>
+
+    <figure class="diagram">
+      <svg viewBox="0 0 800 360" role="img" aria-label="조직 계층별 결정권과 시간 지평">
+        <text x="20" y="26" class="t-dim">계층</text>
+        <text x="160" y="26" class="t-dim">결정권: 무엇을 바꿀 수 있나</text>
+        <text x="670" y="26" text-anchor="middle" class="t-dim">시간 지평</text>
+        <g>
+          <rect x="20" y="42" width="122" height="38" rx="8" class="f-acc-soft"/><text x="81" y="66" text-anchor="middle" class="t-b">부문·전사</text>
+          <text x="160" y="58" class="t">투자 배분 · 조직·제도·규정 · 사업부 간 우선순위</text>
+          <text x="160" y="75" class="t-sm">여러 사업부에 걸친 공통 기반과 규칙</text>
+          <rect x="20" y="92" width="122" height="38" rx="8" class="f-acc-soft"/><text x="81" y="116" text-anchor="middle" class="t-b">사업부</text>
+          <text x="160" y="108" class="t">E2E 가치흐름 · 팀 간 인력·예산 재배치 · 사업부 표준</text>
+          <text x="160" y="125" class="t-sm">제품·고객 단위의 손익(P&amp;L)과 전체 흐름</text>
+          <rect x="20" y="142" width="122" height="38" rx="8" class="f-acc2-soft"/><text x="81" y="166" text-anchor="middle" class="t-b">실</text>
+          <text x="160" y="158" class="t">기능 도메인 데이터·용어·템플릿 · 중복 과제 정리</text>
+          <text x="160" y="175" class="t-sm">품질·생산기술·구매 같은 한 도메인 안의 여러 팀</text>
+          <rect x="20" y="192" width="122" height="38" rx="8" class="f-acc2-soft"/><text x="81" y="216" text-anchor="middle" class="t-b">팀</text>
+          <text x="160" y="208" class="t">특정 업무 프로세스 재설계 · 팀 내 배치 · 양식 폐지</text>
+          <text x="160" y="225" class="t-sm">하나의 업무 흐름 구간을 운영하고 바꾼다</text>
+          <rect x="20" y="242" width="122" height="38" rx="8" class="f-surface"/><text x="81" y="266" text-anchor="middle" class="t-b">그룹</text>
+          <text x="160" y="258" class="t">기능·제품 묶음의 작업 방식 · 도구 운영 규칙</text>
+          <text x="160" y="275" class="t-sm">회사에 따라 없는 계층</text>
+          <rect x="20" y="292" width="122" height="38" rx="8" class="f-surface"/><text x="81" y="316" text-anchor="middle" class="t-b">파트</text>
+          <text x="160" y="308" class="t">일상 실행 · 입력 품질 · 작업 표준 준수 · 개선 제안</text>
+          <text x="160" y="325" class="t-sm">매일의 실행과 운영이 일어나는 곳</text>
+        </g>
+        <g class="s-axis"><line x1="560" y1="340" x2="780" y2="340"/></g>
+        <g>
+          <text x="560" y="354" text-anchor="middle" class="t-sm">주</text><text x="604" y="354" text-anchor="middle" class="t-sm">월</text><text x="648" y="354" text-anchor="middle" class="t-sm">분기</text><text x="692" y="354" text-anchor="middle" class="t-sm">1년</text><text x="736" y="354" text-anchor="middle" class="t-sm">2년</text><text x="798" y="354" text-anchor="end" class="t-sm">3~5년</text>
+        </g>
+        <g>
+          <rect x="736" y="50" width="44" height="22" rx="5" class="f-acc-soft"/>
+          <rect x="714" y="100" width="56" height="22" rx="5" class="f-acc-soft"/>
+          <rect x="692" y="150" width="44" height="22" rx="5" class="f-acc2-soft"/>
+          <rect x="648" y="200" width="44" height="22" rx="5" class="f-acc2-soft"/>
+          <rect x="604" y="250" width="44" height="22" rx="5" class="f-surface"/>
+          <rect x="560" y="300" width="44" height="22" rx="5" class="f-surface"/>
+        </g>
+      </svg>
+      <figcaption><b>그림 12-2.</b> 계층을 인원수가 아니라 결정권과 시간 지평으로 정의한다. 위로 갈수록 바꿀 수 있는 범위가 넓고 책임지는 기간이 길다. 목표는 그 계층의 결정권과 시간 지평에 맞아야 한다. 기간 구간은 일반적인 감각을 보인 예시다.</figcaption>
+    </figure>
+
+    <h3>목표의 다섯 가지 유형</h3>
+    <p>AX 목표를 다섯 유형으로 나누면 계층별 차이가 선명해진다.</p>
+    <div class="cards">
+      <div class="card"><span class="k">OUTCOME</span><h4>결과</h4><p>업무·사업 결과의 변화. 리드타임, 품질 비용(COPQ), 재작업률, 재발률, 가동률. AX의 최종 이유다.</p></div>
+      <div class="card"><span class="k">ENABLER</span><h4>기반</h4><p>결과를 가능하게 하는 공유 자산. 데이터 제품과 품질, 표준 코드·용어·양식, 공통 플랫폼, 프로세스 오너십(<a href="foundation.html">5장</a>, <a href="semantics.html">4장</a>).</p></div>
+      <div class="card"><span class="k">ADOPTION</span><h4>확산</h4><p>실제 업무 건 중 새 방식으로 처리되는 비율, 다른 팀·사업장으로의 복제, 레거시 양식·파일의 폐기.</p></div>
+      <div class="card"><span class="k">CAPABILITY</span><h4>역량</h4><p>파워유저·빌더 비율, 교육이 업무에 적용된 사례. 교육 시간이 아니라 할 수 있게 된 일로 잰다(<a href="people.html">11장</a>).</p></div>
+      <div class="card"><span class="k">GUARDRAIL</span><h4>가드레일</h4><p>보안·품질·리스크 기준. 승인 도구 사용, 데이터 등급 준수, 평가 세트 운영, 섀도 AI 축소(<a href="governance.html">10장</a>).</p></div>
+    </div>
+    <p>계층마다 이 다섯 유형의 <strong>비중</strong>이 달라야 한다. 아래 표는 권장 구성의 감각을 보인 예시다. 진할수록 그 계층 목표 시트에서 비중이 크다.</p>
+    <div class="table-wrap"><table class="hm">
+      <thead><tr><th>계층</th><th>결과</th><th>기반</th><th>확산</th><th>역량</th><th>가드레일</th></tr></thead>
+      <tbody>
+        <tr><td><b>부문·전사</b></td><td class="c h3">●●●<small>핵심 가치흐름 포트폴리오 성과</small></td><td class="c h2">●●<small>투자 배분, 공통 플랫폼</small></td><td class="c h1">●<small>사업부 간 복제</small></td><td class="c h1">●<small>인재 체계</small></td><td class="c h2">●●<small>규정·제도·데이터 등급</small></td></tr>
+        <tr><td><b>사업부</b></td><td class="c h3">●●●<small>E2E 가치흐름 리드타임·비용</small></td><td class="c h3">●●●<small>프로세스 오너, 사업부 데이터 표준</small></td><td class="c h2">●●<small>파일럿의 팀 간 확산, 레거시 퇴역</small></td><td class="c h0">○</td><td class="c h1">●</td></tr>
+        <tr><td><b>실</b></td><td class="c h1">●</td><td class="c h3">●●●<small>도메인 데이터 제품, 용어·템플릿 통일</small></td><td class="c h2">●●<small>중복 과제 통합</small></td><td class="c h2">●●<small>파워유저·빌더 비율</small></td><td class="c h1">●</td></tr>
+        <tr><td><b>팀</b></td><td class="c h3">●●●<small>특정 업무 리드타임, COPQ, 재작업</small></td><td class="c h1">●</td><td class="c h3">●●●<small>실사용률, 레거시 양식 폐기</small></td><td class="c h1">●</td><td class="c h1">●</td></tr>
+        <tr><td><b>그룹·파트</b></td><td class="c h1">●</td><td class="c h2">●●<small>입력 데이터 품질</small></td><td class="c h3">●●●<small>이슈 카드 사용, 병행 작업 중단</small></td><td class="c h2">●●<small>교육의 업무 적용</small></td><td class="c h1">●<small>운영 로그 점검</small></td></tr>
+      </tbody>
+    </table></div>
+    <p>표에서 두 가지를 읽을 수 있다. 첫째, <strong>기반 목표의 무게중심은 사업부와 실</strong>에 있다. 팀이 혼자 만들 수 없고 부문은 너무 멀다. 둘째, <strong>결과 목표는 사업부와 팀 두 곳에서 무겁다</strong>. 사업부는 여러 팀을 관통하는 흐름 전체의 결과를, 팀은 자기 구간의 결과를 책임진다. 실은 결과를 직접 내기보다 결과가 나올 수 있게 만드는 계층이다.</p>
+
+    <div class="sim" id="sim-designer">
+      <div class="sim-head"><span class="sim-tag">INTERACTIVE</span><h3>계층별 목표 설계기: 취합형과 계층형 비교</h3></div>
+      <div class="sim-body side">
+        <div class="sim-view"><div class="sim-html" id="gd-out"></div></div>
+        <div class="sim-controls">
+          <div class="ctrl"><span>계층</span><div class="seg" id="gd-lv"><button data-value="dept">부문</button><button data-value="bu" class="on">사업부</button><button data-value="sil">실</button><button data-value="team">팀</button><button data-value="part">그룹·파트</button></div></div>
+          <div class="ctrl"><span>목표 시트 방식</span><div class="seg" id="gd-mode"><button data-value="agg">취합형(현재)</button><button data-value="hier" class="on">계층형(권장)</button></div></div>
+          <p class="gd-meta" id="gd-side"></p>
+        </div>
+      </div>
+      <div class="sim-readout">
+        <div class="stat"><span class="k">결과+기반 비중</span><span class="v" id="gd-o1">—</span></div>
+        <div class="stat"><span class="k">활동 지표 목표</span><span class="v" id="gd-o2">—</span></div>
+        <div class="stat"><span class="k">이 계층만의 목표</span><span class="v" id="gd-o3">—</span></div>
+        <div class="stat"><span class="k">시간 지평</span><span class="v" id="gd-o4" style="font-size:16px">—</span></div>
+      </div>
+      <div class="sim-note">목표 문장과 수치는 모두 예시다. 해볼 것: 같은 계층에서 취합형과 계층형을 번갈아 눌러 보자. 취합형 시트는 계층이 달라도 거의 같은 모양(과제 수·교육·사용자 수)이고 숫자 크기만 다르다. 계층형 시트는 계층마다 모양 자체가 다르다. 그것이 "각 계층이 자기 일을 한다"는 뜻이다.</div>
+    </div>
+  </section>
+
+  <!-- ============================================================ 4 -->
+  <section id="alignment">
+    <h2>취합·캐스케이드·캐치볼: 목표를 잇는 방식</h2>
+    <p>계층별 목표가 각자 다르다면, 그것들을 어떻게 하나로 묶을까? 목표를 계층 사이에서 연결하는 방식은 크게 세 가지다.</p>
+    <figure class="diagram">
+      <svg viewBox="0 0 800 270" role="img" aria-label="취합, 캐스케이드, 캐치볼 세 가지 목표 연결 방식">
+        <!-- 취합 -->
+        <text x="130" y="24" text-anchor="middle" class="t-bad">① 취합</text>
+        <rect x="70" y="40" width="120" height="40" rx="8" class="f-bad-soft"/>
+        <text x="130" y="65" text-anchor="middle" class="t">상위 = Σ 하위</text>
+        <rect x="20" y="170" width="60" height="34" rx="7" class="f-elev"/><text x="50" y="192" text-anchor="middle" class="t-sm">팀 A</text>
+        <rect x="100" y="170" width="60" height="34" rx="7" class="f-elev"/><text x="130" y="192" text-anchor="middle" class="t-sm">팀 B</text>
+        <rect x="180" y="170" width="60" height="34" rx="7" class="f-elev"/><text x="210" y="192" text-anchor="middle" class="t-sm">팀 C</text>
+        <g class="s-bad"><path d="M50 170 L110 84"/><path d="M130 170 V84"/><path d="M210 170 L150 84"/></g>
+        <path d="M104 92 L110 84 L116 92 M124 92 L130 84 L136 92 M144 92 L150 84 L156 92" class="s-bad"/>
+        <text x="130" y="234" text-anchor="middle" class="t-dim">위로만 흐른다</text>
+        <text x="130" y="252" text-anchor="middle" class="t-sm">팀 사이는 비어 있음</text>
+        <!-- 캐스케이드 -->
+        <text x="400" y="24" text-anchor="middle" class="t-acc2">② 캐스케이드</text>
+        <rect x="340" y="40" width="120" height="40" rx="8" class="f-acc2-soft"/>
+        <text x="400" y="65" text-anchor="middle" class="t">상위 목표 분해</text>
+        <rect x="290" y="170" width="60" height="34" rx="7" class="f-elev"/><text x="320" y="192" text-anchor="middle" class="t-sm">팀 A</text>
+        <rect x="370" y="170" width="60" height="34" rx="7" class="f-elev"/><text x="400" y="192" text-anchor="middle" class="t-sm">팀 B</text>
+        <rect x="450" y="170" width="60" height="34" rx="7" class="f-elev"/><text x="480" y="192" text-anchor="middle" class="t-sm">팀 C</text>
+        <g class="s-acc2"><path d="M380 80 L320 166"/><path d="M400 80 V166"/><path d="M420 80 L480 166"/></g>
+        <path d="M313 158 L320 166 L326 157 M394 158 L400 166 L406 158 M473 157 L480 166 L486 158" class="s-acc2"/>
+        <text x="400" y="234" text-anchor="middle" class="t-dim">아래로만 흐른다</text>
+        <text x="400" y="252" text-anchor="middle" class="t-sm">현장의 제약·아이디어가 안 올라감</text>
+        <!-- 캐치볼 -->
+        <text x="670" y="24" text-anchor="middle" class="t-acc">③ 캐치볼</text>
+        <rect x="610" y="40" width="120" height="40" rx="8" class="f-acc-soft"/>
+        <text x="670" y="65" text-anchor="middle" class="t">결과 + 기반 목표</text>
+        <rect x="560" y="170" width="60" height="34" rx="7" class="f-elev"/><text x="590" y="192" text-anchor="middle" class="t-sm">팀 A</text>
+        <rect x="640" y="170" width="60" height="34" rx="7" class="f-elev"/><text x="670" y="192" text-anchor="middle" class="t-sm">팀 B</text>
+        <rect x="720" y="170" width="60" height="34" rx="7" class="f-elev"/><text x="750" y="192" text-anchor="middle" class="t-sm">팀 C</text>
+        <g class="s-acc"><path d="M640 84 L594 166"/><path d="M652 84 L606 166" stroke-dasharray="4 3"/><path d="M670 84 V166"/><path d="M680 84 V166" stroke-dasharray="4 3"/><path d="M700 84 L746 166"/><path d="M688 84 L734 166" stroke-dasharray="4 3"/></g>
+        <path d="M624 187 H636 M704 187 H716" class="s-acc"/>
+        <rect x="560" y="132" width="220" height="22" rx="11" class="f-surface"/>
+        <text x="670" y="147" text-anchor="middle" class="t-sm">공동 목표: 팀 A·B·C 인계 리드타임</text>
+        <text x="670" y="234" text-anchor="middle" class="t-dim">위아래·옆으로 주고받는다</text>
+        <text x="670" y="252" text-anchor="middle" class="t-sm">실선: 제안 / 점선: 조정된 답</text>
+      </svg>
+      <figcaption><b>그림 12-3.</b> 목표를 잇는 세 방식. 취합은 위로만, 캐스케이드는 아래로만 흐른다. 캐치볼은 상위가 결과와 기반 목표의 초안을 내리면 하위가 수단과 제약을 올려 보내 조정하고, 팀 사이에는 공동 목표를 둔다.</figcaption>
+    </figure>
+
+    <h3>호신 칸리의 캐치볼</h3>
+    <p><span class="term">호신 칸리</span><span class="en">(Hoshin Kanri, 方針管理, 정책 전개)</span>는 일본 제조업에서 발전한 목표 전개 방식이다. 핵심 장치가 <span class="term">캐치볼</span><span class="en">(catchball)</span>이다. 상위 조직이 "무엇을" 달성할지 초안을 내려보내면, 하위 조직은 "어떻게" 할지와 그 과정에서 보이는 제약·필요 자원을 올려 보낸다. 몇 번 공을 주고받은 뒤 확정한다. 상위의 수단이 하위의 목표가 되는 구조라서, 사업부의 "클레임 흐름 표준화"라는 수단이 실의 "클레임 데이터 표준 확정"이라는 목표가 된다. 목표와 수단, 담당, 지표를 한 장에 교차해 보는 X-매트릭스 양식이 흔히 쓰인다.</p>
+    <h3>OKR의 정렬: 위에서 절반, 아래에서 절반</h3>
+    <p><span class="term">OKR</span><span class="en">(Objectives and Key Results)</span>은 앤디 그로브<span class="en">(Andy Grove)</span>가 체계화하고 존 도어<span class="en">(John Doerr)</span>가 『Measure What Matters』(2018)로 널리 알린 목표 방식이다. OKR 실무에서 자주 강조되는 원칙은 정렬<span class="en">(alignment)</span>이 위에서만 내려오지 않는다는 것이다. 상위 목표에 연결되는 하향 목표와 함께, 현장이 스스로 제안하는 상향 목표를 상당 부분 허용한다. AX에서는 이것이 특히 중요하다. 어디에 AI를 쓸 수 있는지는 현장이 가장 잘 알기 때문이다(<a href="usecases.html">7장</a>의 업무 분해).</p>
+    <p>OKR과 MBO 중 무엇을 택하느냐는 이 장의 핵심이 아니다. 피터 드러커<span class="en">(Peter Drucker)</span>가 『경영의 실제<span class="en">(The Practice of Management)</span>』(1954)에서 제시한 MBO도 원래는 상하가 함께 목표를 정하는 방식이었다. 어떤 틀을 쓰든 <strong>상위 조직이 자기 목표를 가질 것, 그리고 위아래와 옆으로 주고받을 것</strong> 두 가지만 지키면 된다.</p>
+
+    <h3>공동 목표와 매트릭스 목표</h3>
+    <p>팀 사이의 흐름처럼 어느 한 팀이 책임질 수 없는 결과는 두 가지 방식으로 시트에 넣는다.</p>
+    <ul>
+      <li><strong>공동 목표</strong><span class="en">(shared goal)</span>: 같은 지표를 여러 팀이 똑같이 갖는다. "고객지원팀·고객품질팀의 클레임 접수→분석 착수 인계 시간 1일 → 2시간(예시)"을 두 팀 모두의 시트에 넣고 함께 평가한다.</li>
+      <li><strong>매트릭스 목표</strong>: 기반 목표의 주인은 실 또는 사업부가 갖고, 각 팀은 그 목표에 대한 <strong>기여 목표</strong>를 갖는다. 품질보증실이 "품질 데이터 제품 품질 점수 70 → 90(예시)"을 갖고, 각 팀은 "우리 팀 소관 필드의 입력 완전성 95%"를 갖는 식이다.</li>
+    </ul>
+    <h3>기여 귀속 규칙: 공은 어떻게 나누나</h3>
+    <p>기반을 만든 쪽과 그것을 써서 결과를 낸 쪽 중 누구의 성과인가? 이 질문에 미리 답해 두지 않으면 기반 목표는 아무도 맡으려 하지 않는다. 흔히 쓰는 규칙은 세 가지다.</p>
+    <div class="table-wrap"><table>
+      <thead><tr><th>규칙</th><th>방식</th><th>장점</th><th>주의</th></tr></thead>
+      <tbody>
+        <tr><td><b>분할</b></td><td>결과 가치를 미리 정한 비율로 나눈다(예: 사용 팀 60 : 기반 오너 40)</td><td>단순, 합이 맞음</td><td>비율 협상이 정치가 됨, 기반 오너가 사용 팀을 압박</td></tr>
+        <tr><td><b>이중 인정 + 단일 집계</b></td><td>평가에서는 양쪽 모두 전액 인정, 재무 성과 집계에서는 한 번만 센다</td><td>협력 유인 최대, 다툼 없음</td><td>평가용 숫자와 재무용 숫자를 명확히 구분해야 함</td></tr>
+        <tr><td><b>기반 고유 지표</b></td><td>기반 오너는 결과 대신 재사용 수, 데이터 품질, 연결된 팀 수로 평가</td><td>결과 지연과 무관하게 평가 가능</td><td>재사용 수만 보면 다시 활동 지표화. 실사용과 묶어야 함</td></tr>
+      </tbody>
+    </table></div>
+    <p>이 장의 권장은 <strong>둘째와 셋째의 조합</strong>이다. 기반 오너는 고유 지표(재사용·품질)로 평가하되, 그 기반을 쓴 결과 목표에도 이중 인정으로 이름을 올린다. 재무 성과 보고에서는 한 번만 센다. 규칙은 연초 목표 확정 때 문서로 남긴다.</p>
+
+    <h3>하나의 사업부 결과를 파트까지: 캐스케이드 예시</h3>
+    <p>장면의 사업부가 계층형으로 목표를 다시 세웠다고 하자. 사업부의 결과 목표는 "고객 클레임 초기 대응 리드타임 50% 단축(예시: 접수~임시조치 완료 월 중앙값 10일 → 5일, 2년)"이다. 이 목표를 캐치볼로 내려 보내면 아래와 같은 나무가 된다. 노드를 눌러 연결 사슬과 지표, 자체·기여 구분을 확인해 보자.</p>
+
+    <div class="sim" id="sim-tree">
+      <div class="sim-head"><span class="sim-tag">INTERACTIVE</span><h3>캐스케이드 트리: 사업부 결과에서 파트 실행까지</h3></div>
+      <div class="sim-body side">
+        <div class="sim-view"><div class="sim-html"><ul class="ct-tree" id="ct-tree"></ul></div></div>
+        <div class="sim-controls">
+          <div class="ctrl"><span>강조</span><div class="seg" id="ct-mode"><button data-value="chain" class="on">위아래 사슬</button><button data-value="type">같은 유형</button></div></div>
+          <div class="ct-detail" id="ct-detail"></div>
+        </div>
+      </div>
+      <div class="sim-readout">
+        <div class="stat"><span class="k">선택한 목표의 계층</span><span class="v" id="ct-o1" style="font-size:16px">—</span></div>
+        <div class="stat"><span class="k">사업부 목표까지 단계</span><span class="v" id="ct-o2">—</span></div>
+        <div class="stat"><span class="k">하위 연결 목표 수</span><span class="v" id="ct-o3">—</span></div>
+      </div>
+      <div class="sim-note">모든 조직명·목표·수치는 예시다. 해볼 것: 맨 아래 파트 목표를 눌러 보자. "이슈 카드 필수 항목 입력 완전성" 같은 작은 실행 목표가 어떤 사슬을 따라 사업부 리드타임에 닿는지 보인다. "같은 유형"으로 바꾸면 기반 목표가 주로 어느 계층에 있는지 드러난다.</div>
+    </div>
+    <div class="callout tip">
+      <strong>사업부 결과 목표에는 반드시 프로세스 오너를</strong>
+      <p>여러 팀을 관통하는 결과 목표는 이름이 붙은 한 사람이 책임져야 한다. 사업부장이 직접 맡기 어렵다면 특정 실장이나 팀장을 <strong>가치흐름 프로세스 오너</strong>로 지정하고(<a href="process.html">3장</a>), 팀 경계를 넘는 양식·순서 변경 권한을 위임한다. 오너 없는 공동 목표는 다시 "누구의 목표도 아닌 것"이 된다.</p>
+    </div>
+  </section>
+
+  <!-- ============================================================ 5 -->
+  <section id="metrics">
+    <h2>지표 설계: 활동이 아니라 결과와 채택을</h2>
+    <p>계층별 목표를 정했으면 각 목표에 지표를 붙인다. <a href="usecases.html">7장</a>에서 유스케이스 하나의 KPI와 기준선을 다뤘다면, 여기서는 <strong>목표 체계 전체</strong>에서 지표가 어떻게 맞물리는지를 본다.</p>
+    <h3>선행 지표와 후행 지표</h3>
+    <p>카플란과 노턴<span class="en">(Robert Kaplan · David Norton)</span>이 균형성과표<span class="en">(Balanced Scorecard)</span>에서 강조한 구분이 여기서도 유용하다. <span class="term">후행 지표</span><span class="en">(lagging)</span>는 결과 그 자체(리드타임, COPQ)라서 늦게 움직이고, <span class="term">선행 지표</span><span class="en">(leading)</span>는 결과에 앞서 움직이는 신호(표준 코드 적용률, 도구 경유 처리 비율)다. 기반 공사가 1년 넘게 걸리는 AX에서 후행 지표만 보면 첫해는 늘 "미달성"이고, 선행 지표만 보면 결과 없이 활동만 늘어난다. 두 가지를 <strong>사슬로 묶어</strong> 함께 둔다.</p>
+
+    <figure class="diagram">
+      <svg viewBox="0 0 800 300" role="img" aria-label="선행 지표와 후행 지표가 움직이는 시점과 다년 마일스톤">
+        <g class="s-axis"><line x1="170" y1="262" x2="780" y2="262"/></g>
+        <g class="s-line" stroke-dasharray="3 4"><line x1="373" y1="40" x2="373" y2="262"/><line x1="577" y1="40" x2="577" y2="262"/><line x1="780" y1="40" x2="780" y2="262"/></g>
+        <text x="271" y="282" text-anchor="middle" class="t-dim">1년차</text><text x="475" y="282" text-anchor="middle" class="t-dim">2년차</text><text x="678" y="282" text-anchor="middle" class="t-dim">3년차</text>
+        <text x="160" y="62" text-anchor="end" class="t">입력·활동</text>
+        <text x="160" y="106" text-anchor="end" class="t">기반 지표</text>
+        <text x="160" y="150" text-anchor="end" class="t">채택 지표</text>
+        <text x="160" y="194" text-anchor="end" class="t">결과 지표</text>
+        <text x="160" y="238" text-anchor="end" class="t">사업 지표</text>
+        <text x="160" y="24" text-anchor="end" class="t-sm">선행 ↑ / 후행 ↓</text>
+        <rect x="174" y="48" width="200" height="22" rx="5" class="f-surface"/>
+        <text x="180" y="63" class="t-sm">교육·과제 착수 (진단용)</text>
+        <rect x="190" y="92" width="400" height="22" rx="5" class="f-acc2-soft"/>
+        <text x="198" y="107" class="t-sm">표준 코드 적용률 · 데이터 품질 점수</text>
+        <rect x="300" y="136" width="480" height="22" rx="5" class="f-acc2-soft"/>
+        <text x="308" y="151" class="t-sm">도구 경유 처리 비율 · 레거시 양식 폐기</text>
+        <rect x="400" y="180" width="380" height="22" rx="5" class="f-acc-soft"/>
+        <text x="408" y="195" class="t-sm">리드타임 · 재작업률 · 인계 시간</text>
+        <rect x="520" y="224" width="260" height="22" rx="5" class="f-acc-soft"/>
+        <text x="528" y="239" class="t-sm">COPQ · 고객 평가</text>
+        <g class="f-acc">
+          <path d="M373 85 l6 7 -6 7 -6 -7z"/><path d="M373 129 l6 7 -6 7 -6 -7z"/>
+          <path d="M577 173 l6 7 -6 7 -6 -7z"/><path d="M577 129 l6 7 -6 7 -6 -7z"/>
+          <path d="M774 173 l6 7 -6 7 -6 -7z"/><path d="M774 217 l6 7 -6 7 -6 -7z"/>
+        </g>
+        <text x="384" y="86" class="t-sm">1년차 마일스톤</text>
+        <text x="588" y="174" class="t-sm">2년차 마일스톤</text>
+        <text x="764" y="218" class="t-sm" text-anchor="end">3년차 목표</text>
+      </svg>
+      <figcaption><b>그림 12-4.</b> 지표의 사슬과 다년 목표. 기반 지표와 채택 지표는 먼저 움직이고 결과·사업 지표는 늦게 움직인다. 3년 목표를 정한 뒤, 해마다 그 해에 움직일 수 있는 지표에 마일스톤(◆)을 둔다. 막대의 시점은 예시다.</figcaption>
+    </figure>
+
+    <h3>기준선이 먼저다</h3>
+    <p>"리드타임 50% 단축"은 지금 리드타임을 모르면 의미가 없다. 그런데 취합형 체계에서 가장 흔히 빠지는 것이 기준선이다. 팀 사이를 흐르는 리드타임은 어느 팀도 재지 않았기 때문이다. 계층형 목표의 첫 분기 목표는 종종 <strong>"측정 가능하게 만들기"</strong> 그 자체다. 이슈 카드나 이벤트 로그로 접수·인계·완료 시각을 남기는 것(<a href="process.html">3장</a>의 프로세스 마이닝)이 사업부 목표의 첫 마일스톤이 된다.</p>
+    <p>지표마다 <strong>측정 정의</strong>를 한 줄로 고정한다. 이름, 정의(시작·끝 시각), 계산식(중앙값인가 평균인가), 데이터 원천, 집계 주기, 기준선과 측정 기간, 오너. 같은 "리드타임"을 팀마다 다르게 계산하면 목표 체계가 통째로 흔들린다(<a href="semantics.html">4장</a>의 KPI 정의 통일).</p>
+
+    <h3>활동 지표의 함정과 바꾸는 법</h3>
+    <div class="table-wrap"><table>
+      <thead><tr><th>흔한 활동 지표</th><th>왜 함정인가</th><th>바꾼 지표 (결과·채택)</th></tr></thead>
+      <tbody>
+        <tr><td><b>AI 과제 수</b> (건)</td><td>과제 쪼개기, 이름 바꾸기. 운영되지 않는 과제도 1건</td><td>운영 중인 과제가 개선한 업무 KPI 개수와 개선 폭, 과제별 대상 업무 처리 비율</td></tr>
+        <tr><td><b>교육 이수 시간·이수율</b></td><td>앉아 있던 시간. 업무 변화와 무관</td><td>교육 후 일정 기간 내 업무 적용 사례 비율, 파워유저·빌더 인증 비율과 그들이 운영하는 자동화의 실사용</td></tr>
+        <tr><td><b>라이선스·계정 수</b></td><td>구매 숫자. 사용과 무관</td><td>대상 업무 건 중 도구를 거쳐 처리된 비율, 주간 활성 사용자 중 반복 사용자 비율</td></tr>
+        <tr><td><b>PoC 건수</b></td><td>파일럿 연옥의 지표. 시작이 성과가 됨</td><td>PoC 중 운영 전환 비율, 확산·수정·중단 결정이 기한 내 내려진 비율(<a href="roadmap.html">13장</a>)</td></tr>
+        <tr><td><b>챗봇·RAG 구축 건수</b></td><td>중복 구축을 보상</td><td>공통 지식 검색 하나의 재사용 팀 수, 검색 성공률(평가 세트), 폐기·통합한 중복 도구 수</td></tr>
+        <tr><td><b>아이디어 제출 수</b></td><td>질보다 양</td><td>제출된 아이디어 중 업무 KPI 개선으로 이어진 비율</td></tr>
+      </tbody>
+    </table></div>
+    <p>목표 문장 하나를 넣으면 이런 함정을 규칙으로 점검해 주는 도구를 만들어 보았다. 키워드 기반의 단순한 점검이라 완벽하지 않지만, 목표 확정 회의 전에 문장을 다듬는 데는 충분하다.</p>
+
+    <div class="sim" id="sim-check">
+      <div class="sim-head"><span class="sim-tag">INTERACTIVE</span><h3>목표 문장 점검기</h3></div>
+      <div class="sim-body side">
+        <div class="sim-view"><div class="sim-html" id="gc-out"></div></div>
+        <div class="sim-controls">
+          <label class="ctrl"><span>이 목표를 가질 계층</span><select id="gc-lv">
+            <option value="dept">부문·전사</option><option value="bu" selected>사업부</option><option value="sil">실</option><option value="team">팀</option><option value="part">그룹·파트</option>
+          </select></label>
+          <label class="ctrl"><span>목표 문장</span><textarea id="gc-text" rows="5"></textarea></label>
+          <div class="ctrl"><span>예시 문장 불러오기</span><div class="gc-samples" id="gc-samples"></div></div>
+        </div>
+      </div>
+      <div class="sim-readout">
+        <div class="stat"><span class="k">점수</span><span class="v" id="gc-o1">—</span></div>
+        <div class="stat"><span class="k">판정</span><span class="v" id="gc-o2" style="font-size:16px">—</span></div>
+        <div class="stat"><span class="k">걸린 항목</span><span class="v" id="gc-o3">—</span></div>
+      </div>
+      <div class="sim-note">규칙 기반 점검이다. 결과 지표 단어, 기준선→목표값 숫자, 측정 정의·기한 표현, 활동 지표 함정 단어(건, 개, 교육, 이수, 도입, 구축, PoC 등), 계층별 고유 단어를 찾는다. 해볼 것: "나쁨" 예시를 불러온 뒤 제안된 고쳐 쓰기 틀대로 직접 고쳐 점수가 오르는지 보자. 계층만 바꿔도 점수가 달라지는 문장이 있다. 같은 문장이 팀에는 좋은 목표이고 사업부에는 취합일 수 있다.</div>
+    </div>
+
+    <h3>다년 목표와 연간 마일스톤</h3>
+    <p>기반 목표는 MBO 1년에 맞춰 자르지 않는다. 3년 목표를 먼저 정하고, 해마다 그 해에 측정 가능한 마일스톤을 목표 시트에 올린다. 예를 들어 사업부의 "클레임 데이터 표준" 기반 목표라면 1년차는 표준 코드 확정과 5개 팀 중 2개 팀 적용, 2년차는 전 팀 적용과 이벤트 로그 기반 리드타임 자동 측정, 3년차는 리드타임 결과 목표 달성이다(예시). 1년차 평가는 결과가 아니라 <strong>마일스톤 달성</strong>으로 한다. 이렇게 하지 않으면 2년짜리 기반 공사는 첫해 평가에서 늘 0점이고, 아무도 시작하지 않는다.</p>
+
+    <h3>자체 목표와 기여 목표의 비중</h3>
+    <p>계층마다 목표 시트에서 <strong>자체 목표</strong>(그 계층의 결정권으로 직접 달성하는 것)와 <strong>기여 목표</strong>(상위·공동 목표에 대한 자기 몫)의 비중을 다르게 둔다. 위로 갈수록 자체 목표 비중이 커진다. 상위 계층이 기여 목표만 가지면 그것이 곧 취합형이다. 아래는 가중치 예시다.</p>
+    <div class="sim-html" style="border:1px solid var(--border);border-radius:var(--radius-sm);margin:18px 0">
+      <div class="bar-row"><span>부문·전사</span><span class="track"><i style="width:80%"></i></span><span class="val">80:20</span></div>
+      <div class="bar-row"><span>사업부</span><span class="track"><i style="width:70%"></i></span><span class="val">70:30</span></div>
+      <div class="bar-row"><span>실</span><span class="track"><i style="width:60%"></i></span><span class="val">60:40</span></div>
+      <div class="bar-row"><span>팀</span><span class="track"><i style="width:50%"></i></span><span class="val">50:50</span></div>
+      <div class="bar-row"><span>그룹·파트</span><span class="track"><i style="width:35%"></i></span><span class="val">35:65</span></div>
+      <p style="margin:8px 0 0;font-size:13px;color:var(--text-dim)">막대 = 자체 목표 가중치(%), 값 = 자체 : 기여. 예시 가중치이며 조직마다 조정한다.</p>
+    </div>
+  </section>
+
+  <!-- ============================================================ 6 -->
+  <section id="review">
+    <h2>평가·보상 운영: 목표는 연말이 아니라 분기에 산다</h2>
+    <p>목표 체계를 잘 짜도 평가 방식이 그대로면 사람들은 예전처럼 행동한다. 계층형 AX 목표를 굴리는 운영 장치를 여섯 가지로 정리한다.</p>
+    <ol class="ladder">
+      <li><b>분기 점검, 연 1회 평가</b>연말 한 번의 MBO 평가만으로는 기반 목표의 지연, 공동 목표의 병목이 너무 늦게 보인다. 분기마다 계층별로 "지표가 움직였나, 막힌 곳은 어디인가, 위아래로 무엇을 요청할 것인가"를 30분 안에 점검한다. 점검은 평가가 아니라 캐치볼의 연장이다.</li>
+      <li><b>반기 조정 창구</b>AX 환경은 빠르게 바뀐다. 상반기 말에 목표를 공식적으로 조정할 수 있는 창구를 둔다. 단, 조정 사유(전제 변화, 의존 목표 지연)와 조정 전후 숫자를 기록해 하향 조정이 습관이 되지 않게 한다.</li>
+      <li><b>기반 작업과 레거시 퇴역을 보상</b>데이터 정리, 표준 코드 적용, 엑셀 양식 폐기, 중복 도구 통합은 눈에 띄지 않는 일이다. 이것들을 목표 시트의 정식 항목으로 올리고, 기여 귀속 규칙(이중 인정)으로 결과 목표에도 이름을 올린다. "없앤 것"을 성과로 인정하는 문화가 AX를 가볍게 만든다.</li>
+      <li><b>샌드배깅과 PoC 성과화 방지</b>쉽게 달성할 목표를 고르는 샌드배깅<span class="en">(sandbagging)</span>은 기준선과 측정 정의를 상위와 함께 확정하면 상당 부분 막힌다. PoC 완료는 성과가 아니라 결정 시점이다. 평가에서는 "운영 전환 또는 중단 결정을 기한 내 내렸는가"를 본다. 근거 있는 중단도 좋은 성과다.</li>
+      <li><b>공동 목표는 공동 평가</b>공동 목표를 가진 팀들은 같은 숫자로 함께 평가받는다. 한 팀의 지연이 다른 팀 점수를 깎는 것이 불공정해 보이지만, 그래야 서로 돕는다. 팀별 기여 목표(입력 완전성, 인계 시간)를 함께 두면 무임승차도 보인다.</li>
+      <li><b>실험과 운영을 분리</b>학습용 실험은 실패해도 되는 별도 트랙으로 관리하고, 운영 중인 확산 과제는 결과 지표로 엄격하게 본다. 둘을 섞으면 실험은 위축되고 운영은 느슨해진다.</li>
+    </ol>
+    <div class="table-wrap"><table>
+      <thead><tr><th></th><th>실험 트랙 (탐색)</th><th>운영 트랙 (확산)</th></tr></thead>
+      <tbody>
+        <tr><td><b>목적</b></td><td>가설 검증, 학습</td><td>업무 KPI 개선, 확산</td></tr>
+        <tr><td><b>목표 형태</b></td><td>"○○ 가설을 ○주 안에 검증하고 확산·수정·중단을 결정"</td><td>"○○ 리드타임 기준선 → 목표값, 기한, 측정 정의"</td></tr>
+        <tr><td><b>성공 기준</b></td><td>기한 내 근거 있는 결정과 학습 기록 공유</td><td>결과·채택 지표 달성</td></tr>
+        <tr><td><b>실패의 의미</b></td><td>허용. 근거 있는 중단은 성과</td><td>원인 분석과 조정 대상</td></tr>
+        <tr><td><b>평가 비중(예시)</b></td><td>시트의 10~20%</td><td>나머지</td></tr>
+      </tbody>
+    </table></div>
+    <div class="callout">
+      <strong>리더의 목표에 무엇이 있는지가 메시지다</strong>
+      <p>사업부장의 목표 시트에 "AI 과제 87건"이 있으면 조직 전체가 과제 수를 센다. 사업부장의 시트에 "클레임 리드타임"과 "클레임 데이터 표준 확정"이 있으면 팀장들은 팀 사이의 인계와 데이터를 보기 시작한다. 상위 계층 목표를 바꾸는 것이 하위 계층 행동을 바꾸는 가장 빠른 길이다. 변화 관리의 강화 단계(<a href="people.html">11장</a>의 ADKAR)가 여기서 작동한다.</p>
+    </div>
+  </section>
+
+  <!-- ============================================================ 7 -->
+  <section id="checklist">
+    <h2>계층별 안티패턴, 체크리스트, 한 장 목표 시트</h2>
+    <div class="table-wrap"><table>
+      <thead><tr><th>계층</th><th>안티패턴</th><th>신호</th><th>처방</th></tr></thead>
+      <tbody>
+        <tr><td><b>부문·전사</b></td><td>전사 숫자 놀음</td><td>"AI 과제 300건, 전 직원 교육" 같은 합계 목표, 사업부 간 같은 도구 중복 계약</td><td>핵심 가치흐름 포트폴리오 결과 + 기반 투자 비중 + 규정·제도 개정을 자체 목표로</td></tr>
+        <tr><td><b>사업부</b></td><td>엑셀 취합기</td><td>사업부 목표 = 팀 목표 합계, 팀 간 흐름 지표 없음, 프로세스 오너 부재</td><td>E2E 가치흐름 결과 목표 + 오너 지정 + 사업부 데이터 표준 + 파일럿 확산 목표</td></tr>
+        <tr><td><b>실</b></td><td>중간 전달자</td><td>사업부 목표를 팀에 나눠 주기만 함, 실 안에 같은 과제가 여러 개</td><td>도메인 데이터 제품 오너십, 용어·템플릿 통일, 중복 과제 통합을 자체 목표로</td></tr>
+        <tr><td><b>팀</b></td><td>도구 수집가</td><td>챗봇·RAG 구축이 목표, 기존 엑셀 양식 그대로, 사용률 미측정</td><td>특정 업무의 결과 KPI + 실사용률 + 폐기할 레거시 양식 명시</td></tr>
+        <tr><td><b>그룹·파트</b></td><td>이수증 모음</td><td>교육 이수와 아이디어 제출 건수만 있음, 입력 품질은 아무도 안 봄</td><td>입력 완전성, 새 방식 사용률, 운영 로그 점검, 교육의 업무 적용</td></tr>
+      </tbody>
+    </table></div>
+
+    <h3>계층별 점검 질문</h3>
+    <p><b>부문·전사</b></p>
+    <ul class="checklist">
+      <li>목표 시트에 하위 조직 합계가 아닌, 부문만 결정할 수 있는 항목(투자 배분, 규정, 사업부 간 우선순위)이 있는가?</li>
+      <li>공통 기반(데이터·플랫폼) 투자에 다년 목표와 연간 마일스톤이 있는가?</li>
+      <li>사업부 간 성공 사례 복제를 목표로 갖고 있는가?</li>
+    </ul>
+    <p><b>사업부</b></p>
+    <ul class="checklist">
+      <li>여러 팀을 관통하는 가치흐름 결과 목표가 있고, 이름 붙은 프로세스 오너가 있는가?</li>
+      <li>사업부 공통 데이터 표준과 중복 도구 통합이 사업부 자체 목표인가?</li>
+      <li>등대 팀의 성과를 다른 팀으로 확산하는 목표와 레거시 퇴역 목표가 있는가?</li>
+    </ul>
+    <p><b>실</b></p>
+    <ul class="checklist">
+      <li>실이 오너인 도메인 데이터 제품(예: 품질 데이터)과 그 품질 지표가 있는가?</li>
+      <li>실 안의 용어·보고서 템플릿 통일과 중복 과제 통합을 목표로 갖는가?</li>
+      <li>파워유저·빌더 비율이 교육 시간이 아니라 그들이 운영하는 자동화의 실사용으로 측정되는가?</li>
+    </ul>
+    <p><b>팀</b></p>
+    <ul class="checklist">
+      <li>목표가 특정 업무의 결과 KPI(리드타임, COPQ, 재작업)이고 기준선과 측정 정의가 있는가?</li>
+      <li>대상 업무 건 중 새 방식으로 처리된 비율(실사용)을 재는가?</li>
+      <li>폐기할 레거시 파일·양식이 목표 시트에 이름으로 적혀 있는가?</li>
+      <li>상위 기반 목표에 대한 기여 목표와 공동 목표가 시트에 있는가?</li>
+    </ul>
+    <p><b>그룹·파트</b></p>
+    <ul class="checklist">
+      <li>입력 데이터 품질(필수 항목 완전성, 표준 코드 사용)을 주 단위로 보는가?</li>
+      <li>이슈 카드·도구 사용이 병행 작업(엑셀·메일) 없이 정착했는가?</li>
+      <li>프롬프트·에이전트 운영 로그와 AI 오답 사례를 정기적으로 점검하고 개선에 반영하는가?</li>
+    </ul>
+
+    <h3>한 장 템플릿: 계층별 AX 목표 시트</h3>
+    <p>아래는 실 단위 목표 시트를 예시로 채운 한 장 양식이다. 열 구성은 모든 계층에 같게 쓰고, 행의 유형 구성만 계층에 맞게 바꾼다. 연간 계획 수립과 함께 쓰려면 <a href="roadmap.html">13장</a>의 로드맵 빌더와 <a href="playbook.html">15장</a>의 경영진 한 장 요약에 붙이면 된다.</p>
+    <div class="table-wrap"><table>
+      <thead><tr><th>#</th><th>목표 문장</th><th>유형</th><th>지표 · 측정 정의</th><th>기준선 → 목표</th><th>자체/기여</th><th>연결된 상위 목표</th><th>오너 · 점검</th></tr></thead>
+      <tbody>
+        <tr><td>1</td><td>품질 데이터 제품(클레임·검사·LOT 이력)을 실 소유로 운영한다</td><td><span class="chip acc">기반</span></td><td>데이터 품질 점수(완전성·일관성·적시성 가중 평균, 월 1회, 카탈로그 기준)</td><td>70 → 90 (예시, 2년, 1년차 80)</td><td>자체</td><td>사업부: 클레임 리드타임 50% 단축</td><td>품질보증실장 · 분기</td></tr>
+        <tr><td>2</td><td>클레임 용어·8D 보고서 템플릿을 실 표준 1종으로 통일한다</td><td><span class="chip acc">기반</span></td><td>표준 템플릿 사용 비율(신규 8D 건 기준, 월)</td><td>템플릿 7종 → 1종, 사용 95% (예시)</td><td>자체</td><td>사업부: 클레임 데이터 표준</td><td>품질기획 담당 · 분기</td></tr>
+        <tr><td>3</td><td>실 내 중복 RAG·챗봇 과제를 통합한다</td><td><span class="chip">확산</span></td><td>통합 후 공통 검색 재사용 팀 수, 폐기 도구 수</td><td>9건 → 3건 (예시)</td><td>기여</td><td>사업부: 공통 지식 검색 1개</td><td>실 AX 챔피언 · 분기</td></tr>
+        <tr><td>4</td><td>파워유저·빌더를 키워 실 업무 자동화를 현업이 운영한다</td><td><span class="chip">역량</span></td><td>빌더가 운영하는 자동화 중 월 실사용 있는 비율</td><td>빌더 3% · 실사용 70% (예시)</td><td>자체</td><td>부문: 현업 주도 AX 역량</td><td>실장 · 반기</td></tr>
+        <tr><td>5</td><td>승인 도구와 데이터 등급 기준을 지킨다</td><td><span class="chip">가드레일</span></td><td>등급 위반 건, 평가 세트 운영 도구 비율</td><td>평가 세트 운영 100% (예시)</td><td>기여</td><td>부문: AI 사용 규정</td><td>실장 · 분기</td></tr>
+      </tbody>
+    </table></div>
+  </section>
+
+  <section class="keypoints" id="summary">
+    <h2>핵심 정리</h2>
+    <ol>
+      <li>팀 목표를 더한 사업부·부문 목표는 팀 간 흐름, 공유 기반, 공통 표준, 자원 재배치, 규정 변경을 담지 못한다. 그 영역은 구조적으로 "누구의 목표도 아닌 것"이 된다.</li>
+      <li>취합형은 국지 최적과 중복, 활동 지표 표류(굿하트의 법칙), 시간 지평 불일치, 기여 귀속 문제, 본업 KPI와의 단절로 실패한다.</li>
+      <li>고도의 원칙: 각 계층은 그 계층의 결정권으로만 바꿀 수 있는 것을 목표로 삼는다. 계층은 인원수가 아니라 결정권·범위·시간 지평으로 정의한다.</li>
+      <li>목표는 결과·기반·확산·역량·가드레일 다섯 유형으로 나누고, 계층마다 비중을 다르게 둔다. 기반의 무게중심은 사업부와 실, 결과는 사업부(흐름 전체)와 팀(자기 구간)이다.</li>
+      <li>목표는 캐치볼로 위아래·옆으로 주고받으며 잇는다. 팀 간 흐름은 공동 목표로, 기반은 매트릭스 목표로, 공은 이중 인정 + 단일 집계 + 기반 고유 지표로 나눈다.</li>
+      <li>지표는 기준선과 측정 정의를 먼저 고정하고, 활동 지표는 진단용으로만 쓰며, 선행·후행 지표를 사슬로 묶은 다년 목표와 연간 마일스톤으로 운영한다.</li>
+      <li>분기 점검, 반기 조정, 기반·퇴역 작업 보상, PoC를 결정 시점으로 보는 평가, 공동 평가, 실험·운영 트랙 분리가 목표 체계를 살아 있게 한다.</li>
+    </ol>
+  </section>
+
+  <section class="quiz-sec" id="quiz">
+    <h2>확인 퀴즈</h2>
+    <div class="quiz">
+      <div class="quiz-q"><p>1. 사업부의 AX 목표가 "12개 팀 목표의 합계(과제 87건, 교육 95%)"인데 고객 클레임 리드타임은 움직이지 않았다. 가장 근본적인 원인은?</p><div class="opts">
+        <button class="opt">팀들의 목표 달성률이 낮았다</button>
+        <button class="opt" data-correct>리드타임의 상당 부분이 팀 사이(인계·재입력·용어 불일치)에서 생기는데, 이 영역이 어느 팀 목표에도 없었다</button>
+        <button class="opt">AI 모델 성능이 부족했다</button>
+        <button class="opt">교육 이수율이 100%가 아니었다</button>
+      </div><div class="quiz-exp">팀 목표의 합은 팀 경계 안의 개선만 담는다. 여러 팀을 관통하는 흐름, 공유 데이터, 표준은 상위 계층이 자기 목표로 떠안아야 한다.</div></div>
+
+      <div class="quiz-q"><p>2. "고도의 원칙"에 따라 실(室)의 자체 목표로 가장 적합한 것은?</p><div class="opts">
+        <button class="opt">실 소속 팀들의 AI 과제 수 합계</button>
+        <button class="opt">전사 AI 플랫폼 투자 배분</button>
+        <button class="opt" data-correct>실이 소유하는 품질 데이터 제품의 품질 점수 향상과 실 내 보고서 템플릿 통일</button>
+        <button class="opt">한 파트의 이슈 카드 입력 완전성</button>
+      </div><div class="quiz-exp">실은 한 기능 도메인의 여러 팀을 아우르므로 도메인 데이터, 용어·템플릿, 중복 정리처럼 팀이 혼자 못 하고 부문은 너무 먼 일을 맡는다. 합계는 취합이고, 투자 배분은 부문, 입력 완전성은 파트의 일이다.</div></div>
+
+      <div class="quiz-q"><p>3. 공통 데이터를 정리한 실과, 그 데이터를 써서 리드타임을 줄인 팀 사이의 성과 인정 방식으로 이 장이 권장한 것은?</p><div class="opts">
+        <button class="opt">결과를 낸 팀만 인정한다</button>
+        <button class="opt">매년 협상으로 비율을 정해 나눈다</button>
+        <button class="opt" data-correct>평가에서는 양쪽 모두 인정하되 재무 집계는 한 번만 하고, 기반 오너는 재사용·품질 같은 고유 지표로도 평가한다</button>
+        <button class="opt">기반 작업은 성과 평가에서 제외한다</button>
+      </div><div class="quiz-exp">기반을 만든 쪽이 보상받지 못하면 아무도 기반을 만들지 않는다. 이중 인정 + 단일 집계로 협력 유인을 살리고, 결과가 늦게 나오는 기반 작업은 고유 지표로 따로 본다. 규칙은 연초에 문서로 정한다.</div></div>
+
+      <div class="quiz-q"><p>4. "생성형 AI 라이선스 1,000석 도입"을 결과·채택 지표로 바꾼 것으로 가장 적절한 것은?</p><div class="opts">
+        <button class="opt">라이선스 1,500석으로 확대</button>
+        <button class="opt">월간 로그인 10,000회</button>
+        <button class="opt" data-correct>대상 업무(예: 8D 초안 작성) 건 중 도구를 거쳐 처리된 비율을 기준선 → 목표값으로, 측정 정의와 기한을 붙여 설정</button>
+        <button class="opt">AI 교육 이수 시간 1인 20시간</button>
+      </div><div class="quiz-exp">라이선스·로그인·교육 시간은 활동 지표다. 실제 업무 건 중 새 방식으로 처리된 비율(채택)과 그 업무의 결과 KPI를 함께 잡아야 한다.</div></div>
+
+      <div class="quiz-q"><p>5. 2년이 걸리는 사업부 데이터 표준 구축 목표를 MBO에서 다루는 가장 좋은 방법은?</p><div class="opts">
+        <button class="opt">1년 안에 끝나도록 범위를 줄여 팀에 나눠 준다</button>
+        <button class="opt" data-correct>3년 목표를 정하고 연도별 측정 가능한 마일스톤(표준 확정, 적용 팀 수, 자동 측정)을 해당 연도 시트에 올려 평가한다</button>
+        <button class="opt">결과가 나올 때까지 목표 시트에 넣지 않는다</button>
+        <button class="opt">1년차에는 결과 지표 미달성으로 평가한다</button>
+      </div><div class="quiz-exp">시간 지평이 긴 기반 목표는 다년 목표 + 연간 마일스톤으로 운영한다. 그렇지 않으면 첫해 평가가 늘 0점이라 아무도 시작하지 않는다.</div></div>
+
+      <div class="quiz-q"><p>6. PoC를 평가에서 다루는 방식으로 이 장의 관점과 가장 가까운 것은?</p><div class="opts">
+        <button class="opt">PoC 완료 건수가 많을수록 높게 평가한다</button>
+        <button class="opt">PoC가 실패하면 감점한다</button>
+        <button class="opt" data-correct>PoC는 결정 시점이다. 기한 내에 확산·수정·중단을 근거 있게 결정했는지를 보고, 근거 있는 중단도 성과로 인정한다</button>
+        <button class="opt">PoC는 평가 대상에서 완전히 제외한다</button>
+      </div><div class="quiz-exp">PoC 건수를 성과로 보면 파일럿 연옥을 보상하게 된다. 실험 트랙에서는 기한 내 결정과 학습 공유를, 운영 트랙에서는 결과·채택 지표를 본다.</div></div>
+    </div>
+  </section>
+</main>
+<script>
+(function () {
+  "use strict";
+  function hexA(c, a) {
+    c = (c || "").trim();
+    if (c[0] === "#") {
+      var h = c.slice(1);
+      if (h.length === 3) h = h.split("").map(function (x) { return x + x; }).join("");
+      var n = parseInt(h.slice(0, 6), 16);
+      return "rgba(" + ((n >> 16) & 255) + "," + ((n >> 8) & 255) + "," + (n & 255) + "," + a + ")";
+    }
+    var m = c.match(/[\d.]+/g);
+    return m ? "rgba(" + m[0] + "," + m[1] + "," + m[2] + "," + a + ")" : c;
+  }
+  var esc = AX.esc;
+
+  /* ================================================ A) 계층별 목표 설계기 */
+  var TYPES = [
+    { k: "out", n: "결과", c: "var(--accent)" },
+    { k: "ena", n: "기반", c: "var(--accent-2)" },
+    { k: "ado", n: "확산", c: "var(--blue)" },
+    { k: "cap", n: "역량", c: "var(--warn)" },
+    { k: "gua", n: "가드레일", c: "var(--text-dim)" }
+  ];
+  var TN = {}; TYPES.forEach(function (t) { TN[t.k] = t.n; });
+  var LV = {
+    dept: { name: "부문·전사", dec: "투자 배분, 조직·제도·규정, 사업부 간 우선순위", hz: "3~5년",
+      hier: { mix: [40, 20, 10, 10, 20], goals: [
+        { t: "out", g: "부문 핵심 가치흐름 3개(클레임 대응·신제품 양산 이관·설비 보전)의 E2E 리드타임 3년 내 40% 단축", m: "가치흐름별 리드타임 월 중앙값, 이벤트 로그 기준" },
+        { t: "ena", g: "AX 예산 중 공통 데이터·AI 기반 투자 비중 40% 이상 유지, 사업부 간 재사용 자산 운영", m: "기반 투자 비율(분기), 2개 이상 사업부가 쓰는 자산 수와 실사용" },
+        { t: "gua", g: "AI 사용 규정·데이터 등급 기준 개정, 승인 도구 경유 비율 90%", m: "승인 도구 경유 비율(월), 등급 위반 건" },
+        { t: "ado", g: "등대 사례의 사업부 간 복제 3건, 복제 후 6개월 KPI 개선 확인", m: "복제 사업부의 동일 KPI 기준선 대비 변화" }
+      ] },
+      agg: { mix: [5, 5, 30, 50, 10], goals: [
+        { t: "ado", g: "전사 AI 과제 340건 추진(사업부 합계)", m: "과제 등록 건수" },
+        { t: "cap", g: "전 직원 AI 교육 이수율 95%", m: "교육 이수 인원 / 대상 인원" },
+        { t: "ado", g: "생성형 AI 라이선스 5,000석 도입", m: "계약 좌석 수" },
+        { t: "ado", g: "PoC 48건 완료", m: "완료 보고 건수" }
+      ] } },
+    bu: { name: "사업부", dec: "E2E 가치흐름, 팀 간 인력·예산 재배치, 사업부 표준", hz: "2~3년",
+      hier: { mix: [35, 30, 20, 0, 15], goals: [
+        { t: "out", g: "고객 클레임 초기 대응 리드타임 50% 단축(10일 → 5일, 2년)", m: "접수~임시조치 완료 시각, 월 중앙값, 이슈 카드 로그" },
+        { t: "ena", g: "클레임 가치흐름 프로세스 오너 지정, 5개 팀 공통 클레임 데이터 표준 적용", m: "표준 코드 적용 비율(신규 건), 팀별" },
+        { t: "ena", g: "팀별 챗봇·RAG 12개를 공통 지식 검색 1개로 통합", m: "공통 검색 재사용 팀 수, 폐기 도구 수, 검색 성공률(평가 세트)" },
+        { t: "ado", g: "등대 팀 8D 초안 도구를 대상 팀 80%로 확산, 엑셀 8D 양식 퇴역", m: "대상 클레임 중 도구 경유 처리 비율(팀별, 월)" }
+      ] },
+      agg: { mix: [5, 5, 35, 50, 5], goals: [
+        { t: "ado", g: "AI 과제 87건 추진(12개 팀 합계)", m: "과제 등록 건수" },
+        { t: "cap", g: "구성원 AI 교육 이수율 95%", m: "이수 인원 / 대상 인원" },
+        { t: "ado", g: "생성형 AI 사용자 1,200명", m: "계정 발급 수" },
+        { t: "ado", g: "챗봇·RAG 구축 12건(팀별 1건)", m: "구축 완료 건수" }
+      ] } },
+    sil: { name: "실", dec: "기능 도메인 데이터·용어·템플릿, 실 내 중복 정리", hz: "1~2년",
+      hier: { mix: [15, 40, 20, 15, 10], goals: [
+        { t: "ena", g: "품질 데이터 제품(클레임·검사·LOT 이력) 실 소유 운영, 품질 점수 70 → 90", m: "완전성·일관성·적시성 가중 점수, 월 1회" },
+        { t: "ena", g: "클레임 용어·8D 템플릿 7종 → 실 표준 1종", m: "신규 8D 중 표준 템플릿 사용 비율" },
+        { t: "ado", g: "실 내 유사 과제 9건 → 3건 통합", m: "통합 후 재사용 팀 수, 폐기 과제 수" },
+        { t: "cap", g: "빌더 비율 3%, 빌더가 운영하는 자동화의 월 실사용 70%", m: "실사용 자동화 수 / 운영 자동화 수" }
+      ] },
+      agg: { mix: [10, 5, 30, 50, 5], goals: [
+        { t: "ado", g: "AI 과제 24건(소속 팀 합계)", m: "과제 등록 건수" },
+        { t: "cap", g: "1인당 AI 교육 20시간", m: "교육 시간 합계 / 인원" },
+        { t: "ado", g: "PoC 6건 완료", m: "완료 보고 건수" },
+        { t: "ado", g: "AI 사용자 300명", m: "계정 발급 수" }
+      ] } },
+    team: { name: "팀", dec: "특정 업무 프로세스 재설계, 팀 내 배치, 양식 폐지", hz: "분기~1년",
+      hier: { mix: [45, 10, 25, 10, 10], goals: [
+        { t: "out", g: "클레임 1차 회신 리드타임 3일 → 1.5일(4분기까지)", m: "접수 시각~고객 회신 시각, 월 중앙값" },
+        { t: "out", g: "8D 보고서 반려(재작업) 비율 30% → 10%", m: "고객·내부 반려 건 / 제출 건, 분기" },
+        { t: "ado", g: "대상 클레임 중 8D 초안 도구 경유 처리 80%, 엑셀 양식 5종 폐기", m: "도구 경유 건 / 전체 건, 월" },
+        { t: "ena", g: "(기여) 팀 소관 클레임 필드 입력 완전성 95%", m: "실 데이터 품질 점수 중 팀 소관 필드", contrib: true }
+      ] },
+      agg: { mix: [15, 5, 30, 45, 5], goals: [
+        { t: "ado", g: "AI 과제 7건 추진", m: "과제 등록 건수" },
+        { t: "cap", g: "팀원 AI 교육 이수 100%", m: "이수 인원 / 팀원" },
+        { t: "ado", g: "팀 전용 8D 챗봇 구축", m: "구축 완료 여부" },
+        { t: "ado", g: "PoC 2건 완료", m: "완료 보고 건수" }
+      ] } },
+    part: { name: "그룹·파트", dec: "일상 실행, 입력 품질, 작업 표준, 도구 운영", hz: "주~분기",
+      hier: { mix: [15, 30, 35, 15, 5], goals: [
+        { t: "ena", g: "이슈 카드 필수 항목 입력 완전성 80% → 95%", m: "주간 표본 점검, 필수 필드 채움 비율" },
+        { t: "ado", g: "파트 처리 클레임 100% 이슈 카드로 처리, 엑셀·메일 병행 중단", m: "이슈 카드 등록 건 / 접수 건, 주" },
+        { t: "gua", g: "프롬프트·에이전트 운영 로그 주간 리뷰, AI 오답 사례 등록·반영", m: "리뷰 실시 주 비율, 오답 사례 반영까지 걸린 일수" },
+        { t: "cap", g: "교육 후 30일 내 업무 적용 사례 1인 1건 공유", m: "적용 사례가 있는 인원 / 교육 인원" }
+      ] },
+      agg: { mix: [10, 0, 30, 55, 5], goals: [
+        { t: "ado", g: "AI 아이디어 10건 제출", m: "제출 건수" },
+        { t: "cap", g: "AI 교육 이수 100%", m: "이수 인원" },
+        { t: "cap", g: "프롬프트 경진대회 참여", m: "참여 인원" },
+        { t: "ado", g: "AI 도구 월 로그인 200회", m: "로그인 횟수" }
+      ] } }
+  };
+  var gdLv, gdMode;
+  function gdRender() {
+    var L = LV[gdLv()], mode = gdMode(), S = L[mode];
+    var h = "";
+    h += "<p class=\"gd-meta\"><b>" + esc(L.name) + "</b> · " + (mode === "agg" ? "취합형(현재): 하위 목표를 더한 시트" : "계층형(권장): 이 계층만 할 수 있는 일") + "</p>";
+    h += "<div class=\"gd-h\">목표 유형 구성 (예시 비중)</div>";
+    TYPES.forEach(function (t, i) {
+      h += "<div class=\"bar-row\"><span>" + t.n + "</span><span class=\"track\"><i style=\"width:" + S.mix[i] + "%;background:" + t.c + "\"></i></span><span class=\"val\">" + S.mix[i] + "%</span></div>";
+    });
+    h += "<div class=\"gd-h\">예시 목표와 지표</div>";
+    var act = 0, own = 0;
+    S.goals.forEach(function (g) {
+      var isAct = mode === "agg";
+      if (isAct) act++;
+      if (!isAct && !g.contrib) own++;
+      var chips = "<span class=\"chip " + (isAct ? "" : "acc") + "\">" + TN[g.t] + "</span>";
+      if (isAct) chips += "<span class=\"chip bad\">활동 지표</span><span class=\"chip warn\">하위 합계·누구나 가능</span>";
+      else chips += g.contrib ? "<span class=\"chip\">기여 목표</span>" : "<span class=\"chip ok\">이 계층 고유</span>";
+      h += "<div class=\"gd-goal" + (isAct ? " badg" : "") + "\"><div class=\"chips\">" + chips + "</div><div class=\"gt\">" + esc(g.g) + "</div><div class=\"gm\">지표: " + esc(g.m) + "</div></div>";
+    });
+    document.getElementById("gd-out").innerHTML = h;
+    document.getElementById("gd-side").innerHTML = "<b>결정권</b>: " + esc(L.dec) + "<br><b>시간 지평</b>: " + esc(L.hz);
+    AX.stat("gd-o1", (S.mix[0] + S.mix[1]) + "%");
+    AX.stat("gd-o2", act + "<small>/ " + S.goals.length + "</small>");
+    AX.stat("gd-o3", own + "<small>/ " + S.goals.length + "</small>");
+    AX.stat("gd-o4", esc(L.hz));
+  }
+  gdLv = AX.seg("gd-lv", gdRender);
+  gdMode = AX.seg("gd-mode", gdRender);
+  gdRender();
+
+  /* ================================================ B) 취합의 함정 시뮬레이터 */
+  var T = 36, TAU = 6, C0 = 0.1, KAPPA = 0.5, LAMBDA = 0.0012, FB = 5, FR = 1.5;
+  var cvT = null;
+  var trd = function () { if (cvT) cvT.redraw(); };
+  var trN = AX.range("tr-n", function (v) { return v + "개"; }, trd);
+  var trD = AX.range("tr-d", function (v) { return v + "%"; }, trd);
+  var trS = AX.range("tr-s", function (v) { return v + "%"; }, trd);
+  var trL = AX.range("tr-l", function (v) { return v + "개월"; }, trd);
+  var trH = AX.seg("tr-h", trd);
+  function r(t) { return t <= 0 ? 0 : 1 - Math.exp(-t / TAU); }
+  function trModel() {
+    var N = trN(), d = trD() / 100, s = trS() / 100, L = trL(), h = Number(trH());
+    var ca = 0, ch = 0, dup = 0, A = [[0, 0]], H = [[0, 0]], cross = -1, startAhead = false;
+    for (var t = 1; t <= T; t++) {
+      var g = Math.min(0.35, LAMBDA * N * d * t);
+      var va = 100 * ((1 - s) * r(t) * (1 - g) + s * C0 * r(t)) - KAPPA * N * d;
+      var F = t <= L ? FB : FR;
+      var vh = 100 * ((1 - s) * r(t) * (1 - 0.2 * g) + s * h * r(t - L)) - 0.2 * KAPPA * N * d - F;
+      ca += va; ch += vh; dup += KAPPA * N * d;
+      A.push([t, ca]); H.push([t, ch]);
+      if (t === 1 && ch > ca) startAhead = true;
+      if (!startAhead && cross < 0 && ch > ca) cross = t;
+    }
+    return { A: A, H: H, ca: ca, ch: ch, dup: dup, cross: cross, startAhead: startAhead, L: L, gEnd: Math.min(0.35, LAMBDA * N * d * T) };
+  }
+  cvT = AX.canvas("#cv-trap", function (ctx, w, h) {
+    var P = AX.palette(), M = trModel();
+    var lo = 0, hi = 100;
+    M.A.concat(M.H).forEach(function (p) { lo = Math.min(lo, p[1]); hi = Math.max(hi, p[1]); });
+    hi = Math.ceil(hi / 500) * 500; lo = lo < 0 ? -Math.ceil(-lo / 100) * 100 : 0;
+    var narrow = w < 480;
+    var box = { x: narrow ? 50 : 62, y: 14, w: w - (narrow ? 50 : 62) - 12, h: h - 14 - 46 };
+    AX.chart(ctx, box, { x: [0, T], y: [lo, hi], xLabel: "개월", yLabel: "누적 순가치 (지수)", xTicks: [0, 6, 12, 18, 24, 30, 36],
+      yFmt: function (v) { return Math.abs(v) >= 1000 ? (v / 1000).toFixed(1) + "k" : String(Math.round(v)); },
+      bands: [{ x0: 0, x1: Math.min(T, M.L), color: hexA(P.accent2, 0.07) }],
+      vlines: [{ x: M.L, color: P.faint, label: "기반 완성 L" }],
+      hlines: lo < 0 ? [{ y: 0, color: P.axis, dash: [2, 3] }] : [],
+      series: [{ data: M.A, color: P.bad, width: 2.6, dash: [6, 4] }, { data: M.H, color: P.accent, width: 2.8 }],
+      points: M.cross > 0 ? [{ x: M.cross, y: M.H[M.cross][1], color: P.accent, r: 4.5, label: narrow ? "" : "역전" }] : []
+    });
+    AX.stat("tr-o1", Math.round(M.ca).toLocaleString());
+    AX.stat("tr-o2", Math.round(M.ch).toLocaleString() + "<small>(" + (M.ch >= M.ca ? "+" : "") + Math.round(M.ch - M.ca).toLocaleString() + ")</small>");
+    AX.stat("tr-o3", M.cross > 0 ? M.cross + "<small>개월차</small>" : (M.startAhead ? "처음부터 앞섬" : "36개월 내 없음"));
+    AX.stat("tr-o4", Math.round(M.dup).toLocaleString() + "<small>· 통합 부채 손실 " + Math.round(M.gEnd * 100) + "%</small>");
+  }, { aspect: 0.6, minHeight: 280, maxHeight: 420 });
+
+  /* ================================================ C) 목표 문장 점검기 */
+  var OUTCOME = /리드\s*타임|소요\s*시간|처리\s*시간|시간\s*단축|비용|COPQ|불량|재작업|반려|재발|가동률|수율|오류율|회신|납기|정확도|품질\s*점수|완전성|비율|사용률|경유|단축|감소|절감|개선율|인계/i;
+  var NUMPAIR = /\d[\d,.]*\s*(%|일|시간|분|건|원|점|배|종|개|명)?\s*(→|->|에서|대비)\s*\D{0,12}?\d/;
+  var ANYNUM = /\d/;
+  var DEADLINE = /20\d\d\s*년|\d{2,4}\s*\.\s*\d{1,2}|[1-4]\s*분기|Q[1-4]|상반기|하반기|연말|월말|까지|\d+\s*(개월|년)\s*(내|안|이내)?/;
+  var DEFN = /중앙값|평균|기준|측정|정의|시각|로그|주간|월간|매월|매주|분기별|표본|\/|~/;
+  var TRAPS = [
+    { re: /PoC|파일럿/i, w: "PoC·파일럿", tip: "PoC는 결정 시점이다. '운영 전환 비율' 또는 '기한 내 확산·수정·중단 결정'으로" },
+    { re: /교육|이수/, w: "교육·이수", tip: "교육 시간이 아니라 '교육 후 업무 적용 사례 비율'이나 '파워유저·빌더가 운영하는 자동화의 실사용'으로" },
+    { re: /도입|구축|개발\s*완료|오픈/, w: "도입·구축", tip: "구축 완료가 아니라 '대상 업무 건 중 도구 경유 비율'과 그 업무의 결과 KPI로" },
+    { re: /라이선스|계정|로그인|좌석/, w: "라이선스·로그인", tip: "계정·로그인 대신 '반복 사용자 비율'이나 '도구 경유 처리 비율'로" },
+    { re: /과제\s*\d|\d+\s*건|\d+\s*개(?!월|\s*팀|\s*사업|\s*실|\s*파트)/, w: "건수·개수", tip: "건수 대신 '그 건들이 개선한 KPI의 개수와 개선 폭'으로" },
+    { re: /아이디어|참여|경진/, w: "아이디어·참여", tip: "제출·참여 수 대신 '업무 KPI 개선으로 이어진 비율'로" }
+  ];
+  var LVK = {
+    dept: { n: "부문·전사", own: /전사|부문|투자|포트폴리오|규정|제도|정책|사업부\s*간|공통\s*플랫폼/, mis: /파트|팀\s*내|보고서\s*작성/, misMsg: "개별 팀·파트의 실행 항목이라 부문이 자기 결정권으로 바꿀 대상이 아닐 수 있다", pat: "부문 핵심 가치흐름 [N]개의 [결과 지표]를 [기준선] → [목표값]으로 [3년] 내 개선하고, 공통 기반 투자 비중을 [x%] 이상 유지한다. (측정: 가치흐름별 [정의], [주기])" },
+    bu: { n: "사업부", own: /가치\s*흐름|E2E|end-to-end|팀\s*간|여러\s*팀|\d\s*개\s*팀|사업부\s*공통|프로세스\s*오너|확산|통합|퇴역|표준/i, mis: /전사|부문\s*전체/, misMsg: "부문·전사 범위라 사업부 결정권을 넘을 수 있다", pat: "[여러 팀을 관통하는 가치흐름]의 [결과 지표]를 [기준선] → [목표값]으로 [기한]까지 개선한다. 프로세스 오너는 [이름]이며, [공통 데이터·표준 기반 목표]를 함께 둔다. (측정: [시작~끝 시각], [중앙값/평균], [데이터 원천])" },
+    sil: { n: "실", own: /데이터\s*제품|데이터\s*품질|오너|용어|템플릿|양식\s*통일|통합|중복|파워\s*유저|빌더|표준|도메인/, mis: /전사|부문/, misMsg: "실의 도메인 범위를 넘는다", pat: "[도메인] 데이터 제품의 [품질 점수/표준 적용률]을 [기준선] → [목표값]으로 [기한]까지 높이고, 실 내 [중복 과제·템플릿] [n] → [m]으로 통합한다. (측정: [정의], [주기])" },
+    team: { n: "팀", own: /업무|리드\s*타임|재작업|반려|COPQ|회신|소요\s*시간|양식\s*폐기|폐기|사용률|경유/i, mis: /전사|부문|사업부\s*공통|사업부\s*전체/, misMsg: "팀 혼자 달성할 수 없는 범위다. 상위 목표에 대한 '기여 목표'로 바꾸자", pat: "[특정 업무]의 [리드타임/재작업률/COPQ]를 [기준선] → [목표값]으로 [기한]까지 개선하고, 대상 건 중 새 방식 처리 비율 [x%], 폐기할 양식 [이름]. (측정: [시작~끝 시각], [중앙값], 월)" },
+    part: { n: "그룹·파트", own: /입력|완전성|이슈\s*카드|운영|로그|프롬프트|에이전트|개선\s*(아이디어|제안)|적용|병행|오답/, mis: /전사|부문|사업부|투자/, misMsg: "파트의 결정권을 넘는 범위다", pat: "[업무]의 [입력 완전성/새 방식 사용률]을 [기준선] → [목표값]으로 [기한]까지 높이고, 병행 작업([엑셀·메일])을 중단한다. (측정: 주간 표본 점검, [정의])" }
+  };
+  var SAMPLES = [
+    { l: "나쁨·사업부", lv: "bu", t: "AI 과제 87건 추진 및 전 구성원 AI 교육 이수율 95% 달성" },
+    { l: "좋음·사업부", lv: "bu", t: "고객 클레임 초기 대응 리드타임(접수~임시조치 완료 시각, 월 중앙값)을 10일에서 5일로 2027년 12월까지 단축하고, 5개 팀 공통 클레임 데이터 표준을 프로세스 오너가 운영한다" },
+    { l: "나쁨·팀", lv: "team", t: "팀 전용 사내 챗봇 구축 및 PoC 2건 완료" },
+    { l: "좋음·팀", lv: "team", t: "클레임 1차 회신 리드타임(접수 시각~고객 회신 시각, 월 중앙값)을 3일에서 1.5일로 2026년 4분기까지 단축하고, 대상 건 중 도구 경유 처리 비율 80%를 달성한다" },
+    { l: "애매·실", lv: "sil", t: "품질 데이터 플랫폼 구축" },
+    { l: "좋음·실", lv: "sil", t: "품질 데이터 제품(클레임·검사·LOT 이력)의 데이터 품질 점수(월간 측정)를 70점에서 90점으로 2027년 상반기까지 높이고, 실 내 중복 RAG 과제를 통합한다" },
+    { l: "좋음·파트", lv: "part", t: "이슈 카드 필수 항목 입력 완전성(주간 표본 점검)을 80%에서 95%로 2026년 12월까지 높이고 엑셀 병행 작성을 중단한다" },
+    { l: "계층 어긋남", lv: "team", t: "전사 AI 플랫폼 투자 비중을 40%로 높여 사업부 공통 기반을 2년 내 완성한다" }
+  ];
+  var gcText = document.getElementById("gc-text"), gcLv = document.getElementById("gc-lv");
+  var sb = document.getElementById("gc-samples");
+  SAMPLES.forEach(function (s, i) {
+    var b = document.createElement("button");
+    b.className = "btn"; b.type = "button"; b.textContent = s.l;
+    b.addEventListener("click", function () { gcLv.value = s.lv; gcText.value = s.t; gcEval(); });
+    sb.appendChild(b);
+  });
+  function gcEval() {
+    var tx = gcText.value.trim(), K = LVK[gcLv.value];
+    var out = document.getElementById("gc-out");
+    if (!tx) {
+      out.innerHTML = "<p style=\"color:var(--text-dim)\">오른쪽에 목표 문장을 쓰거나 예시를 불러오면 점검 결과가 여기에 나온다.</p>";
+      AX.stat("gc-o1", "—"); AX.stat("gc-o2", "—"); AX.stat("gc-o3", "—");
+      return;
+    }
+    var items = [], score = 0, flags = 0;
+    function add(st, title, note, pts) { items.push({ st: st, title: title, note: note }); score += pts; if (st !== "ok") flags++; }
+    var isOut = OUTCOME.test(tx);
+    add(isOut ? "ok" : "bad", "결과·채택 지표인가", isOut ? "업무 결과나 실제 사용 비율을 가리키는 표현이 있다." : "리드타임, 재작업률, COPQ, 도구 경유 비율 같은 결과·채택 지표가 보이지 않는다.", isOut ? 25 : 0);
+    var pair = NUMPAIR.test(tx), num = ANYNUM.test(tx);
+    add(pair ? "ok" : num ? "warn" : "bad", "기준선 → 목표값 숫자", pair ? "기준선과 목표값이 함께 있다." : num ? "숫자는 있지만 기준선(지금 값)이 없다. '○ → ○' 형태로." : "숫자가 없다. 달성 여부를 판정할 수 없다.", pair ? 20 : num ? 8 : 0);
+    var dl = DEADLINE.test(tx), df = DEFN.test(tx);
+    add(dl && df ? "ok" : dl || df ? "warn" : "bad", "측정 정의·기한", (dl ? "기한 있음" : "기한 없음") + " · " + (df ? "측정 정의 단서 있음(중앙값, 시각, 주기 등)" : "측정 정의 없음: 시작·끝 시각, 중앙값/평균, 주기를 적자"), (dl ? 10 : 0) + (df ? 10 : 0));
+    var hits = TRAPS.filter(function (tp) { return tp.re.test(tx); });
+    var trapSt = hits.length === 0 ? "ok" : isOut && pair ? "warn" : "bad";
+    add(trapSt, "활동 지표 함정", hits.length === 0 ? "함정 단어가 없다." : "걸린 단어: " + hits.map(function (x) { return x.w; }).join(", ") + (trapSt === "warn" ? " (결과 지표와 함께 있어 수단으로 섞인 정도)" : "") + "<br>→ " + esc(hits[0].tip), hits.length === 0 ? 20 : trapSt === "warn" ? 10 : 0);
+    var ownHit = K.own.test(tx), misHit = K.mis.test(tx);
+    var lvSt = misHit ? "bad" : ownHit ? "ok" : "warn";
+    var lvNote = misHit ? K.misMsg + "." : ownHit ? K.n + "의 결정권·범위에 맞는 표현이 있다." : K.n + "만 할 수 있는 일인지 불분명하다." + (gcLv.value === "bu" || gcLv.value === "dept" || gcLv.value === "sil" ? " 하위 목표의 합계(취합)일 가능성을 확인하자." : "");
+    add(lvSt, "이 계층만 할 수 있는 일인가", lvNote, lvSt === "ok" ? 15 : lvSt === "warn" ? 6 : 0);
+    var icon = { ok: "<span class=\"chip ok\">통과</span>", warn: "<span class=\"chip warn\">보완</span>", bad: "<span class=\"chip bad\">문제</span>" };
+    var h = "<ul class=\"gc-list\">";
+    items.forEach(function (it) { h += "<li>" + icon[it.st] + "<div><b>" + esc(it.title) + "</b><small>" + it.note + "</small></div></li>"; });
+    h += "</ul>";
+    h += "<div class=\"gc-rewrite\"><b>" + esc(K.n) + " 목표 고쳐 쓰기 틀</b><br>" + esc(K.pat) + "</div>";
+    out.innerHTML = h;
+    var verdict = score >= 80 ? "좋은 목표" : score >= 55 ? "보완 필요" : "다시 쓰기";
+    AX.stat("gc-o1", score + "<small>/ 100</small>");
+    AX.stat("gc-o2", verdict);
+    AX.stat("gc-o3", flags + "<small>/ 5</small>");
+  }
+  gcText.addEventListener("input", gcEval);
+  gcLv.addEventListener("change", gcEval);
+  gcLv.value = SAMPLES[0].lv; gcText.value = SAMPLES[0].t;
+  gcEval();
+
+  /* ================================================ D) 캐스케이드 트리 */
+  var NODES = [
+    { id: "bu", p: null, lv: "사업부", who: "○○사업부 (프로세스 오너: 품질보증실장)", t: "out", own: "자체", g: "고객 클레임 초기 대응 리드타임 50% 단축", m: "접수~임시조치 완료, 월 중앙값 10일 → 5일 (2년)", cr: "사업부 결과 목표. 하위 결과·기반 목표의 성과가 모두 여기에 이중 인정된다." },
+    { id: "bu-ax", p: "bu", lv: "사업부", who: "사업부 AX 추진 담당", t: "ena", own: "자체", g: "팀별 챗봇·RAG 12개를 공통 지식 검색 1개로 통합", m: "재사용 팀 수 0 → 12, 폐기 도구 11개, 검색 성공률(평가 세트) 85%", cr: "기반 고유 지표(재사용·성공률)로 평가하고, 결과 목표에도 이중 인정." },
+    { id: "qa", p: "bu", lv: "실", who: "품질보증실", t: "ena", own: "자체", g: "클레임 데이터 제품 오너십, 표준 불량 코드 적용률 95%", m: "신규 클레임 중 표준 코드 사용 비율, 월", cr: "기반 오너. 고유 지표 + 사업부 리드타임 이중 인정." },
+    { id: "cq", p: "qa", lv: "팀", who: "고객품질팀", t: "out", own: "기여", g: "클레임 1차 회신 리드타임 3일 → 1.5일", m: "접수~고객 회신 시각, 월 중앙값", cr: "사업부 결과 목표에 대한 기여 목표. 공동 목표(인계 시간)를 고객지원팀과 공유." },
+    { id: "cq-p1", p: "cq", lv: "파트", who: "클레임접수파트", t: "ena", own: "기여", g: "이슈 카드 필수 항목 입력 완전성 80% → 95%", m: "주간 표본 점검, 필수 필드 채움 비율", cr: "실의 데이터 제품 품질에 대한 기여 목표." },
+    { id: "cq-p2", p: "cq", lv: "파트", who: "8D분석파트", t: "ado", own: "자체", g: "8D 초안 도구 경유 처리 80%, 엑셀 8D 양식 폐기", m: "도구 경유 건 / 전체 8D 건, 월", cr: "파트 고유 확산 목표. 레거시 퇴역을 성과로 인정." },
+    { id: "qan", p: "qa", lv: "팀", who: "품질분석팀", t: "out", own: "기여", g: "불량 원인 분석 기간 6일 → 3일", m: "분석 의뢰~원인 확정 시각, 월 중앙값", cr: "사업부 결과 목표에 대한 기여 목표." },
+    { id: "qan-g", p: "qan", lv: "그룹", who: "신뢰성시험그룹", t: "ena", own: "기여", g: "시험 결과 표준 양식 등록, 등록 지연 2일 → 당일", m: "시험 완료~시스템 등록 시각 차이, 주", cr: "데이터 제품 적시성에 대한 기여." },
+    { id: "pe", p: "bu", lv: "실", who: "생산기술실", t: "ena", own: "자체", g: "공정 이력·LOT 추적 데이터 연결, 조회 시간 2일 → 2시간", m: "LOT 이력 조회 요청~회신, 중앙값", cr: "기반 오너. 고유 지표 + 사업부 리드타임 이중 인정." },
+    { id: "pet", p: "pe", lv: "팀", who: "공정기술팀", t: "ado", own: "기여", g: "LOT 이력 셀프 조회 비율 80%", m: "셀프 조회 건 / 전체 조회 건, 월", cr: "생산기술실 기반 목표에 대한 기여, 클레임 흐름 공동 목표 참여." },
+    { id: "mfg", p: "pe", lv: "팀", who: "제조팀", t: "out", own: "기여", g: "임시조치(출하 보류·선별) 실행 24시간 → 8시간", m: "임시조치 지시~완료 시각, 중앙값", cr: "사업부 결과 목표에 대한 기여 목표." },
+    { id: "mfg-p", p: "mfg", lv: "파트", who: "라인운영파트", t: "ado", own: "기여", g: "임시조치 지시를 이슈 카드로 수신·완료 등록 100%", m: "이슈 카드 완료 등록 건 / 지시 건, 주", cr: "리드타임 측정 가능성(로그)에 대한 기여." },
+    { id: "sales", p: "bu", lv: "실", who: "영업실", t: "out", own: "자체", g: "고객 접점 클레임 접수의 표준화(이슈 카드 직접 등록)", m: "고객 문의~이슈 카드 등록 시간", cr: "흐름의 시작점 오너." },
+    { id: "cs", p: "sales", lv: "팀", who: "고객지원팀", t: "out", own: "기여", g: "고객 문의 → 이슈 카드 등록 4시간 → 30분", m: "메일 수신 시각~카드 등록 시각, 중앙값", cr: "고객품질팀과 '접수→분석 착수 인계 시간' 공동 목표 공유." }
+  ];
+  var byId = {}; NODES.forEach(function (n) { n.kids = []; byId[n.id] = n; });
+  NODES.forEach(function (n) { if (n.p) byId[n.p].kids.push(n); });
+  var ctSel = "cq-p1";
+  var ctMode;
+  function ctBuild(n) {
+    var s = "<li><button class=\"ct-node\" type=\"button\" data-id=\"" + n.id + "\"><span class=\"lv\">" + esc(n.lv) + "</span><b>" + esc(n.who) + "</b><br>" + esc(n.g) + " <span class=\"chip " + (n.t === "out" ? "acc" : "") + "\">" + TN[n.t] + "</span></button>";
+    if (n.kids.length) { s += "<ul>"; n.kids.forEach(function (k) { s += ctBuild(k); }); s += "</ul>"; }
+    return s + "</li>";
+  }
+  var treeEl = document.getElementById("ct-tree");
+  treeEl.innerHTML = ctBuild(byId.bu);
+  function desc(n, acc) { n.kids.forEach(function (k) { acc.push(k.id); desc(k, acc); }); return acc; }
+  function ctRender() {
+    var n = byId[ctSel], on = {};
+    var anc = [], a = n; while (a.p) { a = byId[a.p]; anc.push(a.id); }
+    var ds = desc(n, []);
+    if (ctMode() === "chain") { anc.concat(ds).forEach(function (id) { on[id] = 1; }); }
+    else NODES.forEach(function (x) { if (x.t === n.t) on[x.id] = 1; });
+    [].forEach.call(treeEl.querySelectorAll(".ct-node"), function (b) {
+      var id = b.dataset.id;
+      b.classList.toggle("sel", id === ctSel);
+      b.classList.toggle("on", !!on[id] && id !== ctSel);
+      b.classList.toggle("dim", !on[id] && id !== ctSel);
+      b.setAttribute("aria-pressed", id === ctSel);
+    });
+    var up = anc.length ? anc.slice().reverse().map(function (id) { return byId[id].who.replace(/ \(.*\)/, ""); }).join(" → ") + " → " + n.who : "최상위 목표";
+    document.getElementById("ct-detail").innerHTML = "<h4>" + esc(n.who) + "</h4><dl>" +
+      "<dt>목표</dt><dd>" + esc(n.g) + "</dd>" +
+      "<dt>지표</dt><dd>" + esc(n.m) + " <small>(예시)</small></dd>" +
+      "<dt>유형</dt><dd>" + TN[n.t] + " · " + esc(n.own) + " 목표</dd>" +
+      "<dt>사슬</dt><dd>" + esc(up) + "</dd>" +
+      "<dt>공 나누기</dt><dd>" + esc(n.cr) + "</dd></dl>";
+    AX.stat("ct-o1", esc(n.lv));
+    AX.stat("ct-o2", anc.length + "<small>단계</small>");
+    AX.stat("ct-o3", ds.length + "<small>개</small>");
+  }
+  treeEl.addEventListener("click", function (e) {
+    var b = e.target.closest(".ct-node"); if (!b) return;
+    ctSel = b.dataset.id; ctRender();
+  });
+  ctMode = AX.seg("ct-mode", ctRender);
+  ctRender();
+})();
+</script>
+</body>
+</html>

@@ -2,7 +2,7 @@
 
 레거시 파일과 메일 더미에서 AI가 일하는 조직까지. 대기업 제조 현장의 실무자와 리더를 위한 한국어 AX 학습 사이트입니다.
 공유 폴더에 흩어진 엑셀·PPT, 메일 속에만 있는 결정과 수치, 이슈마다 달라지는 프로세스와 산출물, 팀마다 다른 용어와 포맷 — 이 현실에서 출발해 데이터·프로세스·공통 언어·사람을 정리하고 그 위에 AI를 올리는 길을 단계별로 안내합니다.
-15개 챕터, 40여 개의 인터랙티브(자가진단, 프로세스 마이닝, 미니 RAG, ROI 계산기, 로드맵 빌더, 90일 플레이북 생성기 등)로 구성됩니다.
+16개 챕터, 40여 개의 인터랙티브(자가진단, 프로세스 마이닝, 미니 RAG, ROI 계산기, 로드맵 빌더, 90일 플레이북 생성기 등)로 구성됩니다.
 
 ## 실행
 빌드 과정이 없는 정적 사이트입니다.
@@ -26,10 +26,11 @@ python3 -m http.server 8000   # → http://localhost:8000
 | 09 | chapters/shopfloor.html | OT/IT, SPC와 이상 탐지, 예지 보전, 비전 검사, 가상 계측 |
 | 10 | chapters/governance.html | ISO/IEC 42001, EU AI Act, NIST AI RMF, 섀도 AI와 기술 유출 |
 | 11 | chapters/people.html | CoE·허브-스포크, 역할과 역량, 확산 모델, 변화 관리 |
-| 12 | chapters/roadmap.html | 가시화→표준화→디지털화→데이터화→지능화→자율화 로드맵 |
-| 13 | chapters/cases.html | 가상 사례로 보는 레거시 방식 vs AX 방식 |
-| 14 | chapters/playbook.html | 우리 팀 90일 계획·유스케이스 캔버스 생성기 |
-| 15 | chapters/glossary.html | 용어집, 종합 퀴즈 |
+| 12 | chapters/goals.html | 계층별 AX 목표 체계: 취합형 MBO의 함정, 부문·사업부·실·팀·파트별 목표 유형, 캐스케이드와 캐치볼 |
+| 13 | chapters/roadmap.html | 가시화→표준화→디지털화→데이터화→지능화→자율화 로드맵 |
+| 14 | chapters/cases.html | 가상 사례로 보는 레거시 방식 vs AX 방식 |
+| 15 | chapters/playbook.html | 우리 팀 90일 계획·유스케이스 캔버스 생성기 |
+| 16 | chapters/glossary.html | 용어집, 종합 퀴즈 |
 
 공통 코드: `css/style.css`(디자인 토큰, 라이트/다크), `js/common.js`(내비게이션, 검색, 캔버스·차트 헬퍼, 전역 `AX`).
 챕터 작성 규칙은 [CONTRIBUTING.md](CONTRIBUTING.md), 편집 기준은 [docs/OUTLINE.md](docs/OUTLINE.md)를 참고하세요.
