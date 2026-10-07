@@ -1,0 +1,10 @@
+{
+  "id": "axbook",
+  "title": "AXBook",
+  "description": "레거시 파일, 메일로 오가는 비정형 데이터, 팀마다 다른 포맷과 그때그때 바뀌는 프로세스 — 대기업 제조 현장의 현실에서 출발해 AI 전환(AX)을 단계별로 설계하는 인터랙티브 교과서.",
+  "url": "https://axbook.euiyun.com/",
+  "repo": "https://github.com/geniuskey/axbook",
+  "field": "ai",
+  "status": "published",
+  "domain": "axbook.euiyun.com"
+}
