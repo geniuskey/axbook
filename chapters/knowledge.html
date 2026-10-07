@@ -1,0 +1,753 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="icon" href="../favicon.ico" sizes="any">
+<link rel="icon" href="../favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="../apple-touch-icon.png">
+<title>문서를 지식으로: RAG와 지식 그래프 · AXBook</title>
+<meta name="description" content="공유 폴더의 PDF·PPT·엑셀·HWP와 메일 첨부를 AI가 근거로 쓰는 지식으로 바꾸는 법. 파싱과 청킹, BM25와 임베딩의 하이브리드 검색, 권한(ACL)과 최신성, GraphRAG와 평가까지 브라우저 안의 미니 RAG로 직접 실험한다.">
+<link rel="canonical" href="https://axbook.euiyun.com/chapters/knowledge.html">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="AXBook">
+<meta property="og:title" content="문서를 지식으로: RAG와 지식 그래프 · AXBook">
+<meta property="og:description" content="공유 폴더의 PDF·PPT·엑셀·HWP와 메일 첨부를 AI가 근거로 쓰는 지식으로 바꾸는 법. 파싱과 청킹, BM25와 임베딩의 하이브리드 검색, 권한(ACL)과 최신성, GraphRAG와 평가까지 브라우저 안의 미니 RAG로 직접 실험한다.">
+<meta property="og:url" content="https://axbook.euiyun.com/chapters/knowledge.html">
+<meta property="og:image" content="https://axbook.euiyun.com/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:locale" content="ko_KR">
+<meta name="twitter:card" content="summary_large_image">
+<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"TechArticle","headline":"문서를 지식으로: RAG와 지식 그래프","name":"문서를 지식으로: RAG와 지식 그래프 · AXBook","url":"https://axbook.euiyun.com/chapters/knowledge.html","mainEntityOfPage":"https://axbook.euiyun.com/chapters/knowledge.html","inLanguage":"ko","isAccessibleForFree":true,"learningResourceType":"interactive textbook chapter","position":6,"image":"https://axbook.euiyun.com/og.png","dateModified":"2026-10-07","isPartOf":{"@type":"Book","@id":"https://axbook.euiyun.com/#book","name":"AXBook — 제조 현장을 위한 인터랙티브 AI 전환 교과서","url":"https://axbook.euiyun.com/"},"publisher":{"@type":"Organization","name":"AXBook","url":"https://axbook.euiyun.com/"},"description":"공유 폴더의 PDF·PPT·엑셀·HWP와 메일 첨부를 AI가 근거로 쓰는 지식으로 바꾸는 법. 파싱과 청킹, BM25와 임베딩의 하이브리드 검색, 권한(ACL)과 최신성, GraphRAG와 평가까지 브라우저 안의 미니 RAG로 직접 실험한다."},{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"AXBook","item":"https://axbook.euiyun.com/"},{"@type":"ListItem","position":2,"name":"06 문서를 지식으로: RAG와 지식 그래프","item":"https://axbook.euiyun.com/chapters/knowledge.html"}]}]}</script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+<link rel="stylesheet" href="../css/style.css">
+<script src="../js/common.js"></script>
+<style>
+  .rag-q { display: flex; gap: 8px; flex-wrap: wrap; }
+  .rag-q input { flex: 1 1 200px; min-width: 0; }
+  .rag-presets { display: flex; flex-wrap: wrap; gap: 6px; margin: 10px 0 4px; }
+  .rag-presets button { font: inherit; font-size: 12.5px; padding: 3px 10px; border-radius: 999px; border: 1px solid var(--border); background: var(--surface); color: var(--text-dim); cursor: pointer; }
+  .rag-presets button:hover { border-color: var(--accent); color: var(--accent); }
+  .rag-answer { margin: 12px 0; padding: 12px 14px; border-radius: 10px; border: 1px solid var(--accent); background: var(--accent-soft); font-size: 14.5px; }
+  .rag-answer.refuse { border-color: var(--warn); background: color-mix(in srgb, var(--warn) 12%, transparent); }
+  .rag-answer h4 { margin: 0 0 6px; font-size: 13px; color: var(--text-dim); font-weight: 700; letter-spacing: .02em; }
+  .rag-answer p { margin: 0 0 4px !important; }
+  .rag-answer sup { color: var(--accent); font-weight: 700; }
+  .rag-res { display: grid; gap: 8px; }
+  .rag-hit { border: 1px solid var(--border); border-radius: 10px; padding: 10px 12px; background: var(--bg-elev); }
+  .rag-hit .meta { display: flex; flex-wrap: wrap; gap: 4px 6px; align-items: center; font-size: 12.5px; color: var(--text-dim); margin-bottom: 4px; }
+  .rag-hit .meta b { color: var(--text); font-size: 13.5px; }
+  .rag-hit .rk { font-family: var(--mono); font-weight: 700; color: var(--accent); }
+  .rag-hit .sc { margin-left: auto; font-family: var(--mono); color: var(--text); }
+  .rag-hit .txt { font-size: 14px; line-height: 1.65; }
+  .rag-hit .scbar { height: 4px; border-radius: 2px; background: var(--surface-2); margin-top: 6px; overflow: hidden; }
+  .rag-hit .scbar i { display: block; height: 100%; background: var(--accent); }
+  .rag-hit mark, .rag-answer mark { background: color-mix(in srgb, var(--warn) 30%, transparent); color: inherit; border-radius: 3px; padding: 0 1px; }
+  .rag-toks { font-family: var(--mono); font-size: 12px; color: var(--text-dim); margin: 4px 0 0; overflow-wrap: anywhere; }
+  .rag-hidden { font-size: 13px; color: var(--text-dim); margin-top: 8px; }
+  .bench-t { font-size: 13.5px !important; }
+  .bench-t td, .bench-t th { padding: 6px 10px; }
+  .bench-t .y { color: var(--ok); font-weight: 700; }
+  .bench-t .n { color: var(--bad); font-weight: 700; }
+</style>
+<!-- Cloudflare Web Analytics -->
+<script type='module' src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "3d6151a0abc94ede89285d462527fa80"}'></script>
+<!-- End Cloudflare Web Analytics -->
+</head>
+<body data-chapter="knowledge">
+<main class="chapter">
+  <header class="chapter-hero">
+    <div class="eyebrow">Chapter 06</div>
+    <h1>문서를 지식으로: RAG와 지식 그래프</h1>
+    <p class="lead">회사의 지식은 대부분 문서에 있다. 공유 폴더의 품질 보고서 PDF, 설비 매뉴얼 스캔본, 회의록 HWP, 결정이 묻힌 메일 첨부 PPT. 생성형 AI가 이 지식을 근거로 답하게 만드는 가장 실용적인 방법이 검색 증강 생성(RAG)이다. 이 장에서는 문서를 쪼개고 색인해 검색하고, 권한과 최신성을 지키며, 출처와 함께 답하게 하는 전 과정을 브라우저 안의 미니 RAG로 직접 돌려 본다.</p>
+    <ul class="objectives">
+      <li>RAG 파이프라인(파싱 → 청킹 → 색인 → 검색 → 재순위화 → 생성 → 출처 표시)의 각 단계가 하는 일과 흔한 실패를 설명할 수 있다.</li>
+      <li>청크 크기·오버랩의 트레이드오프와, 한국어 문서에서 키워드 검색(BM25)과 임베딩 검색을 함께 쓰는 이유를 이해한다.</li>
+      <li>권한(ACL) 필터, 문서 최신성, 출처 표시가 왜 선택이 아니라 필수인지 설명할 수 있다.</li>
+      <li>GraphRAG·지식 그래프·롱 컨텍스트를 언제 쓰는지 구분하고, 검색 재현율·근거성으로 RAG를 평가할 수 있다.</li>
+    </ul>
+  </header>
+
+  <!-- ============================================================ 1 -->
+  <section id="reality">
+    <h2>"지난번 비슷한 불량, 어떻게 해결했더라?"</h2>
+    <p>입사 2년 차 공정 엔지니어가 프레스 라인의 버(burr) 불량 증가를 맡았다. 선배가 "작년에도 비슷한 일이 있었는데, 그때 보고서 찾아봐"라고 한다. 공유 드라이브의 품질 폴더에는 하위 폴더가 수백 개, 파일명은 <code>QR_버불량_분석_최종.pdf</code>, <code>프레스 이슈 정리(김책임 수정).pptx</code>, <code>회의록_0312.hwp</code> 같은 식이다. 파일 탐색기 검색은 PDF 안의 글자를 못 찾고, 스캔본은 아예 그림이다. 결정적인 내용은 결국 선배의 메일함에 있는 첨부 파일이었고, 그 선배는 다음 달 다른 사업부로 옮긴다.</p>
+    <p>이 엔지니어가 사내 AI 챗봇에 "펀치 연마 주기 바뀌었어?"라고 물으면 어떻게 될까. 일반 LLM은 회사 문서를 본 적이 없으므로 그럴듯한 일반론을 말하거나, 더 나쁘게는 존재하지 않는 수치를 지어낸다(환각). 모델을 사내 문서로 다시 학습시키는 방법도 있지만, 비용이 크고 문서가 바뀔 때마다 다시 해야 하며, 무엇보다 <strong>어느 문서를 근거로 답했는지 알 수 없다</strong>.</p>
+    <p><span class="term">검색 증강 생성</span><span class="en">(RAG, Retrieval-Augmented Generation)</span>은 질문이 들어오면 먼저 사내 문서에서 관련 부분을 찾아오고, 그 부분을 LLM에게 "이 자료만 근거로 답하라"며 함께 건네는 방식이다. 문서가 바뀌면 색인만 갱신하면 되고, 답에는 근거 문서가 붙는다.</p>
+    <figure class="diagram">
+      <svg viewBox="0 0 760 300" role="img" aria-label="RAG 파이프라인: 색인 단계와 질의 단계">
+        <text x="20" y="22" class="t-dim">색인 단계 (미리, 주기적으로)</text>
+        <g>
+          <rect x="20" y="34" width="120" height="58" rx="10" class="f-surface"/><text x="80" y="58" text-anchor="middle" class="t" style="font-weight:700">수집</text><text x="80" y="78" text-anchor="middle" class="t-mono">폴더·메일·시스템</text>
+          <rect x="160" y="34" width="120" height="58" rx="10" class="f-surface"/><text x="220" y="58" text-anchor="middle" class="t" style="font-weight:700">파싱</text><text x="220" y="78" text-anchor="middle" class="t-mono">PDF·PPT·HWP·OCR</text>
+          <rect x="300" y="34" width="120" height="58" rx="10" class="f-surface"/><text x="360" y="58" text-anchor="middle" class="t" style="font-weight:700">청킹</text><text x="360" y="78" text-anchor="middle" class="t-mono">구조·크기·오버랩</text>
+          <rect x="440" y="34" width="140" height="58" rx="10" class="f-surface"/><text x="510" y="58" text-anchor="middle" class="t" style="font-weight:700">메타데이터</text><text x="510" y="78" text-anchor="middle" class="t-mono">부서·날짜·권한·버전</text>
+          <rect x="600" y="34" width="140" height="58" rx="10" class="f-acc-soft"/><text x="670" y="58" text-anchor="middle" class="t-acc">색인</text><text x="670" y="78" text-anchor="middle" class="t-mono">키워드 + 벡터</text>
+        </g>
+        <g class="s-line"><path d="M140 63 L 160 63"/><path d="M280 63 L 300 63"/><path d="M420 63 L 440 63"/><path d="M580 63 L 600 63"/></g>
+        <path d="M670 92 L 670 118 L 360 118 L 360 150" class="s-acc"/><path d="M354 142 L 360 150 L 366 142" class="s-acc"/>
+        <text x="20" y="144" class="t-dim">질의 단계 (질문마다)</text>
+        <g>
+          <rect x="20" y="152" width="120" height="58" rx="10" class="f-elev"/><text x="80" y="176" text-anchor="middle" class="t" style="font-weight:700">질문</text><text x="80" y="196" text-anchor="middle" class="t-mono">+ 사용자 역할</text>
+          <rect x="160" y="152" width="120" height="58" rx="10" class="f-elev" style="stroke:var(--warn);stroke-width:2"/><text x="220" y="176" text-anchor="middle" class="t" style="font-weight:700">권한 필터</text><text x="220" y="196" text-anchor="middle" class="t-mono">ACL·최신 버전</text>
+          <rect x="300" y="152" width="120" height="58" rx="10" class="f-elev"/><text x="360" y="176" text-anchor="middle" class="t" style="font-weight:700">검색</text><text x="360" y="196" text-anchor="middle" class="t-mono">BM25 + 벡터</text>
+          <rect x="440" y="152" width="140" height="58" rx="10" class="f-elev"/><text x="510" y="176" text-anchor="middle" class="t" style="font-weight:700">재순위화</text><text x="510" y="196" text-anchor="middle" class="t-mono">상위 k개 선별</text>
+          <rect x="600" y="152" width="140" height="58" rx="10" class="f-acc-soft"/><text x="670" y="176" text-anchor="middle" class="t-acc">LLM 생성</text><text x="670" y="196" text-anchor="middle" class="t-mono">근거만 사용</text>
+        </g>
+        <g class="s-line"><path d="M140 181 L 160 181"/><path d="M280 181 L 300 181"/><path d="M420 181 L 440 181"/><path d="M580 181 L 600 181"/></g>
+        <path d="M670 210 L 670 236" class="s-acc"/>
+        <rect x="300" y="236" width="440" height="46" rx="10" class="f-acc2-soft"/>
+        <text x="520" y="256" text-anchor="middle" class="t" style="font-weight:700">답변 + 출처 [1][2] — 근거 없으면 "모른다"</text>
+        <text x="520" y="274" text-anchor="middle" class="t-mono">로그 → 평가(검색 재현율·근거성) → 개선</text>
+      </svg>
+      <figcaption><b>그림 6-1.</b> RAG 파이프라인. 위는 문서를 미리 처리해 색인하는 단계, 아래는 질문마다 실행되는 단계다. 권한 필터는 검색 <em>전</em>에 적용한다. 실패의 대부분은 LLM이 아니라 앞 단계(파싱, 청킹, 메타데이터)에서 시작된다.</figcaption>
+    </figure>
+    <div class="callout"><strong>RAG의 품질은 문서 정리 수준을 넘지 못한다</strong>
+      <p>같은 주제의 보고서가 <code>최종</code>, <code>최종_v2</code>, <code>진짜최종</code>으로 세 개 있으면 RAG는 셋 중 아무거나 근거로 가져온다. 폐기된 매뉴얼이 현행 매뉴얼과 섞여 있으면 폐기된 수치로 답한다. <a href="legacy.html">2장</a>의 정보 인벤토리와 <a href="semantics.html">4장</a>의 용어 사전이 RAG의 실제 선행 과제다.</p>
+    </div>
+  </section>
+
+  <!-- ============================================================ 2 -->
+  <section id="parsing">
+    <h2>파싱: 파일 형식마다 다른 함정</h2>
+    <p>RAG의 첫 단계는 파일에서 글자를, 가능하면 <em>구조와 함께</em> 꺼내는 일이다. 제조 현장의 문서는 형식이 다양하고, 각 형식에 고유한 함정이 있다.</p>
+    <div class="table-wrap"><table>
+      <thead><tr><th>형식</th><th>흔한 문서</th><th>함정</th><th>대응</th></tr></thead>
+      <tbody>
+        <tr><td><b>PDF(텍스트)</b></td><td>품질 보고서, 사양서</td><td>2단 편집이 한 줄로 섞임, 머리말·꼬리말 반복, 표가 글자 나열로 깨짐</td><td>레이아웃 인식 파서, 머리말 제거, 표는 별도 추출</td></tr>
+        <tr><td><b>PDF(스캔)</b></td><td>옛 매뉴얼, 서명된 성적서</td><td>글자가 아니라 그림. 도장·손글씨·기울어짐</td><td>OCR + 신뢰도 기록, 중요 문서는 사람이 검수</td></tr>
+        <tr><td><b>PPT</b></td><td>이슈 보고, 회의 자료</td><td>텍스트 상자 읽는 순서가 뒤죽박죽, 핵심이 그림·차트 안에, 슬라이드 노트에 숨은 설명</td><td>슬라이드 단위 청킹, 제목 보존, 노트 포함, 이미지 캡션 생성</td></tr>
+        <tr><td><b>엑셀</b></td><td>불량 집계, 작업 일지</td><td>병합 셀, 2~3줄 머리글, 숨은 시트, 수식 결과만 남음, 한 시트에 표 여러 개</td><td>표는 문서가 아니라 데이터로 — 정형 처리(<a href="foundation.html">5장</a>)나 행 단위 텍스트화</td></tr>
+        <tr><td><b>한글(HWP/HWPX)</b></td><td>공문, 사내 규정, 회의록</td><td>전용 형식이라 범용 파서가 못 읽는 경우가 많음, 표 안의 표</td><td>XML 기반 HWPX나 PDF로 변환 후 파싱, 변환 품질 샘플 검수</td></tr>
+        <tr><td><b>메일</b></td><td>고객 클레임, 협력사 공지</td><td>답장마다 인용문이 반복, 서명·면책 문구, 결정은 첨부에</td><td>인용·서명 제거, 스레드 단위 묶기, 첨부를 같은 문서 ID로 연결</td></tr>
+      </tbody>
+    </table></div>
+    <h3>메타데이터가 검색의 절반이다</h3>
+    <p>본문만 색인하면 "3월 B사 클레임 회의록"을 찾을 때 날짜와 고객이 본문에 우연히 적혀 있기를 바라야 한다. 파싱 단계에서 다음 메타데이터를 함께 뽑아 두면 검색 필터, 권한 통제, 최신성 판단이 가능해진다.</p>
+    <ul class="checklist">
+      <li><b>문서 유형</b>: 품질 보고서 / 8D / 매뉴얼 / 작업 표준 / 회의록 / 메일</li>
+      <li><b>작성 부서·작성일·개정 번호</b>, 그리고 <b>상태</b>(현행 / 폐기 / 초안)</li>
+      <li><b>업무 키</b>: 제품·품번, 설비 ID, 고객 코드, 불량 코드(<a href="semantics.html">4장</a>의 정준 코드로)</li>
+      <li><b>보안 등급과 접근 그룹(ACL)</b>: 원본 저장소의 권한을 그대로 가져온다</li>
+      <li><b>원본 위치</b>: 출처 링크로 사용자가 원문을 열어 확인할 수 있게</li>
+    </ul>
+  </section>
+
+  <!-- ============================================================ 3 -->
+  <section id="chunking">
+    <h2>청킹: 얼마나 잘게 자를 것인가</h2>
+    <p>문서를 통째로 검색 대상으로 삼으면 50쪽짜리 매뉴얼 전체가 "관련 문서"로 걸려 LLM에게 너무 많은 글을 건네게 된다. 그래서 문서를 <span class="term">청크</span><span class="en">(chunk)</span>라는 조각으로 나눠 색인한다. 나누는 방식은 크게 세 가지다.</p>
+    <figure class="diagram">
+      <svg viewBox="0 0 760 250" role="img" aria-label="고정 길이, 구조 기반, 의미 기반 청킹 비교">
+        <text x="20" y="22" class="t" style="font-weight:700">고정 길이</text><text x="20" y="40" class="t-mono">500자마다 자름 (+오버랩)</text>
+        <g><rect x="20" y="52" width="220" height="150" rx="8" class="f-surface"/>
+          <rect x="30" y="62" width="200" height="12" rx="3" class="f-elev"/><rect x="30" y="80" width="170" height="8" rx="3" class="f-elev"/><rect x="30" y="94" width="190" height="8" rx="3" class="f-elev"/>
+          <rect x="30" y="112" width="200" height="12" rx="3" class="f-elev"/><rect x="30" y="130" width="180" height="8" rx="3" class="f-elev"/><rect x="30" y="144" width="150" height="8" rx="3" class="f-elev"/><rect x="30" y="158" width="200" height="30" rx="3" class="f-elev"/>
+          <path d="M20 104 L 240 104" style="stroke:var(--bad);stroke-width:2;stroke-dasharray:6 4"/><path d="M20 152 L 240 152" style="stroke:var(--bad);stroke-width:2;stroke-dasharray:6 4"/></g>
+        <text x="20" y="222" class="t-dim">빠르고 단순. 표·문단이</text><text x="20" y="240" class="t-dim">중간에서 잘릴 수 있다</text>
+        <text x="270" y="22" class="t" style="font-weight:700">구조 기반</text><text x="270" y="40" class="t-mono">제목·조항·슬라이드 단위</text>
+        <g><rect x="270" y="52" width="220" height="150" rx="8" class="f-surface"/>
+          <rect x="280" y="62" width="200" height="12" rx="3" class="f-acc-soft"/><rect x="280" y="80" width="170" height="8" rx="3" class="f-elev"/><rect x="280" y="94" width="190" height="8" rx="3" class="f-elev"/>
+          <rect x="280" y="112" width="200" height="12" rx="3" class="f-acc-soft"/><rect x="280" y="130" width="180" height="8" rx="3" class="f-elev"/><rect x="280" y="144" width="150" height="8" rx="3" class="f-elev"/><rect x="280" y="158" width="200" height="30" rx="3" class="f-elev"/>
+          <path d="M270 107 L 490 107" style="stroke:var(--accent);stroke-width:2"/></g>
+        <text x="270" y="222" class="t-dim">제목을 청크에 붙여 맥락 유지.</text><text x="270" y="240" class="t-dim">문서 구조가 살아 있어야 가능</text>
+        <text x="520" y="22" class="t" style="font-weight:700">의미 기반</text><text x="520" y="40" class="t-mono">주제가 바뀌는 곳에서</text>
+        <g><rect x="520" y="52" width="220" height="150" rx="8" class="f-surface"/>
+          <rect x="530" y="62" width="200" height="40" rx="3" class="f-acc2-soft"/><rect x="530" y="108" width="200" height="22" rx="3" class="f-acc-soft"/><rect x="530" y="136" width="200" height="56" rx="3" class="f-acc2-soft"/></g>
+        <text x="520" y="222" class="t-dim">문장 임베딩 유사도가 떨어지는</text><text x="520" y="240" class="t-dim">지점을 경계로. 계산 비용이 든다</text>
+      </svg>
+      <figcaption><b>그림 6-2.</b> 청킹 전략 세 가지. 실무에서는 구조 기반을 기본으로, 너무 긴 구간은 고정 길이로 다시 나누고, 각 청크 앞에 문서 제목과 상위 제목을 붙이는 혼합 방식이 흔하다.</figcaption>
+    </figure>
+    <p>크기는 트레이드오프다. 청크가 너무 작으면 "조치 순서: ①… ②…"의 ③이 다음 청크로 잘려 답이 반쪽이 된다(맥락 손실). 너무 크면 관련 없는 내용이 섞여 검색 점수가 희석되고, LLM에게 잡음을 건넨다(정밀도 저하). <span class="term">오버랩</span><span class="en">(overlap)</span>은 인접 청크가 일부를 겹치게 해 경계에서 잘리는 문제를 줄이지만, 청크 수와 저장·임베딩 비용을 늘린다.</p>
+
+    <div class="sim" id="sim-chunk">
+      <div class="sim-head"><span class="sim-tag">INTERACTIVE</span><h3>청크 크기 실험 — 맥락 완결성 vs 집중도</h3></div>
+      <div class="sim-body side">
+        <div class="sim-view"><canvas id="cv-chunk"></canvas></div>
+        <div class="sim-controls">
+          <label class="ctrl"><span>청크 크기 s <output id="ck-s-out"></output></span><input type="range" id="ck-s" min="100" max="2000" step="25" value="400"></label>
+          <label class="ctrl"><span>오버랩 <output id="ck-o-out"></output></span><input type="range" id="ck-o" min="0" max="50" step="5" value="10"></label>
+          <label class="ctrl"><span>답에 필요한 맥락 길이 L <output id="ck-l-out"></output></span><input type="range" id="ck-l" min="50" max="800" step="10" value="250"></label>
+          <div class="ctrl"><span>문서 성격(L 예시)</span><div class="seg" id="ck-pre"><button data-value="250" class="on">알람 조치</button><button data-value="80">수치 하나</button><button data-value="600">원인 분석</button></div></div>
+        </div>
+      </div>
+      <div class="legend"><span><i style="background:var(--accent)"></i>맥락 완결성 C</span><span><i style="background:var(--accent-2)"></i>집중도 P</span><span><i style="background:var(--warn)"></i>종합 F</span></div>
+      <div class="sim-readout">
+        <div class="stat"><span class="k">완결성 C</span><span class="v" id="ck-o1">—</span></div>
+        <div class="stat"><span class="k">집중도 P</span><span class="v" id="ck-o2">—</span></div>
+        <div class="stat"><span class="k">종합 F</span><span class="v" id="ck-o3">—</span></div>
+        <div class="stat"><span class="k">이 조건의 최적 s</span><span class="v" id="ck-o4">—</span></div>
+        <div class="stat"><span class="k">청크 수(문서 100만 자)</span><span class="v" id="ck-o5">—</span></div>
+      </div>
+      <div class="sim-note">교육용 단순 모델이다. 답에 필요한 연속 구간(길이 L)이 문서 안 임의 위치에 있다고 할 때, 완결성 C는 그 구간이 한 청크 안에 온전히 들어갈 확률 \(\min(1, (s-L)/t)\) (보폭 \(t = s(1-\text{오버랩})\)), 집중도 P는 청크 중 필요한 부분의 비율 \(\min(1, L/s)\), 종합 F는 둘의 조화평균이다. 오버랩 0%에서 최적은 \(s = 2L\) 근처이고, 오버랩을 늘리면 더 작은 청크로도 완결성을 얻지만 청크 수(비용)가 늘어난다. 답의 길이가 문서마다 다르므로, 한 가지 크기를 고집하기보다 문서 유형별로 다르게 자르는 것이 낫다.</div>
+    </div>
+  </section>
+
+  <!-- ============================================================ 4 -->
+  <section id="retrieval">
+    <h2>검색: 키워드, 임베딩, 그리고 하이브리드</h2>
+    <p>청크를 찾는 방법은 크게 두 가지다. 하나는 질문과 청크에 <em>같은 단어</em>가 얼마나 나오는지로 점수를 매기는 <span class="term">키워드 검색</span>, 다른 하나는 문장을 숫자 벡터로 바꿔 <em>뜻이 가까운</em> 청크를 찾는 <span class="term">임베딩(벡터) 검색</span>이다.</p>
+    <h3>키워드 검색: TF-IDF와 BM25</h3>
+    <p>키워드 검색의 기본 생각은 두 가지다. 청크 안에 질문 단어가 많이 나올수록(TF, term frequency) 관련성이 높고, "하다", "있다"처럼 모든 문서에 흔한 단어보다 "E-2041", "펀치"처럼 드문 단어가 일치할수록(IDF, inverse document frequency) 더 중요하다. 이를 다듬은 <span class="term">BM25</span>는 지금도 검색 엔진의 표준적인 기본 점수 함수다.</p>
+    <div class="formula">$$ \mathrm{BM25}(D,Q) = \sum_{q \in Q} \mathrm{IDF}(q)\cdot \frac{f(q,D)\,(k_1+1)}{f(q,D) + k_1\left(1 - b + b\,\frac{|D|}{\overline{|D|}}\right)}, \qquad \mathrm{IDF}(q) = \ln\!\left(1 + \frac{N - n_q + 0.5}{n_q + 0.5}\right) $$
+      <div class="where">\(f(q,D)\): 청크 \(D\)에서 단어 \(q\)의 출현 수, \(|D|\): 청크 길이, \(\overline{|D|}\): 평균 길이, \(N\): 전체 청크 수, \(n_q\): \(q\)가 나오는 청크 수. \(k_1\)(보통 1.2~2.0)은 같은 단어가 반복될 때 점수가 포화되는 정도, \(b\)(보통 0.75)는 긴 청크를 얼마나 깎을지 정한다.</div>
+    </div>
+    <div class="callout warn"><strong>한국어는 띄어쓰기로 자르면 안 된다</strong>
+      <p>한국어는 조사와 어미가 단어에 붙는다. 문서에는 "펀치<b>의</b> 마모", 질문에는 "펀치<b>를</b> 연마"라고 쓰면, 띄어쓰기 단위로 자른 "펀치의"와 "펀치를"은 다른 단어가 된다. 실무 검색 엔진은 형태소 분석기로 조사를 떼어 내지만, 간단하고 의외로 강력한 방법이 <b>글자 2-그램(bigram)</b>이다. "펀치를" → "펀치", "치를"로 자르면 "펀치"가 일치한다. 아래 미니 RAG가 이 방식을 쓴다.</p>
+    </div>
+    <h3>임베딩 검색과 하이브리드</h3>
+    <p>임베딩 검색은 "슬러리가 잘 안 나와요"라는 질문으로 "슬러리 유량 저하" 문서를 찾는 것처럼 표현이 달라도 뜻이 같으면 찾아낸다. 반면 제조 문서에 많은 <strong>코드·번호·고유명사</strong>(알람 E-2041, 품번 12345-A, LOT A2603-L2-0414)는 임베딩이 잘 구별하지 못하는 경우가 많다. 그래서 둘을 함께 쓰는 <span class="term">하이브리드 검색</span>이 실무 기본값이 되었다. 두 결과 목록을 합치는 간단하고 널리 쓰이는 방법이 순위 역수 결합(RRF)이다.</p>
+    <div class="formula">$$ \mathrm{RRF}(d) = \sum_{i \in \{\text{키워드},\,\text{벡터}\}} \frac{1}{k + \mathrm{rank}_i(d)} $$
+      <div class="where">\(\mathrm{rank}_i(d)\): 검색 방식 \(i\)에서 문서 \(d\)의 순위. \(k\)는 상위 몇 개에 과도하게 쏠리지 않게 하는 상수로, 60이 흔히 쓰인다. 점수의 척도가 달라도 순위만으로 합칠 수 있다는 것이 장점이다.</div>
+    </div>
+    <p>마지막으로 <span class="term">재순위화</span><span class="en">(reranking)</span>는 1차 검색으로 뽑은 후보 20~50개를, 질문과 청크를 함께 읽는 더 정밀한(대신 느린) 모델로 다시 정렬해 상위 몇 개만 LLM에 넘기는 단계다.</p>
+    <div class="table-wrap"><table>
+      <thead><tr><th>방식</th><th>강점</th><th>약점</th><th>제조 문서 예</th></tr></thead>
+      <tbody>
+        <tr><td>키워드(BM25)</td><td>코드·번호·고유명사 정확 일치, 설명 가능, 빠름</td><td>동의어·다른 표현에 약함</td><td>"E-2041", "SOP-QC-012", "PR-07"</td></tr>
+        <tr><td>임베딩(벡터)</td><td>표현이 달라도 뜻으로 찾음, 다국어</td><td>정확한 코드 구별에 약함, 왜 걸렸는지 설명이 어려움</td><td>"슬러리가 잘 안 나옴" → "유량 저하"</td></tr>
+        <tr><td>하이브리드 + 재순위화</td><td>둘의 장점 결합, 실무 기본값</td><td>구성 요소가 늘어 튜닝·평가 필요</td><td>대부분의 사내 문서 검색</td></tr>
+        <tr><td>동의어 사전 확장</td><td>사내 은어·약어 해결</td><td>사전 유지 관리 필요</td><td>"긁힘" → SCR-01 (<a href="semantics.html">4장</a>)</td></tr>
+      </tbody>
+    </table></div>
+  </section>
+
+  <!-- ============================================================ 5 -->
+  <section id="minirag">
+    <h2>브라우저 안의 미니 RAG</h2>
+    <p>아래는 가상의 A사 문서 13건(품질 보고서, 설비 매뉴얼, 회의록, 8D 요약, 메일 요약, 작업 표준서)을 문단 단위로 청킹해 BM25로 검색하는 작은 RAG다. 실제 LLM 대신, 상위 청크에서 질문과 가장 많이 겹치는 문장을 뽑아 출처 번호를 붙이는 <b>추출식 답변</b>으로 생성 단계를 흉내 낸다. 모든 계산은 이 페이지 안에서 일어나며 어떤 서버에도 전송되지 않는다.</p>
+    <p>먼저 프리셋 질문을 눌러 보고, <b>사용자 역할</b>을 바꿔 같은 질문의 결과가 어떻게 달라지는지 확인해 보자. 설비 엔지니어로 "NC-5 양산 일정"을 물으면 연구소 대외비 문서는 검색 대상에서 아예 빠진다. "폐기된 문서 포함"을 켜고 CMP 패드 교체 기준을 물으면 개정 2판의 옛 수치가 섞여 들어오는 것도 볼 수 있다.</p>
+
+    <div class="sim" id="sim-rag">
+      <div class="sim-head"><span class="sim-tag">INTERACTIVE</span><h3>미니 RAG — 검색, 근거, 권한</h3></div>
+      <div class="sim-body side">
+        <div class="sim-view"><div class="sim-html">
+          <div class="rag-q"><input type="text" id="rag-input" placeholder="질문을 입력하세요 (예: 펀치 연마 주기)" aria-label="질문"><button class="btn primary" id="rag-go">검색</button></div>
+          <div class="rag-presets" id="rag-presets"></div>
+          <div class="rag-toks" id="rag-toks"></div>
+          <div id="rag-answer"></div>
+          <div class="rag-res" id="rag-res"></div>
+          <div class="rag-hidden" id="rag-hidden"></div>
+        </div></div>
+        <div class="sim-controls">
+          <label class="ctrl"><span>사용자 역할</span><select id="rag-role">
+            <option value="prod">생산 작업자</option>
+            <option value="qual" selected>품질 엔지니어</option>
+            <option value="equip">설비 엔지니어</option>
+            <option value="rnd">연구원(소재연구소)</option>
+            <option value="mgr">품질 팀장</option>
+          </select></label>
+          <label class="ctrl"><span>상위 k개 청크 <output id="rag-k-out"></output></span><input type="range" id="rag-k" min="1" max="6" step="1" value="3"></label>
+          <label class="check"><input type="checkbox" id="rag-old"> 폐기된 문서도 포함(위험)</label>
+          <label class="check"><input type="checkbox" id="rag-acloff"> 권한 필터 끄기(사고 재현용)</label>
+          <div id="rag-access" style="font-size:13px;color:var(--text-dim);line-height:1.55"></div>
+        </div>
+      </div>
+      <div class="sim-readout">
+        <div class="stat"><span class="k">검색 대상 청크</span><span class="v" id="rag-o1">—</span></div>
+        <div class="stat"><span class="k">권한으로 제외된 관련 문서</span><span class="v" id="rag-o2">—</span></div>
+        <div class="stat"><span class="k">1위 BM25 점수</span><span class="v" id="rag-o3">—</span></div>
+        <div class="stat"><span class="k">응답 상태</span><span class="v" id="rag-o4">—</span></div>
+      </div>
+      <div class="sim-note">토크나이저: 한글은 글자 2-그램, 영문·숫자 코드는 통째로(하이픈이 있으면 조각도 함께). 청크 색인에는 문서 제목을 앞에 붙였다. 노란 표시는 질문과 일치한 2-그램이다. 질문 단어의 25% 미만만 근거에서 확인되면 답하지 않는다(환각 방지 규칙의 단순화). 문서와 수치는 모두 교육용 가상 자료다.</div>
+    </div>
+  </section>
+
+  <!-- ============================================================ 6 -->
+  <section id="trust">
+    <h2>권한, 최신성, 출처: 믿을 수 있는 RAG의 세 조건</h2>
+    <h3>권한(ACL)은 검색 전에 건다</h3>
+    <p>사내 RAG의 가장 큰 사고는 틀린 답이 아니라 <strong>보면 안 되는 답</strong>이다. 생산 작업자가 물었는데 경영 회의록의 투자 결정이나 연구소 대외비 일정이 근거로 나오면, 그 순간 문서 보안 체계가 무력화된다. 원칙은 단순하다. <b>원본 저장소의 접근 권한(ACL)을 색인에 그대로 복제하고, 사용자가 볼 수 있는 청크 안에서만 검색한다.</b></p>
+    <div class="compare">
+      <div class="before"><h4>위험한 설계</h4><ul>
+        <li>모든 문서를 하나의 색인에 넣고 검색 → 생성 후 "답변에서 민감 정보 가리기"</li>
+        <li>LLM에게 "권한 없는 내용은 말하지 마"라고 프롬프트로 지시</li>
+        <li>권한 변경(퇴사·전보)이 색인에 반영되지 않음</li>
+      </ul></div>
+      <div class="after"><h4>안전한 설계</h4><ul>
+        <li>검색 단계에서 사용자 그룹으로 먼저 필터 → 볼 수 없는 청크는 후보에도 오르지 않음</li>
+        <li>권한은 원본 시스템이 진실의 원천, 색인은 주기적으로 동기화</li>
+        <li>질문·검색 결과·답변을 감사 로그로 남김(<a href="governance.html">10장</a>)</li>
+      </ul></div>
+    </div>
+    <p>프롬프트로 "말하지 마"라고 지시하는 방식은 프롬프트 주입 같은 공격이나 모델의 실수에 취약하다. LLM에게 건네지 않은 정보는 새어 나갈 수 없다. 이것이 필터를 생성 뒤가 아니라 검색 앞에 두는 이유다.</p>
+    <h3>최신성: 폐기된 문서가 현행 문서를 이기는 순간</h3>
+    <p>미니 RAG에서 "폐기된 문서 포함"을 켜면 CMP 패드 교체 기준으로 "800매"(개정 2판)와 "500매"(개정 3판)가 함께 나온다. 키워드 점수만으로는 어느 쪽이 현행인지 알 수 없다. 문서 상태(현행/폐기), 개정 번호, 시행일을 메타데이터로 관리하고, 기본 검색에서는 현행만, 이력 조회가 필요할 때만 구버전을 포함하게 한다. 같은 주제의 문서가 여럿이면 최신 개정본에 가산점을 주는 규칙도 흔히 쓴다.</p>
+    <h3>출처 표시: "어디에 그렇게 써 있어?"에 답하기</h3>
+    <p>현장 엔지니어는 AI의 답을 그대로 믿지 않는다. 그래야 한다. 답의 각 문장에 근거 청크 번호를 붙이고, 클릭하면 원문의 해당 위치가 열리게 하면 검증 비용이 크게 줄어든다. 근거가 없으면 "찾지 못했다"고 말하게 하는 것도 출처 설계의 일부다. 모르는 것을 모른다고 말하는 RAG가 그럴듯하게 지어내는 RAG보다 훨씬 오래 쓰인다.</p>
+  </section>
+
+  <!-- ============================================================ 7 -->
+  <section id="graph">
+    <h2>GraphRAG, 지식 그래프, 롱 컨텍스트: 언제 무엇을</h2>
+    <p>청크 검색 기반 RAG는 "답이 문서 어딘가에 한두 문단으로 적혀 있는" 질문에 강하다. 하지만 이런 질문은 어렵다. "협력사 D사의 레진 등급 변경이 영향을 줄 수 있는 고객 제품과, 그 제품의 최근 클레임 이력은?" 답이 한 문서에 있지 않고, 메일(레진 변경) → BOM(레진을 쓰는 부품) → 출하 기록(고객) → 8D 보고서(클레임)로 <strong>관계를 여러 번 건너야</strong> 한다.</p>
+    <figure class="diagram">
+      <svg viewBox="0 0 760 270" role="img" aria-label="문서에서 추출한 개체와 관계를 지식 그래프로 연결해 여러 단계 질문에 답하는 구조">
+        <g class="s-line">
+          <path d="M140 70 L 260 70"/><path d="M380 70 L 500 70"/><path d="M560 95 L 560 165"/><path d="M500 190 L 380 190"/><path d="M260 190 L 140 190"/><path d="M320 95 L 320 165"/>
+        </g>
+        <rect x="20" y="46" width="120" height="48" rx="24" class="f-acc2-soft"/><text x="80" y="67" text-anchor="middle" class="t-dim">메일</text><text x="80" y="85" text-anchor="middle" class="t" style="font-weight:700">레진 변경 공지</text>
+        <rect x="260" y="46" width="120" height="48" rx="24" class="f-elev"/><text x="320" y="67" text-anchor="middle" class="t-dim">원자재</text><text x="320" y="85" text-anchor="middle" class="t" style="font-weight:700">레진 R-22</text>
+        <rect x="500" y="46" width="130" height="48" rx="24" class="f-elev"/><text x="565" y="67" text-anchor="middle" class="t-dim">부품</text><text x="565" y="85" text-anchor="middle" class="t" style="font-weight:700">커넥터 하우징</text>
+        <rect x="500" y="166" width="130" height="48" rx="24" class="f-elev"/><text x="565" y="187" text-anchor="middle" class="t-dim">고객</text><text x="565" y="205" text-anchor="middle" class="t" style="font-weight:700">B사</text>
+        <rect x="260" y="166" width="120" height="48" rx="24" class="f-acc2-soft"/><text x="320" y="187" text-anchor="middle" class="t-dim">문서</text><text x="320" y="205" text-anchor="middle" class="t" style="font-weight:700">8D-2026-017</text>
+        <rect x="20" y="166" width="120" height="48" rx="24" class="f-acc-soft"/><text x="80" y="187" text-anchor="middle" class="t-dim">불량</text><text x="80" y="205" text-anchor="middle" class="t-acc">핀 휨</text>
+        <text x="200" y="62" text-anchor="middle" class="t-mono">언급한다</text><text x="440" y="62" text-anchor="middle" class="t-mono">사용된다</text>
+        <text x="572" y="134" class="t-mono">납품된다</text><text x="440" y="182" text-anchor="middle" class="t-mono">클레임</text>
+        <text x="200" y="182" text-anchor="middle" class="t-mono">다룬다</text><text x="328" y="134" class="t-mono">(같은 하우징)</text>
+        <text x="380" y="250" text-anchor="middle" class="t-dim">벡터 검색: "비슷한 글"을 찾는다 · 그래프 탐색: "연결된 것"을 따라간다</text>
+      </svg>
+      <figcaption><b>그림 6-3.</b> 문서에서 개체(원자재, 부품, 고객, 불량, 문서)와 관계를 추출해 지식 그래프로 연결하면, 여러 문서에 흩어진 사실을 관계를 따라 이어 붙일 수 있다. 개체 이름이 <a href="semantics.html">4장</a>의 정준 코드로 정리되어 있어야 노드가 하나로 합쳐진다.</figcaption>
+    </figure>
+    <p><span class="term">GraphRAG</span>는 문서에서 개체와 관계를 추출해 그래프를 만들고, 검색할 때 그래프의 연결 구조와 요약을 함께 활용하는 접근의 총칭이다. 2024년 Microsoft 연구진이 같은 이름의 방법을 공개하면서 널리 알려졌다. 이미 BOM, 설비 계층, LOT 계보처럼 <strong>관계가 정형 데이터로 존재</strong>한다면, 문서에서 추출하기 전에 그것부터 그래프로 연결하는 편이 훨씬 정확하다.</p>
+    <p><span class="term">롱 컨텍스트</span> 모델은 수십만 토큰을 한 번에 읽을 수 있어 "RAG가 필요 없어지는가"라는 질문이 자주 나온다. 매뉴얼 한 권 전체를 넣고 묻는 것은 실제로 좋은 방법이 될 수 있다. 하지만 회사 문서 전체는 여전히 어떤 컨텍스트보다 크고, 매 질문마다 전부를 넣는 것은 비용과 지연이 크며, 권한 필터와 최신성 판단은 어차피 검색 단계에서 해야 한다. 또한 긴 입력의 중간에 있는 정보를 모델이 덜 활용하는 경향이 연구로 보고된 바 있다. 실무에서는 <b>검색으로 후보 문서를 좁히고, 좁힌 문서는 넉넉하게 통째로 넣는</b> 조합이 많이 쓰인다.</p>
+    <div class="table-wrap"><table>
+      <thead><tr><th>질문 유형</th><th>예</th><th>잘 맞는 방식</th></tr></thead>
+      <tbody>
+        <tr><td>사실 조회(한 문서 안)</td><td>"E-2041 조치 순서는?"</td><td>하이브리드 RAG</td></tr>
+        <tr><td>코드·번호로 찾기</td><td>"SOP-QC-012의 스크래치 기준"</td><td>키워드(BM25) + 메타데이터 필터</td></tr>
+        <tr><td>한 문서 깊이 읽기</td><td>"이 8D 보고서의 약점은?"</td><td>롱 컨텍스트(문서 통째로)</td></tr>
+        <tr><td>관계를 건너는 질문</td><td>"레진 변경의 영향 고객과 클레임 이력"</td><td>지식 그래프 / GraphRAG + 정형 데이터</td></tr>
+        <tr><td>집계·통계</td><td>"지난 분기 SCR-01 건수"</td><td>RAG가 아니라 데이터베이스 질의(<a href="foundation.html">5장</a>)</td></tr>
+        <tr><td>전체 경향 요약</td><td>"올해 설비 회의록의 주요 이슈"</td><td>그래프 기반 요약 또는 문서별 요약의 계층 요약</td></tr>
+      </tbody>
+    </table></div>
+    <div class="callout tip"><strong>"지난 분기 불량 몇 건?"은 RAG에게 묻지 말 것</strong>
+      <p>RAG는 문서 조각을 찾아 읽는 방식이라 숫자를 세는 일에 약하다. 집계 질문은 정형 데이터(골드 테이블)에 대한 질의로 보내고, 문서 질문만 RAG로 보내는 라우팅이 필요하다. 에이전트가 이 판단을 하게 만드는 방법은 <a href="agents.html">8장</a>에서 다룬다.</p>
+    </div>
+  </section>
+
+  <!-- ============================================================ 8 -->
+  <section id="evaluate">
+    <h2>RAG 평가: 감이 아니라 숫자로</h2>
+    <p>RAG를 시연하면 대개 잘 되는 질문 몇 개를 보여 준다. 운영에 들어가면 사용자는 시연과 전혀 다른 질문을 한다. 그래서 실제 현업 질문으로 <span class="term">평가 세트</span><span class="en">(golden set)</span>를 만들고, 바꿀 때마다 같은 세트로 점수를 재야 한다. 평가는 두 층으로 나눈다.</p>
+    <div class="cards">
+      <div class="card"><span class="k">RETRIEVAL</span><h4>검색 품질</h4><p><b>재현율@k</b>(정답 문서가 상위 k개 안에 있는 비율), <b>MRR</b>(첫 정답 순위의 역수 평균). 검색이 못 찾으면 LLM이 아무리 좋아도 답할 수 없다.</p></div>
+      <div class="card"><span class="k">GENERATION</span><h4>답변 품질</h4><p><b>정확도</b>(답이 맞는가), <b>근거성</b>(답의 각 주장이 검색된 근거에 실제로 있는가), <b>인용 정확도</b>, 그리고 근거가 없을 때 <b>거절하는가</b>.</p></div>
+      <div class="card"><span class="k">OPERATION</span><h4>운영 지표</h4><p>응답 시간, 질문당 비용, "도움 안 됨" 피드백 비율, 근거 원문 클릭률, 권한 위반 0건.</p></div>
+    </div>
+    <p>아래 벤치는 미니 RAG의 문서로 만든 평가 질문 12개다. 질문은 일부러 문서와 다른 어미·조사로 썼다. 토크나이저와 점수 함수를 바꿔 가며 재현율@k와 MRR이 어떻게 달라지는지 보자. 평가는 권한 필터 없이(관리자 관점) 현행 문서만으로 했다.</p>
+    <div class="formula">$$ \mathrm{Recall@}k = \frac{1}{|Q|}\sum_{q\in Q} \mathbb{1}\left[\text{정답 문서} \in \text{상위 }k\right], \qquad \mathrm{MRR} = \frac{1}{|Q|}\sum_{q\in Q} \frac{1}{\mathrm{rank}_q} $$
+      <div class="where">여기서는 질문당 정답 문서가 하나 이상 있고, 그중 하나라도 상위 k 청크 안에 있으면 적중으로 센다. \(\mathrm{rank}_q\)는 첫 정답 청크의 순위(못 찾으면 0으로 계산).</div>
+    </div>
+
+    <div class="sim" id="sim-bench">
+      <div class="sim-head"><span class="sim-tag">INTERACTIVE</span><h3>검색 평가 벤치 — 토크나이저와 점수 함수 비교</h3></div>
+      <div class="sim-body side">
+        <div class="sim-view">
+          <canvas id="cv-bench"></canvas>
+          <div class="sim-html" id="bench-table" style="border-top:1px solid var(--border)"></div>
+        </div>
+        <div class="sim-controls">
+          <div class="ctrl"><span>토크나이저</span><div class="seg" id="bn-tok"><button data-value="bigram" class="on">글자 2-그램</button><button data-value="space">띄어쓰기</button></div></div>
+          <div class="ctrl"><span>점수 함수</span><div class="seg" id="bn-score"><button data-value="bm25" class="on">BM25</button><button data-value="tfidf">TF-IDF</button></div></div>
+          <label class="ctrl"><span>상위 k <output id="bn-k-out"></output></span><input type="range" id="bn-k" min="1" max="5" step="1" value="3"></label>
+          <label class="check"><input type="checkbox" id="bn-syn"> 동의어 사전으로 질문 확장</label>
+        </div>
+      </div>
+      <div class="sim-readout">
+        <div class="stat"><span class="k">재현율@k</span><span class="v" id="bn-o1">—</span></div>
+        <div class="stat"><span class="k">MRR</span><span class="v" id="bn-o2">—</span></div>
+        <div class="stat"><span class="k">놓친 질문</span><span class="v" id="bn-o3">—</span></div>
+      </div>
+      <div class="sim-note">막대는 네 가지 조합(토크나이저 × 점수 함수)의 재현율@k를 한꺼번에 보여 주고, 현재 선택을 강조한다. 띄어쓰기 토크나이저는 "펀치를"과 "펀치"를 다른 단어로 보기 때문에 한국어 질문에서 크게 떨어진다. 동의어 사전 확장은 "구부러짐"→"휨", "흠집"→"스크래치"처럼 사내 표현을 질문에 덧붙이는 단순한 규칙이다. 질문 12개짜리 장난감 벤치이므로 차이는 경향으로만 읽자. 이렇게 작은 문서 집합에서는 BM25와 TF-IDF가 거의 같은 결과를 내며, 차이는 청크 길이가 제각각인 큰 색인에서 커진다. 실제 평가 세트는 현업 질문 수십~수백 개로 만든다.</div>
+    </div>
+
+    <h3>도입 체크리스트</h3>
+    <ul class="checklist">
+      <li>대상 문서 범위를 정했고, 중복·구버전·개인 사본을 정리했다(정보 인벤토리, <a href="legacy.html">2장</a>).</li>
+      <li>문서 유형별 파싱 품질을 샘플 검수했다(특히 스캔 PDF, HWP, 표가 많은 엑셀).</li>
+      <li>문서 유형·부서·개정 번호·상태·보안 등급·ACL 메타데이터를 추출한다.</li>
+      <li>권한 필터가 검색 단계에서 적용되고, 원본 권한과 주기적으로 동기화된다.</li>
+      <li>키워드와 벡터를 함께 쓰고, 사내 동의어 사전(<a href="semantics.html">4장</a>)을 검색에 연결했다.</li>
+      <li>답변의 문장마다 출처가 붙고, 근거가 없으면 거절한다.</li>
+      <li>현업 질문 50개 이상으로 평가 세트를 만들고, 변경 때마다 재현율·근거성을 잰다.</li>
+      <li>집계·통계 질문은 RAG가 아니라 데이터 질의로 보낸다.</li>
+    </ul>
+  </section>
+
+  <section class="keypoints" id="summary">
+    <h2>핵심 정리</h2>
+    <ol>
+      <li>RAG는 질문마다 사내 문서에서 근거를 찾아 LLM에게 건네는 방식이다. 재학습 없이 최신 문서를 반영하고, 답에 출처를 붙일 수 있다.</li>
+      <li>실패의 대부분은 생성이 아니라 앞 단계에서 시작된다. 파싱(PDF·PPT·엑셀·HWP·스캔·메일), 메타데이터, 문서 정리가 품질의 상한을 정한다.</li>
+      <li>청크가 작으면 맥락이 잘리고, 크면 잡음이 섞인다. 구조 기반 청킹 + 제목 붙이기 + 적당한 오버랩이 출발점이며, 문서 유형별로 다르게 자른다.</li>
+      <li>BM25는 드문 단어 일치에 가중치를 주는 키워드 점수다. 한국어는 띄어쓰기 대신 형태소 분석이나 글자 2-그램으로 자른다. 코드·번호에는 키워드, 표현 차이에는 임베딩 — 하이브리드(RRF)와 재순위화가 실무 기본값이다.</li>
+      <li>권한(ACL)은 검색 전에 걸어야 한다. LLM에게 건네지 않은 정보는 새지 않는다. 문서 상태·개정 번호로 최신성을 관리하고, 근거가 없으면 답하지 않게 한다.</li>
+      <li>관계를 여러 번 건너는 질문은 지식 그래프·GraphRAG, 한 문서 깊이 읽기는 롱 컨텍스트, 집계는 데이터베이스 질의가 맞다.</li>
+      <li>RAG는 현업 질문으로 만든 평가 세트로 검색(재현율@k, MRR)과 생성(정확도, 근거성, 거절)을 나눠 숫자로 관리한다.</li>
+    </ol>
+  </section>
+
+  <section class="quiz-sec" id="quiz">
+    <h2>확인 퀴즈</h2>
+    <div class="quiz">
+      <div class="quiz-q"><p>1. 한국어 문서 검색에서 띄어쓰기 단위 대신 글자 2-그램(또는 형태소 분석)을 쓰는 주된 이유는?</p><div class="opts">
+        <button class="opt">한국어는 띄어쓰기를 하지 않기 때문에</button>
+        <button class="opt" data-correct>조사·어미가 단어에 붙어 "펀치의"와 "펀치를"이 다른 단어로 취급되기 때문에</button>
+        <button class="opt">2-그램이 임베딩보다 항상 정확하기 때문에</button>
+        <button class="opt">색인 크기를 줄이기 위해</button>
+      </div><div class="quiz-exp">한국어는 교착어라 같은 명사에 여러 조사가 붙는다. 2-그램으로 자르면 "펀치를" → "펀치"·"치를"이 되어 "펀치"가 일치한다. 대신 색인은 커지고 "치를" 같은 잡음 조각이 생기므로, IDF와 불용 2-그램 처리로 보완한다.</div></div>
+
+      <div class="quiz-q"><p>2. BM25에서 IDF 항이 하는 역할은?</p><div class="opts">
+        <button class="opt">긴 청크의 점수를 높인다.</button>
+        <button class="opt" data-correct>많은 청크에 흔하게 나오는 단어의 가중치를 낮추고, 드문 단어("E-2041" 등)의 일치에 더 큰 가중치를 준다.</button>
+        <button class="opt">질문의 단어 순서를 반영한다.</button>
+        <button class="opt">동의어를 자동으로 찾아 준다.</button>
+      </div><div class="quiz-exp">IDF는 단어가 등장하는 청크 수가 적을수록 커진다. 그래서 어디에나 있는 "하다"보다 특정 문서에만 있는 알람 코드나 설비 ID의 일치가 점수를 크게 좌우한다. 길이 보정은 \(b\), 반복 포화는 \(k_1\)이 담당한다. 동의어는 BM25가 해결하지 못해 임베딩이나 동의어 사전이 필요하다.</div></div>
+
+      <div class="quiz-q"><p>3. 사내 RAG에서 권한(ACL)을 적용하는 위치로 가장 안전한 것은?</p><div class="opts">
+        <button class="opt">LLM 프롬프트에 "권한 없는 내용은 말하지 말 것"이라고 적는다.</button>
+        <button class="opt">답변이 생성된 뒤 민감한 단어를 가린다.</button>
+        <button class="opt" data-correct>검색 단계에서 사용자가 볼 수 있는 청크만 후보로 삼는다.</button>
+        <button class="opt">권한은 문서 원본에만 있으면 충분하다.</button>
+      </div><div class="quiz-exp">LLM에게 건네지 않은 정보는 새어 나갈 수 없다. 프롬프트 지시나 사후 마스킹은 모델의 실수나 프롬프트 주입에 뚫릴 수 있다. 원본 권한을 색인에 복제하고 주기적으로 동기화하는 것이 기본이다.</div></div>
+
+      <div class="quiz-q"><p>4. 청크 크기를 지나치게 크게 잡았을 때 생기는 주된 문제는?</p><div class="opts">
+        <button class="opt">조치 순서의 일부가 다음 청크로 잘려 답이 반쪽이 된다.</button>
+        <button class="opt" data-correct>관련 없는 내용이 섞여 검색 점수가 희석되고, LLM에게 잡음이 많은 근거가 전달된다.</button>
+        <button class="opt">청크 수가 늘어 저장 비용이 커진다.</button>
+        <button class="opt">권한 필터가 동작하지 않는다.</button>
+      </div><div class="quiz-exp">맥락이 잘리는 것은 청크가 너무 작을 때의 문제이고, 청크 수가 늘어나는 것은 작은 청크나 큰 오버랩의 비용이다. 큰 청크는 집중도(정밀도)를 떨어뜨린다. 청크 크기 실험에서 최적점이 답에 필요한 맥락 길이에 따라 달라지는 것을 확인할 수 있다.</div></div>
+
+      <div class="quiz-q"><p>5. 사용자가 "E-2041"이라는 알람 코드만 입력했다. 임베딩 검색만 쓰는 시스템보다 하이브리드 검색이 유리한 이유는?</p><div class="opts">
+        <button class="opt">임베딩은 숫자를 전혀 처리하지 못한다.</button>
+        <button class="opt" data-correct>코드·번호 같은 정확한 문자열 일치는 키워드 검색(BM25)이 강하고, 임베딩은 비슷해 보이는 다른 코드와 잘 구별하지 못할 수 있다.</button>
+        <button class="opt">하이브리드 검색은 LLM을 쓰지 않아 더 빠르다.</button>
+        <button class="opt">키워드 검색은 권한 필터가 필요 없다.</button>
+      </div><div class="quiz-exp">제조 문서에는 알람 코드, 품번, LOT ID, 설비 ID처럼 한 글자만 달라도 다른 대상인 식별자가 많다. 키워드 검색은 이런 정확 일치에 강하고 왜 걸렸는지 설명도 쉽다. 임베딩은 표현이 다른 질문에 강하므로 둘을 RRF 등으로 합친다.</div></div>
+
+      <div class="quiz-q"><p>6. "협력사의 레진 등급 변경이 영향을 줄 수 있는 고객 제품과 그 제품의 최근 클레임 이력"을 묻는 질문에 가장 잘 맞는 접근은?</p><div class="opts">
+        <button class="opt">청크 검색 RAG에서 상위 1개 청크만 사용한다.</button>
+        <button class="opt">LLM의 일반 지식에 맡긴다.</button>
+        <button class="opt" data-correct>원자재–부품–고객–클레임 관계를 지식 그래프(BOM·출하 같은 정형 데이터 포함)로 연결해 관계를 따라 탐색하고, 관련 문서를 근거로 붙인다.</button>
+        <button class="opt">관련 메일 하나를 롱 컨텍스트에 넣는다.</button>
+      </div><div class="quiz-exp">답이 여러 문서·시스템에 흩어져 있고 관계를 여러 번 건너야 하는 질문이다. 비슷한 글을 찾는 벡터 검색보다 연결된 것을 따라가는 그래프 탐색이 맞다. BOM과 출하처럼 이미 정형 데이터로 있는 관계는 문서 추출보다 그대로 그래프에 연결하는 것이 정확하다.</div></div>
+    </div>
+  </section>
+</main>
+<script>
+(function () {
+  "use strict";
+  function hexA(c, a) {
+    c = (c || "").trim();
+    if (c[0] === "#") {
+      var h = c.slice(1);
+      if (h.length === 3) h = h.split("").map(function (x) { return x + x; }).join("");
+      var n = parseInt(h.slice(0, 6), 16);
+      return "rgba(" + ((n >> 16) & 255) + "," + ((n >> 8) & 255) + "," + (n & 255) + "," + a + ")";
+    }
+    var m = c.match(/[\d.]+/g);
+    return m ? "rgba(" + m[0] + "," + m[1] + "," + m[2] + "," + a + ")" : c;
+  }
+  function font(px, mono, bold) { return (bold ? "700 " : "") + px + "px " + getComputedStyle(document.body).getPropertyValue(mono ? "--mono" : "--font"); }
+  var esc = AX.esc;
+
+  /* ================================================ 가상 사내 문서 (교육용) */
+  var DOCS = [
+    { id: "D01", type: "품질 보고서", title: "QR-2026-031 하우징 버(burr) 불량 증가 분석", dept: "품질1팀", date: "2026-02-18", acl: ["qual", "prod", "mgmt"], status: "현행", paras: [
+      "2월 2주차부터 하우징 부품의 버(burr) 불량률이 평소의 약 3배로 증가했다. 불량은 프레스 PR-07에서 생산된 LOT에 집중되었다.",
+      "원인 분석 결과 금형 #7의 펀치 날 끝 마모가 확인되었다. 마지막 연마 이후 누적 타수는 약 52,000타였다.",
+      "대책으로 펀치 연마 주기를 50,000타에서 30,000타로 단축하고, 버 높이 측정을 LOT당 1회에서 2회로 늘린다."] },
+    { id: "D02", type: "설비 매뉴얼", title: "프레스 PR-07 금형 점검 기준", dept: "설비기술팀", date: "2025-11-03", acl: ["all"], status: "현행", paras: [
+      "펀치와 다이의 날 끝 마모는 매 교대 시작 시 육안으로 점검한다. 날 끝에 0.05 mm 이상의 라운드가 생기면 연마 대상으로 판정한다.",
+      "펀치 연마는 표준 연마 주기에 도달하거나 버 높이가 기준을 넘으면 실시한다. 연마 후에는 펀치 길이를 측정해 금형 이력 카드에 기록한다.",
+      "클리어런스가 맞지 않으면 버가 한쪽으로만 생긴다. 이 경우 연마보다 다이 정렬을 먼저 확인한다."] },
+    { id: "D03", type: "설비 매뉴얼", title: "CMP-03 알람 코드 E-2041 조치 절차", dept: "설비기술팀", date: "2025-09-12", acl: ["equip", "prod"], status: "현행", paras: [
+      "알람 E-2041은 슬러리 유량이 설정값의 80% 아래로 10초 이상 떨어질 때 발생한다.",
+      "조치 순서: ① 슬러리 공급 필터의 차압을 확인한다. ② 공급 펌프 압력을 확인한다. ③ 이상이 없으면 공급 라인을 플러싱한다.",
+      "같은 알람이 하루 2회 이상 반복되면 필터를 교체하고 설비 보전 담당에게 보고한다."] },
+    { id: "D04", type: "회의록", title: "B사 클레임 대응 회의 (3월 12일)", dept: "품질2팀", date: "2026-03-12", acl: ["qual", "mgmt"], status: "현행", paras: [
+      "참석: 품질2팀, 생산1팀, 영업팀. 안건: 고객 B사 커넥터 핀 휨 클레임 대응.",
+      "결정 사항: 출하 전 전수 외관 검사를 2주간 실시한다. 8D 보고서는 3월 20일까지 B사에 제출한다. 담당은 품질2팀이다.",
+      "보류 사항: 포장 트레이 설계 변경 여부는 근본 원인 분석 후 결정한다."] },
+    { id: "D05", type: "8D 요약", title: "8D-2026-017 커넥터 핀 휨", dept: "품질2팀", date: "2026-03-19", acl: ["qual", "mgmt"], status: "현행", paras: [
+      "D2 문제 기술: B사 입고 검사에서 커넥터 핀 휨이 발견되었다. 해당 LOT는 A2603-L2-0414 외 2개 LOT이다.",
+      "D4 근본 원인: 포장 트레이 칸막이 높이가 부족해 운송 중 진동으로 핀이 트레이 벽에 닿아 휘었다.",
+      "D5·D6 대책: 칸막이 높이를 올린 신규 트레이로 교체하고, 출하 검사에 핀 높이 검사를 추가했다."] },
+    { id: "D06", type: "설비 매뉴얼", title: "CMP 연마 패드 교체 기준 (개정 3판)", dept: "설비기술팀", date: "2026-01-15", acl: ["equip", "prod"], status: "현행", paras: [
+      "연마 패드는 웨이퍼 500매 처리 후 또는 제거율이 기준 대비 15% 이상 떨어지면 교체한다.",
+      "패드 교체 후에는 더미 웨이퍼 3매로 길들이기를 하고 제거율을 확인한 뒤 생산에 투입한다."] },
+    { id: "D07", type: "회의록", title: "설비 보전 주간 회의 (3월 2주)", dept: "보전팀", date: "2026-03-13", acl: ["equip"], status: "현행", paras: [
+      "CMP-03에서 E-2041 슬러리 유량 알람이 이번 주 3회 반복되었다. 필터 차압이 높게 나타났다.",
+      "결정: 슬러리 필터 교체 주기를 2주에서 1주로 단축한다. 공급 펌프 예비품 1대를 확보한다."] },
+    { id: "D08", type: "기술 메모(대외비)", title: "신규 코팅액 NC-5 개발 현황", dept: "소재연구소", date: "2026-02-27", acl: ["rnd"], status: "현행", paras: [
+      "신규 코팅액 NC-5는 스크래치 내성을 개선하기 위한 후보 소재다. 고객 C사에 샘플을 제출했다.",
+      "개발 일정: 신뢰성 평가는 2026년 3분기, 양산 적용 목표는 2027년 상반기다."] },
+    { id: "D09", type: "품질 보고서", title: "도금 두께 편차와 단위 혼선", dept: "품질1팀", date: "2026-03-08", acl: ["qual", "prod"], status: "현행", paras: [
+      "3월 첫 주 도금 두께 데이터에서 일부 값이 1000배 작게 기록되었다. 측정기 교체 후 표시 단위가 µm에서 mm로 바뀐 것이 원인이었다.",
+      "대책: 측정기 단위 설정을 µm로 고정하고, 데이터 적재 시 허용 범위(5~30 µm) 검증 규칙을 추가했다."] },
+    { id: "D10", type: "메일 요약", title: "협력사 공지: 커넥터 레진 등급 변경", dept: "구매팀", date: "2026-03-02", acl: ["qual", "mgmt"], status: "현행", paras: [
+      "협력사 D사가 커넥터 하우징용 레진 원자재의 등급 변경을 통보했다. 적용 예정일은 4월 1일이다.",
+      "요청: 4M 변경 신고서와 변경 전후 물성 비교 자료를 제출받아 품질팀이 승인 여부를 판단한다."] },
+    { id: "D11", type: "작업 표준서", title: "외관 검사 기준 (SOP-QC-012)", dept: "품질경영팀", date: "2025-12-01", acl: ["all"], status: "현행", paras: [
+      "스크래치(SCR-01): 길이 0.3 mm 이상이거나 손톱에 걸리는 깊이면 불량으로 판정한다.",
+      "찍힘(DNT-02): 지름 0.2 mm 이상의 점형 함몰은 불량이다. 판정이 애매하면 한도 견본과 비교한다.",
+      "이물(FMT-03): 표면에 붙은 입자는 에어 블로우 후 재검사하고, 남아 있으면 불량이다."] },
+    { id: "D12", type: "경영 회의록", title: "2분기 품질 비용 리뷰", dept: "생산본부", date: "2026-04-02", acl: ["mgmt"], status: "현행", paras: [
+      "1분기 품질 비용 중 하우징 버 불량의 재작업 비용이 가장 컸다.",
+      "결정: 금형 #7 예비 펀치 세트를 확보하는 투자를 승인한다. 펀치 연마 이력을 설비 시스템에 등록하도록 한다."] },
+    { id: "D13", type: "설비 매뉴얼", title: "CMP 연마 패드 교체 기준 (개정 2판)", dept: "설비기술팀", date: "2024-06-10", acl: ["equip", "prod"], status: "폐기", paras: [
+      "연마 패드는 웨이퍼 800매 처리 후 교체한다. 패드 교체 후 길들이기는 더미 웨이퍼 5매로 한다."] }
+  ];
+  var ROLES = {
+    prod: { name: "생산 작업자", groups: ["all", "prod"] },
+    qual: { name: "품질 엔지니어", groups: ["all", "prod", "qual"] },
+    equip: { name: "설비 엔지니어", groups: ["all", "prod", "equip"] },
+    rnd: { name: "연구원", groups: ["all", "rnd"] },
+    mgr: { name: "품질 팀장", groups: ["all", "prod", "qual", "mgmt"] }
+  };
+  var GROUP_NAME = { all: "전 직원", prod: "생산", qual: "품질", equip: "설비", rnd: "연구소", mgmt: "경영진" };
+  function canSee(doc, role) { var g = ROLES[role].groups; return doc.acl.some(function (a) { return g.indexOf(a) >= 0; }); }
+
+  /* ================================================ 토크나이저 + 색인 */
+  var STOP = {};
+  ["에서", "으로", "하는", "있다", "한다", "했다", "하고", "이다", "니다", "습니", "대한", "위해", "경우", "관련", "무엇", "어떻", "떻게", "어떤", "알려", "려줘", "인가", "는지", "나요", "얼마", "까지", "부터", "하면", "되었", "었다", "였다", "된다", "이번"].forEach(function (s) { STOP[s] = 1; });
+  var TOKRE = /[가-힣]+|[a-z0-9µ]+(?:[-_.][a-z0-9µ]+)*/g;
+  function tokenize(text, mode) {
+    var out = [], s = text.toLowerCase(), m;
+    TOKRE.lastIndex = 0;
+    while ((m = TOKRE.exec(s))) {
+      var w = m[0];
+      if (/[가-힣]/.test(w)) {
+        if (mode === "space") out.push(w);
+        else if (w.length === 1) out.push(w);
+        else for (var i = 0; i < w.length - 1; i++) { var bg = w.substr(i, 2); if (!STOP[bg]) out.push(bg); }
+      } else {
+        out.push(w);
+        if (/[-_.]/.test(w)) w.split(/[-_.]/).forEach(function (p) { if (p && p.length > 1) out.push(p); });
+      }
+    }
+    return out;
+  }
+  var CHUNKS = [];
+  DOCS.forEach(function (d) { d.paras.forEach(function (p, i) { CHUNKS.push({ doc: d, idx: i, text: p, index: d.title + " " + p }); }); });
+  var IDX = {};
+  function getIndex(mode) {
+    if (IDX[mode]) return IDX[mode];
+    var df = {}, total = 0, tfs = [];
+    CHUNKS.forEach(function (c) {
+      var toks = tokenize(c.index, mode), tf = {};
+      toks.forEach(function (t) { tf[t] = (tf[t] || 0) + 1; });
+      Object.keys(tf).forEach(function (t) { df[t] = (df[t] || 0) + 1; });
+      tfs.push({ tf: tf, len: toks.length }); total += toks.length;
+    });
+    IDX[mode] = { df: df, tfs: tfs, N: CHUNKS.length, avg: total / CHUNKS.length };
+    return IDX[mode];
+  }
+  function uniq(a) { var s = {}, o = []; a.forEach(function (x) { if (!s[x]) { s[x] = 1; o.push(x); } }); return o; }
+  function score(qToks, mode, fn, allow) {
+    var I = getIndex(mode), q = uniq(qToks), res = [];
+    var k1 = 1.2, b = 0.75;
+    var qv = null, qn = 0;
+    if (fn === "tfidf") { qv = {}; q.forEach(function (t) { if (I.df[t]) { var w = Math.log((I.N + 1) / (I.df[t] + 1)) + 1; qv[t] = w; qn += w * w; } }); qn = Math.sqrt(qn); }
+    CHUNKS.forEach(function (c, i) {
+      if (allow && !allow(c)) return;
+      var T = I.tfs[i], s = 0, matched = [];
+      if (fn === "bm25") {
+        q.forEach(function (t) {
+          var f = T.tf[t]; if (!f) return;
+          var n = I.df[t], idf = Math.log(1 + (I.N - n + 0.5) / (n + 0.5));
+          s += idf * f * (k1 + 1) / (f + k1 * (1 - b + b * T.len / I.avg)); matched.push(t);
+        });
+      } else {
+        var dot = 0, dn = 0;
+        Object.keys(T.tf).forEach(function (t) { var w = (1 + Math.log(T.tf[t])) * (Math.log((I.N + 1) / (I.df[t] + 1)) + 1); dn += w * w; if (qv[t]) { dot += w * qv[t]; matched.push(t); } });
+        s = qn && dn ? dot / (qn * Math.sqrt(dn)) : 0;
+      }
+      if (s > 0) res.push({ c: c, s: s, matched: matched });
+    });
+    res.sort(function (a, b2) { return b2.s - a.s; });
+    return res;
+  }
+  /* 일치한 토큰을 원문에 표시 */
+  function highlight(text, qset) {
+    var low = text.toLowerCase(), mark = new Array(text.length).fill(false), m;
+    TOKRE.lastIndex = 0;
+    while ((m = TOKRE.exec(low))) {
+      var w = m[0], st = m.index;
+      if (/[가-힣]/.test(w)) {
+        if (w.length === 1) { if (qset[w]) mark[st] = true; }
+        else for (var i = 0; i < w.length - 1; i++) if (qset[w.substr(i, 2)]) { mark[st + i] = true; mark[st + i + 1] = true; }
+      } else if (qset[w]) { for (var j = 0; j < w.length; j++) mark[st + j] = true; }
+      else if (/[-_.]/.test(w)) { var off = 0; w.split(/([-_.])/).forEach(function (p) { if (p.length > 1 && qset[p]) for (var k = 0; k < p.length; k++) mark[st + off + k] = true; off += p.length; }); }
+    }
+    var out = "", on = false;
+    for (var x = 0; x < text.length; x++) {
+      if (mark[x] && !on) { out += "<mark>"; on = true; }
+      if (!mark[x] && on) { out += "</mark>"; on = false; }
+      out += esc(text[x]);
+    }
+    return out + (on ? "</mark>" : "");
+  }
+
+  /* ================================================ 1) 미니 RAG */
+  var PRESETS = ["펀치 연마 주기는 얼마로 바뀌었나?", "E-2041 알람이 뜨면 어떻게 조치하나?", "CMP 연마 패드 교체 기준은?", "B사 클레임 회의 결정 사항", "NC-5 코팅액 양산 일정", "스크래치 불량 판정 기준 길이", "도금 두께 단위 혼선 원인"];
+  var inp = document.getElementById("rag-input");
+  document.getElementById("rag-presets").innerHTML = PRESETS.map(function (p) { return "<button>" + esc(p) + "</button>"; }).join("");
+  document.querySelectorAll("#rag-presets button").forEach(function (bt) { bt.addEventListener("click", function () { inp.value = bt.textContent; ragRun(); }); });
+  var ragK = AX.range("rag-k", function (v) { return v + "개"; }, ragRun);
+  var roleSel = document.getElementById("rag-role"), oldChk = document.getElementById("rag-old"), aclOff = document.getElementById("rag-acloff");
+  [roleSel, oldChk, aclOff].forEach(function (el) { el.addEventListener("change", ragRun); });
+  document.getElementById("rag-go").addEventListener("click", ragRun);
+  inp.addEventListener("keydown", function (e) { if (e.key === "Enter") ragRun(); });
+  function splitSent(t) { return (t.match(/[^.!?]+[.!?]?/g) || [t]).map(function (s) { return s.trim(); }).filter(function (s) { return s.length > 1; }); }
+  function ragRun() {
+    var role = roleSel.value, k = ragK(), q = inp.value.trim();
+    var g = ROLES[role].groups;
+    document.getElementById("rag-access").innerHTML = "<b>" + esc(ROLES[role].name) + "</b>의 접근 그룹: " + g.map(function (x) { return GROUP_NAME[x]; }).join(", ");
+    var allowFn = function (c) { return (oldChk.checked || c.doc.status === "현행") && (aclOff.checked || canSee(c.doc, role)); };
+    var pool = CHUNKS.filter(allowFn).length;
+    AX.stat("rag-o1", pool + "<small>/ " + CHUNKS.length + "</small>");
+    var ansEl = document.getElementById("rag-answer"), resEl = document.getElementById("rag-res"), hidEl = document.getElementById("rag-hidden"), tokEl = document.getElementById("rag-toks");
+    if (!q) { ansEl.innerHTML = ""; resEl.innerHTML = '<p style="color:var(--text-dim);font-size:14px;margin:8px 0 0">질문을 입력하거나 위의 예시 질문을 눌러 보세요.</p>'; hidEl.textContent = ""; tokEl.textContent = ""; AX.stat("rag-o2", "—"); AX.stat("rag-o3", "—"); AX.stat("rag-o4", "—"); return; }
+    var qt = uniq(tokenize(q, "bigram")), qset = {};
+    qt.forEach(function (t) { qset[t] = 1; });
+    tokEl.textContent = "질문 토큰: " + qt.join(" · ");
+    var res = score(qt, "bigram", "bm25", allowFn).slice(0, k);
+    // 권한 때문에 빠진 관련 문서 수 (현행 문서 중)
+    var all = score(qt, "bigram", "bm25", function (c) { return oldChk.checked || c.doc.status === "현행"; });
+    var top = res.length ? res[0].s : 0, hiddenDocs = {};
+    all.forEach(function (r) { if (!aclOff.checked && !canSee(r.c.doc, role) && r.s >= Math.max(1, 0.5 * top)) hiddenDocs[r.c.doc.id] = 1; });
+    var nh = Object.keys(hiddenDocs).length;
+    AX.stat("rag-o2", nh ? '<span style="color:var(--warn)">' + nh + "건</span>" : "0건");
+    AX.stat("rag-o3", res.length ? res[0].s.toFixed(2) : "0");
+    hidEl.innerHTML = aclOff.checked ? '<span style="color:var(--bad);font-weight:700">⚠ 권한 필터가 꺼져 있다. 이 역할이 볼 수 없는 문서가 근거로 노출될 수 있다.</span>' :
+      (nh ? "권한이 없어 검색 후보에서 제외된 관련 문서가 " + nh + "건 있다(제목·내용은 표시하지 않음). 실제 시스템에서는 이 숫자조차 보여 주지 않는 것이 원칙이며, 여기서는 학습용으로만 표시한다." : "");
+    // 결과 목록
+    var maxS = res.length ? res[0].s : 1;
+    resEl.innerHTML = res.length ? res.map(function (r, i) {
+      var d = r.c.doc, leak = !canSee(d, role);
+      return '<div class="rag-hit"' + (leak ? ' style="border-color:var(--bad)"' : "") + '><div class="meta"><span class="rk">[' + (i + 1) + "]</span><b>" + esc(d.title) + '</b><span class="chip">' + esc(d.type) + '</span><span class="chip">' + esc(d.dept) + " · " + d.date + "</span>" +
+        (d.status !== "현행" ? '<span class="chip bad">폐기</span>' : "") + (leak ? '<span class="chip bad">권한 없음</span>' : "") +
+        '<span class="sc">' + r.s.toFixed(2) + '</span></div><div class="txt">' + highlight(r.c.text, qset) + '</div><div class="scbar"><i style="width:' + (100 * r.s / maxS).toFixed(0) + '%"></i></div></div>';
+    }).join("") : '<p style="color:var(--text-dim);font-size:14px">일치하는 청크가 없다.</p>';
+    // 추출식 답변
+    var cover = 0;
+    if (res.length) { var mt = {}; res.forEach(function (r) { r.matched.forEach(function (t) { mt[t] = 1; }); }); cover = Object.keys(mt).length / Math.max(1, qt.length); }
+    if (!res.length || cover < 0.25) {
+      ansEl.innerHTML = '<div class="rag-answer refuse"><h4>답변 (추출식 데모)</h4><p>근거 문서에서 질문 내용을 충분히 확인하지 못했다. 이 역할로 접근할 수 있는 문서에서는 답을 찾을 수 없으므로 답하지 않는다.</p></div>';
+      AX.stat("rag-o4", '<span style="color:var(--warn)">거절</span>');
+      return;
+    }
+    var cand = [];
+    res.forEach(function (r, ri) {
+      splitSent(r.c.text).forEach(function (s, si) {
+        var st = uniq(tokenize(s, "bigram")), hit = st.filter(function (t) { return qset[t]; }).length;
+        if (hit) cand.push({ s: s, hit: hit, ri: ri, si: si });
+      });
+    });
+    cand.sort(function (a, b2) { return b2.hit - a.hit || a.ri - b2.ri || a.si - b2.si; });
+    var best = cand.length ? cand[0].hit : 0;
+    var pick = cand.filter(function (c) { return c.hit >= Math.max(1, best * 0.6); }).slice(0, 3);
+    pick.sort(function (a, b2) { return a.ri - b2.ri || a.si - b2.si; });
+    var stale = pick.some(function (p) { return res[p.ri].c.doc.status !== "현행"; });
+    var leaked = pick.some(function (p) { return !canSee(res[p.ri].c.doc, role); });
+    ansEl.innerHTML = '<div class="rag-answer"><h4>답변 초안 (추출식 데모 — 근거 문장 + 출처)</h4>' + pick.map(function (p) { return "<p>" + highlight(p.s, qset) + " <sup>[" + (p.ri + 1) + "]</sup></p>"; }).join("") +
+      (stale ? '<p style="color:var(--warn);font-size:13px">⚠ 폐기된 문서가 근거에 섞여 있다. 수치가 서로 다르면 현행 개정판을 확인할 것.</p>' : "") + "</div>";
+    AX.stat("rag-o4", leaked ? '<span style="color:var(--bad)">권한 위반</span>' : stale ? '<span style="color:var(--warn)">구버전 혼입</span>' : '<span style="color:var(--ok)">근거 있음</span>');
+  }
+  inp.value = PRESETS[0];
+  ragRun();
+
+  /* ================================================ 2) 청크 크기 실험 */
+  var ckS = AX.range("ck-s", function (v) { return v + "자"; }, ckDraw);
+  var ckO = AX.range("ck-o", function (v) { return v + "%"; }, ckDraw);
+  var ckL = AX.range("ck-l", function (v) { return v + "자"; }, ckDraw);
+  AX.seg("ck-pre", function (v) { ckL.set(+v); });
+  function ckM(s, o, L) {
+    var t = s * (1 - o), C = s < L ? 0 : Math.min(1, (s - L) / t), P = Math.min(1, L / s), F = C + P > 0 ? 2 * C * P / (C + P) : 0;
+    return { C: C, P: P, F: F, n: 1e6 / t };
+  }
+  var cvCk = AX.canvas("#cv-chunk", function (ctx, w, h) {
+    var P = AX.palette(), s = ckS(), o = ckO() / 100, L = ckL();
+    var c1 = [], c2 = [], c3 = [], bestS = 100, bestF = -1;
+    for (var x = 100; x <= 2000; x += 10) { var m = ckM(x, o, L); c1.push([x, m.C]); c2.push([x, m.P]); c3.push([x, m.F]); if (m.F > bestF) { bestF = m.F; bestS = x; } }
+    AX.chart(ctx, null, {
+      x: [100, 2000], y: [0, 1.05], xLabel: "청크 크기 s (자)", yLabel: "점수",
+      yTicks: [0, 0.25, 0.5, 0.75, 1], yFmt: function (v) { return v.toFixed(2); },
+      bands: [{ x0: 100, x1: Math.min(2000, Math.max(100, L)), color: hexA(P.bad, 0.07) }],
+      series: [{ data: c1, color: P.accent, width: 2.4 }, { data: c2, color: P.accent2, width: 2.4 }, { data: c3, color: P.warn, width: 3 }],
+      vlines: [{ x: s, color: P.text, label: "현재 " + s }, { x: bestS, color: P.warn, dash: [2, 4], label: "" }],
+      points: [{ x: s, y: ckM(s, o, L).F, color: P.warn, r: 5 }]
+    });
+    var m0 = ckM(s, o, L);
+    AX.stat("ck-o1", (100 * m0.C).toFixed(0) + "<small>%</small>");
+    AX.stat("ck-o2", (100 * m0.P).toFixed(0) + "<small>%</small>");
+    AX.stat("ck-o3", m0.F.toFixed(2));
+    AX.stat("ck-o4", bestS + "<small>자 (F=" + bestF.toFixed(2) + ")</small>");
+    AX.stat("ck-o5", Math.round(m0.n).toLocaleString() + "<small>개</small>");
+  }, { aspect: 0.58, minHeight: 250, maxHeight: 360 });
+  function ckDraw() { cvCk.redraw(); }
+
+  /* ================================================ 3) 평가 벤치 */
+  var BENCH = [
+    { q: "펀치를 갈아 주는 주기를 알려줘", gold: ["D01", "D02"] },
+    { q: "슬러리가 잘 안 나올 때 조치는?", gold: ["D03", "D07"] },
+    { q: "B사가 제기한 클레임에 대해 회의에서 정한 것", gold: ["D04"] },
+    { q: "커넥터 핀이 휘는 근본 원인은", gold: ["D05"] },
+    { q: "두께가 천 배나 작게 나온 원인", gold: ["D09"] },
+    { q: "레진이 바뀌면 무엇을 받아야 하나", gold: ["D10"] },
+    { q: "흠집은 길이가 얼마부터 불량인가", gold: ["D11"] },
+    { q: "패드를 언제 갈아야 하나", gold: ["D06"] },
+    { q: "예비 부품 사는 투자가 승인됐나", gold: ["D12"] },
+    { q: "핀 구부러짐의 진짜 원인", gold: ["D05"] },
+    { q: "E-2041", gold: ["D03", "D07"] },
+    { q: "측정기 바꾼 뒤 숫자가 이상해진 건", gold: ["D09"] }
+  ];
+  var SYN = { "휘는": "휨", "구부러짐": "휨", "흠집": "스크래치", "갈아": "연마 교체", "안 나올": "유량 저하", "바뀌면": "변경 4M", "바꾼": "교체", "숫자": "값 단위", "천 배": "1000배 단위", "부품 사는": "예비 펀치 확보" };
+  var bnK = AX.range("bn-k", function (v) { return v + "개"; }, bnRun);
+  var bnTok = AX.seg("bn-tok", bnRun), bnScore = AX.seg("bn-score", bnRun);
+  var bnSyn = document.getElementById("bn-syn");
+  bnSyn.addEventListener("change", bnRun);
+  var BN = { bars: [] };
+  function expand(q) { if (!bnSyn.checked) return q; var extra = []; Object.keys(SYN).forEach(function (k) { if (q.indexOf(k) >= 0) extra.push(SYN[k]); }); return q + " " + extra.join(" "); }
+  function evalCfg(mode, fn, k, detail) {
+    var hits = 0, rr = 0, rows = [];
+    BENCH.forEach(function (b) {
+      var res = score(tokenize(expand(b.q), mode), mode, fn, function (c) { return c.doc.status === "현행"; });
+      var rank = 0;
+      for (var i = 0; i < res.length; i++) if (b.gold.indexOf(res[i].c.doc.id) >= 0) { rank = i + 1; break; }
+      var hit = rank > 0 && rank <= k;
+      if (hit) hits++;
+      if (rank) rr += 1 / rank;
+      if (detail) rows.push({ q: b.q, gold: b.gold, top: res[0] ? res[0].c.doc : null, rank: rank, hit: hit });
+    });
+    return { rec: hits / BENCH.length, mrr: rr / BENCH.length, rows: rows };
+  }
+  function bnRun() {
+    var k = bnK(), mode = bnTok(), fn = bnScore();
+    var cur = evalCfg(mode, fn, k, true);
+    BN.bars = [["bigram", "bm25", "2-그램 + BM25"], ["bigram", "tfidf", "2-그램 + TF-IDF"], ["space", "bm25", "띄어쓰기 + BM25"], ["space", "tfidf", "띄어쓰기 + TF-IDF"]].map(function (c) {
+      return { label: c[2], v: evalCfg(c[0], c[1], k, false).rec, on: c[0] === mode && c[1] === fn };
+    });
+    AX.stat("bn-o1", (100 * cur.rec).toFixed(0) + "<small>%</small>");
+    AX.stat("bn-o2", cur.mrr.toFixed(2));
+    AX.stat("bn-o3", cur.rows.filter(function (r) { return !r.hit; }).length + "<small>/ " + BENCH.length + "</small>");
+    document.getElementById("bench-table").innerHTML = '<div class="table-wrap" style="margin:0"><table class="bench-t"><thead><tr><th>평가 질문</th><th>정답</th><th>1위 결과</th><th class="num">첫 정답 순위</th><th>적중@' + k + "</th></tr></thead><tbody>" +
+      cur.rows.map(function (r) { return "<tr><td>" + esc(r.q) + "</td><td>" + r.gold.join(", ") + "</td><td>" + (r.top ? esc(r.top.id) : "—") + '</td><td class="num">' + (r.rank || "—") + '</td><td class="' + (r.hit ? "y" : "n") + '">' + (r.hit ? "✓" : "✗") + "</td></tr>"; }).join("") + "</tbody></table></div>";
+    if (cvBn) cvBn.redraw();
+  }
+  var cvBn = null;
+  bnRun();
+  cvBn = AX.canvas("#cv-bench", function (ctx, w, h) {
+    var P = AX.palette(), B = BN.bars, padL = Math.min(130, w * 0.36), padR = 52, top = 30, rowH = (h - top - 10) / B.length;
+    ctx.font = font(12, false, true); ctx.fillStyle = P.dim; ctx.textAlign = "left"; ctx.textBaseline = "top";
+    ctx.fillText("재현율@" + bnK() + " — 네 가지 조합", 10, 8);
+    B.forEach(function (b, i) {
+      var y = top + i * rowH, bh = Math.min(22, rowH * 0.6), bw = (w - padL - padR) * b.v;
+      ctx.fillStyle = P.surface; ctx.fillRect(padL, y + (rowH - bh) / 2, w - padL - padR, bh);
+      ctx.fillStyle = b.on ? P.accent : hexA(P.dim, 0.45); ctx.fillRect(padL, y + (rowH - bh) / 2, bw, bh);
+      ctx.font = font(12, false, b.on); ctx.fillStyle = b.on ? P.text : P.dim; ctx.textAlign = "right"; ctx.textBaseline = "middle";
+      ctx.fillText(b.label, padL - 8, y + rowH / 2);
+      ctx.textAlign = "left"; ctx.font = font(12, true, true); ctx.fillStyle = P.text;
+      ctx.fillText((100 * b.v).toFixed(0) + "%", padL + bw + 6, y + rowH / 2);
+    });
+  }, { aspect: 0.4, minHeight: 170, maxHeight: 210 });
+})();
+</script>
+</body>
+</html>

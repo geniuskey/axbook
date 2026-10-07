@@ -26,7 +26,7 @@ def inject(path, url, kind, ld):
         '<meta property="og:image:height" content="630">',
         '<meta property="og:locale" content="ko_KR">',
         '<meta name="twitter:card" content="summary_large_image">',
-        '<script type="application/ld+json">' + json.dumps({'@context': 'https://schema.org', '@graph': ld}, ensure_ascii=False, separators=(',', ':')).replace('</', '<\/') + '</script>',
+        '<script type="application/ld+json">' + json.dumps({'@context': 'https://schema.org', '@graph': ld}, ensure_ascii=False, separators=(',', ':')).replace('</', '<\\/') + '</script>',
     ]) + '\n'
     s = s[:m.end()] + block + s[m.end():]
     io.open(path, 'w', encoding='utf-8', newline='').write(s)
