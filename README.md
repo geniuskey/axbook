@@ -27,7 +27,7 @@ python3 -m http.server 8000   # → http://localhost:8000
 | 10 | chapters/governance.html | ISO/IEC 42001, EU AI Act, NIST AI RMF, 섀도 AI와 기술 유출, 보안–가치 파레토 프런티어 |
 | 11 | chapters/people.html | CoE·허브-스포크, 역할과 역량, 확산 모델, 변화 관리 |
 | 12 | chapters/goals.html | 계층별 AX 목표 체계: 취합형 MBO의 함정, 부문·사업부·실·팀·파트별 목표 유형, 캐스케이드와 캐치볼 |
-| 13 | chapters/reporting.html | AX 시대의 보고와 평가: 보고 증폭 비용, 데일리·주간 보고와 우선순위 부채, 목적별 보고 형태, 문서 작업의 적정선, 평가하는 조직의 AX, 증거 기반 목표 평가 |
+| 13 | chapters/reporting.html | AX 시대의 보고와 평가: 보고 증폭 비용, 산출물의 소비자와 가치–비용, 데일리·주간 보고와 우선순위 부채, 목적별 보고 형태, 문서 작업의 적정선, 평가하는 조직의 AX, 증거 기반 목표 평가 |
 | 14 | chapters/system.html | 전체를 보는 AX: 팀 간 흐름과 산출물 계약·API, 팀에 요구하기 전 회사가 깔 인프라 바닥, 효율을 돈으로 바꾸는 가치 실현 결정, 컴퓨트·플랫폼·사람 투자의 균형, 역할의 조건 |
 | 15 | chapters/experiments.html | 기준이 바뀌는 실험 조직의 AX: AI-readable 데이터, 기준 레지스트리·실험 카드, AX 성과의 증거 사다리, FDE |
 | 16 | chapters/roadmap.html | 가시화→표준화→디지털화→데이터화→지능화→자율화 로드맵 |
