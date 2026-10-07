@@ -775,8 +775,8 @@
     { n: "금지 + 단속 강화(차단·DLP)", v: 4, rIn: 7, rExt: 0, sh: 0.6 },
     { n: "공개 자료만 기업용 SaaS", v: 25, rIn: 4, rExt: 6 },
     { n: "기업 계약 SaaS(사내 일반까지) + 게이트웨이", v: 52, rIn: 6, rExt: 12, gw: 1 },
-    { n: "④ + 대외비는 전용 클라우드 테넌트", v: 70, rIn: 8, rExt: 18, gw: 1 },
-    { n: "④ + 대외비는 사내 호스팅 모델", v: 66, rIn: 9, rExt: 11, gw: 1, gpu: 1 },
+    { n: "4번 + 대외비는 전용 클라우드 테넌트", v: 70, rIn: 8, rExt: 18, gw: 1 },
+    { n: "4번 + 대외비는 사내 호스팅 모델", v: 66, rIn: 9, rExt: 11, gw: 1, gpu: 1 },
     { n: "사내 호스팅 모델만", v: 38, rIn: 8, rExt: 0, gpu: 1 },
     { n: "폐쇄망 + 건별 승인", v: 12, rIn: 4, rExt: 0, gpu: 1 },
     { n: "기업 SaaS 전면 허용(통제 없음)", v: 80, rIn: 18, rExt: 40 },
@@ -818,8 +818,16 @@
       vlines: [{ x: ap, label: "위험 허용 한도", color: P.warn }],
       series: [{ data: stair, color: P.accent, width: 2 }]
     });
+    var placed = [];
     pts.forEach(function (p) {
-      var x = r.X(p.r), y = r.Y(p.v), isBest = best && p.i === best.i;
+      var x0 = r.X(p.r), y0 = r.Y(p.v), x = x0, y = y0, isBest = best && p.i === best.i;
+      // 겹치는 점은 위로 비켜 그리고 실제 위치까지 가는 짧은 선을 남긴다
+      while (placed.some(function (q) { return Math.hypot(q[0] - x, q[1] - y) < 15; })) y -= 15;
+      placed.push([x, y]);
+      if (y !== y0) {
+        ctx.strokeStyle = P.dim; ctx.lineWidth = 1; ctx.beginPath(); ctx.moveTo(x0, y0); ctx.lineTo(x, y + 7); ctx.stroke();
+        ctx.fillStyle = P.dim; ctx.beginPath(); ctx.arc(x0, y0, 2, 0, Math.PI * 2); ctx.fill();
+      }
       ctx.beginPath(); ctx.arc(x, y, isBest ? 9 : 7, 0, Math.PI * 2);
       ctx.fillStyle = p.dom ? hexA(P.dim, 0.25) : (isBest ? P.accent : hexA(P.accent, 0.35));
       ctx.fill();

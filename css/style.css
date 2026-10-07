@@ -419,8 +419,8 @@ td.num, th.num { text-align: right; font-family: var(--mono); font-variant-numer
 .compare li { margin: 4px 0; }
 /* 단계 사다리: <ol class="ladder"><li><b>단계</b>설명</li></ol> */
 .ladder { list-style: none; padding: 0 !important; margin: 22px 0; display: grid; gap: 8px; counter-reset: ld; }
-.ladder li { counter-increment: ld; display: grid; grid-template-columns: 42px 1fr; gap: 0 12px; align-items: start; padding: 12px 14px; border-radius: var(--radius-sm); border: 1px solid var(--border); background: var(--bg-elev); margin: 0 !important; font-size: 15px; color: var(--text-dim); }
-.ladder li::before { content: counter(ld, decimal-leading-zero); grid-row: span 2; font-family: var(--mono); font-weight: 700; color: var(--accent); font-size: 18px; line-height: 1.4; }
+.ladder li { counter-increment: ld; position: relative; display: block; padding: 12px 14px 12px 68px; border-radius: var(--radius-sm); border: 1px solid var(--border); background: var(--bg-elev); margin: 0 !important; font-size: 15px; color: var(--text-dim); }
+.ladder li::before { content: counter(ld, decimal-leading-zero); position: absolute; left: 14px; top: 12px; width: 42px; font-family: var(--mono); font-weight: 700; color: var(--accent); font-size: 18px; line-height: 1.4; }
 .ladder li b { color: var(--text); display: block; }
 /* 체크리스트 */
 .checklist { list-style: none; padding: 0 !important; margin: 18px 0; }
