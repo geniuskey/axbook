@@ -2,7 +2,7 @@
 
 레거시 파일과 메일 더미에서 AI가 일하는 조직까지. 대기업 제조 현장의 실무자와 리더를 위한 한국어 AX 학습 사이트입니다.
 공유 폴더에 흩어진 엑셀·PPT, 메일 속에만 있는 결정과 수치, 이슈마다 달라지는 프로세스와 산출물, 팀마다 다른 용어와 포맷 — 이 현실에서 출발해 데이터·프로세스·공통 언어·사람을 정리하고 그 위에 AI를 올리는 길을 단계별로 안내합니다.
-19개 챕터, 50여 개의 인터랙티브(자가진단, 프로세스 마이닝, 미니 RAG, ROI 계산기, 보안 정책 파레토 프런티어, 로드맵 빌더, 90일 플레이북 생성기 등)로 구성됩니다.
+20개 챕터, 50여 개의 인터랙티브(자가진단, 프로세스 마이닝, 미니 RAG, ROI 계산기, 보안 정책 파레토 프런티어, 로드맵 빌더, 90일 플레이북 생성기 등)로 구성됩니다.
 
 ## 실행
 빌드 과정이 없는 정적 사이트입니다.
@@ -27,13 +27,14 @@ python3 -m http.server 8000   # → http://localhost:8000
 | 10 | chapters/governance.html | ISO/IEC 42001, EU AI Act, NIST AI RMF, 섀도 AI와 기술 유출, 보안–가치 파레토 프런티어 |
 | 11 | chapters/people.html | CoE·허브-스포크, 역할과 역량, 확산 모델, 변화 관리 |
 | 12 | chapters/goals.html | 계층별 AX 목표 체계: 취합형 MBO의 함정, 부문·사업부·실·팀·파트별 목표 유형, 캐스케이드와 캐치볼 |
-| 13 | chapters/reporting.html | AX 시대의 보고와 평가: 보고 증폭 비용, 목적별 보고 형태, 문서 작업의 적정선, 평가하는 조직의 AX, 증거 기반 목표 평가 |
-| 14 | chapters/experiments.html | 기준이 바뀌는 실험 조직의 AX: AI-readable 데이터, 기준 레지스트리·실험 카드, AX 성과의 증거 사다리, FDE |
-| 15 | chapters/roadmap.html | 가시화→표준화→디지털화→데이터화→지능화→자율화 로드맵 |
-| 16 | chapters/cases.html | 가상 사례로 보는 레거시 방식 vs AX 방식 |
-| 17 | chapters/playbook.html | 우리 팀 90일 계획·유스케이스 캔버스 생성기 |
-| 18 | chapters/questions.html | AX에 대한 정직한 질문들: 유행인가, 기간, top-down/bottom-up, 자기 업무 개선, 표준과 창의성, 보안의 적정선, 숙련자 병목, 인재, 학습 |
-| 19 | chapters/glossary.html | 용어집, 종합 퀴즈 |
+| 13 | chapters/reporting.html | AX 시대의 보고와 평가: 보고 증폭 비용, 데일리·주간 보고와 우선순위 부채, 목적별 보고 형태, 문서 작업의 적정선, 평가하는 조직의 AX, 증거 기반 목표 평가 |
+| 14 | chapters/system.html | 전체를 보는 AX: 팀 간 흐름과 산출물 계약·API, 효율을 돈으로 바꾸는 가치 실현 결정, 컴퓨트·플랫폼·사람 투자의 균형, 역할의 조건 |
+| 15 | chapters/experiments.html | 기준이 바뀌는 실험 조직의 AX: AI-readable 데이터, 기준 레지스트리·실험 카드, AX 성과의 증거 사다리, FDE |
+| 16 | chapters/roadmap.html | 가시화→표준화→디지털화→데이터화→지능화→자율화 로드맵 |
+| 17 | chapters/cases.html | 가상 사례로 보는 레거시 방식 vs AX 방식 |
+| 18 | chapters/playbook.html | 우리 팀 90일 계획·유스케이스 캔버스 생성기 |
+| 19 | chapters/questions.html | AX에 대한 정직한 질문들: 유행인가, 기간, top-down/bottom-up, 자기 업무 개선, 표준과 창의성, 보안의 적정선, 숙련자 병목, 인재, 학습 |
+| 20 | chapters/glossary.html | 용어집, 종합 퀴즈 |
 
 공통 코드: `css/style.css`(디자인 토큰, 라이트/다크), `js/common.js`(내비게이션, 검색, 캔버스·차트 헬퍼, 전역 `AX`).
 챕터 작성 규칙은 [CONTRIBUTING.md](CONTRIBUTING.md), 편집 기준은 [docs/OUTLINE.md](docs/OUTLINE.md)를 참고하세요.

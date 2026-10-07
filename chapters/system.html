@@ -1,0 +1,532 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="icon" href="../favicon.ico" sizes="any">
+<link rel="icon" href="../favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="../apple-touch-icon.png">
+<title>전체를 보는 AX: 인터페이스, 가치 실현, 투자 · AXBook</title>
+<meta name="description" content="팀마다 AX 목표를 세웠는데 전체 리드타임은 그대로인 이유. 팀 간 산출물 계약과 플랫폼 API가 없는 AX의 한계, 하위 조직의 효율을 돈으로 바꾸는 책임은 누구에게 있는지, 컴퓨트·플랫폼·사람에 대한 변화 투자는 어느 정도가 적당한지, 역할만 부여하는 AX의 함정을 다룬다.">
+<link rel="canonical" href="https://axbook.euiyun.com/chapters/system.html">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="AXBook">
+<meta property="og:title" content="전체를 보는 AX: 인터페이스, 가치 실현, 투자 · AXBook">
+<meta property="og:description" content="팀마다 AX 목표를 세웠는데 전체 리드타임은 그대로인 이유. 팀 간 산출물 계약과 플랫폼 API가 없는 AX의 한계, 하위 조직의 효율을 돈으로 바꾸는 책임은 누구에게 있는지, 컴퓨트·플랫폼·사람에 대한 변화 투자는 어느 정도가 적당한지, 역할만 부여하는 AX의 함정을 다룬다.">
+<meta property="og:url" content="https://axbook.euiyun.com/chapters/system.html">
+<meta property="og:image" content="https://axbook.euiyun.com/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:locale" content="ko_KR">
+<meta name="twitter:card" content="summary_large_image">
+<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"TechArticle","headline":"전체를 보는 AX: 인터페이스, 가치 실현, 투자","name":"전체를 보는 AX: 인터페이스, 가치 실현, 투자 · AXBook","url":"https://axbook.euiyun.com/chapters/system.html","mainEntityOfPage":"https://axbook.euiyun.com/chapters/system.html","inLanguage":"ko","isAccessibleForFree":true,"learningResourceType":"interactive textbook chapter","position":14,"image":"https://axbook.euiyun.com/og.png","dateModified":"2026-10-07","isPartOf":{"@type":"Book","@id":"https://axbook.euiyun.com/#book","name":"AXBook — 제조 현장을 위한 인터랙티브 AI 전환 교과서","url":"https://axbook.euiyun.com/"},"publisher":{"@type":"Organization","name":"AXBook","url":"https://axbook.euiyun.com/"},"description":"팀마다 AX 목표를 세웠는데 전체 리드타임은 그대로인 이유. 팀 간 산출물 계약과 플랫폼 API가 없는 AX의 한계, 하위 조직의 효율을 돈으로 바꾸는 책임은 누구에게 있는지, 컴퓨트·플랫폼·사람에 대한 변화 투자는 어느 정도가 적당한지, 역할만 부여하는 AX의 함정을 다룬다."},{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"AXBook","item":"https://axbook.euiyun.com/"},{"@type":"ListItem","position":2,"name":"14 전체를 보는 AX: 인터페이스, 가치 실현, 투자","item":"https://axbook.euiyun.com/chapters/system.html"}]}]}</script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+<link rel="stylesheet" href="../css/style.css">
+<script src="../js/common.js"></script>
+<style>
+  svg .s-bad { stroke: var(--bad); fill: none; stroke-width: 2; }
+  svg .s-acc2 { stroke: var(--accent-2); fill: none; stroke-width: 2; }
+  svg .f-bad-soft { fill: color-mix(in srgb, var(--bad) 12%, transparent); stroke: var(--bad); }
+  svg .f-ok-soft { fill: color-mix(in srgb, var(--ok) 12%, transparent); stroke: var(--ok); }
+  svg .f-warn-soft { fill: color-mix(in srgb, var(--warn) 14%, transparent); stroke: var(--warn); }
+  svg .t-bad { fill: var(--bad); font-family: var(--font); font-size: 13px; font-weight: 700; }
+  svg .t-ok { fill: var(--ok); font-family: var(--font); font-size: 13px; font-weight: 700; }
+  svg .t-acc2 { fill: var(--accent-2); font-family: var(--font); font-size: 13px; font-weight: 700; }
+  svg .t-sm { fill: var(--text-dim); font-family: var(--font); font-size: 11px; }
+  .sy-out { margin-top: 12px; padding: 12px 14px; border-radius: 10px; background: var(--surface); border: 1px solid var(--border); font-size: 14px; }
+  .sy-out h4 { margin: 0 0 6px; font-size: 15.5px; }
+  .sy-out ul { margin: 6px 0 0; padding-left: 18px; }
+  .presets { display: flex; flex-wrap: wrap; gap: 6px; }
+  .presets .btn { font-size: 12.5px; padding: 5px 10px; }
+</style>
+<!-- Cloudflare Web Analytics -->
+<script type='module' src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "3d6151a0abc94ede89285d462527fa80"}'></script>
+<!-- End Cloudflare Web Analytics -->
+</head>
+<body data-chapter="system">
+<main class="chapter">
+  <header class="chapter-hero">
+    <div class="eyebrow">Chapter 14</div>
+    <h1>전체를 보는 AX: 인터페이스, 가치 실현, 투자</h1>
+    <p class="lead">팀마다 AX 목표를 세우고 각자 성과를 냈다. 그런데 고객이 체감하는 리드타임은 그대로다. 사내 플랫폼은 API를 열어 주지 않고, 팀과 팀 사이를 오가는 산출물은 정의되어 있지 않은데, 각 팀은 자기 안의 효율만 계산한다. 부품 하나하나를 잘 설계한다고 좋은 시스템이 되지는 않는다. 이 장은 AX를 <strong>시스템 설계의 문제</strong>로 다시 본다. 팀 사이의 인터페이스는 누가 설계하는지, 아래에서 만든 효율을 돈으로 바꾸는 일은 누구의 몫인지, 그리고 이 변화에 무엇을 얼마나 투자해야 하는지를 다룬다.</p>
+    <ul class="objectives">
+      <li>팀 단위 최적화가 전체 리드타임을 바꾸지 못하는 이유를 흐름(처리 시간과 대기 시간)으로 설명할 수 있다.</li>
+      <li>팀 간 산출물 계약과 플랫폼 API를 어느 계층이 책임져야 하는지, API가 없을 때의 과도기 전략을 제시할 수 있다.</li>
+      <li>절감 시간이 실제 금액이 되는 경로와, 그 전환을 결정해야 하는 사람을 구분할 수 있다.</li>
+      <li>컴퓨트·플랫폼·사람 시간·전문 인력에 대한 투자의 균형을 판단하고, "역할만 부여하는" AX의 함정을 설명할 수 있다.</li>
+    </ul>
+  </header>
+
+  <!-- ============================================================ 1 -->
+  <section id="scene">
+    <h2>모든 팀이 목표를 달성했는데, 고객은 모른다</h2>
+    <p>E사(산업용 장비 부품) 고객 클레임은 다섯 팀을 지나간다. 영업이 접수하고, 품질이 분석하고, 생산기술이 원인을 확인하고, 구매가 협력사 조치를 받고, 다시 품질이 회신서를 쓴다. 올해 다섯 팀은 모두 AX 목표를 세웠고 모두 달성했다. 영업은 접수 양식을 AI로 자동 분류하게 했고, 품질은 8D 초안을 AI로 쓴다. 생산기술은 설비 이력 검색을 붙였고, 구매는 협력사 회신 메일을 요약한다. 팀별로 보면 처리 시간이 30~60% 줄었다(예시 수치).</p>
+    <p>그런데 클레임 한 건이 접수부터 회신까지 걸리는 시간은 21일에서 19일로 줄었을 뿐이다. 실 기획이 한 건을 처음부터 끝까지 따라가 보고서야 이유가 보였다. 21일 중 팀 안에서 실제로 일하는 시간은 7일 남짓이었다. 나머지는 <strong>팀과 팀 사이</strong>에 있었다. 다음 팀이 메일을 확인할 때까지 기다리는 시간, 받은 자료의 양식이 맞지 않아 다시 요청하는 시간, 협력사 시스템과 사내 시스템을 사람이 옮겨 적는 시간. 다섯 팀이 각자 자기 부품을 빠르게 만들었지만, 부품 사이의 연결은 아무도 설계하지 않았다.</p>
+    <div class="callout warn">
+      <strong>부품 설계와 시스템 설계는 다른 일이다</strong>
+      <p>팀 단위 AX 목표는 각 팀을 하나의 부품처럼 다룬다. 부품마다 성능을 높이는 것은 필요하지만, 시스템의 성능은 부품 사이의 인터페이스와 흐름에서 결정되는 경우가 많다. 부품만 잘 설계해 본 사람에게 갑자기 시스템 전체를 맡기고 부품 단위 가치만 묻는 것과 같다. 전체를 보는 사람과 전체를 설계하는 권한이 없으면, 팀 목표의 합은 조직의 결과가 되지 않는다(<a href="goals.html">12장</a>의 "합은 전체가 아니다").</p>
+    </div>
+  </section>
+
+  <!-- ============================================================ 2 -->
+  <section id="flow">
+    <h2>시간은 팀 안이 아니라 팀 사이에 있다</h2>
+    <p>일이 여러 팀을 지나가는 흐름에서 전체 리드타임은 세 부분으로 나뉜다. 각 팀이 실제로 일하는 <b>처리 시간</b>, 일이 다음 팀을 기다리는 <b>대기 시간</b>, 받은 산출물이 맞지 않아 되돌아가는 <b>재작업 시간</b>. 처리 시간이 전체에서 차지하는 비율을 흐름 효율<span class="en">(flow efficiency)</span>이라고 한다. 사무·지식 업무에서는 이 비율이 낮은 경우가 많다. 일하는 시간보다 기다리는 시간이 훨씬 길다는 뜻이다.</p>
+    <div class="formula">$$\text{흐름 효율} = \frac{\sum \text{처리 시간}}{\sum \text{처리 시간} + \sum \text{대기 시간} + \text{재작업 시간}}$$<div class="where">흐름 효율이 낮은 업무에서는 팀 안의 처리 시간을 아무리 줄여도 전체 리드타임이 크게 줄지 않는다.</div></div>
+    <p>이것이 팀 단위 AX 목표가 전체 성과로 이어지지 않는 수학적 이유다. 대기 시간과 재작업은 어느 한 팀의 것이 아니다. 앞 팀이 무엇을 어떤 형식으로 넘기는지, 뒤 팀이 언제 받아 가는지, 두 시스템이 연결되어 있는지에 달려 있다. 즉 <strong>인터페이스</strong>의 문제다.</p>
+
+    <div class="sim" id="sim-flow">
+      <div class="sim-head"><span class="sim-tag">INTERACTIVE</span><h3>흐름 시뮬레이터: 팀 안을 줄일까, 팀 사이를 줄일까</h3></div>
+      <div class="sim-body side">
+        <div class="sim-view"><canvas id="cv-flow"></canvas></div>
+        <div class="sim-controls">
+          <label class="ctrl"><span>각 팀 내부 효율화(처리 시간 단축) <output id="fl-u-out"></output></span><input type="range" id="fl-u" min="0" max="70" step="5" value="40"></label>
+          <label class="ctrl"><span>인계마다 기다리는 시간 <output id="fl-w-out"></output></span><input type="range" id="fl-w" min="0.5" max="6" step="0.5" value="3"></label>
+          <label class="ctrl"><span>산출물 불일치로 인한 반려율 <output id="fl-r-out"></output></span><input type="range" id="fl-r" min="0" max="40" step="5" value="25"></label>
+          <label class="check"><input type="checkbox" id="fl-c"> 팀 간 산출물 계약 도입</label>
+          <label class="check"><input type="checkbox" id="fl-a"> 시스템 간 API로 자동 인계</label>
+        </div>
+      </div>
+      <div class="sim-readout">
+        <div class="stat"><span class="k">전체 리드타임</span><span class="v" id="fl-o1">—</span></div>
+        <div class="stat"><span class="k">흐름 효율</span><span class="v" id="fl-o2">—</span></div>
+        <div class="stat"><span class="k">팀 내부 효율화만의 효과</span><span class="v" id="fl-o3">—</span></div>
+      </div>
+      <div class="sim-note">다섯 팀(처리 시간 2·3·1.5·2·2.5일, 합 11일)이 네 번 인계하는 흐름의 교육용 모델이다. 반려된 일은 대기와 처리를 한 번 더 거친다고 보았다. 산출물 계약은 대기를 40% 줄이고 반려율을 70% 낮추며, API 자동 인계는 인계 대기를 0.3일로 만든다고 가정했다(예시). 해볼 것: 팀 내부 효율화를 70%까지 올려도 리드타임이 얼마나 남는지 보고, 그다음 체크박스 두 개를 켜 보자.</div>
+    </div>
+  </section>
+
+  <!-- ============================================================ 3 -->
+  <section id="interface">
+    <h2>인터페이스는 누구의 목표인가: 산출물 계약과 플랫폼 API</h2>
+    <p>소프트웨어 공학에는 "조직이 설계하는 시스템은 그 조직의 의사소통 구조를 닮는다"는 <strong>콘웨이의 법칙</strong><span class="en">(Conway's law, 1968)</span>이 있다. 팀 사이에 정의된 인터페이스가 없으면 업무 시스템도 팀마다 따로 놀고, 그 사이를 사람이 메일과 엑셀로 잇는다. 거꾸로 말하면, 팀 사이의 인터페이스를 명시적으로 설계하면 그 위에서 자동화와 AI가 흐름 전체를 이을 수 있다.</p>
+
+    <figure class="diagram">
+      <svg viewBox="0 0 800 270" role="img" aria-label="팀 내부 최적화와 인터페이스 설계">
+        <text x="200" y="22" text-anchor="middle" class="t-bad">부품만 설계한 경우</text>
+        <g>
+          <rect x="30" y="50" width="70" height="44" rx="8" class="f-acc-soft"/><text x="65" y="77" text-anchor="middle" class="t-sm">팀 A ★</text>
+          <rect x="130" y="50" width="70" height="44" rx="8" class="f-acc-soft"/><text x="165" y="77" text-anchor="middle" class="t-sm">팀 B ★</text>
+          <rect x="230" y="50" width="70" height="44" rx="8" class="f-acc-soft"/><text x="265" y="77" text-anchor="middle" class="t-sm">팀 C ★</text>
+          <rect x="330" y="50" width="70" height="44" rx="8" class="f-acc-soft"/><text x="365" y="77" text-anchor="middle" class="t-sm">팀 D ★</text>
+        </g>
+        <g class="s-bad" stroke-dasharray="4 4"><path d="M100 72 H130"/><path d="M200 72 H230"/><path d="M300 72 H330"/></g>
+        <text x="115" y="118" text-anchor="middle" class="t-sm">메일</text>
+        <text x="215" y="118" text-anchor="middle" class="t-sm">엑셀</text>
+        <text x="315" y="118" text-anchor="middle" class="t-sm">재입력</text>
+        <text x="215" y="150" text-anchor="middle" class="t-dim">★ 팀 목표 달성 · 흐름은 그대로</text>
+
+        <line x1="420" y1="20" x2="420" y2="250" class="s-line" stroke-dasharray="4 4"/>
+
+        <text x="610" y="22" text-anchor="middle" class="t-ok">인터페이스부터 설계한 경우</text>
+        <g>
+          <rect x="440" y="50" width="70" height="44" rx="8" class="f-surface"/><text x="475" y="77" text-anchor="middle" class="t-sm">팀 A</text>
+          <rect x="530" y="50" width="70" height="44" rx="8" class="f-surface"/><text x="565" y="77" text-anchor="middle" class="t-sm">팀 B</text>
+          <rect x="620" y="50" width="70" height="44" rx="8" class="f-surface"/><text x="655" y="77" text-anchor="middle" class="t-sm">팀 C</text>
+          <rect x="710" y="50" width="70" height="44" rx="8" class="f-surface"/><text x="745" y="77" text-anchor="middle" class="t-sm">팀 D</text>
+        </g>
+        <g class="s-acc"><path d="M510 72 H530"/><path d="M600 72 H620"/><path d="M690 72 H710"/></g>
+        <rect x="440" y="120" width="340" height="40" rx="8" class="f-acc-soft"/>
+        <text x="610" y="145" text-anchor="middle" class="t-acc">산출물 계약 · 공통 데이터 · 플랫폼 API</text>
+        <g class="s-acc2" stroke-dasharray="3 3"><path d="M475 94 V120"/><path d="M565 94 V120"/><path d="M655 94 V120"/><path d="M745 94 V120"/></g>
+        <text x="610" y="190" text-anchor="middle" class="t-dim">각 팀은 계약을 지키는 한 안을 자유롭게 바꾼다</text>
+        <text x="610" y="210" text-anchor="middle" class="t-dim">AI·자동화는 계약 위에서 흐름 전체를 잇는다</text>
+        <text x="215" y="210" text-anchor="middle" class="t-dim">AI는 팀 안에만 붙는다</text>
+      </svg>
+      <figcaption><b>그림 14-1.</b> 부품 최적화와 인터페이스 설계. 왼쪽은 팀마다 자기 안을 최적화했지만 팀 사이가 메일·엑셀·재입력으로 이어진 상태다. 오른쪽은 팀 사이에 산출물 계약과 공통 데이터, API가 있어 팀 안은 자유롭게 바뀌어도 흐름이 유지된다. <a href="questions.html">19장</a>의 "좁은 허리"가 팀 사이에 적용된 모습이다.</figcaption>
+    </figure>
+
+    <h3>산출물 계약: 팀의 API</h3>
+    <p>팀과 팀 사이를 오가는 산출물을 정의한 것을 이 책은 <strong>산출물 계약</strong>이라고 부른다. <a href="foundation.html">5장</a>의 데이터 계약을 팀 간 인계에 적용한 것이고, 조직 설계 분야에서 "팀 API"라고 부르는 생각과도 통한다(Skelton·Pais, <i>Team Topologies</i>, 2019). 거창할 필요는 없다. 다음 여섯 가지만 합의하면 된다.</p>
+    <div class="table-wrap"><table>
+      <thead><tr><th>항목</th><th>예시: 품질 → 생산기술 원인 확인 요청</th></tr></thead>
+      <tbody>
+        <tr><td><b>무엇을</b></td><td>클레임 이슈 카드(불량 현상, 해당 LOT, 1차 분석 결과)</td></tr>
+        <tr><td><b>어떤 형식으로</b></td><td>이슈 카드 시스템의 레코드. 표준 불량 코드·설비 ID 필수(<a href="semantics.html">4장</a>)</td></tr>
+        <tr><td><b>완성 조건</b></td><td>재현 조건과 사진, 측정값 기준 버전 포함. 없으면 접수하지 않는다</td></tr>
+        <tr><td><b>언제까지</b></td><td>접수 후 1영업일 안에 담당 지정, 3영업일 안에 1차 회신</td></tr>
+        <tr><td><b>받는 방법</b></td><td>메일이 아니라 시스템 알림과 API. 담당자 부재 시 대체 담당 자동 지정</td></tr>
+        <tr><td><b>바꾸는 방법</b></td><td>계약 변경은 양쪽 팀장 합의 후 버전을 올린다. 실이 계약 목록을 관리한다</td></tr>
+      </tbody>
+    </table></div>
+
+    <h3>계층별 책임: 인터페이스는 위로 갈수록 커진다</h3>
+    <p>팀은 자기 팀 안을 설계할 수 있지만, 팀 사이의 계약은 양쪽 팀 위에 있는 사람이 정해야 한다. 이 원칙을 <a href="goals.html">12장</a>의 "각 계층은 그 계층만 할 수 있는 일을 목표로"와 겹쳐 보면 책임이 깔끔하게 나뉜다.</p>
+    <div class="table-wrap"><table>
+      <thead><tr><th>계층</th><th>설계 책임</th><th>AX 목표 예시</th></tr></thead>
+      <tbody>
+        <tr><td><b>파트·팀</b></td><td>팀 안의 업무, 계약을 지키는 산출물</td><td>이슈 카드 완성 조건 충족률 95%, 팀 내 반복 작업 자동화</td></tr>
+        <tr><td><b>실</b></td><td>산하 팀 사이의 산출물 계약, 흐름 리드타임</td><td>클레임 흐름 산출물 계약 5종 확정, 인계 대기 50% 단축</td></tr>
+        <tr><td><b>사업부</b></td><td>실 사이의 흐름, 사업부 시스템의 API·데이터 접근 정책</td><td>품질·생산 시스템의 조회 API 공개, 협력사 회신 시스템 연동</td></tr>
+        <tr><td><b>전사·플랫폼 조직</b></td><td>공통 플랫폼의 API 표준, 인증·권한, 커넥터</td><td>핵심 사내 플랫폼의 API 제공률, AI 에이전트용 표준 커넥터</td></tr>
+      </tbody>
+    </table></div>
+
+    <h3>플랫폼이 API를 열어 주지 않는다면</h3>
+    <p>현실에서는 사내 플랫폼이 API를 제공하지 않는 경우가 많다. 화면으로만 조회할 수 있고, 데이터를 꺼내려면 엑셀 다운로드뿐이다. 이런 상태에서 "AX를 하라"고 하면 팀은 사람이 화면을 보고 옮겨 적는 일을 자동화하는 수밖에 없다. 몇 가지 선택지와 주의점을 정리한다.</p>
+    <div class="table-wrap"><table>
+      <thead><tr><th>방법</th><th>장점</th><th>주의</th><th>성격</th></tr></thead>
+      <tbody>
+        <tr><td><b>화면 자동화(RPA)</b></td><td>당장 가능</td><td>화면이 바뀌면 깨진다. 권한·감사 추적이 약하다</td><td>임시 다리. 폐기 계획과 함께</td></tr>
+        <tr><td><b>정기 내보내기·읽기 전용 복제</b></td><td>분석·검색에는 충분</td><td>최신성 지연, 등급·권한 관리 필요(<a href="governance.html">10장</a>)</td><td>과도기 표준</td></tr>
+        <tr><td><b>플랫폼 조직에 API 요청</b></td><td>정식·안정적</td><td>대기열이 길다. 요청이 쌓여야 우선순위가 오른다</td><td>목표 상태</td></tr>
+        <tr><td><b>AI 에이전트용 표준 커넥터</b></td><td>여러 AI 도구가 같은 방식으로 연결(<a href="agents.html">8장</a>의 MCP 같은 표준)</td><td>API가 먼저 있어야 한다. 권한 최소화 필수</td><td>API 위의 한 층</td></tr>
+      </tbody>
+    </table></div>
+    <div class="callout tip">
+      <strong>API가 없다는 사실 자체를 성과로 기록하자</strong>
+      <p>팀이 플랫폼 API가 없어 화면 자동화로 우회했다면, 그 우회의 비용(만든 시간, 깨질 때마다 고치는 시간, 사람이 옮겨 적는 시간)을 기록해 실과 사업부에 올리자. 여러 팀의 우회 비용이 모이면 그것이 플랫폼 API 투자의 근거가 된다. API 제공은 팀이 아니라 플랫폼을 가진 조직의 AX 목표여야 한다. 팀에게 API 없는 AX를 요구하는 것은, 인터페이스를 주지 않고 부품끼리 알아서 붙으라고 하는 것과 같다.</p>
+    </div>
+  </section>
+
+  <!-- ============================================================ 4 -->
+  <section id="value">
+    <h2>효율은 언제 돈이 되나: 가치 실현은 누구의 몫인가</h2>
+    <p>회사 차원에서 사업 가치와 돈을 따지는 것은 당연하다. 문제는 현장에서 만든 효율, 예를 들어 "보고서 작성 시간 주 3시간 단축"이 그 자체로는 돈이 아니라는 데 있다. 절감된 시간은 <strong>해방된 용량</strong><span class="en">(freed capacity)</span>일 뿐이다. 그 용량이 돈이 되려면 누군가 그것으로 무엇을 할지 <b>결정</b>해야 한다. 결정이 없으면 해방된 시간은 회의와 다른 잡무 사이로 조용히 흩어진다.</p>
+
+    <figure class="diagram">
+      <svg viewBox="0 0 800 280" role="img" aria-label="해방된 용량이 금액이 되는 경로">
+        <rect x="30" y="110" width="150" height="60" rx="10" class="f-acc-soft"/>
+        <text x="105" y="136" text-anchor="middle" class="t-acc">해방된 용량</text>
+        <text x="105" y="156" text-anchor="middle" class="t-sm">팀·개인이 만든다</text>
+        <rect x="240" y="110" width="150" height="60" rx="10" class="f-warn-soft"/>
+        <text x="315" y="136" text-anchor="middle" class="t">결정</text>
+        <text x="315" y="156" text-anchor="middle" class="t-sm">예산·인력·계획 권한자</text>
+        <path d="M180 140 H238" class="s-acc"/><path d="M230 134 L240 140 L230 146" class="s-acc"/>
+        <g class="s-acc"><path d="M390 140 C430 140 430 40 470 40"/><path d="M390 140 C430 140 430 100 470 100"/><path d="M390 140 C430 140 430 170 470 170"/><path d="M390 140 C430 140 430 230 470 230"/></g>
+        <rect x="470" y="22" width="300" height="36" rx="8" class="f-ok-soft"/><text x="485" y="45" class="t">물량 증가를 채용 없이 흡수</text>
+        <rect x="470" y="82" width="300" height="36" rx="8" class="f-ok-soft"/><text x="485" y="105" class="t">초과근무·외주 축소</text>
+        <rect x="470" y="152" width="300" height="36" rx="8" class="f-acc2-soft"/><text x="485" y="175" class="t">새 일에 재배치(품질·개발·고객)</text>
+        <rect x="470" y="212" width="300" height="36" rx="8" class="f-bad-soft"/><text x="485" y="235" class="t">결정 없음 → 흩어짐</text>
+        <text x="315" y="210" text-anchor="middle" class="t-sm">이 상자가 비어 있으면</text>
+        <text x="315" y="226" text-anchor="middle" class="t-sm">돈은 생기지 않는다</text>
+      </svg>
+      <figcaption><b>그림 14-2.</b> 해방된 용량이 금액이 되는 경로. 위 두 경로는 비교적 직접 금액이 되고, 재배치는 새 일의 성과를 따로 측정해야 하며, 결정이 없으면 대부분 사라진다. 가운데 "결정"은 팀이나 취합 담당이 아니라 예산·인력·계획을 바꿀 수 있는 사람만 할 수 있다.</figcaption>
+    </figure>
+
+    <p>그래서 "아래의 효율을 돈으로 바꾸는 것은 누구의 몫인가"에 대한 이 책의 답은 이렇다. <strong>그 돈을 실제로 움직일 수 있는 결정권자의 몫이다.</strong> 보통은 인력 계획과 예산을 가진 사업부, 경우에 따라 예산을 가진 실이다. 팀이나 실의 취합 담당자는 절감 시간을 더할 수는 있지만 돈으로 바꿀 수는 없다. 더하기만 한 숫자를 돈으로 표기하면 장부상 가치만 커진다(<a href="experiments.html">15장</a>의 증거 사다리).</p>
+    <div class="table-wrap"><table>
+      <thead><tr><th>누가</th><th>무엇을 하나</th><th>하지 말아야 할 것</th></tr></thead>
+      <tbody>
+        <tr><td><b>실무자·팀</b></td><td>무엇이 없어졌는지(시간·단계·오류)와 해방된 시간을 어디에 썼는지 기록</td><td>"내 개선은 연 몇 억 원" 같은 개인 단위 금액 환산</td></tr>
+        <tr><td><b>실</b></td><td>여러 팀의 해방 용량을 흐름 단위로 모으고, 재배치 제안을 만든다</td><td>팀 숫자를 그대로 더해 금액으로 올리기</td></tr>
+        <tr><td><b>사업부</b></td><td>분기마다 "가치 실현 결정": 물량 흡수, 외주 축소, 재배치를 실제로 정하고 금액을 기록</td><td>결정 없이 목표 금액만 아래로 나눠 주기</td></tr>
+        <tr><td><b>재무·경영기획</b></td><td>실현 경로별 환산 기준을 하나로 정해 제공</td><td>팀마다 다른 환산 방식 방치</td></tr>
+      </tbody>
+    </table></div>
+
+    <div class="sim" id="sim-value">
+      <div class="sim-head"><span class="sim-tag">INTERACTIVE</span><h3>가치 실현 계산기: 장부상 가치와 실현된 가치</h3></div>
+      <div class="sim-body side">
+        <div class="sim-view"><div class="sim-html">
+          <div id="va-bars"></div>
+          <div class="sy-out" id="va-out"></div>
+        </div></div>
+        <div class="sim-controls">
+          <label class="ctrl"><span>사업부의 연간 해방 용량 <output id="va-h-out"></output></span><input type="range" id="va-h" min="2000" max="40000" step="1000" value="12000"></label>
+          <label class="ctrl"><span>시간당 인건비(예시) <output id="va-c-out"></output></span><input type="range" id="va-c" min="3" max="10" step="0.5" value="5"></label>
+          <label class="ctrl"><span>물량 증가를 채용 없이 흡수 <output id="va-a-out"></output></span><input type="range" id="va-a" min="0" max="100" step="5" value="10"></label>
+          <label class="ctrl"><span>초과근무·외주 축소 <output id="va-o-out"></output></span><input type="range" id="va-o" min="0" max="100" step="5" value="10"></label>
+          <label class="ctrl"><span>새 일에 재배치 <output id="va-r-out"></output></span><input type="range" id="va-r" min="0" max="100" step="5" value="20"></label>
+          <label class="ctrl"><span>결정 없음 <output id="va-n-out"></output></span><input type="range" id="va-n" min="0" max="100" step="5" value="60"></label>
+        </div>
+      </div>
+      <div class="sim-readout">
+        <div class="stat"><span class="k">장부상 가치</span><span class="v" id="va-o1">—</span></div>
+        <div class="stat"><span class="k">실현 추정</span><span class="v" id="va-o2">—</span></div>
+        <div class="stat"><span class="k">실현률</span><span class="v" id="va-o3">—</span></div>
+      </div>
+      <div class="sim-note">네 경로의 비중은 합이 100%가 되도록 자동으로 맞춘다. 실현 계수는 교육용 예시다(물량 흡수 0.9, 초과근무·외주 축소 0.8, 재배치 0.5 — 새 일의 성과가 측정될 때, 결정 없음 0.05). 해볼 것: "결정 없음"을 60%에서 10%로 낮춰 보자. 현장이 더 효율화하지 않아도 실현 가치가 몇 배가 된다. 가치를 키우는 가장 큰 손잡이는 아래가 아니라 위에 있다.</div>
+    </div>
+
+    <div class="callout">
+      <strong>회사의 목표를 개인에게 떠넘기지 않는 법</strong>
+      <p>중간에서 환산 방법을 모르면 "각자 금액으로 적어 오라"는 요청이 개인에게 내려간다. 개인은 자기 일이 얼마의 돈이 되는지 말하기 어렵고, 그래서 숫자를 지어내거나 의욕을 잃는다. 대안은 간단하다. 개인과 팀은 <b>운영의 언어</b>(없앤 시간·단계·오류, 해방 용량의 사용처)로 기록하고, 금액은 사업부가 분기마다 내리는 가치 실현 결정에서만 기록한다. 이렇게 하면 금액은 줄어 보일 수 있지만, 그 숫자는 재무가 믿는 숫자가 된다.</p>
+    </div>
+  </section>
+
+  <!-- ============================================================ 5 -->
+  <section id="invest">
+    <h2>변화에 대한 투자: 무엇에, 얼마나</h2>
+    <p>AX를 하라는 요청과 함께 흔히 들리는 세 가지 가정이 있다. "AI 시대가 되었으니 업무는 자연스럽게 효율화된다." "기존 인력을 교육하면 AI 전문가가 된다." "누구든 역할을 부여하면 된다." 셋 다 절반만 맞다. 그리고 빠진 절반이 대개 <strong>투자</strong>다.</p>
+    <div class="table-wrap"><table>
+      <thead><tr><th>가정</th><th>맞는 부분</th><th>빠진 부분</th></tr></thead>
+      <tbody>
+        <tr><td><b>"AI 시대니까 저절로 효율화된다"</b></td><td>도구는 계속 좋아지고 싸진다</td><td>도구가 닿을 데이터·API·권한, 업무 재설계 시간이 없으면 효율은 개인의 손끝에서 멈춘다(<a href="why.html">1장</a>의 증폭기)</td></tr>
+        <tr><td><b>"교육하면 전문가가 된다"</b></td><td>현업 엔지니어가 AI 빌더가 되는 것은 가능하고 효과적이다</td><td>실습할 업무 시간, 실제 과제, 옆에서 함께 만드는 사람(FDE), 실패할 여유. 강의만으로는 되지 않는다(<a href="questions.html">19장</a>)</td></tr>
+        <tr><td><b>"역할을 부여하면 된다"</b></td><td>책임자가 정해져야 일이 움직인다</td><td>역할은 권한·시간·예산·지원·평가가 함께 올 때만 역할이다. 그렇지 않으면 명함에 한 줄이 늘 뿐이다</td></tr>
+      </tbody>
+    </table></div>
+
+    <h3>GPU와 클라우드를 늘리면 해결되는 문제, 안 되는 문제</h3>
+    <p>컴퓨트 자원이 실제 병목인 경우는 분명히 있다. 사내 보안 정책상 외부 모델을 쓸 수 없어 사내에서 모델을 돌려야 하는데 GPU가 부족하거나, 사내 AI 서비스의 응답이 느려 아무도 쓰지 않거나, 문서 수십만 건의 색인을 다시 만들 자원이 없는 경우다. 이때는 자원 투자가 가장 빠른 해법이다. 그러나 다른 병목이 있는 곳에 자원만 늘리면 비싼 장비가 놀게 된다.</p>
+    <div class="compare">
+      <div class="after"><h4>자원 투자가 잘 듣는 병목</h4><ul>
+        <li>사내 호스팅이 필수인데 GPU가 모자라 대기열이 길다</li>
+        <li>응답 지연 때문에 사용자가 떠난다</li>
+        <li>사용량 상한·토큰 예산 때문에 쓰다 멈춘다</li>
+        <li>대량 문서 색인·평가를 돌릴 자원이 없다</li>
+      </ul></div>
+      <div class="before"><h4>자원만으로는 안 되는 병목</h4><ul>
+        <li>데이터가 메일·엑셀에 있고 기준이 섞여 있다(<a href="foundation.html">5장</a>·<a href="experiments.html">15장</a>)</li>
+        <li>플랫폼 API가 없어 AI가 업무 시스템에 닿지 않는다</li>
+        <li>만들 줄 아는 사람이 없거나, 있어도 시간이 없다</li>
+        <li>업무 절차가 그대로라 도구가 일을 더할 뿐이다(<a href="people.html">11장</a>)</li>
+      </ul></div>
+    </div>
+
+    <div class="sim" id="sim-invest">
+      <div class="sim-head"><span class="sim-tag">INTERACTIVE</span><h3>투자 균형 시뮬레이터: 가장 약한 고리가 성과를 정한다</h3></div>
+      <div class="sim-body side">
+        <div class="sim-view"><div class="sim-html">
+          <div id="iv-bars"></div>
+          <div class="sy-out" id="iv-out"></div>
+        </div></div>
+        <div class="sim-controls">
+          <div class="ctrl"><span>예시 배분</span><div class="presets">
+            <button class="btn" data-p="gpu">GPU·클라우드 위주</button>
+            <button class="btn" data-p="edu">교육 위주</button>
+            <button class="btn" data-p="role">역할만 부여</button>
+            <button class="btn" data-p="bal">균형</button>
+          </div></div>
+          <label class="ctrl"><span>컴퓨트(GPU·클라우드·모델 사용료) <output id="iv-c-out"></output></span><input type="range" id="iv-c" min="0" max="100" step="5" value="25"></label>
+          <label class="ctrl"><span>플랫폼·데이터·API <output id="iv-p-out"></output></span><input type="range" id="iv-p" min="0" max="100" step="5" value="25"></label>
+          <label class="ctrl"><span>기존 인력의 시간(실습·업무 재설계) <output id="iv-t-out"></output></span><input type="range" id="iv-t" min="0" max="100" step="5" value="25"></label>
+          <label class="ctrl"><span>전문 인력(채용·FDE) <output id="iv-e-out"></output></span><input type="range" id="iv-e" min="0" max="100" step="5" value="15"></label>
+          <label class="ctrl"><span>강의형 교육 <output id="iv-l-out"></output></span><input type="range" id="iv-l" min="0" max="100" step="5" value="10"></label>
+        </div>
+      </div>
+      <div class="sim-readout">
+        <div class="stat"><span class="k">기대 성과 지수</span><span class="v" id="iv-o1">—</span></div>
+        <div class="stat"><span class="k">병목</span><span class="v" id="iv-o2" style="font-size:15px">—</span></div>
+        <div class="stat"><span class="k">놀고 있는 투자</span><span class="v" id="iv-o3" style="font-size:13px;font-weight:500">—</span></div>
+      </div>
+      <div class="sim-note">같은 예산을 다섯 곳에 나누는 교육용 모델이다(비중은 합이 100%가 되도록 자동 조정). 각 요소는 투자할수록 효과가 체감하며, 전체 성과는 요소들의 곱으로 정해져 가장 약한 요소가 상한을 만든다. 강의형 교육은 실습 시간과 함께일 때만 효과가 커지도록 했다. 해볼 것: 네 가지 예시 배분을 차례로 눌러 보자. 한 곳에 몰면 다른 곳이 병목이 되고, 그 한 곳의 투자는 놀게 된다.</div>
+    </div>
+
+    <h3>얼마가 적당한가</h3>
+    <p>모든 회사에 맞는 투자 비율은 없다. 산업, 규모, 데이터 성숙도, 보안 요구가 다르기 때문이다. 업계 평균 같은 숫자를 그대로 가져오는 것보다, 다음 질문으로 우리 조직의 적정선을 잡는 편이 낫다.</p>
+    <ol class="ladder">
+      <li><b>기대 효과에서 거꾸로 계산한다</b>"사업부 업무 시간의 10%를 바꾸겠다"는 목표라면, 그 변화를 만들 사람 시간이 먼저 필요하다. 효과를 기대하는 업무에 투입할 실습·재설계 시간을 먼저 예산에 넣는다. 시간 투자 없는 효율 목표는 결국 야근으로 메워진다.</li>
+      <li><b>병목부터 산다</b>지금 가장 막힌 곳이 데이터인지, API인지, 사람인지, 컴퓨트인지 확인하고 그곳부터 투자한다. 위 시뮬레이터처럼 병목이 아닌 곳의 투자는 논다.</li>
+      <li><b>사람 시간은 명시적 예산이다</b>"업무 외 시간에 공부하라", "본업을 하면서 AX도 하라"는 투자가 아니다. 참여자의 업무 시간 중 일정 비율을 공식적으로 AX에 배정하고, 그만큼 다른 일을 덜어 준다.</li>
+      <li><b>J-커브를 견딜 기간을 정한다</b>기반 투자는 효과가 늦게 나온다(<a href="questions.html">19장</a>). 1년 안에 회수를 요구하면 퀵윈만 남는다. 기반과 퀵윈의 비중, 재검토 시점을 미리 정한다.</li>
+      <li><b>투자도 증거 사다리로 관리한다</b>투자의 효과를 사용 기록 → 전후 비교 → 가치 실현 결정으로 추적하고, 분기마다 다음 투자의 근거로 쓴다(<a href="experiments.html">15장</a>).</li>
+    </ol>
+  </section>
+
+  <!-- ============================================================ 6 -->
+  <section id="roles">
+    <h2>역할은 명함이 아니다</h2>
+    <p>AX 조직을 만들 때 가장 쉬운 일은 이름을 붙이는 것이다. "AX 챔피언", "AI 리더", "데이터 오너". 이름을 받은 사람은 대개 본업을 그대로 하면서 역할을 하나 더 얹는다. 몇 달 뒤 그 역할은 회의 참석과 취합 담당이 되어 있다. 역할이 실제로 작동하려면 다섯 가지가 함께 와야 한다.</p>
+    <div class="table-wrap"><table>
+      <thead><tr><th>요소</th><th>명함뿐인 역할</th><th>작동하는 역할</th></tr></thead>
+      <tbody>
+        <tr><td><b>권한</b></td><td>"추진해 주세요"</td><td>계약·양식·우선순위를 바꿀 수 있는 범위가 문서로 정해져 있다</td></tr>
+        <tr><td><b>시간</b></td><td>본업 + 알파</td><td>업무 시간의 일정 비율이 공식 배정되고, 그만큼 본업이 줄어든다</td></tr>
+        <tr><td><b>예산</b></td><td>필요하면 품의</td><td>도구·컴퓨트·외부 지원에 쓸 작은 재량 예산이 있다</td></tr>
+        <tr><td><b>지원</b></td><td>"모르면 물어보세요"</td><td>FDE·CoE·플랫폼 조직이 함께 만들어 준다(<a href="experiments.html">15장</a>)</td></tr>
+        <tr><td><b>평가</b></td><td>평가 항목에 없음</td><td>역할의 성과가 본인 평가에 들어가고, 상사도 그것을 안다</td></tr>
+      </tbody>
+    </table></div>
+    <div class="callout warn">
+      <strong>"누구든 역할을 주면 된다"가 위험한 이유</strong>
+      <p>역할을 주는 것은 비용이 들지 않아 보인다. 그래서 가장 흔한 AX 투자 방식이 된다. 하지만 시간과 권한 없이 역할만 받은 사람은 두 가지 중 하나를 고른다. 본업을 희생하거나, 역할을 형식적으로 수행하거나. 어느 쪽이든 조직은 비용을 치른다. 역할을 하나 만들 때마다 "이 사람의 어떤 일을 덜어 줄 것인가"를 함께 정하자.</p>
+    </div>
+  </section>
+
+  <!-- ============================================================ 7 -->
+  <section id="check">
+    <h2>전체를 보는 사람이 확인할 것</h2>
+    <p>실장, 사업부장, AX 추진 조직이 분기마다 확인할 질문을 모았다. 팀 목표의 달성 여부보다 이 질문들의 답이 조직의 AX 상태를 더 잘 보여 준다.</p>
+    <ul class="checklist">
+      <li>우리 조직의 핵심 흐름 3개를 처음부터 끝까지 따라가 본 적이 있는가? 처리 시간과 대기 시간의 비율을 아는가?</li>
+      <li>팀 사이 산출물 중 계약으로 정의된 것은 몇 개인가? 계약 목록은 누가 관리하는가?</li>
+      <li>팀들이 API가 없어 우회하는 곳은 어디이며, 그 우회 비용은 얼마인가? 플랫폼 조직의 목표에 API 제공이 들어 있는가?</li>
+      <li>지난 분기 해방된 용량 중 어디로 갔는지 결정된 비율은 얼마인가? 가치 실현 결정을 누가 내렸는가?</li>
+      <li>AX 참여자의 업무 시간 중 공식 배정된 비율은 얼마이고, 그만큼 덜어 준 일은 무엇인가?</li>
+      <li>지금 가장 큰 병목은 데이터·API·사람·컴퓨트 중 무엇이며, 이번 분기 투자는 그 병목에 가는가?</li>
+      <li>새로 만든 역할마다 권한·시간·예산·지원·평가가 갖춰져 있는가?</li>
+    </ul>
+  </section>
+
+  <section class="keypoints" id="summary">
+    <h2>핵심 정리</h2>
+    <ol>
+      <li>여러 팀을 지나는 업무에서 시간의 대부분은 팀 안이 아니라 팀 사이(대기·재작업)에 있다. 흐름 효율이 낮으면 팀 내부 효율화만으로는 전체 리드타임이 크게 줄지 않는다.</li>
+      <li>팀 사이의 산출물 계약(무엇을, 형식, 완성 조건, 기한, 받는 방법, 변경 방법)은 팀의 API다. 계약은 양쪽 팀 위의 계층(실)이, 시스템 API와 데이터 접근은 사업부와 플랫폼 조직이 목표로 가져야 한다.</li>
+      <li>API가 없을 때 화면 자동화는 임시 다리일 뿐이다. 우회 비용을 기록해 올리는 것이 플랫폼 투자의 근거가 된다.</li>
+      <li>절감 시간은 해방된 용량이며, 예산·인력·계획을 바꾸는 결정이 있어야 돈이 된다. 금액 환산은 그 결정을 내릴 수 있는 사업부의 몫이고, 개인과 팀은 운영의 언어로 기록한다.</li>
+      <li>"저절로 효율화", "교육하면 전문가", "역할만 주면 된다"는 투자 없는 AX의 세 가정이다. 컴퓨트·플랫폼·사람 시간·전문 인력 중 가장 약한 고리가 성과를 정하므로 병목부터 투자한다.</li>
+      <li>역할은 권한·시간·예산·지원·평가가 함께 올 때만 작동한다. 역할을 만들 때마다 덜어 줄 일을 함께 정한다.</li>
+    </ol>
+  </section>
+
+  <section class="quiz-sec" id="quiz">
+    <h2>확인 퀴즈</h2>
+    <div class="quiz">
+      <div class="quiz-q"><p>1. 다섯 팀이 각자 처리 시간을 40% 줄였는데 전체 리드타임은 10%만 줄었다. 가장 그럴듯한 설명은?</p><div class="opts">
+        <button class="opt">팀들이 성과를 부풀렸다</button>
+        <button class="opt" data-correct>리드타임의 대부분이 팀 사이의 대기와 재작업에 있어 흐름 효율이 낮았다</button>
+        <button class="opt">AI 모델의 정확도가 낮았다</button>
+        <button class="opt">팀 수가 너무 적었다</button>
+      </div><div class="quiz-exp">흐름 효율이 낮은 업무에서는 처리 시간을 줄여도 전체에서 차지하는 비중이 작아 효과가 제한된다. 인계 대기와 반려를 줄이는 인터페이스 설계가 필요하다.</div></div>
+
+      <div class="quiz-q"><p>2. 품질팀과 생산기술팀 사이의 산출물 계약을 정의하고 관리할 책임은 누구에게 있는가?</p><div class="opts">
+        <button class="opt">품질팀이 혼자 정한다</button>
+        <button class="opt">각 팀원이 그때그때 협의한다</button>
+        <button class="opt" data-correct>두 팀 위에 있는 실이 계약 목록을 관리하고, 양쪽 팀장이 합의해 버전을 올린다</button>
+        <button class="opt">IT 부서가 정한다</button>
+      </div><div class="quiz-exp">팀은 자기 팀 안을 설계할 수 있지만 팀 사이는 양쪽 위 계층이 책임져야 한다. 각 계층은 그 계층만 할 수 있는 일을 목표로 삼는다.</div></div>
+
+      <div class="quiz-q"><p>3. 사내 플랫폼이 API를 제공하지 않아 팀이 화면 자동화(RPA)로 데이터를 옮기고 있다. 바람직한 대응은?</p><div class="opts">
+        <button class="opt">화면 자동화를 영구적인 표준으로 삼는다</button>
+        <button class="opt" data-correct>임시 다리로 쓰되 우회 비용을 기록해 올리고, API 제공을 플랫폼 조직의 목표로 요청한다</button>
+        <button class="opt">AX를 포기한다</button>
+        <button class="opt">개인 계정의 외부 도구로 데이터를 옮긴다</button>
+      </div><div class="quiz-exp">화면 자동화는 화면이 바뀌면 깨지고 권한·감사 추적이 약하다. 여러 팀의 우회 비용이 모이면 플랫폼 API 투자의 근거가 된다.</div></div>
+
+      <div class="quiz-q"><p>4. 사업부 전체에서 연 12,000시간의 업무 시간이 절감되었다. 이것이 실제 금액이 되기 위해 꼭 필요한 것은?</p><div class="opts">
+        <button class="opt">절감 시간에 시간당 인건비를 곱해 보고서에 적는 것</button>
+        <button class="opt">각 개인이 자기 몫의 금액을 계산해 제출하는 것</button>
+        <button class="opt" data-correct>해방된 용량을 물량 흡수·외주 축소·재배치 중 어디에 쓸지 예산·인력 권한자가 결정하는 것</button>
+        <button class="opt">더 많은 AI 도구를 도입하는 것</button>
+      </div><div class="quiz-exp">절감 시간은 해방된 용량일 뿐이다. 결정이 없으면 다른 일 사이로 흩어진다. 가치 실현의 가장 큰 손잡이는 결정권자에게 있다.</div></div>
+
+      <div class="quiz-q"><p>5. 다음 중 GPU·클라우드 자원 투자만으로 해결될 가능성이 가장 높은 문제는?</p><div class="opts">
+        <button class="opt">실험 데이터의 기준이 팀마다 달라 비교할 수 없다</button>
+        <button class="opt">사내 플랫폼에 API가 없다</button>
+        <button class="opt" data-correct>사내 호스팅이 필수인데 GPU가 부족해 AI 서비스 대기열이 길다</button>
+        <button class="opt">AI 도구가 기존 업무 위에 얹혀 일이 늘었다</button>
+      </div><div class="quiz-exp">컴퓨트가 실제 병목일 때는 자원 투자가 가장 빠른 해법이다. 데이터·API·업무 절차가 병목인 곳에 자원만 늘리면 장비가 논다.</div></div>
+
+      <div class="quiz-q"><p>6. "AX 챔피언" 역할이 실제로 작동하기 위해 함께 와야 하는 것으로 가장 적절한 묶음은?</p><div class="opts">
+        <button class="opt">직함과 명함</button>
+        <button class="opt">교육 이수증과 발표 기회</button>
+        <button class="opt" data-correct>권한, 공식 배정된 시간(과 덜어 준 본업), 재량 예산, 함께 만드는 지원, 평가 반영</button>
+        <button class="opt">월간 활동 보고 의무</button>
+      </div><div class="quiz-exp">역할은 권한·시간·예산·지원·평가가 함께 올 때만 작동한다. 그렇지 않으면 본업을 희생하거나 형식적으로 수행하게 된다.</div></div>
+    </div>
+  </section>
+</main>
+<script>
+(function () {
+  "use strict";
+  function font(px, bold) { return (bold ? "700 " : "") + px + "px " + getComputedStyle(document.body).getPropertyValue("--font"); }
+
+  /* ================================================ 1) 흐름 시뮬레이터 */
+  var T = [2, 3, 1.5, 2, 2.5];
+  var cvF = null;
+  var flUpd = function () { if (cvF) cvF.redraw(); };
+  var flU = AX.range("fl-u", function (v) { return v + "%"; }, flUpd);
+  var flW = AX.range("fl-w", function (v) { return v + "일"; }, flUpd);
+  var flR = AX.range("fl-r", function (v) { return v + "%"; }, flUpd);
+  ["fl-c", "fl-a"].forEach(function (id) { document.getElementById(id).addEventListener("change", flUpd); });
+  function flCalc(u, w, r, c, a) {
+    var proc = T.reduce(function (s, x) { return s + x; }, 0) * (1 - u);
+    if (c) { w *= 0.6; r *= 0.3; }
+    if (a) w = 0.3;
+    var wait = 4 * w;
+    var avgStep = proc / 5 + w;                                   // 반려 1회 = 대기 + 앞 단계 처리 재수행
+    var rework = 4 * (r / (1 - r)) * avgStep;
+    return { proc: proc, wait: wait, rework: rework, total: proc + wait + rework };
+  }
+  cvF = AX.canvas("#cv-flow", function (ctx, w, h) {
+    var P = AX.palette();
+    var u = flU() / 100, wt = flW(), r = flR() / 100, c = document.getElementById("fl-c").checked, a = document.getElementById("fl-a").checked;
+    var base = flCalc(0, wt, r, false, false), unit = flCalc(u, wt, r, false, false), cur = flCalc(u, wt, r, c, a);
+    var rows = [["지금(효율화 전)", base], ["팀 내부 효율화만", unit], ["현재 설정", cur]];
+    var maxT = Math.max(base.total, 1);
+    var x0 = Math.min(150, w * 0.32), x1 = w - 60, bh = Math.min(34, h / 6), gap = (h - 60 - 3 * bh) / 3;
+    ctx.font = font(12, true); ctx.textBaseline = "middle";
+    rows.forEach(function (row, i) {
+      var y = 20 + i * (bh + gap), d = row[1], sc = (x1 - x0) / maxT, xx = x0;
+      ctx.fillStyle = P.text; ctx.textAlign = "right"; ctx.fillText(row[0], x0 - 8, y + bh / 2);
+      [[d.proc, P.accent], [d.wait, P.warn], [d.rework, P.bad]].forEach(function (seg) {
+        var ww = seg[0] * sc; ctx.fillStyle = seg[1]; ctx.globalAlpha = 0.85; ctx.fillRect(xx, y, ww, bh); ctx.globalAlpha = 1; xx += ww;
+      });
+      ctx.fillStyle = P.text; ctx.textAlign = "left"; ctx.fillText(d.total.toFixed(1) + "일", xx + 6, y + bh / 2);
+    });
+    var ly = h - 22; ctx.font = font(11.5, false);
+    [[P.accent, "처리"], [P.warn, "대기"], [P.bad, "재작업"]].forEach(function (it, i) {
+      var lx = x0 + i * 80; ctx.fillStyle = it[0]; ctx.fillRect(lx, ly - 5, 12, 10); ctx.fillStyle = P.dim; ctx.textAlign = "left"; ctx.fillText(it[1], lx + 16, ly);
+    });
+    AX.stat("fl-o1", cur.total.toFixed(1) + "<small>일 (전 " + base.total.toFixed(1) + ")</small>");
+    AX.stat("fl-o2", Math.round(cur.proc / cur.total * 100) + "%");
+    AX.stat("fl-o3", "−" + Math.round((1 - unit.total / base.total) * 100) + "%<small> 리드타임</small>");
+  }, { aspect: 0.5, minHeight: 240, maxHeight: 320 });
+
+  /* ================================================ 2) 가치 실현 */
+  var VK = ["a", "o", "r", "n"], VF = { a: 0.9, o: 0.8, r: 0.5, n: 0.05 };
+  var VN = { a: "물량 흡수", o: "초과근무·외주 축소", r: "새 일에 재배치", n: "결정 없음" };
+  var vaH = AX.range("va-h", function (v) { return v.toLocaleString() + "시간"; }, vaEval);
+  var vaC = AX.range("va-c", function (v) { return v + "만 원"; }, vaEval);
+  var vaG = {};
+  VK.forEach(function (k) { vaG[k] = AX.range("va-" + k, function (v) { return v; }, vaEval); });
+  function won(x) { return x >= 10000 ? (x / 10000).toFixed(1) + "억 원" : Math.round(x).toLocaleString() + "만 원"; }
+  function vaEval() {
+    var H = vaH(), c = vaC(), sum = 0, sh = {};
+    VK.forEach(function (k) { sum += vaG[k](); });
+    VK.forEach(function (k) { sh[k] = sum ? vaG[k]() / sum : 0.25; document.getElementById("va-" + k + "-out").textContent = Math.round(sh[k] * 100) + "%"; });
+    var book = H * c, real = 0, html = "";
+    VK.forEach(function (k) {
+      var v = H * sh[k] * c * VF[k]; real += v;
+      html += '<div class="bar-row"><span>' + VN[k] + '</span><span class="track"><i style="width:' + Math.max(1, sh[k] * 100).toFixed(1) + "%" + (k === "n" ? ";background:var(--bad)" : "") + '"></i></span><span class="val">' + Math.round(sh[k] * 100) + "%</span></div>";
+    });
+    document.getElementById("va-bars").innerHTML = html;
+    var rate = real / book;
+    document.getElementById("va-out").innerHTML = "<h4>장부 " + won(book) + " → 실현 " + won(real) + "</h4>" +
+      (sh.n > 0.4 ? "해방된 용량의 " + Math.round(sh.n * 100) + "%가 어디로 갈지 정해지지 않았다. 현장의 효율화보다 사업부의 가치 실현 결정이 먼저다." :
+        "용량의 사용처가 대부분 결정되어 있다. 재배치한 새 일의 성과를 측정하면 실현 추정이 더 정확해진다.") +
+      "<ul><li>결정 주체: 인력 계획·예산을 가진 사업부(또는 예산을 가진 실)</li></ul>";
+    AX.stat("va-o1", won(book));
+    AX.stat("va-o2", won(real));
+    AX.stat("va-o3", '<span style="color:' + (rate < 0.3 ? "var(--bad)" : rate < 0.6 ? "var(--warn)" : "var(--ok)") + '">' + Math.round(rate * 100) + "%</span>");
+  }
+  vaEval();
+
+  /* ================================================ 3) 투자 균형 */
+  var IK = ["c", "p", "t", "e", "l"];
+  var IN = { c: "컴퓨트", p: "플랫폼·데이터·API", t: "인력 시간", e: "전문 인력", l: "강의형 교육" };
+  var IS = { c: 14, p: 18, t: 18, e: 12 };
+  var IW = { c: 0.2, p: 0.3, t: 0.3, e: 0.2 };
+  var PRE = { gpu: { c: 70, p: 10, t: 5, e: 5, l: 10 }, edu: { c: 10, p: 5, t: 10, e: 5, l: 70 }, role: { c: 15, p: 10, t: 0, e: 0, l: 75 }, bal: { c: 20, p: 30, t: 30, e: 15, l: 5 } };
+  var ivG = {};
+  IK.forEach(function (k) { ivG[k] = AX.range("iv-" + k, function (v) { return v; }, ivEval); });
+  [].forEach.call(document.querySelectorAll("#sim-invest .presets .btn"), function (b) {
+    b.addEventListener("click", function () { var pr = PRE[b.dataset.p]; IK.forEach(function (k) { ivG[k].set(pr[k]); }); ivEval(); });
+  });
+  function ivEval() {
+    var sum = 0, x = {};
+    IK.forEach(function (k) { sum += ivG[k](); });
+    IK.forEach(function (k) { x[k] = sum ? ivG[k]() / sum * 100 : 20; document.getElementById("iv-" + k + "-out").textContent = Math.round(x[k]) + "%"; });
+    // 강의형 교육은 실습 시간이 있을 때만 '인력 시간'의 효과를 키운다
+    var tEff = x.t + x.l * Math.min(1, x.t / 20) * 0.6;
+    var f = {
+      c: 1 - Math.exp(-x.c / IS.c), p: 1 - Math.exp(-x.p / IS.p),
+      t: 1 - Math.exp(-tEff / IS.t), e: 1 - Math.exp(-x.e / IS.e)
+    };
+    var v = 100;
+    ["c", "p", "t", "e"].forEach(function (k) { v *= Math.pow(Math.max(f[k], 1e-3), IW[k]); });
+    var html = "", minK = "c";
+    ["c", "p", "t", "e"].forEach(function (k) {
+      if (f[k] < f[minK]) minK = k;
+      html += '<div class="bar-row"><span>' + IN[k] + '</span><span class="track"><i style="width:' + Math.max(1, f[k] * 100).toFixed(1) + "%" + '"></i></span><span class="val">' + Math.round(f[k] * 100) + "</span></div>";
+    });
+    document.getElementById("iv-bars").innerHTML = html;
+    var idle = [];
+    ["c", "p", "t", "e"].forEach(function (k) { if (k !== minK && f[k] > 0.9 && f[minK] < 0.6) idle.push(IN[k]); });
+    if (x.l > 30 && x.t < 15) idle.push("강의형 교육(실습 시간 부족)");
+    var tips = { c: "모델을 돌릴 자원이 부족하다. 사내 호스팅 필요 여부와 대기열을 확인하자.", p: "AI가 닿을 데이터와 API가 없다. 도구는 사람의 손끝에서 멈춘다.", t: "만들고 바꿀 사람의 시간이 없다. 교육과 역할만으로는 채워지지 않는다.", e: "함께 만들어 줄 사람(FDE·전문가)이 없다. 첫 관통 과제가 끝나지 않는다." };
+    document.getElementById("iv-out").innerHTML = "<h4>병목: " + IN[minK] + "</h4>" + AX.esc(tips[minK]);
+    AX.stat("iv-o1", Math.round(v));
+    AX.stat("iv-o2", IN[minK]);
+    AX.stat("iv-o3", idle.length ? AX.esc(idle.join(", ")) : "없음");
+  }
+  ivEval();
+})();
+</script>
+</body>
+</html>
