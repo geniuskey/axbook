@@ -19,7 +19,7 @@
 <meta property="og:image:height" content="630">
 <meta property="og:locale" content="ko_KR">
 <meta name="twitter:card" content="summary_large_image">
-<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"TechArticle","headline":"사례로 보는 AX","name":"사례로 보는 AX · AXBook","url":"https://axbook.euiyun.com/chapters/cases.html","mainEntityOfPage":"https://axbook.euiyun.com/chapters/cases.html","inLanguage":"ko","isAccessibleForFree":true,"learningResourceType":"interactive textbook chapter","position":14,"image":"https://axbook.euiyun.com/og.png","dateModified":"2026-10-07","isPartOf":{"@type":"Book","@id":"https://axbook.euiyun.com/#book","name":"AXBook — 제조 현장을 위한 인터랙티브 AI 전환 교과서","url":"https://axbook.euiyun.com/"},"publisher":{"@type":"Organization","name":"AXBook","url":"https://axbook.euiyun.com/"},"description":"가상의 제조사 다섯 곳(A사~E사)의 고객 클레임, 설비 보전, 설계 변경, 공급망 공지, 퇴직자 지식 사례를 레거시 방식과 AX 방식으로 나란히 비교하고, 같은 사건을 두 방식으로 직접 대응해 본다."},{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"AXBook","item":"https://axbook.euiyun.com/"},{"@type":"ListItem","position":2,"name":"14 사례로 보는 AX","item":"https://axbook.euiyun.com/chapters/cases.html"}]}]}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"TechArticle","headline":"사례로 보는 AX","name":"사례로 보는 AX · AXBook","url":"https://axbook.euiyun.com/chapters/cases.html","mainEntityOfPage":"https://axbook.euiyun.com/chapters/cases.html","inLanguage":"ko","isAccessibleForFree":true,"learningResourceType":"interactive textbook chapter","position":15,"image":"https://axbook.euiyun.com/og.png","dateModified":"2026-10-07","isPartOf":{"@type":"Book","@id":"https://axbook.euiyun.com/#book","name":"AXBook — 제조 현장을 위한 인터랙티브 AI 전환 교과서","url":"https://axbook.euiyun.com/"},"publisher":{"@type":"Organization","name":"AXBook","url":"https://axbook.euiyun.com/"},"description":"가상의 제조사 다섯 곳(A사~E사)의 고객 클레임, 설비 보전, 설계 변경, 공급망 공지, 퇴직자 지식 사례를 레거시 방식과 AX 방식으로 나란히 비교하고, 같은 사건을 두 방식으로 직접 대응해 본다."},{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"AXBook","item":"https://axbook.euiyun.com/"},{"@type":"ListItem","position":2,"name":"15 사례로 보는 AX","item":"https://axbook.euiyun.com/chapters/cases.html"}]}]}</script>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
 <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
 <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
@@ -70,7 +70,7 @@
 <body data-chapter="cases">
 <main class="chapter">
   <header class="chapter-hero">
-    <div class="eyebrow">Chapter 14</div>
+    <div class="eyebrow">Chapter 15</div>
     <h1>사례로 보는 AX</h1>
     <p class="lead">앞의 열두 장에서 데이터·프로세스·공통 언어·사람을 정리하고 그 위에 AI를 얹는 법을 배웠다. 이 장에서는 그 원리가 실제 업무 한 건에서 어떻게 맞물리는지 본다. 다섯 개의 가상 제조사가 각자 겪는 익숙한 장면을 레거시 방식과 AX 방식으로 나란히 놓고, 무엇이 바뀌었는지, 그리고 무엇은 AI가 아니라 사람과 구조가 바꿨는지 구분해 본다.</p>
     <ul class="objectives">
@@ -118,7 +118,7 @@
         <text x="470" y="150" class="t-dim">결과는 항상 "무엇을 어떻게</text>
         <text x="470" y="170" class="t-dim">쟀는가"와 함께 읽는다.</text>
       </svg>
-      <figcaption><b>그림 14-1.</b> 이 장의 사례 분석 틀. AX 방식 칸은 데이터 → 프로세스 → AI 순서로 아래부터 쌓인다. 대부분의 사례에서 효과의 절반 이상은 ①·②에서 나온다는 점을 눈여겨보자.</figcaption>
+      <figcaption><b>그림 15-1.</b> 이 장의 사례 분석 틀. AX 방식 칸은 데이터 → 프로세스 → AI 순서로 아래부터 쌓인다. 대부분의 사례에서 효과의 절반 이상은 ①·②에서 나온다는 점을 눈여겨보자.</figcaption>
     </figure>
     <div class="callout warn">
       <strong>모든 회사와 수치는 가상이다</strong>
@@ -254,7 +254,7 @@
         </g>
         <text x="455" y="250" text-anchor="middle" class="t-mono">고장코드 체계: 현상–원인–조치 3단 코드</text>
       </svg>
-      <figcaption><b>그림 14-2.</b> B사의 AX 구조. 핵심은 가운데의 정비 이력 레코드다. 자유 텍스트와 알람이 설비 ID·표준 고장코드로 묶이면, 검색과 예지 보전이 같은 데이터에서 동시에 나온다. 예지 보전 모델의 "정답 라벨"도 이 레코드에서 나온다.</figcaption>
+      <figcaption><b>그림 15-2.</b> B사의 AX 구조. 핵심은 가운데의 정비 이력 레코드다. 자유 텍스트와 알람이 설비 ID·표준 고장코드로 묶이면, 검색과 예지 보전이 같은 데이터에서 동시에 나온다. 예지 보전 모델의 "정답 라벨"도 이 레코드에서 나온다.</figcaption>
     </figure>
     <ol class="ladder">
       <li><b>데이터 — 설비 마스터와 고장코드</b>ISA-95 계층(사이트–영역–작업센터–작업단위)에 맞춘 설비 ID를 정하고, 현상–원인–조치 3단 고장코드를 보전팀과 함께 50개 남짓(예시)으로 합의했다.</li>
@@ -311,7 +311,7 @@
         <text x="545" y="190" text-anchor="middle" class="t-mono">공급(supplied_by)</text>
         <text x="185" y="198" text-anchor="middle" class="t-mono">검사 대상(inspects)</text>
       </svg>
-      <figcaption><b>그림 14-3.</b> C사의 지식 그래프 일부. ECN 하나에서 출발해 "이 부품이 쓰이는 조립품 → 완제품 모델", "이 부품을 다루는 문서", "공급사와 재고"까지 관계를 따라간다. 관계의 이름(used_in, inspects, supplied_by)을 정하는 일이 곧 온톨로지 설계다(<a href="semantics.html">4장</a>).</figcaption>
+      <figcaption><b>그림 15-3.</b> C사의 지식 그래프 일부. ECN 하나에서 출발해 "이 부품이 쓰이는 조립품 → 완제품 모델", "이 부품을 다루는 문서", "공급사와 재고"까지 관계를 따라간다. 관계의 이름(used_in, inspects, supplied_by)을 정하는 일이 곧 온톨로지 설계다(<a href="semantics.html">4장</a>).</figcaption>
     </figure>
     <ol class="ladder">
       <li><b>데이터 — 품번 정준화</b>설계·구매 품번을 하나의 정준 품번으로 묶는 기준정보(MDM)를 만들고, 매핑 엑셀을 폐기했다.</li>
@@ -449,7 +449,7 @@
           <path d="M202 186 V228"/><path d="M316 186 V228"/><path d="M430 186 V228"/><path d="M544 186 V228"/><path d="M658 186 V228"/>
         </g>
       </svg>
-      <figcaption><b>그림 14-4.</b> 다섯 사례의 공통 구조. 위 두 줄(표준 단위, 정준 ID)이 <a href="legacy.html">2장</a>~<a href="foundation.html">5장</a>의 내용이고, 셋째 줄이 <a href="knowledge.html">6장</a>~<a href="shopfloor.html">9장</a>, 마지막 줄이 <a href="agents.html">8장</a>·<a href="governance.html">10장</a>의 사람 승인 지점이다.</figcaption>
+      <figcaption><b>그림 15-4.</b> 다섯 사례의 공통 구조. 위 두 줄(표준 단위, 정준 ID)이 <a href="legacy.html">2장</a>~<a href="foundation.html">5장</a>의 내용이고, 셋째 줄이 <a href="knowledge.html">6장</a>~<a href="shopfloor.html">9장</a>, 마지막 줄이 <a href="agents.html">8장</a>·<a href="governance.html">10장</a>의 사람 승인 지점이다.</figcaption>
     </figure>
     <div class="table-wrap"><table>
       <thead><tr><th>사례</th><th>첫 3개월에 한 일</th><th>AI가 등장한 시점</th><th>현업 주인</th></tr></thead>
@@ -490,7 +490,7 @@
     </div>
     <h3>공개적으로 알려진 업계 흐름</h3>
     <p>세계경제포럼(WEF)은 첨단 제조 기술을 대규모로 적용한 공장을 선정해 <span class="term">글로벌 등대 네트워크</span><span class="en">(Global Lighthouse Network)</span>로 소개하고 있으며, 여러 나라·업종의 제조사가 이름을 올렸다. 공개된 소개 자료에서 반복되는 주제는 단일 기술보다 여러 유스케이스를 하나의 데이터 기반 위에서 확산하는 운영 방식, 그리고 현장 인력의 역량 개발이다. 또 산업용 소프트웨어 업계 전반에서는 MES·PLM·ERP와 생성형 AI를 연결하는 "산업용 AI 플랫폼"과 코파일럿 기능을 내놓는 흐름이 뚜렷하다.</p>
-    <p>이런 흐름은 참고가 되지만, 이 장의 사례가 보여 주듯 플랫폼이 우리 회사의 고장코드나 이슈 카드를 대신 정해 주지는 않는다. 어떤 플랫폼을 고르든 <a href="roadmap.html">13장</a>의 가시화·표준화 단계는 우리가 해야 한다.</p>
+    <p>이런 흐름은 참고가 되지만, 이 장의 사례가 보여 주듯 플랫폼이 우리 회사의 고장코드나 이슈 카드를 대신 정해 주지는 않는다. 어떤 플랫폼을 고르든 <a href="roadmap.html">14장</a>의 가시화·표준화 단계는 우리가 해야 한다.</p>
     <h3>우리 회사 사례로 옮길 때 체크리스트</h3>
     <ul class="checklist">
       <li>우리 업무의 "1건"은 무엇인가? (클레임 1건, 정비 1건, 공지 1건 …) 그 1건의 필드를 적을 수 있는가?</li>
@@ -500,7 +500,7 @@
       <li>시작 전 기준값을 쟀는가? 측정 정의를 문서로 남겼는가?</li>
       <li>현업 주인(팀장·파트장)이 이름으로 정해져 있는가?</li>
     </ul>
-    <p>이 체크리스트를 우리 팀 계획으로 바꾸는 작업은 다음 장 <a href="playbook.html">15장 플레이북</a>에서 한다.</p>
+    <p>이 체크리스트를 우리 팀 계획으로 바꾸는 작업은 다음 장 <a href="playbook.html">16장 플레이북</a>에서 한다.</p>
   </section>
 
   <section class="keypoints" id="summary">

@@ -1,0 +1,620 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="icon" href="../favicon.ico" sizes="any">
+<link rel="icon" href="../favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="../apple-touch-icon.png">
+<title>AX에 대한 정직한 질문들 · AXBook</title>
+<meta name="description" content="AX도 6시그마처럼 지나가는 유행일까? 몇 년이면 끝날까? Top-down과 bottom-up은 어떻게 나눌까? 실무자의 자기 업무 개선은 왜 인정받지 못할까? 표준화는 창의성을 죽일까? 20년차 선배는 병목일까? 보안은 어디까지? AX를 실무로 하며 의심과 걱정이 많은 사람을 위한 판단 기준을 정리한다.">
+<link rel="canonical" href="https://axbook.euiyun.com/chapters/questions.html">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="AXBook">
+<meta property="og:title" content="AX에 대한 정직한 질문들 · AXBook">
+<meta property="og:description" content="AX도 6시그마처럼 지나가는 유행일까? 몇 년이면 끝날까? Top-down과 bottom-up은 어떻게 나눌까? 실무자의 자기 업무 개선은 왜 인정받지 못할까? 표준화는 창의성을 죽일까? 20년차 선배는 병목일까? 보안은 어디까지? AX를 실무로 하며 의심과 걱정이 많은 사람을 위한 판단 기준을 정리한다.">
+<meta property="og:url" content="https://axbook.euiyun.com/chapters/questions.html">
+<meta property="og:image" content="https://axbook.euiyun.com/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:locale" content="ko_KR">
+<meta name="twitter:card" content="summary_large_image">
+<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"TechArticle","headline":"AX에 대한 정직한 질문들","name":"AX에 대한 정직한 질문들 · AXBook","url":"https://axbook.euiyun.com/chapters/questions.html","mainEntityOfPage":"https://axbook.euiyun.com/chapters/questions.html","inLanguage":"ko","isAccessibleForFree":true,"learningResourceType":"interactive textbook chapter","position":17,"image":"https://axbook.euiyun.com/og.png","dateModified":"2026-10-07","isPartOf":{"@type":"Book","@id":"https://axbook.euiyun.com/#book","name":"AXBook — 제조 현장을 위한 인터랙티브 AI 전환 교과서","url":"https://axbook.euiyun.com/"},"publisher":{"@type":"Organization","name":"AXBook","url":"https://axbook.euiyun.com/"},"description":"AX도 6시그마처럼 지나가는 유행일까? 몇 년이면 끝날까? Top-down과 bottom-up은 어떻게 나눌까? 실무자의 자기 업무 개선은 왜 인정받지 못할까? 표준화는 창의성을 죽일까? 20년차 선배는 병목일까? 보안은 어디까지? AX를 실무로 하며 의심과 걱정이 많은 사람을 위한 판단 기준을 정리한다."},{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"AXBook","item":"https://axbook.euiyun.com/"},{"@type":"ListItem","position":2,"name":"17 AX에 대한 정직한 질문들","item":"https://axbook.euiyun.com/chapters/questions.html"}]}]}</script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+<link rel="stylesheet" href="../css/style.css">
+<script src="../js/common.js"></script>
+<style>
+  svg .s-bad { stroke: var(--bad); fill: none; stroke-width: 2; }
+  svg .s-acc2 { stroke: var(--accent-2); fill: none; stroke-width: 2; }
+  svg .f-bad-soft { fill: color-mix(in srgb, var(--bad) 12%, transparent); stroke: var(--bad); }
+  svg .f-ok-soft { fill: color-mix(in srgb, var(--ok) 12%, transparent); stroke: var(--ok); }
+  svg .f-warn-soft { fill: color-mix(in srgb, var(--warn) 14%, transparent); stroke: var(--warn); }
+  svg .t-bad { fill: var(--bad); font-family: var(--font); font-size: 13px; font-weight: 700; }
+  svg .t-ok { fill: var(--ok); font-family: var(--font); font-size: 13px; font-weight: 700; }
+  svg .t-acc2 { fill: var(--accent-2); font-family: var(--font); font-size: 13px; font-weight: 700; }
+  svg .t-sm { fill: var(--text-dim); font-family: var(--font); font-size: 11px; }
+  .qlist { display: grid; gap: 6px; margin: 0; padding-left: 20px; }
+  .wiz { display: grid; gap: 8px; }
+  .wiz-q { display: grid; gap: 6px; padding: 9px 11px; border: 1px solid var(--border); border-radius: 10px; background: var(--bg-elev); }
+  .wiz-q > span { font-size: 13.5px; font-weight: 600; color: var(--text); }
+  .wiz-q .seg button { font-size: 12px; padding: 4px 9px; }
+  .fad-out { margin-top: 12px; padding: 12px 14px; border-radius: 10px; background: var(--surface); border: 1px solid var(--border); font-size: 14px; }
+  .fad-out h4 { margin: 0 0 6px; font-size: 15.5px; }
+  .fad-out ul { margin: 6px 0 0; padding-left: 18px; }
+  .qhead { display: inline-block; font-family: var(--mono); font-size: 12px; font-weight: 700; color: var(--accent); letter-spacing: .04em; margin-bottom: 4px; }
+</style>
+<!-- Cloudflare Web Analytics -->
+<script type='module' src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "3d6151a0abc94ede89285d462527fa80"}'></script>
+<!-- End Cloudflare Web Analytics -->
+</head>
+<body data-chapter="questions">
+<main class="chapter">
+  <header class="chapter-hero">
+    <div class="eyebrow">Chapter 17</div>
+    <h1>AX에 대한 정직한 질문들</h1>
+    <p class="lead">AX를 실무로 맡은 사람일수록 의심이 많다. 위에서는 급하게 미션이 내려오고, AI를 제대로 다뤄 본 사람은 회사 전체로 보면 아직 많지 않고, 급히 모신 외부 강사는 직접 해 본 경험이 없다. "이거 또 한때 유행 아닌가?", "결국 연말 발표용 숫자 만들기 아닌가?" 이 장은 그런 질문을 피하지 않는다. 정답을 주기보다, 각 질문에 대해 <strong>스스로 판단할 수 있는 기준</strong>을 정리한다. 의심은 AX의 적이 아니라, 좋은 AX의 재료다.</p>
+    <ul class="objectives">
+      <li>AX가 6시그마·그린벨트 같은 과거의 경영 혁신과 무엇이 같고 무엇이 다른지 설명하고, 우리 조직의 AX가 "캠페인형"인지 "체질 전환형"인지 진단할 수 있다.</li>
+      <li>Top-down과 bottom-up의 역할을 나누고, 실무자의 자기 업무 개선을 조직의 성과로 "번역"하는 방법을 제시할 수 있다.</li>
+      <li>표준화·플랫폼화와 창의적 시도가 공존하는 구조(좁은 허리, 샌드박스, 도전자 경로)를 설계할 수 있다.</li>
+      <li>숙련자 지식의 병목, AX 이후 사람의 역할, 추구해야 할 인재상, 강의 중심 교육의 한계에 대해 근거를 갖고 말할 수 있다.</li>
+    </ul>
+  </header>
+
+  <!-- ============================================================ 1 -->
+  <section id="scene">
+    <h2>AX 담당자의 수첩</h2>
+    <p>B사(자동차 부품) 혁신팀의 정 책임은 2년째 AX 실무를 맡고 있다. 생성형 AI가 나온 직후부터 혼자 공부했고, 업무 자동화 에이전트도 몇 개 직접 만들었다. 사내에서는 "AI 잘하는 사람"으로 통한다. 그런데 올해 전사 AX 미션이 내려온 뒤로 정 책임의 수첩에는 답이 없는 질문이 쌓여 간다.</p>
+    <div class="mock">
+      <div class="mock-head">정 책임의 수첩 / 2026년 3분기</div>
+      <div class="mock-body">
+        <ol class="qlist">
+          <li>각 팀이 AX 과제 3개씩 내라는데, 다들 AI가 뭔지도 모르고 <mark class="w">미션 숫자만 맞추는 중</mark>. 이게 AX인가?</li>
+          <li>외부 강사 섭외했는데 <mark class="w">직접 만들어 본 경험이 없다</mark>. 어디서 들은 이야기 정리 수준. 그래도 계속 불러야 하나?</li>
+          <li>6시그마 때도 벨트 따느라 난리였는데 지금은 아무도 신경 안 씀. <mark>AX도 2~3년 하고 끝?</mark></li>
+          <li>내가 내 업무 자동화한 건 <mark class="b">성과로 안 쳐 준다</mark>. "본업이나 잘해." 이게 직장 생활인가?</li>
+          <li>표준 플랫폼 만들면 <mark>새로운 시도는 다 "표준 위반"</mark>이 되는 거 아닌가?</li>
+          <li>보안팀은 다 막고, 현업은 개인 계정으로 몰래 쓴다. <mark class="w">적정선은 어디?</mark></li>
+          <li>20년차 김 수석님 없으면 아무것도 안 돌아간다. 그분이 병목인가, 보물인가?</li>
+          <li>AX가 다 되면 우리는 뭘 하지? 어떤 사람을 뽑아야 하지?</li>
+          <li>솔직히 <mark class="b">언제까지 학원 다닐 건가</mark>. 이건 직접 해 봐야 느는 건데.</li>
+        </ol>
+      </div>
+    </div>
+    <p>이 질문들은 냉소가 아니다. 현장을 아는 사람만 던질 수 있는 질문이다. 그리고 대부분은 앞 장들에서 다룬 원리로 답의 방향을 잡을 수 있다. 하나씩 보자.</p>
+  </section>
+
+  <!-- ============================================================ 2 -->
+  <section id="fad">
+    <h2>AX는 6시그마처럼 지나가는 유행일까</h2>
+    <span class="qhead">Q. 그린벨트, 6시그마, TQM, BPR… AX도 그중 하나 아닌가?</span>
+    <p>정직하게 답하면 <strong>"AX라는 이름은 지나갈 가능성이 높다. 그러나 그것이 실패를 뜻하지는 않는다."</strong> 과거의 경영 혁신이 어떻게 "지나갔는지"를 자세히 보면 패턴이 있다.</p>
+    <p>6시그마는 1980년대 모토로라에서 시작되어 1990년대 GE 등을 통해 널리 알려졌고, 국내 대기업들도 앞다투어 도입했다. 벨트 인증 인원과 과제 수가 경쟁적으로 보고되던 시기가 지나자, 지금은 회의에서 6시그마를 말하는 사람이 드물다. 그런데 사라진 것은 <strong>이름과 캠페인</strong>이지 내용이 아니다. 데이터로 문제를 정의하고, 원인을 측정으로 검증하고, 관리도로 유지하는 습관은 품질 조직의 일상 언어가 되었다. <a href="shopfloor.html">9장</a>의 SPC, <a href="process.html">3장</a>의 8D와 근본 원인 분석은 그 흔적이다.</p>
+
+    <figure class="diagram">
+      <svg viewBox="0 0 800 280" role="img" aria-label="경영 혁신의 일반적 경로">
+        <path d="M60 230 H760" class="s-axis"/><path d="M60 230 V30" class="s-axis"/>
+        <text x="760" y="252" text-anchor="end" class="t-dim">시간 →</text>
+        <text x="70" y="40" class="t-dim">관심·활동량</text>
+        <path d="M60 225 C140 222 170 60 240 55 C310 50 330 190 420 200 C500 208 620 212 760 214" class="s-bad"/>
+        <text x="250" y="48" class="t-bad">캠페인(이름·인증·과제 수)</text>
+        <path d="M60 228 C160 226 220 190 300 165 C380 140 470 128 560 124 C650 120 700 119 760 118" class="s-acc"/>
+        <text x="560" y="112" class="t-acc">일하는 방식에 흡수된 습관</text>
+        <line x1="420" y1="40" x2="420" y2="230" class="s-line" stroke-dasharray="4 4"/>
+        <text x="426" y="62" class="t-sm">이름이 사라지는 지점</text>
+        <text x="426" y="78" class="t-sm">= 피로감의 정점</text>
+        <text x="170" y="150" class="t-sm">활동 지표로 측정</text>
+        <text x="600" y="150" class="t-sm">더 이상 따로 부르지 않음</text>
+      </svg>
+      <figcaption><b>그림 17-1.</b> 경영 혁신이 "지나가는" 일반적 모습(개념도). 캠페인은 올라갔다 내려오지만, 잘된 경우 그 아래에서 습관이 남아 일하는 방식이 된다. 실패한 경우에는 빨간 선만 있고 파란 선이 없다. 질문은 "AX가 유행인가"가 아니라 "우리 조직의 AX가 파란 선을 만들고 있는가"다.</figcaption>
+    </figure>
+
+    <p>그렇다면 AX는 과거의 혁신과 무엇이 다를까. 중요한 차이가 하나 있다. 6시그마는 <strong>방법론</strong>이었다. 사람이 배워서 적용해야 했고, 배우는 사람이 줄면 힘이 빠졌다. AI는 <strong>범용 기술</strong><span class="en">(general-purpose technology)</span>에 가깝다. 전기나 인터넷처럼 기술 자체가 계속 좋아지고 싸지며, 조직이 캠페인을 멈춰도 도구는 업무 소프트웨어, 검색, 문서 도구 안으로 계속 들어온다. 그래서 AX의 위험은 "유행이 끝나 버리는 것"보다 <strong>"캠페인이 끝났을 때 아무 기반도 남지 않은 채 도구만 들어오는 것"</strong>이다. 그러면 정리되지 않은 조직 위에 AI가 올라가고, <a href="why.html">1장</a>에서 본 대로 혼란이 증폭된다.</p>
+
+    <div class="table-wrap"><table>
+      <thead><tr><th>구분</th><th>지나간 것(캠페인)</th><th>남은 것(체질)</th><th>AX에 대입하면</th></tr></thead>
+      <tbody>
+        <tr><td><b>측정</b></td><td>벨트 인원, 과제 수</td><td>데이터로 문제를 정의하는 습관</td><td>"AI 과제 수" 대신 "기준이 선언된 데이터 비율"</td></tr>
+        <tr><td><b>사람</b></td><td>인증 교육, 발표회</td><td>현장에서 통계적 사고를 하는 엔지니어</td><td>"교육 이수자" 대신 "스스로 만들어 쓰는 사람"</td></tr>
+        <tr><td><b>도구</b></td><td>과제 관리 양식</td><td>관리도·SPC 시스템</td><td>"파일럿 데모" 대신 "업무 시스템에 들어간 기능"</td></tr>
+        <tr><td><b>조직</b></td><td>전담 사무국</td><td>품질 조직의 표준 절차</td><td>"AX 추진단" 대신 "각 조직의 표준 업무 절차"</td></tr>
+      </tbody>
+    </table></div>
+
+    <div class="sim" id="sim-fad">
+      <div class="sim-head"><span class="sim-tag">INTERACTIVE</span><h3>우리 AX는 캠페인형인가, 체질 전환형인가</h3></div>
+      <div class="sim-body side">
+        <div class="sim-view"><div class="sim-html">
+          <div id="fad-bars"></div>
+          <div class="fad-out" id="fad-out"></div>
+        </div></div>
+        <div class="sim-controls"><div class="wiz" id="fad-wiz"></div></div>
+      </div>
+      <div class="sim-readout">
+        <div class="stat"><span class="k">캠페인 신호</span><span class="v" id="fad-o1">—</span></div>
+        <div class="stat"><span class="k">체질 전환 신호</span><span class="v" id="fad-o2">—</span></div>
+        <div class="stat"><span class="k">판정</span><span class="v" id="fad-o3" style="font-size:15px">—</span></div>
+      </div>
+      <div class="sim-note">여덟 문장에 대해 우리 조직이 어느 쪽에 가까운지 고른다. 가중치는 교육용 예시다. 해볼 것: 캠페인 신호가 높아도 체질 신호 두세 개가 "그렇다"이면 판정이 바뀐다. 캠페인 자체가 나쁜 것이 아니라, 캠페인만 있는 것이 문제다.</div>
+    </div>
+    <div class="callout tip">
+      <strong>실무자가 할 수 있는 일: 캠페인의 에너지를 체질로 옮겨 담기</strong>
+      <p>전사 미션이 "과제 3개"라면, 그중 하나는 데이터와 기준을 정리하는 과제로 내자(<a href="experiments.html">13장</a>). 발표회가 있다면 성공 사례와 함께 "그만둔 과제와 이유"를 발표하자. 캠페인은 예산과 관심이 몰리는 드문 시기다. 그 시기에 남길 수 있는 것을 남기는 것이 실무자의 몫이다.</p>
+    </div>
+  </section>
+
+  <!-- ============================================================ 3 -->
+  <section id="duration">
+    <h2>얼마나 오래 해야 하나: 2~3년 하고 끝?</h2>
+    <span class="qhead">Q. 적절한 AX의 변화 기간은? 지금 아무도 6시그마를 신경 쓰지 않잖아.</span>
+    <p>범용 기술이 생산성으로 이어지기까지는 생각보다 오래 걸린다는 관찰이 많다. 1980년대 말에는 "컴퓨터 시대는 어디서나 보이는데 생산성 통계에서만 안 보인다"는 말(솔로의 역설)이 회자되었고, 경제사학자 폴 데이비드는 전기가 공장 생산성을 크게 바꾸기까지 공장 배치와 일하는 방식이 바뀌는 데 수십 년이 걸렸다고 지적했다(1990). 브린욜프슨·록·시버슨은 이를 <strong>생산성 J-커브</strong>로 설명한다(<i>American Economic Journal: Macroeconomics</i>, 2021). 새 기술을 쓰려면 데이터 정리, 업무 재설계, 교육 같은 측정되지 않는 무형 투자가 먼저 필요하고, 그 기간에는 생산성이 오히려 정체되거나 떨어져 보이다가 나중에 올라간다는 것이다.</p>
+    <p>이것이 실무자에게 주는 시사점은 두 가지다. 첫째, <strong>2~3년의 캠페인은 J-커브의 바닥에서 끝나기 쉽다.</strong> 기반 작업에 돈과 시간을 쓰고 효과가 막 나오려는 시점에 "성과가 없다"며 접으면 투자만 하고 회수는 못 한다. 둘째, 그렇다고 영원히 "AX 추진"이라는 이름으로 할 필요도 없다. 바람직한 끝은 <strong>캠페인이 끝나도 계속 굴러가는 상태</strong>, 즉 데이터 기준, 업무 절차, 사람의 역량이 각 조직의 일상 업무 안에 들어간 상태다.</p>
+
+    <div class="sim" id="sim-j">
+      <div class="sim-head"><span class="sim-tag">INTERACTIVE</span><h3>J-커브와 중단 시점: 언제 멈추면 손해인가</h3></div>
+      <div class="sim-body side">
+        <div class="sim-view"><canvas id="cv-j"></canvas></div>
+        <div class="sim-controls">
+          <label class="ctrl"><span>기반 투자 비중(데이터·업무 재설계·역량) <output id="j-f-out"></output></span><input type="range" id="j-f" min="0" max="80" step="5" value="40"></label>
+          <label class="ctrl"><span>조직 학습 속도 <output id="j-g-out"></output></span><input type="range" id="j-g" min="2" max="12" step="1" value="5"></label>
+          <label class="ctrl"><span>프로그램 중단 시점 <output id="j-s-out"></output></span><input type="range" id="j-s" min="12" max="60" step="6" value="30"></label>
+        </div>
+      </div>
+      <div class="sim-readout">
+        <div class="stat"><span class="k">누적 손익분기</span><span class="v" id="j-o1">—</span></div>
+        <div class="stat"><span class="k">60개월 누적(중단 반영)</span><span class="v" id="j-o2">—</span></div>
+        <div class="stat"><span class="k">중단 없이 계속했다면</span><span class="v" id="j-o3">—</span></div>
+      </div>
+      <div class="sim-note">월 투자 1단위를 기준으로 한 교육용 모델이다. 기반 투자 없이 퀵윈만 하면 빨리 오르지만 곧 정체하고, 프로그램이 끝나면 오너 없는 도구들이 빠르게 사라진다. 기반 투자는 느리게 오르지만, 중단 뒤에도 일하는 방식으로 남아 천천히 줄어든다. 해볼 것: 기반 비중 0%와 50%에서 중단 시점을 24개월로 두고 비교해 보자.</div>
+    </div>
+    <div class="table-wrap"><table>
+      <thead><tr><th>시기(예시)</th><th>성격</th><th>이 시기에 할 일</th><th>끝났다는 신호</th></tr></thead>
+      <tbody>
+        <tr><td>0~1년</td><td>캠페인</td><td>관심과 예산을 기반 작업과 소수의 관통 과제에 쓴다</td><td>첫 업무가 끝까지 새 방식으로 돈다</td></tr>
+        <tr><td>1~3년</td><td>확산·내재화</td><td>FDE·챔피언으로 조직을 옮겨 다니며 부품을 재사용한다</td><td>현업이 스스로 만든 것이 CoE가 만든 것보다 많다</td></tr>
+        <tr><td>3년~</td><td>일상화</td><td>AX라는 이름 없이 각 조직의 업무 표준·예산에 들어간다</td><td>"AX 과제"라는 말을 아무도 쓰지 않는데 일은 바뀌어 있다</td></tr>
+      </tbody>
+    </table></div>
+  </section>
+
+  <!-- ============================================================ 4 -->
+  <section id="direction">
+    <h2>Top-down과 bottom-up, 둘 다 해야 하나</h2>
+    <span class="qhead">Q. 위에서 미션을 내리는 것과 아래에서 스스로 하는 것, 무엇이 맞나?</span>
+    <p>둘 다 필요하다. 다만 <strong>같은 일을 둘 다 하는 것이 아니라, 각자 다른 일을 한다.</strong> 둘의 역할이 섞일 때 문제가 생긴다. 위에서 유스케이스를 하나하나 정해 내려보내면 현장은 숫자를 맞추고, 아래에서 기반까지 알아서 하라고 하면 팀마다 다른 도구와 다른 데이터가 쌓인다.</p>
+
+    <figure class="diagram">
+      <svg viewBox="0 0 800 300" role="img" aria-label="Top-down과 bottom-up의 역할 분담">
+        <rect x="40" y="20" width="720" height="70" rx="10" class="f-acc-soft"/>
+        <text x="60" y="46" class="t-acc">Top-down이 할 일 — 개인이나 팀은 못 하는 것</text>
+        <text x="60" y="70" class="t">데이터·플랫폼·보안 기반 · 업무 재설계 권한 · 예산과 시간 보장 · 소수의 전략 과제 · 측정 정의</text>
+        <rect x="40" y="115" width="720" height="70" rx="10" class="f-surface"/>
+        <text x="60" y="141" class="t-acc2">Middle(실·팀장)이 할 일 — 연결</text>
+        <text x="60" y="165" class="t">현장 개선을 팀 표준으로 끌어올리기 · 위의 방향을 현장 언어로 번역 · 과제 정리와 중단 결정</text>
+        <rect x="40" y="210" width="720" height="70" rx="10" class="f-acc2-soft"/>
+        <text x="60" y="236" class="t-acc2">Bottom-up이 할 일 — 위에서는 보이지 않는 것</text>
+        <text x="60" y="260" class="t">불편과 낭비의 발견 · 작은 실험과 자기 업무 자동화 · 동료에게 퍼뜨리기(챔피언) · 현장 기준 제공</text>
+        <path d="M770 95 V112" class="s-acc"/><path d="M764 104 L770 114 L776 104" class="s-acc"/>
+        <path d="M30 205 V188" class="s-acc"/><path d="M24 196 L30 186 L36 196" class="s-acc"/>
+      </svg>
+      <figcaption><b>그림 17-2.</b> 역할로 나눈 top-down과 bottom-up. 위는 "아무도 혼자서는 못 하는 일"을, 아래는 "위에서는 보이지 않는 일"을 맡는다. 가운데 실·팀장이 둘을 잇지 않으면 위의 미션은 숫자 맞추기로, 아래의 개선은 개인 취미로 끝난다(<a href="goals.html">12장</a>).</figcaption>
+    </figure>
+
+    <div class="compare">
+      <div class="before"><h4>Top-down만 있을 때</h4><ul>
+        <li>"팀당 과제 3개" → 서류상 과제, 발표용 데모</li>
+        <li>현장의 진짜 불편은 과제 목록에 없다</li>
+        <li>담당 임원이 바뀌면 같이 끝난다</li>
+      </ul></div>
+      <div class="after"><h4>Bottom-up만 있을 때</h4><ul>
+        <li>개인 도구가 늘지만 퍼지지 않는다</li>
+        <li>팀마다 다른 데이터·도구, 섀도 AI(<a href="governance.html">10장</a>)</li>
+        <li>기반(데이터·권한·플랫폼)은 아무도 만들지 않는다</li>
+      </ul></div>
+    </div>
+    <p>판단 기준은 간단하다. <strong>"이 일은 한 팀이 혼자 할 수 있는가?"</strong> 할 수 없으면(전사 데이터 기준, 보안 정책, 공통 플랫폼, 부서 간 업무 재설계) 위의 일이다. 할 수 있으면(우리 팀 보고서 자동화, 회의록 정리, 실험 카드 초안) 아래의 일이고, 위는 그것을 막지 않고 시간과 도구를 보장하는 것이 할 일이다.</p>
+  </section>
+
+  <!-- ============================================================ 5 -->
+  <section id="grassroots">
+    <h2>내 업무를 내가 개선한 것도 AX인가</h2>
+    <span class="qhead">Q. 실무자가 자기 불편과 비효율을 개선한 것은 인정받지 못한다. 타파해야 하나, 수긍해야 하나?</span>
+    <p>먼저 첫 질문에 답하면, <strong>그렇다. 그것이 AX의 가장 기본 단위다.</strong> 자기 업무를 가장 잘 아는 사람이 자기 불편을 AI로 없애는 것, 이것이 쌓이지 않으면 어떤 전사 플랫폼도 쓰이지 않는다. <a href="people.html">11장</a>의 확산 모델에서 본 것처럼, 확산을 만드는 것은 동료의 사용(모방 계수 q)이고, 그 출발점은 늘 누군가의 자기 업무 개선이다.</p>
+    <p>그런데 왜 인정받지 못할까. 조직이 나빠서라기보다 구조적인 이유가 있다.</p>
+    <div class="cards">
+      <div class="card"><span class="k">INVISIBLE</span><h4>보이지 않는다</h4><p>3시간 걸리던 일이 30분이 되면, 남는 것은 "일이 없어 보이는 사람"이다. 개선은 결과가 아니라 부재로 나타난다.</p></div>
+      <div class="card"><span class="k">UNMEASURED</span><h4>잴 기준이 없다</h4><p>개인 업무에는 베이스라인이 없다. "원래 얼마나 걸렸는지"를 아무도 기록하지 않았다.</p></div>
+      <div class="card"><span class="k">MISALIGNED</span><h4>상사의 목표와 연결되지 않는다</h4><p>팀장의 평가 항목에 "팀원의 자기 업무 개선"은 없다. 상사도 인정하고 싶어도 쓸 칸이 없다.</p></div>
+      <div class="card"><span class="k">FRAGILE</span><h4>개인에게 묶여 있다</h4><p>그 사람이 휴가 가면 멈추는 도구는 조직 입장에서 자산이 아니라 위험으로 보이기도 한다.</p></div>
+    </div>
+    <p>그래서 "타파할까, 수긍할까"라는 이분법보다 나은 길이 있다. <strong>번역</strong>이다. 개인의 개선을 조직이 알아들을 수 있는 언어로 바꾸는 것이다.</p>
+    <ol class="ladder">
+      <li><b>시간이 아니라 결과로 기록한다</b>"보고서 작성 2시간 단축"보다 "그 시간으로 지난달 불량 3건의 재발 원인을 추가 분석했다." 절감 시간의 사용처가 성과다.</li>
+      <li><b>남이 쓸 수 있게 만든다</b>프롬프트, 템플릿, 스크립트, 사용 설명 한 장. 두 명 이상이 재사용하는 순간 개인 취미가 팀 자산이 된다.</li>
+      <li><b>상사의 목표에 연결한다</b>팀장의 목표가 "클레임 리드타임 단축"이라면, 내 개선이 그 중 어느 단계를 줄였는지 한 줄로 쓴다(<a href="goals.html">12장</a>).</li>
+      <li><b>승인된 경로 위에서 한다</b>개인 계정의 외부 AI로 만든 개선은 아무리 좋아도 공식화될 수 없다. 회사가 허용한 도구 위에서 만들어야 확산될 수 있다(<a href="governance.html">10장</a>).</li>
+    </ol>
+    <div class="callout">
+      <strong>조직이 해야 할 일: 작은 개선이 올라올 통로</strong>
+      <p>리더와 AX 조직이 할 수 있는 일은 많지 않지만 효과는 크다. 개인 개선 등록부(무엇을, 얼마나, 누가 재사용하는지), 분기마다 현업이 현업에게 말하는 짧은 공유회, 그리고 <strong>"두 명 이상 재사용하면 공식 성과로 인정"</strong> 같은 단순한 규칙. 인정은 저절로 생기지 않는다. 설계해야 생긴다.</p>
+    </div>
+    <div class="callout deep">
+      <strong>그래도 인정받지 못한다면: 직장 생활에 대한 솔직한 이야기</strong>
+      <p>모든 노력이 그때그때 인정받는 조직은 드물다. 그것은 받아들여야 할 현실의 일부다. 하지만 수긍과 체념은 다르다. 직접 만들고 시행착오를 겪으며 얻은 역량은 평가표에 적히지 않아도 사라지지 않는다. 지금처럼 기술이 빠르게 바뀌는 시기에는 그 역량이 개인의 가장 확실한 자산이다. 인정을 위해 개선을 멈추기보다, 개선을 계속하면서 위의 네 가지 번역을 꾸준히 하자. 번역된 성과가 쌓이면 조직은 생각보다 빨리 그것을 알아본다. 그리고 그런 사람이 결국 다음 단계의 AX를 이끌게 된다.</p>
+    </div>
+  </section>
+
+  <!-- ============================================================ 6 -->
+  <section id="creativity">
+    <h2>표준화와 플랫폼은 창의성을 죽이는가</h2>
+    <span class="qhead">Q. AX가 되면 플랫폼화·표준화로 빈틈이 없어지고, 새 시도는 "잘 만든 프로세스를 해친다"며 막히지 않을까? 즉흥적이고 자유로운 환경이 더 효율적이지 않을까?</span>
+    <p>이 걱정은 정당하다. 실제로 많은 조직에서 "표준"은 새 시도를 막는 이유로 쓰여 왔다. 조직학자 제임스 마치는 조직 학습을 기존의 것을 다듬는 <strong>활용</strong><span class="en">(exploitation)</span>과 새로운 것을 찾는 <strong>탐색</strong><span class="en">(exploration)</span>으로 나누고, 활용은 성과가 빠르고 확실해서 조직이 점점 탐색을 밀어내는 경향이 있다고 지적했다(<i>Organization Science</i>, 1991). 잘 만든 AX 프로세스가 이 경향을 강화할 위험은 분명히 있다.</p>
+    <p>하지만 답은 "표준화를 하지 말자"가 아니라 <strong>"무엇을 표준화하느냐"</strong>다. 인터넷이 좋은 예다. 인터넷은 그 위에서 무엇을 만들지는 전혀 정하지 않고, 아주 좁은 공통 규약만 표준으로 정했다. 그 좁은 허리<span class="en">(narrow waist)</span> 덕분에 위아래에서 끝없이 새로운 것이 나왔다. AX의 표준도 이렇게 설계해야 한다.</p>
+
+    <figure class="diagram">
+      <svg viewBox="0 0 800 300" role="img" aria-label="좁은 허리 구조">
+        <path d="M120 20 H680 L470 130 H330 Z" class="f-acc2-soft"/>
+        <text x="400" y="50" text-anchor="middle" class="t-acc2">자유: 방법·도구 조합·프롬프트·에이전트·실험</text>
+        <text x="400" y="74" text-anchor="middle" class="t-sm">팀마다 다르게, 매주 바뀌어도 된다</text>
+        <rect x="330" y="130" width="140" height="40" rx="6" class="f-acc-soft"/>
+        <text x="400" y="155" text-anchor="middle" class="t-acc">표준(좁게)</text>
+        <path d="M330 170 H470 L680 280 H120 Z" class="f-surface"/>
+        <text x="400" y="230" text-anchor="middle" class="t">기반: 데이터·업무 시스템·문서·설비</text>
+        <text x="400" y="254" text-anchor="middle" class="t-sm">팀마다 다른 원천</text>
+        <text x="490" y="146" class="t-sm">· 데이터 계약·기준 레지스트리</text>
+        <text x="490" y="162" class="t-sm">· 기록 형식(이슈·실험 카드)</text>
+        <text x="40" y="146" class="t-sm">· 보안 등급·권한</text>
+        <text x="40" y="162" class="t-sm">· 로그·평가 방식</text>
+      </svg>
+      <figcaption><b>그림 17-3.</b> 좁은 허리 구조. 표준은 가운데 좁은 부분, 즉 "서로 연결되기 위해 꼭 맞춰야 하는 것"(데이터 계약, 기록 형식, 보안, 로그)에만 둔다. 그 위에서 어떤 방법을 쓰는지, 어떤 에이전트를 만드는지는 자유다. 허리가 넓어질수록(표준이 많아질수록) 위의 자유는 줄어든다.</figcaption>
+    </figure>
+
+    <ul class="checklist">
+      <li><b>반복되는 일에는 프로세스, 처음 하는 일에는 자유.</b> 클레임 대응 절차는 표준화하되, 새 공정 개발 방법은 표준화하지 않는다. 기록 형식만 맞춘다(<a href="experiments.html">13장</a>).</li>
+      <li><b>샌드박스를 공식으로 둔다.</b> 승인된 도구와 비민감 데이터로 누구나 마음껏 만들어 볼 수 있는 공간. 막는 대신 안전한 놀이터를 준다.</li>
+      <li><b>도전자 경로를 만든다.</b> 새 방식이 기존 표준 프로세스보다 낫다는 증거(같은 측정 정의로)를 가져오면 표준을 바꿀 수 있는 공식 절차. 표준은 지키는 대상이 아니라 이길 수 있는 대상이어야 한다.</li>
+      <li><b>표준에 유효기간을 둔다.</b> 1년마다 "이 표준이 아직 필요한가"를 묻고, 근거 없는 표준은 폐기한다. 경제학자 슘페터가 말한 창조적 파괴는 조직 안에서도 일어나야 한다.</li>
+    </ul>
+    <div class="callout tip">
+      <strong>AI는 오히려 즉흥성을 싸게 만든다</strong>
+      <p>예전에는 새 아이디어를 시험하려면 개발 요청을 하고 몇 달을 기다려야 했다. 지금은 반나절이면 동작하는 시제품을 만들 수 있다. 즉흥적이고 자유로운 시도의 비용이 이렇게 낮아진 시대는 없었다. 그러니 "자유로운 개발 환경이 더 효율적이지 않은가"라는 질문의 답은 "탐색 단계에서는 그렇다"다. 문제는 탐색에서 얻은 것을 여러 사람이 쓰는 운영으로 옮길 때다. 그때 필요한 것이 좁은 허리다. 탐색은 자유롭게, 졸업은 표준으로.</p>
+    </div>
+  </section>
+
+  <!-- ============================================================ 7 -->
+  <section id="security">
+    <h2>보안 때문에 AX를 못 한다면</h2>
+    <span class="qhead">Q. 보안을 따지다가 제대로 된 AX를 못 할 수도 있다. 적정선은 어디인가?</span>
+    <p>현장에서 가장 많이 듣는 하소연 중 하나다. 그리고 보안 조직의 걱정도 근거가 있다. 제조 기업의 공정 조건, 설계, 고객 정보는 한 번 나가면 되돌릴 수 없다. 그래서 이 질문을 "보안 대 AX"의 싸움으로 보면 답이 나오지 않는다. 더 나은 질문은 이것이다. <strong>"같은 수준의 위험을 감수하면서 더 많은 가치를 낼 수 있는 선택지가 있는가?"</strong></p>
+    <p>이렇게 보면 적정선은 하나의 점이 아니라 <strong>선택지들의 경계선</strong>, 즉 파레토 프런티어<span class="en">(Pareto frontier)</span>다. 프런티어 위의 선택지들은 "위험을 더 줄이려면 가치를 포기해야 하는" 효율적인 조합이고, 그중 어디를 고를지는 회사의 위험 성향과 사업 상황에 따라 경영이 결정할 문제다. 반면 프런티어 안쪽의 선택지는 더 안전하면서 더 가치 있는 대안이 있는데도 고른 비효율적 선택이다. 흥미롭게도 <strong>"전면 금지"는 종종 프런티어 안쪽에 있다.</strong> 공식 경로를 막으면 개인 계정으로 우회하는 섀도 AI가 늘어나, 가치는 낮고 실제 위험은 오히려 커지기 때문이다.</p>
+    <p>이 관점과 선택지를 직접 비교해 보는 인터랙티브는 <a href="governance.html#tradeoff">10장의 "보안과 AX의 적정선"</a>에 있다. 실무자가 기억할 원칙만 정리하면 다음과 같다.</p>
+    <ul class="checklist">
+      <li>보안 수준은 회사 전체에 하나가 아니라 <b>데이터 등급별로</b> 다르게 정한다. 공개·사내 일반 자료까지 최고 등급으로 막는 것이 가장 비싼 선택이다.</li>
+      <li>"막을까 말까"보다 <b>"어떤 통제를 붙이면 허용할 수 있나"</b>를 묻는다. 기업 계약, 게이트웨이, 마스킹, 로그가 선택지를 넓힌다.</li>
+      <li>적정선을 정하는 것은 보안 조직 혼자가 아니라 <b>사업 책임자와 보안이 함께</b>다. 위험을 감수하는 결정의 주인은 그 가치를 얻는 사업 쪽이어야 한다.</li>
+      <li>"못 해서 잃는 것"도 비용으로 적는다. AX를 막은 기회비용과 섀도 AI 위험은 보안 점검표에 잘 나타나지 않는다.</li>
+    </ul>
+  </section>
+
+  <!-- ============================================================ 8 -->
+  <section id="senior">
+    <h2>20년차 선배는 병목인가, 보물인가</h2>
+    <span class="qhead">Q. AX 시대에는 혼자만 알고 있는 20년차 선배가 병목이 되는 것인가?</span>
+    <p>병목인 것은 맞다. 그러나 병목인 것은 <strong>선배가 아니라 구조</strong>다. 모든 예외 상황, 과거 이력, "그건 예전에 해 봤는데 안 됐어"가 한 사람의 머릿속에만 있고, 그 사람에게 묻는 것 외에는 알 방법이 없는 구조. 철학자 마이클 폴라니가 "우리는 말할 수 있는 것보다 더 많이 안다"고 한 암묵지가 바로 이것이다. 선배가 일부러 숨기는 경우보다, 말로 꺼낼 기회와 형식이 없었던 경우가 훨씬 많다.</p>
+    <p>질문이 한 사람에게 몰리면 어떤 일이 생기는지 숫자로 보면 분명해진다. 가동률이 100%에 가까워질수록 대기 시간은 직선이 아니라 폭발적으로 늘어난다. 선배는 하루 종일 같은 질문에 답하느라 정작 선배만 할 수 있는 판단에 쓸 시간이 없다.</p>
+
+    <div class="sim" id="sim-senior">
+      <div class="sim-head"><span class="sim-tag">INTERACTIVE</span><h3>숙련자 병목 시뮬레이터: 질문이 한 사람에게 몰릴 때</h3></div>
+      <div class="sim-body side">
+        <div class="sim-view"><canvas id="cv-senior"></canvas></div>
+        <div class="sim-controls">
+          <label class="ctrl"><span>질문하는 동료 수 <output id="sn-n-out"></output></span><input type="range" id="sn-n" min="5" max="60" step="1" value="25"></label>
+          <label class="ctrl"><span>1인당 주간 질문 <output id="sn-q-out"></output></span><input type="range" id="sn-q" min="0.2" max="4" step="0.1" value="1.2"></label>
+          <label class="ctrl"><span>1건 답변 시간 <output id="sn-s-out"></output></span><input type="range" id="sn-s" min="10" max="60" step="5" value="30"></label>
+          <label class="ctrl"><span>선배가 답변에 쓸 수 있는 주간 시간 <output id="sn-h-out"></output></span><input type="range" id="sn-h" min="4" max="30" step="1" value="16"></label>
+          <label class="ctrl"><span>지식화 비율(문서·AI가 먼저 답함) <output id="sn-k-out"></output></span><input type="range" id="sn-k" min="0" max="90" step="5" value="0"></label>
+        </div>
+      </div>
+      <div class="sim-readout">
+        <div class="stat"><span class="k">선배 가동률</span><span class="v" id="sn-o1">—</span></div>
+        <div class="stat"><span class="k">평균 대기(근무 시간)</span><span class="v" id="sn-o2">—</span></div>
+        <div class="stat"><span class="k">선배에게 남는 주간 시간</span><span class="v" id="sn-o3">—</span></div>
+      </div>
+      <div class="sim-note">질문이 무작위로 도착하고 한 사람이 순서대로 답한다고 보는 단순 대기열 모델(M/M/1)이다. 주 40시간 근무 기준으로 환산했다. 해볼 것: 지식화 비율을 0%에서 40%로만 올려도 대기 시간이 얼마나 줄어드는지 보자. 반복 질문의 일부만 문서와 AI가 받아도 선배의 시간이 판단에 돌아간다.</div>
+    </div>
+
+    <p>그래서 AX에서 숙련자의 역할은 줄어드는 것이 아니라 <strong>바뀐다</strong>. 같은 질문에 반복해서 답하는 사람에서, AI와 후배가 낸 답이 맞는지 판정하는 사람으로. <a href="cases.html">15장</a>의 E사 사례처럼 숙련자의 판단을 "상황–판단–이유–예외" 형식의 지식 카드로 남기고, AI가 그것을 근거로 1차 답을 하게 하면, 선배는 평가 세트를 만들고 예외를 판단하는 <strong>검증자</strong>가 된다. AI 시스템에서 가장 귀한 것은 "무엇이 정답인지 아는 사람"이다.</p>
+    <div class="callout warn">
+      <strong>지식을 꺼내 달라고 하기 전에 먼저 답할 것</strong>
+      <p>"선배님 지식을 AI에 넣겠습니다"라는 말은 "선배님이 필요 없어지게 하겠습니다"로 들리기 쉽다. 경계하는 것이 당연하다. 지식 추출을 요청하기 전에 그 사람의 새 역할(검증자, 평가 세트 오너, 멘토, 에이전트의 감수자)과 그것이 평가에 어떻게 반영되는지를 먼저 약속해야 한다. 지식을 내놓은 사람이 손해를 보는 조직에서는 아무도 지식을 내놓지 않는다.</p>
+    </div>
+  </section>
+
+  <!-- ============================================================ 9 -->
+  <section id="humans">
+    <h2>AX가 완성되면 사람은 무엇을 하나, 어떤 인재를 찾아야 하나</h2>
+    <span class="qhead">Q. 우리가 상상하는 AX가 완성되면 인간은 무엇을 해야 할까? AX 시대에는 어떤 인재를 추구해야 할까?</span>
+    <p>먼저, <strong>"완성된 AX"는 오지 않는다.</strong> 13장에서 본 것처럼 기준은 계속 바뀌고, 고객과 기술과 규제도 바뀐다. AI가 지금 하는 일을 다 하게 되는 날, 조직은 그때 새로 생긴 문제를 풀고 있을 것이다. 그래서 더 정확한 질문은 "AI가 일을 더 많이 맡을수록, 사람의 일은 어디로 옮겨 가는가"다.</p>
+    <div class="table-wrap"><table>
+      <thead><tr><th>AI에게로 옮겨 가는 일</th><th>사람에게 남거나 커지는 일</th></tr></thead>
+      <tbody>
+        <tr><td>찾기, 모으기, 요약하기, 양식 채우기</td><td><b>문제 정의</b>: 무엇이 문제인지, 무엇을 목표로 할지 정하기</td></tr>
+        <tr><td>정해진 기준으로 분류·판정하기</td><td><b>기준 정하기</b>: 무엇이 좋은 결과인지, 기준을 언제 바꿀지</td></tr>
+        <tr><td>초안 쓰기, 과거 사례 대조하기</td><td><b>판단과 책임</b>: 승인하고, 틀렸을 때 책임지는 일(<a href="agents.html">8장</a>)</td></tr>
+        <tr><td>반복되는 예외 처리</td><td><b>처음 보는 예외</b>: 데이터에 없던 상황에서의 판단</td></tr>
+        <tr><td>정보 전달, 회의록 정리</td><td><b>합의와 관계</b>: 부서 간 이해 조정, 고객과의 신뢰</td></tr>
+        <tr><td>정해진 실험의 반복·분석</td><td><b>새로운 시도</b>: 아직 아무도 해 보지 않은 실험과 질문</td></tr>
+      </tbody>
+    </table></div>
+    <p>이 표에서 인재상이 나온다. AX 시대에 조직이 찾아야 할 사람은 "AI를 잘 아는 사람"이라기보다, 다음을 갖춘 사람이다.</p>
+    <div class="cards">
+      <div class="card"><span class="k">DOMAIN</span><h4>도메인 깊이</h4><p>무엇이 정답인지 아는 사람. AI가 평범한 답을 싸게 만들수록, 진짜 전문성의 값은 오른다.</p></div>
+      <div class="card"><span class="k">BUILD</span><h4>직접 만들어 보는 힘</h4><p>코딩 실력이 아니라, 불편을 보면 AI로 고쳐 보는 습관. 반나절짜리 시제품을 두려워하지 않는 것.</p></div>
+      <div class="card"><span class="k">SPEC</span><h4>명확하게 쓰는 능력</h4><p>원하는 것을 맥락·기준·예외까지 글로 정확히 설명하는 능력. 사람에게도 AI에게도 일을 잘 맡기는 핵심이다.</p></div>
+      <div class="card"><span class="k">VERIFY</span><h4>의심하고 검증하는 태도</h4><p>그럴듯한 답을 그대로 믿지 않고 근거를 확인하는 사람. 이 장의 질문을 던지는 사람이 바로 이런 인재다.</p></div>
+      <div class="card"><span class="k">LEARN</span><h4>학습 속도</h4><p>오늘 배운 도구가 1년 뒤에도 같을 것이라고 기대하지 않는 사람. 지식보다 배우는 방법을 가진 사람.</p></div>
+      <div class="card"><span class="k">OWN</span><h4>결과에 대한 책임감</h4><p>"AI가 그렇게 했다"고 말하지 않는 사람. 도구가 무엇이든 결과의 주인은 자신이라는 태도.</p></div>
+    </div>
+    <div class="callout">
+      <strong>채용과 승진에서 볼 신호</strong>
+      <p>자격증이나 교육 이수 시간보다 "최근에 AI로 직접 바꾼 업무 하나를 설명해 보라"가 훨씬 많은 것을 알려 준다. 무엇이 불편했는지, 어떻게 만들었는지, 어디서 틀렸는지, 지금도 쓰는지. 이 네 가지에 구체적으로 답하는 사람이 AX 시대의 인재다.</p>
+    </div>
+  </section>
+
+  <!-- ============================================================ 10 -->
+  <section id="learning">
+    <h2>언제까지 학원을 다닐 것인가</h2>
+    <span class="qhead">Q. 급하게 외부 강사를 불러도 경험이 없다. 이건 누가 알려 준다고 해결되는 게 아니라, 직접 해 보고 고민해야 느는 것 아닌가?</span>
+    <p>맞는 말이다. 그리고 그 이유는 개인의 학습 성향보다 <strong>분야의 속도</strong>에 있다. 생성형 AI와 에이전트 도구는 몇 달 단위로 바뀐다. 강의 자료가 만들어지는 동안 내용이 낡는다. 강사가 직접 만들어 본 경험이 없다면 그 강의는 "어디서 들은 이야기의 정리"가 될 수밖에 없다. 게다가 들은 것은 쓰지 않으면 빨리 잊힌다. 업무와 연결되지 않은 강의는 다음 주 월요일이면 대부분 사라진다.</p>
+    <p>그렇다고 "각자 독학하라"가 답은 아니다. 독학은 개인을 성장시키지만 조직으로 퍼지지 않는다. 그리고 모두가 독학할 시간과 동기를 가진 것도 아니다. 필요한 것은 <strong>학습을 업무 안으로 옮기는 것</strong>이다.</p>
+    <div class="compare">
+      <div class="before"><h4>강의 중심</h4><ul>
+        <li>전 직원 대상 일괄 강의, 이수 시간으로 평가</li>
+        <li>외부 강사가 일반 사례로 설명</li>
+        <li>실습은 강의장 예제로</li>
+        <li>끝나면 업무로 돌아가 다시 예전 방식</li>
+      </ul></div>
+      <div class="after"><h4>업무 중심</h4><ul>
+        <li>자기 실제 업무 하나를 들고 오는 4~8주 코호트</li>
+        <li>사내에서 직접 만들어 본 실천가가 짝이 된다(FDE·챔피언)</li>
+        <li>매주 실패와 시행착오를 공유하는 짧은 모임</li>
+        <li>끝날 때 "지금도 쓰는가"로 평가</li>
+      </ul></div>
+    </div>
+    <ul class="checklist">
+      <li><b>시간을 보장한다.</b> "업무 외 시간에 공부하라"는 학습을 소수의 열정에 맡기는 것이다. 주 몇 시간이라도 업무 시간으로 공식화한다.</li>
+      <li><b>외부 강사는 용도를 좁혀 쓴다.</b> 개념, 동향, 영감을 위해서는 유용하다. 섭외할 때 "직접 만든 것을 보여 달라"고 요청하자. 보여 줄 것이 없다면 실습 강의는 맡기지 않는다.</li>
+      <li><b>사내 독학자를 교사로 만든다.</b> 스스로 깨친 사람이 가장 좋은 교사다. 단, 가르치는 일이 그 사람의 성과로 인정되어야 한다(앞의 "번역").</li>
+      <li><b>실패를 공유하는 자리를 만든다.</b> 강의는 성공한 방법만 가르친다. 실제 역량은 "이렇게 했더니 안 됐다"에서 자란다.</li>
+      <li><b>결과물로 배운다.</b> 수료증이 아니라 실제로 돌아가는 작은 도구, 실험 카드, 평가 세트가 학습의 산출물이다.</li>
+    </ul>
+    <div class="callout tip">
+      <strong>독학한 사람에게: 당신의 다음 역할</strong>
+      <p>"언제까지 학원 다닐래?"라는 생각이 든다면, 당신은 이미 조직에 몇 안 되는 실천가다. 그 생각이 냉소로 끝나지 않으려면, 내가 배운 방식을 동료가 따라 할 수 있는 형태로 바꾸는 사람이 되어야 한다. 독학의 다음 단계는 동료 학습을 조직하는 것이다. 강사를 부르는 대신 다섯 명과 함께 각자의 업무 하나씩을 6주 동안 바꿔 보는 것. 그것이 이 장의 다른 모든 질문에 대한 가장 실용적인 답이기도 하다.</p>
+    </div>
+  </section>
+
+  <!-- ============================================================ 11 -->
+  <section id="skeptic">
+    <h2>의심하는 실천가를 위한 체크리스트</h2>
+    <p>의심이 많다는 것은 AX를 대충 하고 싶지 않다는 뜻이다. 그 의심을 행동으로 바꾸는 질문들로 이 장을 정리한다. 다음 회의, 다음 과제 심사, 다음 보고서에서 하나씩 써 보자.</p>
+    <div class="table-wrap"><table>
+      <thead><tr><th>의심</th><th>행동으로 바꾼 질문</th><th>관련 장</th></tr></thead>
+      <tbody>
+        <tr><td>이거 또 유행 아닌가</td><td>캠페인이 끝나도 남을 것(데이터 기준, 업무 절차, 사람)이 이 과제에 있는가?</td><td><a href="roadmap.html">14장</a></td></tr>
+        <tr><td>숫자 맞추기 아닌가</td><td>이 성과는 사전 등록한 베이스라인과 공통 정의로 측정했는가?</td><td><a href="experiments.html">13장</a></td></tr>
+        <tr><td>미션만 내려온다</td><td>이 일은 한 팀이 혼자 할 수 있는가? 아니라면 위가 무엇을 해 줘야 하는가?</td><td><a href="goals.html">12장</a></td></tr>
+        <tr><td>내 개선은 인정 안 된다</td><td>절감한 시간으로 무엇을 했고, 누가 재사용하는가?</td><td><a href="people.html">11장</a></td></tr>
+        <tr><td>표준이 새 시도를 막는다</td><td>이 표준은 좁은 허리인가? 도전자 경로와 유효기간이 있는가?</td><td><a href="process.html">3장</a></td></tr>
+        <tr><td>보안이 다 막는다</td><td>같은 위험으로 더 많은 가치를 내는 선택지가 있는가? 결정의 주인은 누구인가?</td><td><a href="governance.html#tradeoff">10장</a></td></tr>
+        <tr><td>선배 없으면 안 된다</td><td>반복 질문 중 문서·AI가 먼저 받을 수 있는 것은? 선배의 새 역할은 약속되었는가?</td><td><a href="knowledge.html">6장</a></td></tr>
+        <tr><td>교육이 효과가 없다</td><td>이 교육이 끝나면 누가 어떤 실제 업무를 바꿔 지금도 쓰고 있는가?</td><td><a href="people.html">11장</a></td></tr>
+      </tbody>
+    </table></div>
+  </section>
+
+  <section class="keypoints" id="summary">
+    <h2>핵심 정리</h2>
+    <ol>
+      <li>AX라는 이름은 지나갈 수 있다. 6시그마처럼 캠페인은 사라져도 습관이 남는다면 성공이다. AI는 방법론이 아닌 범용 기술이라, 위험은 "유행이 끝나는 것"보다 "기반 없이 도구만 들어오는 것"이다.</li>
+      <li>범용 기술의 효과는 무형 투자 뒤에 늦게 나타난다(생산성 J-커브). 2~3년 캠페인은 바닥에서 끝나기 쉽다. 목표는 영원한 캠페인이 아니라 캠페인 없이도 굴러가는 상태다.</li>
+      <li>Top-down은 한 팀이 혼자 못 하는 일(기반·권한·예산·측정 정의)을, bottom-up은 위에서 보이지 않는 일(발견·실험·확산)을 맡고, 실·팀장이 둘을 잇는다.</li>
+      <li>자기 업무 개선은 AX의 기본 단위다. 인정은 결과로 기록하기, 재사용 가능하게 만들기, 상사 목표와 연결하기, 승인된 경로 위에서 하기라는 "번역"과 조직의 통로 설계로 생긴다.</li>
+      <li>표준은 좁은 허리(데이터 계약·기록 형식·보안·로그)에만 두고, 샌드박스·도전자 경로·표준 유효기간으로 탐색을 지킨다. 탐색은 자유롭게, 졸업은 표준으로.</li>
+      <li>보안의 적정선은 하나의 점이 아니라 위험과 가치의 파레토 프런티어 위의 선택이며, 데이터 등급별로 사업 책임자와 보안이 함께 정한다. 전면 금지는 종종 프런티어 안쪽의 비효율적 선택이다.</li>
+      <li>병목은 숙련자가 아니라 구조다. 반복 질문을 지식화하면 숙련자는 검증자·평가 세트 오너로 역할이 올라간다. 단, 새 역할을 먼저 약속해야 한다.</li>
+      <li>AI가 맡는 일이 늘수록 사람의 일은 문제 정의·기준·판단과 책임·새로운 시도로 옮겨 간다. 학습은 강의실이 아니라 업무 안에서, 실천가와 함께 일어나야 한다.</li>
+    </ol>
+  </section>
+
+  <section class="quiz-sec" id="quiz">
+    <h2>확인 퀴즈</h2>
+    <div class="quiz">
+      <div class="quiz-q"><p>1. "AX도 6시그마처럼 몇 년 뒤엔 아무도 말하지 않을 것"이라는 주장에 대한 이 장의 관점으로 가장 적절한 것은?</p><div class="opts">
+        <button class="opt">그러니 AX에 투자하지 않는 것이 합리적이다</button>
+        <button class="opt">AX는 절대 사라지지 않을 영원한 경영 철학이다</button>
+        <button class="opt" data-correct>이름과 캠페인은 사라질 수 있지만, 데이터 기준·업무 절차·사람의 역량이 일하는 방식에 남는다면 성공이다</button>
+        <button class="opt">6시그마는 완전히 실패했으므로 비교할 가치가 없다</button>
+      </div><div class="quiz-exp">6시그마의 이름은 잘 들리지 않지만 데이터 기반 문제 해결, SPC 같은 습관은 품질 조직에 남았다. 판단 기준은 이름의 수명이 아니라 남는 체질이다.</div></div>
+
+      <div class="quiz-q"><p>2. 생산성 J-커브가 AX 프로그램 운영에 주는 시사점은?</p><div class="opts">
+        <button class="opt">첫해에 성과가 없으면 즉시 중단해야 한다</button>
+        <button class="opt" data-correct>데이터 정리·업무 재설계 같은 무형 투자 기간에는 성과가 정체되어 보일 수 있으므로, 바닥에서 중단하면 투자만 하고 회수하지 못한다</button>
+        <button class="opt">AI 도입 효과는 언제나 즉시 나타난다</button>
+        <button class="opt">퀵윈 과제만 하면 J-커브를 피할 수 있다</button>
+      </div><div class="quiz-exp">범용 기술은 보완적 무형 투자가 쌓인 뒤 효과가 나타난다. 퀵윈만으로는 빨리 오르지만 정체한다. 기반과 퀵윈의 균형, 그리고 중단 시점에 대한 판단이 중요하다.</div></div>
+
+      <div class="quiz-q"><p>3. 다음 중 top-down으로 해야 할 일로 가장 적절한 것은?</p><div class="opts">
+        <button class="opt">각 팀원의 회의록 정리 프롬프트를 정해 주는 것</button>
+        <button class="opt" data-correct>전사 데이터 기준과 보안 등급, 공통 플랫폼, 부서 간 업무 재설계 권한을 마련하는 것</button>
+        <button class="opt">팀마다 AX 과제 개수를 똑같이 배분하는 것</button>
+        <button class="opt">현장의 불편 사항을 대신 찾아 주는 것</button>
+      </div><div class="quiz-exp">"한 팀이 혼자 할 수 있는가?"로 나눈다. 혼자 못 하는 기반·권한·측정 정의는 위의 일이고, 현장의 발견과 자기 업무 개선은 아래의 일이다.</div></div>
+
+      <div class="quiz-q"><p>4. 실무자의 자기 업무 개선을 조직의 성과로 "번역"하는 방법으로 적절하지 않은 것은?</p><div class="opts">
+        <button class="opt">절감 시간으로 무엇을 했는지 결과로 기록한다</button>
+        <button class="opt">동료가 재사용할 수 있게 템플릿과 설명을 남긴다</button>
+        <button class="opt">팀장의 목표 중 어느 단계를 줄였는지 연결한다</button>
+        <button class="opt" data-correct>개인 계정의 외부 AI로 빠르게 만들어 결과만 보고한다</button>
+      </div><div class="quiz-exp">승인되지 않은 경로로 만든 개선은 아무리 좋아도 공식화·확산될 수 없고 보안 위험도 생긴다. 회사가 허용한 도구 위에서 만들어야 조직의 자산이 된다.</div></div>
+
+      <div class="quiz-q"><p>5. 표준화와 창의적 시도를 함께 살리는 설계로 가장 적절한 것은?</p><div class="opts">
+        <button class="opt">모든 업무 방법을 상세히 표준화하고 예외를 금지한다</button>
+        <button class="opt">표준을 아예 두지 않고 팀마다 자유롭게 한다</button>
+        <button class="opt" data-correct>연결에 꼭 필요한 것(데이터 계약·기록 형식·보안·로그)만 좁게 표준화하고, 샌드박스와 표준을 바꿀 수 있는 도전자 경로를 둔다</button>
+        <button class="opt">새로운 시도는 연 1회 해커톤에서만 허용한다</button>
+      </div><div class="quiz-exp">좁은 허리 구조다. 표준이 좁을수록 위의 자유가 넓어진다. 표준은 지키는 대상이 아니라, 더 나은 증거가 오면 바뀔 수 있는 대상이어야 한다.</div></div>
+
+      <div class="quiz-q"><p>6. 숙련자에게 질문이 몰려 가동률이 90%를 넘었다. 대기 시간을 가장 효과적으로 줄이는 방법은?</p><div class="opts">
+        <button class="opt">숙련자에게 야근을 요청한다</button>
+        <button class="opt">질문을 금지한다</button>
+        <button class="opt" data-correct>반복 질문의 일부를 지식 카드·문서·AI가 먼저 답하게 하고, 숙련자는 검증과 예외 판단에 집중하게 한다</button>
+        <button class="opt">숙련자의 지식을 강제로 문서화하게 하고 역할 변화는 나중에 논의한다</button>
+      </div><div class="quiz-exp">대기열에서 가동률이 1에 가까우면 대기 시간이 폭발적으로 늘어나므로, 도착하는 질문을 조금만 줄여도 효과가 크다. 지식화는 숙련자의 새 역할을 먼저 약속한 뒤에 해야 협조를 얻는다.</div></div>
+    </div>
+  </section>
+</main>
+<script>
+(function () {
+  "use strict";
+  function font(px, bold) { return (bold ? "700 " : "") + px + "px " + getComputedStyle(document.body).getPropertyValue("--font"); }
+  function hexA(c, a) {
+    c = (c || "").trim();
+    if (c[0] === "#") {
+      var h = c.slice(1);
+      if (h.length === 3) h = h.split("").map(function (x) { return x + x; }).join("");
+      var n = parseInt(h.slice(0, 6), 16);
+      return "rgba(" + ((n >> 16) & 255) + "," + ((n >> 8) & 255) + "," + (n & 255) + "," + a + ")";
+    }
+    var m = c.match(/[\d.]+/g);
+    return m ? "rgba(" + m[0] + "," + m[1] + "," + m[2] + "," + a + ")" : c;
+  }
+
+  /* ================================================ 1) 캠페인형 vs 체질 전환형 */
+  var FAD = [
+    { t: "성과를 과제 수·교육 이수자 수로 잰다", side: "c", w: 1.2 },
+    { t: "지식의 주된 공급원은 외부 강사·업체다", side: "c", w: 1.0 },
+    { t: "담당 임원이 바뀌면 프로그램 이름도 바뀔 것 같다", side: "c", w: 1.1 },
+    { t: "연말 발표회용 과제가 많다", side: "c", w: 0.9 },
+    { t: "업무 시스템·양식·결재 절차가 실제로 바뀌었다", side: "t", w: 1.3 },
+    { t: "현업이 스스로 만든 도구가 늘고 있다", side: "t", w: 1.1 },
+    { t: "데이터·기준 정리에 예산과 시간이 배정된다", side: "t", w: 1.2 },
+    { t: "그만둔 과제와 이유가 공유된다", side: "t", w: 0.8 }
+  ];
+  var fadWiz = document.getElementById("fad-wiz");
+  fadWiz.innerHTML = FAD.map(function (q, i) {
+    return '<div class="wiz-q"><span>' + AX.esc(q.t) + '</span><div class="seg" id="fad-' + i + '"><button data-value="0">아니다</button><button data-value="1" class="on">일부</button><button data-value="2">그렇다</button></div></div>';
+  }).join("");
+  var fadGet = FAD.map(function (q, i) { return AX.seg("fad-" + i, fadEval); });
+  function fadEval() {
+    var c = 0, t = 0, cm = 0, tm = 0;
+    FAD.forEach(function (q, i) {
+      var v = Number(fadGet[i]()) / 2;
+      if (q.side === "c") { c += q.w * v; cm += q.w; } else { t += q.w * v; tm += q.w; }
+    });
+    var cp = Math.round(c / cm * 100), tp = Math.round(t / tm * 100);
+    document.getElementById("fad-bars").innerHTML =
+      '<div class="bar-row"><span>캠페인 신호</span><span class="track"><i style="width:' + cp + '%;background:var(--bad)"></i></span><span class="val">' + cp + "</span></div>" +
+      '<div class="bar-row"><span>체질 전환 신호</span><span class="track"><i style="width:' + tp + '%;background:var(--ok)"></i></span><span class="val">' + tp + "</span></div>";
+    var j, tip, keep;
+    if (tp >= 60 && cp < 50) { j = "체질 전환형"; tip = "캠페인이 끝나도 남을 것이 쌓이고 있다."; keep = "업무 절차·데이터 기준·현업 빌더"; }
+    else if (tp >= 50) { j = "혼합형"; tip = "캠페인의 에너지가 체질로 옮겨 가는 중이다. 활동 지표를 결과 지표로 바꾸면 한 단계 올라간다."; keep = "일부 업무 절차, 몇 명의 빌더"; }
+    else if (cp >= 50) { j = "캠페인형"; tip = "3년 뒤 이름과 함께 사라질 위험이 크다. 과제 하나라도 기반 작업으로 돌리자."; keep = "발표 자료와 이수증"; }
+    else { j = "탐색기"; tip = "아직 뚜렷한 모양이 없다. 첫 관통 과제를 고르는 것이 먼저다."; keep = "아직 판단하기 이르다"; }
+    document.getElementById("fad-out").innerHTML = "<h4>" + j + "</h4>" + AX.esc(tip) + "<ul><li>3년 뒤 남을 가능성이 큰 것: " + AX.esc(keep) + "</li></ul>";
+    AX.stat("fad-o1", cp);
+    AX.stat("fad-o2", tp);
+    AX.stat("fad-o3", j);
+  }
+  fadEval();
+
+  /* ================================================ 2) J-커브 */
+  var cvJ = null;
+  var jUpd = function () { if (cvJ) cvJ.redraw(); };
+  var jF = AX.range("j-f", function (v) { return v + "%"; }, jUpd);
+  var jG = AX.range("j-g", function (v) { return v + "%/월"; }, jUpd);
+  var jS = AX.range("j-s", function (v) { return v + "개월"; }, jUpd);
+  function jSim(f, g, stop) {
+    var K = 0, Q = 0, cum = 0, out = [], be = null;
+    for (var t = 1; t <= 60; t++) {
+      var run = t <= stop;
+      if (run) {
+        K += g * f * 1.6 * (1 - K);                            // 기반 역량 축적
+        Q = (1 - f) * 0.9 * (1 - Math.exp(-t / 3));            // 퀵윈: 빠르게 오르고 정체
+      } else {
+        K *= 0.985;                                           // 일하는 방식에 남아 천천히 감소
+        Q *= 0.85;                                            // 오너 없는 도구는 빠르게 사라짐
+      }
+      var benefit = Q + 2.8 * K * K;
+      var cost = run ? 1 : 0;
+      cum += benefit - cost;
+      if (be === null && cum >= 0 && t > 1) be = t;
+      out.push([t, cum]);
+    }
+    return { data: out, be: be, end: cum };
+  }
+  cvJ = AX.canvas("#cv-j", function (ctx, w, h) {
+    var P = AX.palette();
+    var f = jF() / 100, g = jG() / 100, S = jS();
+    var a = jSim(f, g, S), b = jSim(f, g, 60), q = jSim(0, g, S);
+    var all = a.data.concat(b.data, q.data).map(function (p) { return p[1]; });
+    var lo = Math.min.apply(null, all), hi = Math.max.apply(null, all);
+    var pad = (hi - lo) * 0.08 + 1;
+    AX.chart(ctx, null, {
+      x: [1, 60], y: [Math.floor(lo - pad), Math.ceil(hi + pad)], xLabel: "개월", yLabel: "누적 순가치(월 투자=1)",
+      hlines: [{ y: 0, color: P.axis, dash: [] }],
+      vlines: [{ x: S, label: "중단", color: P.warn }],
+      series: [
+        { data: q.data, color: P.dim, dash: [4, 4], width: 1.6 },
+        { data: b.data, color: P.accent2, dash: [6, 4], width: 2 },
+        { data: a.data, color: P.accent, width: 2.6 }
+      ]
+    });
+    ctx.font = font(12, true);
+    [[P.accent, "현재 설정(중단 반영)"], [P.accent2, "중단 없이 계속"], [P.dim, "기반 0%·같은 중단"]].forEach(function (it, i) {
+      ctx.fillStyle = it[0]; ctx.fillRect(70, 22 + i * 18 - 5, 14, 3);
+      ctx.fillStyle = P.text; ctx.textAlign = "left"; ctx.textBaseline = "middle"; ctx.fillText(it[1], 90, 22 + i * 18 - 3);
+    });
+    AX.stat("j-o1", a.be ? a.be + "개월" : "60개월 내 없음");
+    AX.stat("j-o2", '<span style="color:' + (a.end >= 0 ? "var(--ok)" : "var(--bad)") + '">' + a.end.toFixed(0) + "</span>");
+    AX.stat("j-o3", b.end.toFixed(0));
+  }, { aspect: 0.6, minHeight: 260, maxHeight: 400 });
+
+  /* ================================================ 3) 숙련자 병목 */
+  var cvS = null;
+  var sUpd = function () { if (cvS) cvS.redraw(); };
+  var sN = AX.range("sn-n", function (v) { return v + "명"; }, sUpd);
+  var sQ = AX.range("sn-q", function (v) { return v.toFixed(1) + "건"; }, sUpd);
+  var sS = AX.range("sn-s", function (v) { return v + "분"; }, sUpd);
+  var sH = AX.range("sn-h", function (v) { return v + "시간"; }, sUpd);
+  var sK = AX.range("sn-k", function (v) { return v + "%"; }, sUpd);
+  // 대기 시간(근무 시간) — M/M/1, 주 단위 → 근무시간 환산(주 40시간)
+  function waitH(N, q, s, H, k) {
+    var lam = N * q * (1 - k), mu = H * 60 / s;
+    if (lam >= mu) return Infinity;
+    return lam / (mu * (mu - lam)) * 40;
+  }
+  cvS = AX.canvas("#cv-senior", function (ctx, w, h) {
+    var P = AX.palette();
+    var N = sN(), q = sQ(), s = sS(), H = sH(), k = sK() / 100;
+    var data = [], cap = 80;
+    for (var x = 0; x <= 90; x += 1) { var wv = waitH(N, q, s, H, x / 100); data.push([x, isFinite(wv) ? Math.min(wv, cap) : cap]); }
+    var cur = waitH(N, q, s, H, k);
+    var r = AX.chart(ctx, null, {
+      x: [0, 90], y: [0, cap], xLabel: "지식화 비율(%)", yLabel: "평균 대기(근무 시간)",
+      bands: [{ x0: 0, x1: Math.max(0, Math.min(90, (1 - (H * 60 / s) / (N * q)) * 100)), color: hexA(P.bad, 0.10) }],
+      series: [{ data: data, color: P.accent, width: 2.5 }],
+      points: [{ x: k * 100, y: isFinite(cur) ? Math.min(cur, cap) : cap, r: 6, color: isFinite(cur) ? P.accent2 : P.bad, label: "현재" }]
+    });
+    var lam = N * q * (1 - k), mu = H * 60 / s, rho = lam / mu;
+    AX.stat("sn-o1", '<span style="color:' + (rho >= 0.85 ? "var(--bad)" : rho >= 0.7 ? "var(--warn)" : "var(--ok)") + '">' + Math.round(rho * 100) + "%</span>");
+    AX.stat("sn-o2", isFinite(cur) ? (cur < 1 ? Math.round(cur * 60) + "분" : cur.toFixed(1) + "시간") : '<span style="color:var(--bad)">대기열 폭주</span>');
+    var busy = Math.min(H, lam * s / 60);
+    AX.stat("sn-o3", Math.max(0, H - busy).toFixed(1) + "<small>시간/주</small>");
+  }, { aspect: 0.6, minHeight: 260, maxHeight: 400 });
+})();
+</script>
+</body>
+</html>
