@@ -1,0 +1,725 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="icon" href="../favicon.ico" sizes="any">
+<link rel="icon" href="../favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="../apple-touch-icon.png">
+<title>유스케이스 발굴과 우선순위 · AXBook</title>
+<meta name="description" content="가치사슬 지도로 제조업 AI 유스케이스를 찾고, 업무를 작업 단위로 쪼개 AI 적합도를 판단하며, 가치–실현성 매트릭스와 ROI·NPV 계산으로 무엇부터 할지 정하는 방법.">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+<link rel="stylesheet" href="../css/style.css">
+<script src="../js/common.js"></script>
+<style>
+  .uc-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 4px 14px; padding: 12px 18px 14px; border-top: 1px solid var(--border); font-size: 13px; background: var(--canvas-bg); }
+  .uc-list button { all: unset; cursor: pointer; display: flex; gap: 8px; align-items: baseline; padding: 2px 4px; border-radius: 6px; color: var(--text-dim); }
+  .uc-list button:hover { background: var(--surface); }
+  .uc-list button.sel { color: var(--text); font-weight: 700; background: var(--accent-soft); }
+  .uc-list .n { font-family: var(--mono); font-size: 12px; color: var(--accent); min-width: 18px; }
+  .task-row { display: grid; grid-template-columns: minmax(0, 1fr) 132px; gap: 6px 12px; align-items: center; padding: 8px 0; border-bottom: 1px dashed var(--border); }
+  .task-row:last-child { border-bottom: 0; }
+  .task-row .nm { font-size: 14px; line-height: 1.45; }
+  .task-row .nm small { color: var(--text-faint); font-family: var(--mono); margin-left: 6px; }
+  .task-row select { font: inherit; font-size: 13px; padding: 5px 8px; border-radius: 8px; border: 1px solid var(--border); background: var(--surface); color: var(--text); width: 100%; }
+  .task-row .trk { grid-column: 1 / -1; height: 10px; border-radius: 6px; background: var(--surface-2); overflow: hidden; display: flex; }
+  .task-row .trk i { display: block; height: 100%; background: var(--accent); transition: width .25s; }
+  .task-row .trk b { display: block; height: 100%; background: var(--accent-2-soft); transition: width .25s; }
+  @media (max-width: 420px) { .task-row { grid-template-columns: 1fr; } }
+</style>
+<!-- Cloudflare Web Analytics -->
+<script type='module' src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "3d6151a0abc94ede89285d462527fa80"}'></script>
+<!-- End Cloudflare Web Analytics -->
+</head>
+<body data-chapter="usecases">
+<main class="chapter">
+  <header class="chapter-hero">
+    <div class="eyebrow">Chapter 07</div>
+    <h1>유스케이스 발굴과 우선순위</h1>
+    <p class="lead">"AI로 뭘 할 수 있을까?"라는 질문에는 아이디어가 백 개씩 나온다. 어려운 것은 그중 무엇을 먼저 할지 정하는 일이다. 이 장에서는 기술이 아니라 업무에서 출발해 기회를 찾고, 업무를 작업 단위로 쪼개 AI가 맡을 부분을 가려내고, 가치·실현성·ROI로 순서를 정하는 방법을 다룬다.</p>
+    <ul class="objectives">
+      <li>가치사슬(R&amp;D부터 경영지원까지) 위에서 AI 유스케이스를 찾고, 일곱 가지 유형으로 분류할 수 있다.</li>
+      <li>하나의 업무를 작업 단위로 분해해 AI가 맡을 작업과 사람이 맡을 작업을 구분할 수 있다.</li>
+      <li>가치–실현성 매트릭스로 퀵윈과 전략 과제를 나누고, 데이터 준비도와 리스크를 점수에 반영할 수 있다.</li>
+      <li>절감 시간·채택률·구축비로 손익분기와 3년 NPV를 계산하고, 측정 가능한 KPI와 기준선을 정의할 수 있다.</li>
+    </ul>
+  </header>
+
+  <!-- ============================================================ 1 -->
+  <section id="pain">
+    <h2>아이디어는 많은데 왜 고르지 못하는가</h2>
+    <p>연초에 AX 추진 TF가 꾸려지면 흔히 벌어지는 장면이 있다. 각 팀에 "AI 적용 아이디어를 제출해 달라"는 메일이 나가고, 2주 뒤 공유 폴더에 <code>AI_과제_취합_v4.xlsx</code>가 생긴다. 행은 120개쯤 된다. "AI로 불량 예측", "챗GPT 같은 사내 챗봇", "AI 기반 스마트 품질 관리", "회의록 자동화"… 문제는 이 목록으로는 아무것도 결정할 수 없다는 점이다.</p>
+    <ul>
+      <li><strong>기술 이름만 있고 업무가 없다.</strong> "AI로 불량 예측"은 어떤 공정의 어떤 불량을, 누가, 언제 예측해서, 그 결과로 무엇을 바꾸는지 말하지 않는다.</li>
+      <li><strong>같은 아이디어가 다른 이름으로 여러 번 나온다.</strong> 품질팀의 "클레임 보고서 자동화"와 영업팀의 "고객 대응 문서 AI"는 사실 같은 8D 보고서 작성 업무다.</li>
+      <li><strong>크기가 제각각이다.</strong> "회의록 요약"(한 달이면 된다)과 "전 공정 디지털 트윈"(수년 걸린다)이 같은 표에서 같은 칸을 차지한다.</li>
+      <li><strong>측정 기준이 없다.</strong> 지금 그 업무에 몇 시간이 들고 오류가 얼마나 나는지 아는 사람이 없으니, 효과를 약속할 수도 검증할 수도 없다.</li>
+    </ul>
+    <p>그 결과 목소리가 큰 팀의 과제, 데모가 화려한 과제가 먼저 선택되고, 몇 달 뒤 "PoC는 성공했는데 아무도 안 쓴다"는 보고가 올라온다. <a href="why.html">1장</a>에서 말한 파일럿 연옥의 입구가 바로 여기다. 이 장의 방법은 단순하다. <strong>업무에서 출발하고, 작업으로 쪼개고, 같은 잣대로 점수를 매기고, 숫자로 약속한다.</strong></p>
+    <div class="callout">
+      <strong>유스케이스의 최소 정의</strong>
+      <p>좋은 유스케이스 문장은 "<em>[누가]</em>가 <em>[어떤 상황]</em>에서 <em>[어떤 작업]</em>을 할 때, AI가 <em>[무엇]</em>을 해서 <em>[어떤 지표]</em>가 <em>[얼마나]</em> 바뀐다"의 꼴을 갖춘다. 예: "품질 엔지니어가 고객 클레임을 접수했을 때, AI가 과거 유사 8D와 해당 LOT의 검사 이력을 찾아 보고서 초안을 만들어, 초안 작성 시간이 절반으로 준다." 이 문장을 못 쓰는 아이디어는 아직 유스케이스가 아니라 주제다.</p>
+    </div>
+  </section>
+
+  <!-- ============================================================ 2 -->
+  <section id="valuechain">
+    <h2>가치사슬 지도로 기회 찾기</h2>
+    <p>아이디어 공모 대신 <span class="term">가치사슬</span><span class="en">(value chain)</span>을 펼쳐 놓고 기능별로 훑으면 빠지는 영역 없이, 그리고 서로 겹치지 않게 기회를 찾을 수 있다. 제조업의 주 활동은 대체로 설계 → 구매·SCM → 생산 → 품질 → 물류 → 영업·고객의 흐름을 따르고, 설비 보전과 경영지원이 그 전체를 받친다.</p>
+    <figure class="diagram">
+      <svg viewBox="0 0 420 420" role="img" aria-label="제조업 가치사슬과 기능별 대표 AI 유스케이스">
+        <text x="210" y="16" text-anchor="middle" class="t-dim">주 활동 (Primary activities) — 왼쪽 위에서 오른쪽 아래로</text>
+        <rect x="6" y="28" width="128" height="122" rx="8" class="f-elev"/>
+        <rect x="6" y="28" width="128" height="40" rx="8" class="f-acc-soft"/>
+        <text x="16" y="46" class="t" style="font-weight:700">R&amp;D·설계</text>
+        <text x="16" y="61" class="t-mono">PLM</text>
+        <text x="16" y="90" class="t-dim">· 설계 문서 검색</text>
+        <text x="16" y="110" class="t-dim">· ECN 영향 분석</text>
+        <text x="16" y="130" class="t-dim">· 시험 보고 요약</text>
+        <path d="M136 48 h8 m-4 -4 l4 4 l-4 4" class="s-acc"/>
+        <rect x="146" y="28" width="128" height="122" rx="8" class="f-elev"/>
+        <rect x="146" y="28" width="128" height="40" rx="8" class="f-acc-soft"/>
+        <text x="156" y="46" class="t" style="font-weight:700">구매·SCM</text>
+        <text x="156" y="61" class="t-mono">ERP·SRM</text>
+        <text x="156" y="90" class="t-dim">· 견적 비교표</text>
+        <text x="156" y="110" class="t-dim">· 단종 공지 분류</text>
+        <text x="156" y="130" class="t-dim">· 수요 예측</text>
+        <path d="M276 48 h8 m-4 -4 l4 4 l-4 4" class="s-acc"/>
+        <rect x="286" y="28" width="128" height="122" rx="8" class="f-elev"/>
+        <rect x="286" y="28" width="128" height="40" rx="8" class="f-acc-soft"/>
+        <text x="296" y="46" class="t" style="font-weight:700">생산</text>
+        <text x="296" y="61" class="t-mono">MES</text>
+        <text x="296" y="90" class="t-dim">· 생산계획 조정</text>
+        <text x="296" y="110" class="t-dim">· 레시피 최적화</text>
+        <text x="296" y="130" class="t-dim">· 교대 인수인계</text>
+        <rect x="6" y="162" width="128" height="122" rx="8" class="f-elev"/>
+        <rect x="6" y="162" width="128" height="40" rx="8" class="f-acc-soft"/>
+        <text x="16" y="180" class="t" style="font-weight:700">품질</text>
+        <text x="16" y="195" class="t-mono">QMS·SPC</text>
+        <text x="16" y="224" class="t-dim">· 8D 초안</text>
+        <text x="16" y="244" class="t-dim">· 비전 검사</text>
+        <text x="16" y="264" class="t-dim">· SPC 이상 탐지</text>
+        <path d="M136 182 h8 m-4 -4 l4 4 l-4 4" class="s-acc"/>
+        <rect x="146" y="162" width="128" height="122" rx="8" class="f-elev"/>
+        <rect x="146" y="162" width="128" height="40" rx="8" class="f-acc-soft"/>
+        <text x="156" y="180" class="t" style="font-weight:700">물류</text>
+        <text x="156" y="195" class="t-mono">WMS·TMS</text>
+        <text x="156" y="224" class="t-dim">· 출하 서류 검증</text>
+        <text x="156" y="244" class="t-dim">· 적재 최적화</text>
+        <text x="156" y="264" class="t-dim">· 납기 위험 경보</text>
+        <path d="M276 182 h8 m-4 -4 l4 4 l-4 4" class="s-acc"/>
+        <rect x="286" y="162" width="128" height="122" rx="8" class="f-elev"/>
+        <rect x="286" y="162" width="128" height="40" rx="8" class="f-acc-soft"/>
+        <text x="296" y="180" class="t" style="font-weight:700">영업·고객</text>
+        <text x="296" y="195" class="t-mono">CRM</text>
+        <text x="296" y="224" class="t-dim">· 클레임 분류</text>
+        <text x="296" y="244" class="t-dim">· 사양 질의 응답</text>
+        <text x="296" y="264" class="t-dim">· RFQ 응답 초안</text>
+        <text x="210" y="312" text-anchor="middle" class="t-dim">지원 활동 (Support activities)</text>
+        <rect x="6" y="320" width="408" height="44" rx="8" class="f-acc2-soft"/>
+        <text x="16" y="338" class="t" style="font-weight:700">설비 보전</text>
+        <text x="16" y="355" class="t-dim">알람 트리아지 · 정비 이력 검색 · 예지 보전</text>
+        <rect x="6" y="370" width="408" height="44" rx="8" class="f-surface"/>
+        <text x="16" y="388" class="t" style="font-weight:700">경영지원 (인사·재무·법무·IT)</text>
+        <text x="16" y="405" class="t-dim">규정 질의 응답 · 계약서 검토 보조 · 주간보고 취합</text>
+        </svg>
+      <figcaption><b>그림 7-1.</b> 가치사슬 위에 놓은 대표 AI 유스케이스. 같은 "요약"이라도 품질의 8D 초안과 경영지원의 주간보고 취합은 데이터·위험·효과가 전혀 다르다. 기능별로 펼쳐 놓아야 중복과 공백이 보인다.</figcaption>
+    </figure>
+    <p>지도를 그릴 때는 각 기능에서 <strong>"반복되고, 시간이 많이 들고, 판단 근거가 문서·데이터에 있는 업무"</strong>를 먼저 찾는다. 다음 표는 가상의 A사(글로벌 전자부품 제조사)가 기능별 워크숍에서 뽑은 후보 중 일부다.</p>
+    <div class="table-wrap"><table>
+      <thead><tr><th>기능</th><th>현장의 장면</th><th>AI 유스케이스</th><th>필요한 데이터</th></tr></thead>
+      <tbody>
+        <tr><td>R&amp;D·설계</td><td>설계 변경(ECN) 결재 메일에 "영향 없음"이라고 적었는데 금형·검사 기준이 바뀌어야 했다</td><td>ECN 영향 분석 보조</td><td>BOM, 도면 메타데이터, 공정 라우팅, 과거 ECN</td></tr>
+        <tr><td>구매·SCM</td><td>협력사 5곳의 견적 회신이 엑셀·PDF·메일 본문으로 제각각 온다</td><td>견적 비교표 자동 작성</td><td>견적 메일·첨부, 품목 코드, 과거 단가</td></tr>
+        <tr><td>생산</td><td>교대 때마다 화이트보드와 메신저로 인계, 야간 이슈가 누락된다</td><td>교대 인수인계 요약</td><td>MES 이벤트, 작업일지, 알람 이력</td></tr>
+        <tr><td>품질</td><td>고객 클레임마다 8D 보고서를 처음부터 쓴다</td><td>8D 초안·유사 사례 검색</td><td>과거 8D, 검사 데이터, LOT 추적 정보</td></tr>
+        <tr><td>설비</td><td>야간 알람 200건 중 진짜 조치가 필요한 것은 일부뿐이다</td><td>알람 트리아지</td><td>알람 로그, 정비 이력(CMMS), 설비 매뉴얼</td></tr>
+        <tr><td>영업·고객</td><td>고객 사양 질의에 답하려고 규격서 PDF를 뒤진다</td><td>사양 질의 응답(RAG)</td><td>제품 규격서, 인증서, 과거 답변</td></tr>
+        <tr><td>경영지원</td><td>팀별 주간보고를 취합해 본부 보고서로 다시 쓴다</td><td>보고 취합·요약</td><td>팀별 보고 양식(표준화 필요)</td></tr>
+      </tbody>
+    </table></div>
+    <div class="callout tip">
+      <strong>워크숍 진행 요령</strong>
+      <p>"AI로 뭘 하고 싶나요?"라고 묻지 말고 "지난달 가장 짜증났던 반복 업무 세 가지는?", "신입이 가장 오래 헤매는 일은?", "담당자가 휴가 가면 멈추는 일은?"이라고 묻는다. 답은 대부분 <a href="legacy.html">2장</a>의 레거시(메일·엑셀·개인 PC)와 <a href="process.html">3장</a>의 프로세스 부채 위에 있다.</p>
+    </div>
+  </section>
+
+  <!-- ============================================================ 3 -->
+  <section id="types">
+    <h2>유스케이스의 일곱 가지 유형</h2>
+    <p>후보를 유형으로 묶으면 필요한 기술·데이터·검증 방법이 보인다. 유형이 같으면 플랫폼과 평가 방법을 재사용할 수 있으므로, 두 번째 과제부터는 속도가 붙는다.</p>
+    <div class="cards">
+      <div class="card"><span class="k">TYPE 1</span><h4>검색·요약</h4><p>규격서·매뉴얼·과거 8D에서 근거를 찾아 요약한다. RAG(<a href="knowledge.html">6장</a>)가 핵심. 실패 패턴: 문서 권한·최신성 미정리.</p></div>
+      <div class="card"><span class="k">TYPE 2</span><h4>작성·변환</h4><p>보고서 초안, 영문 변환, 양식 간 변환. 효과가 빨리 보이지만 "초안 품질"의 기준을 먼저 정해야 한다.</p></div>
+      <div class="card"><span class="k">TYPE 3</span><h4>분류·추출</h4><p>메일·첨부에서 품목·수량·납기를 뽑고, 클레임 유형을 분류한다. 정답 라벨(과거 처리 결과)이 있으면 평가가 쉽다.</p></div>
+      <div class="card"><span class="k">TYPE 4</span><h4>예측</h4><p>수요, 수율, 납기 지연, 설비 고장. 정형 데이터의 이력과 품질이 성패를 가른다.</p></div>
+      <div class="card"><span class="k">TYPE 5</span><h4>최적화</h4><p>생산계획, 레시피, 적재. 제약 조건을 명시할 수 있어야 하고, 현장 수용성이 관건이다.</p></div>
+      <div class="card"><span class="k">TYPE 6</span><h4>이상 탐지</h4><p>SPC 이탈, 설비 진동, 비전 불량. 불량 표본이 적고 오탐·미탐 비용이 비대칭이다(<a href="shopfloor.html">9장</a>).</p></div>
+      <div class="card"><span class="k">TYPE 7</span><h4>에이전트형 자동화</h4><p>여러 도구를 호출하며 여러 단계를 수행한다. 앞의 유형들이 부품으로 쓰인다. 승인 지점 설계가 필수(<a href="agents.html">8장</a>).</p></div>
+    </div>
+    <p>하나의 업무에는 여러 유형이 섞여 있다. 고객 클레임 대응은 클레임 메일 분류(유형 3), 유사 사례 검색(유형 1), 8D 초안 작성(유형 2)이 이어진 사슬이다. 그래서 다음 절처럼 업무를 작업 단위로 쪼개 보는 것이 출발점이다.</p>
+    <div class="callout warn">
+      <strong>생성형 AI가 모든 유형의 답은 아니다</strong>
+      <p>수율 예측이나 진동 기반 이상 탐지 같은 정형 데이터 문제에는 통계 모델이나 전통적 머신러닝이 더 정확하고 싸고 설명하기 쉬운 경우가 많다. 반대로 메일·보고서·규격서처럼 비정형 텍스트가 중심인 업무에서는 생성형 AI가 이전에는 불가능했던 자동화를 연다. 유형을 먼저 정하면 "LLM으로 수요 예측" 같은 어긋난 조합을 피할 수 있다.</p>
+    </div>
+  </section>
+
+  <!-- ============================================================ 4 -->
+  <section id="decompose">
+    <h2>업무를 작업 단위로 쪼개기</h2>
+    <p>"클레임 대응을 AI로 자동화한다"는 목표는 너무 크다. 클레임 대응은 메일을 읽고, 데이터를 조회하고, 불량 샘플을 분석하고, 원인을 토론하고, 보고서를 쓰고, 고객과 통화하는 여러 <span class="term">작업</span><span class="en">(task)</span>의 묶음이다. AI는 업무 전체가 아니라 이 작업 중 일부를 맡는다. 현물 분석이나 고객과의 신뢰 형성처럼 사람이 해야 하는 작업은 그대로 남고, 정보를 찾고 정리하고 문서로 옮기는 작업이 줄어든다.</p>
+    <p>작업마다 AI 적합도를 판단하는 질문은 네 가지다.</p>
+    <ol>
+      <li><strong>입력이 디지털로 존재하는가?</strong> 현장 확인, 실물 분석이 필요하면 적합도가 낮다.</li>
+      <li><strong>정답을 확인할 수 있는가?</strong> 결과를 사람이 빠르게 검증할 수 있으면 높다(예: 비교표의 숫자는 원본과 대조 가능).</li>
+      <li><strong>틀렸을 때의 비용은?</strong> 고객 송부 문서, 설비 제어처럼 비용이 크면 AI는 초안까지만 맡는다.</li>
+      <li><strong>판단에 암묵지·관계가 필요한가?</strong> 협상, 원인 확정 토론처럼 사람 사이의 합의가 핵심이면 낮다.</li>
+    </ol>
+    <div class="sim" id="sim-decomp">
+      <div class="sim-head"><span class="sim-tag">INTERACTIVE</span><h3>업무 분해기 — 어디까지 AI가 맡을 수 있나</h3></div>
+      <div class="sim-body side">
+        <div class="sim-view"><div class="sim-html" style="padding-bottom:4px"><div class="ctrl"><span>업무 선택</span><div class="seg" id="dc-job"><button data-value="claim" class="on">고객 클레임</button><button data-value="quote">구매 견적</button><button data-value="alarm">설비 알람</button></div></div></div><div class="sim-html" id="dc-out" style="padding-top:4px"></div></div>
+        <div class="sim-controls">
+          <p style="margin:0;font-size:13px;color:var(--text-dim)">각 작업의 AI 적합도를 바꿔 보자. 가정 비율: 높음 70%, 중간 40%, 낮음 15%, 사람 고유 0%의 시간을 AI가 덜어 준다(예시 가정).</p>
+          <label class="ctrl"><span>담당 인원 <output id="dc-n-out"></output></span><input type="range" id="dc-n" min="1" max="50" step="1" value="8"></label>
+          <button class="btn" id="dc-reset">기본값으로</button>
+        </div>
+      </div>
+      <div class="sim-readout">
+        <div class="stat"><span class="k">1인 주당 업무시간</span><span class="v" id="dc-o1">—</span></div>
+        <div class="stat"><span class="k">AI가 덜어 줄 시간</span><span class="v" id="dc-o2">—</span></div>
+        <div class="stat"><span class="k">자동화 가능 비중</span><span class="v" id="dc-o3">—</span></div>
+        <div class="stat"><span class="k">팀 연간 절감(시간)</span><span class="v" id="dc-o4">—</span></div>
+      </div>
+      <div class="sim-note">막대의 진한 부분이 AI가 덜어 줄 수 있는 시간, 옅은 부분이 사람에게 남는 시간이다. 해볼 것: 클레임 대응에서 "8D 작성"과 "유사 사례 검색"만 높음으로 둬도 비중이 얼마나 나오는지 보고, "현물 분석"을 높음으로 바꾸는 것이 왜 비현실적인지 생각해 보자. 작업 시간은 예시 수치다.</div>
+    </div>
+    <p>분해 결과는 대개 비슷한 모양이다. 업무 전체를 대체하는 경우는 드물고, 30~50% 정도의 시간이 줄어드는 대신 남은 시간은 판단·현장·관계에 집중된다(이 범위 역시 위 모델의 가정에서 나온 예시다). 이 관점은 현장의 불안을 줄이는 데도 중요하다. "당신의 일을 대체한다"가 아니라 "당신이 싫어하는 그 작업을 덜어 준다"로 말할 수 있기 때문이다.</p>
+  </section>
+
+  <!-- ============================================================ 5 -->
+  <section id="matrix">
+    <h2>가치–실현성 매트릭스</h2>
+    <p>후보 목록이 업무·작업 단위로 정리되었으면 같은 잣대로 점수를 매긴다. 가장 널리 쓰는 틀은 <span class="term">가치–실현성 매트릭스</span><span class="en">(value–feasibility matrix)</span>다. 가치는 "성공하면 얼마나 좋은가", 실현성은 "지금 조직이 그것을 해낼 수 있는가"다.</p>
+    <figure class="diagram">
+      <svg viewBox="0 0 560 340" role="img" aria-label="가치-실현성 매트릭스의 네 사분면">
+        <rect x="70" y="20" width="220" height="140" class="f-acc2-soft"/>
+        <rect x="290" y="20" width="220" height="140" class="f-acc-soft"/>
+        <rect x="70" y="160" width="220" height="140" class="f-surface"/>
+        <rect x="290" y="160" width="220" height="140" class="f-elev"/>
+        <text x="180" y="78" text-anchor="middle" class="t" style="font-weight:700">전략 과제</text>
+        <text x="180" y="98" text-anchor="middle" class="t-dim">가치 큼 · 기반 부족</text>
+        <text x="180" y="116" text-anchor="middle" class="t-dim">데이터·프로세스 먼저</text>
+        <text x="400" y="78" text-anchor="middle" class="t-acc">퀵윈</text>
+        <text x="400" y="98" text-anchor="middle" class="t-dim">가치 큼 · 바로 가능</text>
+        <text x="400" y="116" text-anchor="middle" class="t-dim">첫 등대 과제 후보</text>
+        <text x="180" y="222" text-anchor="middle" class="t" style="font-weight:700">보류</text>
+        <text x="180" y="242" text-anchor="middle" class="t-dim">재정의하거나 버린다</text>
+        <text x="400" y="222" text-anchor="middle" class="t" style="font-weight:700">작은 개선</text>
+        <text x="400" y="242" text-anchor="middle" class="t-dim">셀프서비스 도구로</text>
+        <path d="M70 300 V20 M70 300 H510" class="s-axis"/>
+        <text x="290" y="326" text-anchor="middle" class="t-dim">실현성 (데이터 준비도 · 프로세스 표준화 · 리스크) →</text>
+        <text x="24" y="160" text-anchor="middle" class="t-dim" transform="rotate(-90 24 160)">가치 (시간 · 품질 · 리드타임) →</text>
+        <path d="M200 130 C 240 132, 300 120, 360 72" class="s-acc" stroke-dasharray="5 4"/>
+        <path d="M352 70 l10 1 l-4 9" class="s-acc"/>
+        <text x="236" y="146" class="t-mono">기반 정비 후 이동</text>
+      </svg>
+      <figcaption><b>그림 7-2.</b> 가치–실현성 매트릭스. 전략 과제는 버리는 것이 아니라 "먼저 기반을 깔아야 하는 과제"다. 데이터 인벤토리, 용어 표준화, 양식 통일이 끝나면 같은 과제가 오른쪽(퀵윈)으로 이동한다.</figcaption>
+    </figure>
+    <p>점수는 하위 항목으로 쪼개야 토론이 가능해진다. 아래는 이 책에서 쓰는 예시 기준이다. 조직마다 가중치를 바꿔도 되지만, <strong>모든 후보에 같은 기준을 적용하는 것</strong>이 핵심이다.</p>
+    <div class="table-wrap"><table>
+      <thead><tr><th>축</th><th>하위 항목</th><th>1점</th><th>10점</th></tr></thead>
+      <tbody>
+        <tr><td rowspan="3">가치</td><td>시간 절감</td><td>몇 명이 가끔 하는 일</td><td>수백 명이 매일 하는 일</td></tr>
+        <tr><td>품질·COPQ</td><td>품질 영향 없음</td><td>유출·재작업·클레임 비용을 직접 줄임</td></tr>
+        <tr><td>리드타임·리스크</td><td>속도 영향 없음</td><td>고객 응답·출하·복구 시간을 크게 단축</td></tr>
+        <tr><td rowspan="3">실현성</td><td>데이터 준비도</td><td>메일·개인 PC에 흩어짐, 권한 불명</td><td>시스템에 구조화, 오너·권한 명확</td></tr>
+        <tr><td>프로세스 표준화</td><td>건마다 절차·양식이 다름</td><td>표준 절차와 양식, 이력이 남음</td></tr>
+        <tr><td>리스크(역점수)</td><td>틀리면 안전·고객·법적 문제</td><td>틀려도 사람이 즉시 바로잡음</td></tr>
+      </tbody>
+    </table></div>
+
+    <div class="sim" id="sim-matrix">
+      <div class="sim-head"><span class="sim-tag">INTERACTIVE</span><h3>유스케이스 포트폴리오 매트릭스</h3></div>
+      <div class="sim-body side">
+        <div class="sim-view">
+          <canvas id="cv-matrix"></canvas>
+          <div class="uc-list" id="mx-list"></div>
+        </div>
+        <div class="sim-controls">
+          <label class="ctrl"><span>유스케이스</span><select id="mx-pick"></select></label>
+          <label class="ctrl"><span>가치 <output id="mx-v-out"></output></span><input type="range" id="mx-v" min="1" max="10" step="1" value="5"></label>
+          <label class="ctrl"><span>데이터 준비도 <output id="mx-d-out"></output></span><input type="range" id="mx-d" min="1" max="10" step="1" value="5"></label>
+          <label class="ctrl"><span>프로세스 표준화 <output id="mx-p-out"></output></span><input type="range" id="mx-p" min="1" max="10" step="1" value="5"></label>
+          <label class="ctrl"><span>리스크 <output id="mx-r-out"></output></span><input type="range" id="mx-r" min="1" max="10" step="1" value="5"></label>
+          <button class="btn" id="mx-reset">전체 초기화</button>
+        </div>
+      </div>
+      <div class="sim-readout">
+        <div class="stat"><span class="k">선택 과제</span><span class="v" id="mx-o1">—</span></div>
+        <div class="stat"><span class="k">퀵윈</span><span class="v" id="mx-o2">—</span></div>
+        <div class="stat"><span class="k">전략 과제</span><span class="v" id="mx-o3">—</span></div>
+        <div class="stat"><span class="k">작은 개선 · 보류</span><span class="v" id="mx-o4">—</span></div>
+      </div>
+      <div class="sim-note">실현성 = 0.45×데이터 준비도 + 0.35×프로세스 표준화 + 0.20×(11 − 리스크). 점이나 목록을 클릭해 과제를 고른다. 해볼 것: "ECN 영향 분석"의 데이터 준비도를 3에서 8로 올려 보자(BOM·도면·라우팅이 연결된 상태). 전략 과제가 퀵윈으로 옮겨 가는 것이 기반 투자의 효과다. 점수는 가상 A사의 예시다.</div>
+    </div>
+    <div class="callout deep">
+      <strong>점수의 함정</strong>
+      <p>점수표는 토론을 구조화하는 도구이지 정답 생성기가 아니다. 흔한 함정은 세 가지다. ① 가치를 낙관적으로 매기는 제안자 편향 — 기준선 측정값이 없는 가치 점수는 최대 6점으로 제한하는 식의 규칙이 도움이 된다. ② 리스크를 0으로 두는 것 — 고객 송부 문서나 설비 제어에 닿는 과제는 승인 지점을 먼저 설계해야 한다. ③ 데이터 준비도를 "데이터가 있다"로 오해하는 것 — 있는 것과 쓸 수 있는 것(구조화·권한·품질, <a href="foundation.html">5장</a>)은 다르다.</p>
+    </div>
+  </section>
+
+  <!-- ============================================================ 6 -->
+  <section id="roi">
+    <h2>ROI 계산: 시간·품질·리드타임</h2>
+    <p>경영진 보고에서 반드시 나오는 질문은 "그래서 얼마 버나?"다. 생성형 AI 과제의 편익은 대부분 <strong>시간</strong>에서 시작한다. 가장 단순한 모형은 다음과 같다.</p>
+    <div class="formula">$$ B_t = N \cdot H \cdot r \cdot s \cdot a(t) \cdot w $$
+      <div class="where">\(B_t\): \(t\)월의 편익, \(N\): 대상 인원, \(H\): 1인 월 근무시간, \(r\): 대상 업무가 차지하는 시간 비중, \(s\): 그 업무에서 AI가 줄이는 비율(앞 절의 분해 결과), \(a(t)\): \(t\)월의 채택률, \(w\): 시간당 인건비.</div>
+    </div>
+    <p>여기서 가장 자주 빠지는 항이 <span class="term">채택률</span> \(a(t)\)이다. 시스템을 열었다고 모두가 첫날부터 쓰지 않는다. 채택은 대개 S자 곡선을 그린다. 11장에서 확산 모델을 더 다루겠지만, 여기서는 로지스틱 곡선으로 근사한다.</p>
+    <div class="formula">$$ a(t) = \frac{a_{\max}}{1 + e^{-k\,(t - t_{50})}} $$
+      <div class="where">\(a_{\max}\): 최종 채택률, \(t_{50}\): 최종 채택률의 절반에 도달하는 달, \(k\): 확산 속도(아래 계산기는 \(k = 0.7\)/월로 고정).</div>
+    </div>
+    <p>비용 쪽은 구축비(초기 개발, 데이터 정비, 통합)와 운영비(인프라·모델 사용료, 유지보수, 평가·모니터링 인력)다. 시간 가치가 있으므로 현재가치로 할인한 <span class="term">순현재가치</span><span class="en">(NPV, Net Present Value)</span>로 비교한다.</p>
+    <div class="formula">$$ \mathrm{NPV} = \sum_{t=0}^{T} \frac{B_t - C_t}{(1+i)^{t}}, \qquad \text{손익분기 } t^{*} = \min\Big\{ t : \sum_{\tau \le t} (B_\tau - C_\tau) \ge 0 \Big\} $$
+      <div class="where">\(C_t\): \(t\)월 비용, \(i\): 월 할인율(아래 계산기는 연 8%를 월로 환산한 예시값).</div>
+    </div>
+
+    <div class="sim" id="sim-roi">
+      <div class="sim-head"><span class="sim-tag">INTERACTIVE</span><h3>ROI 계산기 — 손익분기와 3년 NPV</h3></div>
+      <div class="sim-body side">
+        <div class="sim-view"><canvas id="cv-roi"></canvas></div>
+        <div class="sim-controls">
+          <label class="ctrl"><span>대상 인원 N <output id="roi-n-out"></output></span><input type="range" id="roi-n" min="10" max="600" step="10" value="120"></label>
+          <label class="ctrl"><span>대상 업무 시간 비중 r <output id="roi-r-out"></output></span><input type="range" id="roi-r" min="2" max="50" step="1" value="15"></label>
+          <label class="ctrl"><span>업무 절감률 s <output id="roi-s-out"></output></span><input type="range" id="roi-s" min="5" max="80" step="1" value="40"></label>
+          <label class="ctrl"><span><span>최종 채택률 a<sub>max</sub></span> <output id="roi-a-out"></output></span><input type="range" id="roi-a" min="10" max="100" step="5" value="70"></label>
+          <label class="ctrl"><span><span>채택 절반 도달 t<sub>50</sub></span> <output id="roi-t-out"></output></span><input type="range" id="roi-t" min="1" max="18" step="1" value="6"></label>
+          <label class="ctrl"><span>구축비 <output id="roi-c-out"></output></span><input type="range" id="roi-c" min="0.5" max="20" step="0.5" value="4"></label>
+          <label class="ctrl"><span>연간 운영비 <output id="roi-o-out"></output></span><input type="range" id="roi-o" min="0.1" max="6" step="0.1" value="1.2"></label>
+          <label class="ctrl"><span>시간당 인건비 w <output id="roi-w-out"></output></span><input type="range" id="roi-w" min="3" max="12" step="0.5" value="5"></label>
+        </div>
+      </div>
+      <div class="sim-readout">
+        <div class="stat"><span class="k">정착 후 월 절감 시간</span><span class="v" id="roi-o1">—</span></div>
+        <div class="stat"><span class="k">손익분기</span><span class="v" id="roi-o2">—</span></div>
+        <div class="stat"><span class="k">3년 NPV</span><span class="v" id="roi-o3">—</span></div>
+        <div class="stat"><span class="k">3년 ROI</span><span class="v" id="roi-o4">—</span></div>
+      </div>
+      <div class="sim-note">월 근무시간 H = 160시간, 연 할인율 8%로 가정한 교육용 예시 모델이다. 실선은 누적 순현금흐름, 점선은 누적 편익, 막대는 월 채택률이다. 해볼 것: 채택률을 70%에서 30%로 낮추면 손익분기가 어떻게 바뀌나? 구축비를 줄이는 것보다 채택률을 올리는 것이 더 큰 효과를 내는 경우가 많다.</div>
+    </div>
+
+    <p><strong>예제(예시 수치).</strong> 품질 엔지니어 120명이 근무시간의 15%를 클레임·8D 문서 작업에 쓰고, AI가 그 작업의 40%를 줄이며, 최종적으로 70%가 쓴다고 하자. 정착 후 월 절감 시간은 \(120 \times 160 \times 0.15 \times 0.4 \times 0.7 \approx 806\)시간이다. 시간당 5만 원이면 월 약 4,000만 원, 연 약 4.8억 원이다. 구축비 4억 원, 연 운영비 1.2억 원이면 채택이 자리 잡는 기간까지 포함하면 손익분기는 2년 가까이 걸린다(계산기 기본값으로 약 21개월, 3년 NPV 약 3.5억 원). 같은 과제라도 채택률이 30%에 머물면 3년 안에 본전을 못 찾을 수도 있다.</p>
+    <div class="callout warn">
+      <strong>"절감 시간 = 절감 비용"이 아니다</strong>
+      <p>주당 3시간이 줄었다고 인건비가 줄지는 않는다. 그 시간이 재발 방지 활동, 고객 방문, 더 많은 이슈 처리로 <strong>재배치</strong>되어야 가치가 된다. 그래서 ROI 보고에는 "절감 시간을 어디에 쓸 것인가"를 같이 적는다. 경영진이 믿는 숫자는 대개 시간 그 자체보다 그 시간이 만든 결과(클레임 응답 리드타임 단축, 처리 건수 증가, 재발률 감소)다.</p>
+    </div>
+    <p>품질 과제는 시간보다 <span class="term">품질 비용</span><span class="en">(COPQ, Cost of Poor Quality)</span>으로 계산하는 편이 설득력 있다. 예를 들어 비전 검사의 과검을 줄이면 재검사 인력과 양품 폐기가 줄고, 미검을 줄이면 고객 클레임·리콜 위험이 준다. 이때 편익은 "연간 불량 건수 × 건당 처리 비용 × 감소율"로 잡는다. 건당 처리 비용에는 재작업·폐기·선별·출장·고객 페널티처럼 실제로 장부에 남는 항목만 넣는 것이 보수적이고 안전하다.</p>
+  </section>
+
+  <!-- ============================================================ 7 -->
+  <section id="kpi">
+    <h2>측정 가능한 KPI와 기준선</h2>
+    <p>ROI 숫자를 믿게 만드는 것은 계산식이 아니라 <strong>측정</strong>이다. 파일럿을 시작하기 전에 지금 상태, 즉 <span class="term">기준선</span><span class="en">(baseline)</span>을 재 두지 않으면 6개월 뒤 "좋아진 것 같다"는 인상만 남는다. 지표는 세 층으로 정의한다.</p>
+    <div class="table-wrap"><table>
+      <thead><tr><th>층</th><th>의미</th><th>8D 초안 과제의 예</th><th>측정 방법</th></tr></thead>
+      <tbody>
+        <tr><td><span class="chip acc">선행</span> 사용</td><td>실제로 쓰이고 있는가</td><td>주간 활성 사용자, 클레임 건 대비 초안 생성 비율</td><td>시스템 로그</td></tr>
+        <tr><td><span class="chip ok">결과</span> 업무</td><td>업무가 바뀌었는가</td><td>클레임 접수→D3 제출 리드타임, 보고서 작성 시간</td><td>이슈 카드 타임스탬프, 표본 시간 측정</td></tr>
+        <tr><td><span class="chip ok">결과</span> 사업</td><td>사업 성과가 바뀌었는가</td><td>고객 응답 기한 준수율, 동일 원인 재발률</td><td>QMS, 고객 스코어카드</td></tr>
+        <tr><td><span class="chip warn">가드레일</span></td><td>나빠진 것은 없는가</td><td>초안의 사실 오류 건수, 고객 반려율, 사람 수정량</td><td>검토자 체크, 반려 이력</td></tr>
+      </tbody>
+    </table></div>
+    <ul class="checklist">
+      <li>파일럿 전 4~8주 동안 기준선을 잰다. 시스템 로그가 없다면 표본 업무 일지라도 쓴다.</li>
+      <li>지표의 계산식을 문서로 고정한다("리드타임"의 시작과 끝이 무엇인지 — <a href="semantics.html">4장</a>의 KPI 정의 문제와 같다).</li>
+      <li>사용 지표만 보고 성공을 선언하지 않는다. 결과 지표가 움직여야 한다.</li>
+      <li>가드레일 지표에 임계값을 정한다(예: 사실 오류가 주 1건 이상이면 원인 분석 후 재개).</li>
+      <li>비교군을 둘 수 있으면 둔다(같은 기간, AI를 쓰지 않는 라인·팀).</li>
+    </ul>
+  </section>
+
+  <!-- ============================================================ 8 -->
+  <section id="canvas">
+    <h2>유스케이스 캔버스: 한 장으로 약속하기</h2>
+    <p>선정된 과제는 한 장짜리 <span class="term">유스케이스 캔버스</span>로 정리해 현업 오너·IT·보안·경영진이 같은 그림을 보게 한다. 캔버스의 목적은 문서 작성이 아니라 <strong>빈칸을 드러내는 것</strong>이다. "데이터 오너" 칸을 못 채우면 그 과제는 아직 시작하면 안 된다.</p>
+    <figure class="diagram">
+      <svg viewBox="0 0 600 330" role="img" aria-label="유스케이스 캔버스 양식">
+        <rect x="10" y="10" width="190" height="96" rx="8" class="f-acc-soft"/>
+        <text x="22" y="32" class="t-acc">① 문제와 사용자</text>
+        <text x="22" y="54" class="t-dim">누가, 어떤 상황에서,</text>
+        <text x="22" y="72" class="t-dim">무엇 때문에 힘든가</text>
+        <rect x="205" y="10" width="190" height="96" rx="8" class="f-elev"/>
+        <text x="217" y="32" class="t" style="font-weight:700">② 현재 방식 (기준선)</text>
+        <text x="217" y="54" class="t-dim">절차 · 소요 시간 · 오류</text>
+        <text x="217" y="72" class="t-dim">지금 숫자로</text>
+        <rect x="400" y="10" width="190" height="96" rx="8" class="f-elev"/>
+        <text x="412" y="32" class="t" style="font-weight:700">③ AI의 역할</text>
+        <text x="412" y="54" class="t-dim">유형 · 맡는 작업 ·</text>
+        <text x="412" y="72" class="t-dim">맡지 않는 작업</text>
+        <rect x="10" y="114" width="190" height="96" rx="8" class="f-elev"/>
+        <text x="22" y="136" class="t" style="font-weight:700">④ 데이터</text>
+        <text x="22" y="158" class="t-dim">원천 · 오너 · 권한 ·</text>
+        <text x="22" y="176" class="t-dim">품질 · 갱신 주기</text>
+        <rect x="205" y="114" width="190" height="96" rx="8" class="f-acc2-soft"/>
+        <text x="217" y="136" class="t" style="font-weight:700">⑤ 사람의 승인 지점</text>
+        <text x="217" y="158" class="t-dim">누가 무엇을 확인하고</text>
+        <text x="217" y="176" class="t-dim">언제 멈추는가</text>
+        <rect x="400" y="114" width="190" height="96" rx="8" class="f-elev"/>
+        <text x="412" y="136" class="t" style="font-weight:700">⑥ KPI</text>
+        <text x="412" y="158" class="t-dim">선행 · 결과 · 가드레일</text>
+        <text x="412" y="176" class="t-dim">목표값과 측정 방법</text>
+        <rect x="10" y="218" width="190" height="96" rx="8" class="f-elev"/>
+        <text x="22" y="240" class="t" style="font-weight:700">⑦ 리스크</text>
+        <text x="22" y="262" class="t-dim">보안 등급 · 오류 영향 ·</text>
+        <text x="22" y="280" class="t-dim">규제 (10장)</text>
+        <rect x="205" y="218" width="190" height="96" rx="8" class="f-elev"/>
+        <text x="217" y="240" class="t" style="font-weight:700">⑧ 비용과 일정</text>
+        <text x="217" y="262" class="t-dim">구축 · 운영 · 마일스톤</text>
+        <text x="217" y="280" class="t-dim">중단 기준</text>
+        <rect x="400" y="218" width="190" height="96" rx="8" class="f-acc-soft"/>
+        <text x="412" y="240" class="t-acc">⑨ 오너와 팀</text>
+        <text x="412" y="262" class="t-dim">현업 프로덕트 오너 ·</text>
+        <text x="412" y="280" class="t-dim">IT · 데이터 스튜어드</text>
+      </svg>
+      <figcaption><b>그림 7-3.</b> 유스케이스 캔버스의 아홉 칸. ①과 ⑨가 현업에서 나와야 하고(현업이 주인), ⑤와 ⑦은 시작 전에 보안·품질 조직과 합의해야 한다. <a href="playbook.html">14장</a>의 플레이북에서 우리 팀의 캔버스를 직접 만들 수 있다.</figcaption>
+    </figure>
+    <p>가상의 B사(자동차 부품) 품질팀이 작성한 캔버스를 요약하면 다음과 같다.</p>
+    <div class="mock">
+      <div class="mock-head">유스케이스 캔버스 · UC-07 고객 클레임 8D 초안 · 오너: 품질보증팀 파트장</div>
+      <div class="mock-body">
+        <b>① 문제</b> 고객 클레임 접수 후 D3(임시 조치) 보고 기한이 촉박한데, 과거 유사 8D와 LOT 이력을 찾는 데만 반나절이 걸린다.<br>
+        <b>② 기준선</b> 최근 3개월 클레임 <mark>건당 8D 초안 작성 평균 6.5시간</mark>(표본 측정, 예시 수치), 기한 초과 다수.<br>
+        <b>③ AI 역할</b> 클레임 메일 요약, 과거 8D 유사 사례 상위 5건 검색, D2(문제 기술)·D3 초안 작성. <mark class="w">근본원인(D4) 확정과 고객 송부는 하지 않는다.</mark><br>
+        <b>④ 데이터</b> QMS의 8D 이력(구조화), 클레임 메일(비정형), MES LOT 추적. 오너: 품질보증팀, 권한: 고객사별 접근 제한.<br>
+        <b>⑤ 승인 지점</b> 담당 엔지니어 검토 → 파트장 승인 후에만 고객 송부.<br>
+        <b>⑥ KPI</b> 초안 작성 시간 <mark class="b">6.5h → 3h</mark>, D3 기한 준수율, 사실 오류 0건(가드레일).<br>
+        <b>⑦ 리스크</b> 고객 기밀 — 사내 호스팅 모델만 사용. <b>⑧ 일정</b> 8주 파일럿, 기한 준수율 개선이 없으면 중단.
+      </div>
+    </div>
+    <div class="callout tip">
+      <strong>중단 기준을 미리 적는다</strong>
+      <p>"성공 기준"만큼 중요한 것이 "중단 기준"이다. 8주 뒤 무엇이 안 보이면 멈출지 미리 적어 두면, 실패한 파일럿이 예산만 먹으며 연명하는 일을 막고 팀이 다음 과제로 빨리 옮겨 갈 수 있다.</p>
+    </div>
+  </section>
+
+  <section class="keypoints" id="summary">
+    <h2>핵심 정리</h2>
+    <ol>
+      <li>아이디어 공모가 아니라 가치사슬 지도에서 출발한다. "반복되고, 시간이 많이 들고, 근거가 문서·데이터에 있는 업무"가 첫 후보다.</li>
+      <li>유스케이스는 검색·요약, 작성·변환, 분류·추출, 예측, 최적화, 이상 탐지, 에이전트형 자동화의 일곱 유형으로 묶으면 필요한 데이터와 평가 방법이 보인다.</li>
+      <li>AI는 업무 전체가 아니라 작업을 맡는다. 업무를 분해해 입력의 디지털 여부, 검증 가능성, 오류 비용, 암묵지 필요성으로 적합도를 판단한다.</li>
+      <li>가치–실현성 매트릭스에서 전략 과제는 "버릴 과제"가 아니라 "기반을 먼저 깔 과제"다. 데이터·프로세스 정비가 과제를 퀵윈으로 옮긴다.</li>
+      <li>ROI의 핵심 변수는 채택률이다. \(B_t = N H r s\,a(t)\,w\)에서 \(a(t)\)를 빼면 숫자가 과장된다. 절감 시간은 재배치되어야 가치가 된다.</li>
+      <li>기준선을 먼저 재고, 선행·결과·가드레일 지표와 중단 기준을 유스케이스 캔버스 한 장에 약속한다.</li>
+    </ol>
+  </section>
+
+  <section class="quiz-sec" id="quiz">
+    <h2>확인 퀴즈</h2>
+    <div class="quiz">
+      <div class="quiz-q"><p>Q1. 다음 중 "유스케이스"로서 가장 잘 정의된 것은?</p><div class="opts">
+        <button class="opt">AI 기반 스마트 품질 관리 체계 구축</button>
+        <button class="opt">사내 전용 생성형 AI 챗봇 도입</button>
+        <button class="opt" data-correct>품질 엔지니어가 클레임 접수 시, AI가 유사 8D를 찾아 D2·D3 초안을 만들어 작성 시간을 절반으로 줄인다</button>
+        <button class="opt">AI로 불량률 제로 달성</button>
+      </div><div class="quiz-exp">누가·어떤 상황에서·어떤 작업을·AI가 무엇을 해서·어떤 지표가 얼마나 바뀌는지가 모두 들어 있다. 나머지는 기술 이름이나 구호에 가깝다.</div></div>
+
+      <div class="quiz-q"><p>Q2. 업무 분해에서 AI 적합도가 가장 낮은 작업은?</p><div class="opts">
+        <button class="opt">협력사 견적 회신 첨부에서 단가·납기 추출</button>
+        <button class="opt" data-correct>불량 샘플의 단면 분석과 재현 시험</button>
+        <button class="opt">설비 알람 코드의 의미를 매뉴얼에서 찾기</button>
+        <button class="opt">교대 작업일지 요약</button>
+      </div><div class="quiz-exp">입력이 디지털로 존재하지 않고 현물·현장 작업이 필요하다. 나머지는 입력이 문서·데이터로 있고 결과를 원본과 대조해 검증할 수 있다.</div></div>
+
+      <div class="quiz-q"><p>Q3. 가치는 높지만 데이터가 메일과 개인 PC에 흩어져 실현성이 낮은 과제는 어떻게 다루는 것이 바람직한가?</p><div class="opts">
+        <button class="opt">가치가 높으니 바로 PoC를 시작한다</button>
+        <button class="opt">실현성이 낮으니 목록에서 삭제한다</button>
+        <button class="opt" data-correct>전략 과제로 분류하고 데이터 인벤토리·표준화 같은 기반 작업을 먼저 계획한다</button>
+        <button class="opt">외부 업체에 맡겨 실현성 점수를 높인다</button>
+      </div><div class="quiz-exp">전략 과제는 기반 정비 후 퀵윈으로 이동한다. 데이터 기반 없이 바로 시작하면 파일럿 연옥에 빠지기 쉽다.</div></div>
+
+      <div class="quiz-q"><p>Q4. 대상 인원 100명, 월 160시간, 대상 업무 비중 10%, 절감률 50%, 채택률 60%일 때 정착 후 월 절감 시간은?</p><div class="opts">
+        <button class="opt">800시간</button>
+        <button class="opt" data-correct>480시간</button>
+        <button class="opt">960시간</button>
+        <button class="opt">1,600시간</button>
+      </div><div class="quiz-exp">\(100 \times 160 \times 0.1 \times 0.5 \times 0.6 = 480\). 채택률을 빼면 800시간으로 과대평가된다.</div></div>
+
+      <div class="quiz-q"><p>Q5. 파일럿 결과 보고에서 "주간 활성 사용자 90%"만 제시했다. 가장 큰 문제는?</p><div class="opts">
+        <button class="opt">사용자 수는 개인정보라 보고하면 안 된다</button>
+        <button class="opt" data-correct>사용(선행) 지표일 뿐, 업무·사업 결과 지표와 가드레일 지표가 빠져 있다</button>
+        <button class="opt">90%는 너무 낮은 수치다</button>
+        <button class="opt">문제없다. 사용률이 곧 ROI다</button>
+      </div><div class="quiz-exp">많이 쓴다고 업무 결과가 좋아졌다는 보장은 없다. 리드타임·준수율 같은 결과 지표와 사실 오류 같은 가드레일 지표가 함께 있어야 한다.</div></div>
+
+      <div class="quiz-q"><p>Q6. 유스케이스 캔버스에서 "중단 기준"을 미리 적는 가장 중요한 이유는?</p><div class="opts">
+        <button class="opt">경영진에게 보수적으로 보이기 위해</button>
+        <button class="opt">IT 부서의 책임을 줄이기 위해</button>
+        <button class="opt" data-correct>효과가 없는 파일럿이 예산을 소모하며 연명하는 것을 막고 다음 과제로 빨리 옮기기 위해</button>
+        <button class="opt">규제 기관에 제출해야 하므로</button>
+      </div><div class="quiz-exp">미리 합의한 중단 기준은 감정과 매몰 비용에 휘둘리지 않고 포트폴리오를 관리하게 해 준다.</div></div>
+    </div>
+  </section>
+</main>
+<script>
+(function () {
+  "use strict";
+  function hexA(c, a) {
+    c = (c || "").trim();
+    if (c[0] === "#") {
+      var h = c.slice(1);
+      if (h.length === 3) h = h.split("").map(function (x) { return x + x; }).join("");
+      var n = parseInt(h.slice(0, 6), 16);
+      return "rgba(" + ((n >> 16) & 255) + "," + ((n >> 8) & 255) + "," + (n & 255) + "," + a + ")";
+    }
+    var m = c.match(/[\d.]+/g);
+    return m ? "rgba(" + m[0] + "," + m[1] + "," + m[2] + "," + a + ")" : c;
+  }
+  function font(px, mono, bold) { return (bold ? "700 " : "") + px + "px " + getComputedStyle(document.body).getPropertyValue(mono ? "--mono" : "--font"); }
+
+  /* ================================================ 1) 업무 분해기 */
+  var FIT = { high: { label: "높음", w: 0.7 }, mid: { label: "중간", w: 0.4 }, low: { label: "낮음", w: 0.15 }, none: { label: "사람 고유", w: 0 } };
+  var JOBS = {
+    claim: [
+      ["클레임 메일·첨부 읽고 사실 정리", 3, "high"],
+      ["과거 유사 이슈·8D 검색", 2.5, "high"],
+      ["불량 샘플 현물 분석·재현 시험", 5, "none"],
+      ["MES·검사 데이터 조회와 집계", 3, "mid"],
+      ["근본원인 토론·확정", 3, "low"],
+      ["8D 보고서 작성·영문 변환", 4, "high"],
+      ["고객 커뮤니케이션", 2, "low"]
+    ],
+    quote: [
+      ["견적 요청서(RFQ) 작성·발송", 2, "mid"],
+      ["회신 메일 첨부(엑셀·PDF) 정리", 4, "high"],
+      ["단가·납기·MOQ·조건 비교표 작성", 3, "high"],
+      ["과거 단가·원자재 시세 확인", 2, "mid"],
+      ["협력사 협상", 3, "low"],
+      ["구매 품의서 작성", 2, "high"],
+      ["협력사 리스크 판단", 1.5, "low"]
+    ],
+    alarm: [
+      ["알람 확인·현장 이동", 4, "none"],
+      ["알람 코드 의미·매뉴얼 확인", 2, "high"],
+      ["과거 정비 이력 검색", 2, "high"],
+      ["센서 트렌드 확인", 2, "mid"],
+      ["조치 실행(부품 교체·조정)", 6, "none"],
+      ["작업일지·인계 메모 작성", 2.5, "high"],
+      ["재발 분석 보고", 2, "mid"]
+    ]
+  };
+  var dcState = {};
+  function dcDefaults(job) { dcState[job] = JOBS[job].map(function (t) { return t[2]; }); }
+  Object.keys(JOBS).forEach(dcDefaults);
+  var dcN = AX.range("dc-n", function (v) { return v + "명"; }, dcCalc);
+  var dcJob = AX.seg("dc-job", dcRender);
+  var dcOut = document.getElementById("dc-out");
+  function dcRender() {
+    var job = dcJob(), tasks = JOBS[job], st = dcState[job];
+    var opts = Object.keys(FIT);
+    dcOut.innerHTML = tasks.map(function (t, i) {
+      return '<div class="task-row"><div class="nm">' + AX.esc(t[0]) + '<small>' + t[1] + 'h/주</small></div>' +
+        '<select data-i="' + i + '" aria-label="' + AX.esc(t[0]) + ' AI 적합도">' + opts.map(function (k) { return '<option value="' + k + '"' + (st[i] === k ? " selected" : "") + ">" + FIT[k].label + "</option>"; }).join("") + "</select>" +
+        '<div class="trk"><i></i><b></b></div></div>';
+    }).join("");
+    [].forEach.call(dcOut.querySelectorAll("select"), function (s) {
+      s.addEventListener("change", function () { dcState[dcJob()][+s.dataset.i] = s.value; dcCalc(); });
+    });
+    dcCalc();
+  }
+  function dcCalc() {
+    var job = dcJob(), tasks = JOBS[job], st = dcState[job];
+    var total = 0, saved = 0, maxH = 0, best = null, bestV = -1;
+    tasks.forEach(function (t) { total += t[1]; maxH = Math.max(maxH, t[1]); });
+    var rows = dcOut.querySelectorAll(".task-row");
+    tasks.forEach(function (t, i) {
+      var s = t[1] * FIT[st[i]].w; saved += s;
+      if (s > bestV) { bestV = s; best = t[0]; }
+      var r = rows[i]; if (!r) return;
+      r.querySelector(".trk i").style.width = (s / maxH * 100) + "%";
+      r.querySelector(".trk b").style.width = ((t[1] - s) / maxH * 100) + "%";
+    });
+    var share = saved / total;
+    AX.stat("dc-o1", total.toFixed(1) + "<small>h</small>");
+    AX.stat("dc-o2", saved.toFixed(1) + "<small>h/주</small>");
+    AX.stat("dc-o3", (share * 100).toFixed(0) + "<small>%</small>");
+    AX.stat("dc-o4", Math.round(saved * dcN() * 46).toLocaleString() + "<small>h (46주)</small>");
+  }
+  document.getElementById("dc-reset").addEventListener("click", function () { dcDefaults(dcJob()); dcRender(); });
+  dcRender();
+
+  /* ================================================ 2) 포트폴리오 매트릭스 */
+  var UC0 = [
+    ["8D 보고서 초안", "품질", 7, 6, 7, 4],
+    ["사내 규격·매뉴얼 검색", "공통", 6, 7, 6, 3],
+    ["설비 알람 트리아지", "설비", 8, 5, 4, 5],
+    ["구매 견적 비교표", "구매", 5, 7, 6, 3],
+    ["수요 예측 고도화", "SCM", 8, 4, 3, 5],
+    ["비전 검사 과검 감소", "품질", 9, 4, 5, 6],
+    ["회의록·주간보고 요약", "경영지원", 3, 8, 5, 2],
+    ["ECN 영향 분석", "R&D", 8, 3, 3, 6],
+    ["클레임 메일 분류", "영업", 5, 6, 5, 3],
+    ["공정 레시피 최적화", "생산", 9, 3, 3, 8],
+    ["예지 보전", "설비", 8, 3, 4, 5],
+    ["단종 공지 → 영향 부품 매칭", "SCM", 6, 5, 4, 4]
+  ];
+  var UC = UC0.map(function (u) { return u.slice(); });
+  var sel = 0;
+  function feas(u) { return 0.45 * u[3] + 0.35 * u[4] + 0.2 * (11 - u[5]); }
+  function quad(u) {
+    var v = u[2], f = feas(u);
+    if (v >= 5.5 && f >= 5.5) return { k: "퀵윈", c: "accent" };
+    if (v >= 5.5) return { k: "전략 과제", c: "accent2" };
+    if (f >= 5.5) return { k: "작은 개선", c: "warn" };
+    return { k: "보류", c: "faint" };
+  }
+  var pick = document.getElementById("mx-pick");
+  pick.innerHTML = UC.map(function (u, i) { return '<option value="' + i + '">' + (i + 1) + ". " + AX.esc(u[0]) + "</option>"; }).join("");
+  var list = document.getElementById("mx-list");
+  var mxV, mxD, mxP, mxR, cvMx = null, mxPts = [];
+  var syncing = false;
+  function onSlide() {
+    if (syncing) return;
+    var u = UC[sel]; u[2] = mxV(); u[3] = mxD(); u[4] = mxP(); u[5] = mxR();
+    mxUpdate();
+  }
+  mxV = AX.range("mx-v", function (v) { return v + " / 10"; }, onSlide);
+  mxD = AX.range("mx-d", function (v) { return v + " / 10"; }, onSlide);
+  mxP = AX.range("mx-p", function (v) { return v + " / 10"; }, onSlide);
+  mxR = AX.range("mx-r", function (v) { return v + " / 10"; }, onSlide);
+  function select(i) {
+    sel = i; pick.value = String(i);
+    var u = UC[i]; syncing = true;
+    mxV.set(u[2]); mxD.set(u[3]); mxP.set(u[4]); mxR.set(u[5]);
+    syncing = false; mxUpdate();
+  }
+  pick.addEventListener("change", function () { select(+pick.value); });
+  document.getElementById("mx-reset").addEventListener("click", function () { UC = UC0.map(function (u) { return u.slice(); }); select(sel); });
+  function mxUpdate() {
+    var cnt = { "퀵윈": 0, "전략 과제": 0, "작은 개선": 0, "보류": 0 };
+    UC.forEach(function (u) { cnt[quad(u).k]++; });
+    list.innerHTML = UC.map(function (u, i) {
+      var q = quad(u);
+      return '<button data-i="' + i + '" class="' + (i === sel ? "sel" : "") + '"><span class="n">' + (i + 1) + "</span><span>" + AX.esc(u[0]) + ' <span class="chip ' + (q.k === "퀵윈" ? "acc" : q.k === "전략 과제" ? "" : q.k === "작은 개선" ? "warn" : "") + '">' + q.k + "</span></span></button>";
+    }).join("");
+    [].forEach.call(list.querySelectorAll("button"), function (b) { b.addEventListener("click", function () { select(+b.dataset.i); }); });
+    var u = UC[sel];
+    AX.stat("mx-o1", quad(u).k + "<small>실현성 " + feas(u).toFixed(1) + "</small>");
+    AX.stat("mx-o2", cnt["퀵윈"] + "<small>개</small>");
+    AX.stat("mx-o3", cnt["전략 과제"] + "<small>개</small>");
+    AX.stat("mx-o4", cnt["작은 개선"] + " · " + cnt["보류"] + "<small>개</small>");
+    if (cvMx) cvMx.redraw();
+  }
+  cvMx = AX.canvas("#cv-matrix", function (ctx, w, h) {
+    var P = AX.palette();
+    var box = { x: 46, y: 14, w: w - 46 - 14, h: h - 14 - 44 };
+    var ch = AX.chart(ctx, box, { x: [1, 10], y: [1, 10], xLabel: "실현성 →", yLabel: "가치 →", xTicks: [1, 3, 5.5, 8, 10], yTicks: [1, 3, 5.5, 8, 10] });
+    var X = ch.X, Y = ch.Y;
+    ctx.fillStyle = hexA(P.accent, 0.08); ctx.fillRect(X(5.5), Y(10), X(10) - X(5.5), Y(5.5) - Y(10));
+    ctx.fillStyle = hexA(P.accent2, 0.07); ctx.fillRect(X(1), Y(10), X(5.5) - X(1), Y(5.5) - Y(10));
+    ctx.strokeStyle = P.axis; ctx.setLineDash([4, 4]); ctx.beginPath();
+    ctx.moveTo(X(5.5), Y(1)); ctx.lineTo(X(5.5), Y(10)); ctx.moveTo(X(1), Y(5.5)); ctx.lineTo(X(10), Y(5.5)); ctx.stroke(); ctx.setLineDash([]);
+    ctx.font = font(12, false, true); ctx.textBaseline = "top";
+    ctx.fillStyle = P.accent; ctx.textAlign = "right"; ctx.fillText("퀵윈", X(10) - 6, Y(10) + 4);
+    ctx.fillStyle = P.accent2; ctx.textAlign = "left"; ctx.fillText("전략 과제", X(1) + 6, Y(10) + 4);
+    ctx.fillStyle = P.dim; ctx.textBaseline = "bottom"; ctx.fillText("보류", X(1) + 6, Y(1) - 4);
+    ctx.textAlign = "right"; ctx.fillText("작은 개선", X(10) - 6, Y(1) - 4);
+    // 겹치는 점은 오른쪽으로 비켜 그린다
+    mxPts = [];
+    var OFF = [[0, 0], [20, 0], [-20, 0], [0, 20], [0, -20], [20, 20], [-20, 20], [20, -20], [-20, -20], [40, 0], [-40, 0], [0, 40]];
+    UC.forEach(function (u, i) {
+      var x0 = X(feas(u)), y0 = Y(u[2]), sx = x0 >= X(5.5), sy = y0 <= Y(5.5), pos = [x0, y0];
+      for (var j = 0; j < OFF.length; j++) {
+        var x = x0 + OFF[j][0], y = y0 + OFF[j][1];
+        if ((x >= X(5.5)) !== sx || (y <= Y(5.5)) !== sy) continue;
+        if (x < box.x || x > box.x + box.w || y < box.y || y > box.y + box.h) continue;
+        if (!mxPts.some(function (q) { return Math.abs(q.x - x) < 19 && Math.abs(q.y - y) < 19; })) { pos = [x, y]; break; }
+      }
+      mxPts.push({ i: i, x: pos[0], y: pos[1] });
+    });
+    mxPts.forEach(function (p) {
+      var u = UC[p.i], q = quad(u), col = P[q.c] || P.dim, isSel = p.i === sel;
+      ctx.beginPath(); ctx.arc(p.x, p.y, isSel ? 12 : 9, 0, Math.PI * 2);
+      ctx.fillStyle = isSel ? col : hexA(col, 0.22); ctx.fill();
+      ctx.lineWidth = isSel ? 2.5 : 1.4; ctx.strokeStyle = col; ctx.stroke();
+      ctx.fillStyle = isSel ? P.bg : P.text; ctx.font = font(10, true, true); ctx.textAlign = "center"; ctx.textBaseline = "middle";
+      ctx.fillText(String(p.i + 1), p.x, p.y + 0.5);
+    });
+    var sp = mxPts[sel];
+    if (sp) {
+      var name = UC[sel][0]; ctx.font = font(12, false, true);
+      var tw = ctx.measureText(name).width, tx = sp.x + 16, ty = sp.y - 22;
+      if (tx + tw + 8 > box.x + box.w) tx = sp.x - 16 - tw;
+      if (ty < box.y) ty = sp.y + 14;
+      ctx.fillStyle = hexA(P.bg, 0.85); ctx.fillRect(tx - 4, ty - 2, tw + 8, 18);
+      ctx.fillStyle = P.text; ctx.textAlign = "left"; ctx.textBaseline = "top"; ctx.fillText(name, tx, ty);
+    }
+  }, { aspect: 0.72, minHeight: 280, maxHeight: 440 });
+  document.getElementById("cv-matrix").addEventListener("click", function (e) {
+    var r = e.target.getBoundingClientRect(), x = e.clientX - r.left, y = e.clientY - r.top, best = -1, bd = 400;
+    mxPts.forEach(function (p) { var d = (p.x - x) * (p.x - x) + (p.y - y) * (p.y - y); if (d < bd) { bd = d; best = p.i; } });
+    if (best >= 0) select(best);
+  });
+  select(0);
+
+  /* ================================================ 3) ROI 계산기 */
+  function rr() { if (cvRoi) cvRoi.redraw(); }
+  var rN = AX.range("roi-n", function (v) { return v + "명"; }, rr);
+  var rR = AX.range("roi-r", function (v) { return v + "%"; }, rr);
+  var rS = AX.range("roi-s", function (v) { return v + "%"; }, rr);
+  var rA = AX.range("roi-a", function (v) { return v + "%"; }, rr);
+  var rT = AX.range("roi-t", function (v) { return v + "개월"; }, rr);
+  var rC = AX.range("roi-c", function (v) { return v.toFixed(1) + "억 원"; }, rr);
+  var rO = AX.range("roi-o", function (v) { return v.toFixed(1) + "억 원/년"; }, rr);
+  var rW = AX.range("roi-w", function (v) { return v.toFixed(1) + "만 원"; }, rr);
+  var cvRoi = null;
+  cvRoi = AX.canvas("#cv-roi", function (ctx, w, h) {
+    var P = AX.palette();
+    var N = rN(), r = rR() / 100, s = rS() / 100, amax = rA() / 100, t50 = rT(), capex = rC(), opex = rO(), wage = rW();
+    var H = 160, k = 0.7, im = Math.pow(1.08, 1 / 12) - 1, T = 36;
+    var cum = 0, cumB = 0, npv = 0, be = null, sumB = 0, sumC = 0;
+    var net = [[0, 0]], ben = [[0, 0]], adopt = [];
+    for (var t = 0; t <= T; t++) {
+      var a = t === 0 ? 0 : amax / (1 + Math.exp(-k * (t - t50)));
+      var B = N * H * r * s * a * wage / 10000; // 억 원 (만원 → 억원)
+      var C = (t === 0 ? capex : 0) + (t === 0 ? 0 : opex / 12);
+      cum += B - C; cumB += B; sumB += B; sumC += C;
+      npv += (B - C) / Math.pow(1 + im, t);
+      if (be === null && t > 0 && cum >= 0) be = t;
+      net.push([t, cum]); ben.push([t, cumB]); adopt.push([t, a]);
+    }
+    net.shift(); ben.shift();
+    var ymin = Math.min(0, -capex * 1.1), ymax = 1;
+    net.forEach(function (p) { ymin = Math.min(ymin, p[1]); ymax = Math.max(ymax, p[1]); });
+    ben.forEach(function (p) { ymax = Math.max(ymax, p[1]); });
+    ymin = Math.floor(ymin * 1.1); ymax = Math.ceil(ymax * 1.08);
+    var box = { x: 54, y: 16, w: w - 54 - 16, h: h - 16 - 46 };
+    // adoption bars (scaled to plot height)
+    var X0 = function (t) { return box.x + t / T * box.w; };
+    var bw = box.w / (T + 1) * 0.6;
+    ctx.fillStyle = hexA(P.accent2, 0.16);
+    adopt.forEach(function (p) { var hh = p[1] * box.h * 0.9; ctx.fillRect(X0(p[0]) - bw / 2, box.y + box.h - hh, bw, hh); });
+    var ch = AX.chart(ctx, box, { x: [0, T], y: [ymin, ymax], xLabel: "개월", yLabel: "누적 금액 (억 원)", xTicks: [0, 6, 12, 18, 24, 30, 36],
+      series: [{ data: ben, color: P.ok, width: 1.6, dash: [5, 4] }, { data: net, color: P.accent, width: 2.8 }],
+      hlines: [{ y: 0, color: P.axis, dash: [] }],
+      vlines: be !== null ? [{ x: be, color: P.warn, label: "손익분기 " + be + "개월" }] : [] });
+    ctx.font = font(11, false); ctx.textAlign = "left"; ctx.textBaseline = "top"; ctx.fillStyle = P.dim;
+    var steady = N * H * r * s * amax;
+    AX.stat("roi-o1", Math.round(steady).toLocaleString() + "<small>h/월</small>");
+    AX.stat("roi-o2", be === null ? "36개월 내 없음" : be + "<small>개월</small>");
+    AX.stat("roi-o3", (npv >= 0 ? "" : "−") + Math.abs(npv).toFixed(1) + "<small>억 원</small>");
+    AX.stat("roi-o4", ((sumB - sumC) / sumC * 100).toFixed(0) + "<small>%</small>");
+    var lx = box.x + 8, ly = box.y + 6;
+    [[P.accent, "누적 순현금흐름", []], [P.ok, "누적 편익", [5, 4]], [hexA(P.accent2, 0.5), "월 채택률(막대)", null]].forEach(function (L, i) {
+      var yy = ly + i * 16;
+      if (L[2]) { ctx.strokeStyle = L[0]; ctx.lineWidth = 2; ctx.setLineDash(L[2]); ctx.beginPath(); ctx.moveTo(lx, yy + 7); ctx.lineTo(lx + 18, yy + 7); ctx.stroke(); ctx.setLineDash([]); }
+      else { ctx.fillStyle = L[0]; ctx.fillRect(lx + 4, yy + 2, 10, 10); }
+      ctx.fillStyle = P.dim; ctx.fillText(L[1], lx + 24, yy);
+    });
+  }, { aspect: 0.62, minHeight: 260, maxHeight: 400 });
+})();
+</script>
+</body>
+</html>
