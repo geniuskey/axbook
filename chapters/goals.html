@@ -7,7 +7,7 @@
 <link rel="icon" href="../favicon.svg" type="image/svg+xml">
 <link rel="apple-touch-icon" href="../apple-touch-icon.png">
 <title>AX 목표 체계: 계층별 목표 설계 · AXBook</title>
-<meta name="description" content="팀 목표를 취합해 사업부·부문 목표로 삼는 방식이 왜 AX에서 실패하는지, 부문·사업부·실·팀·그룹·파트가 각자 무엇을 목표로 가져야 하는지, 캐치볼과 공동 목표, 지표 설계와 평가·보상 운영까지 계층별 AX 목표 체계를 설계한다.">
+<meta name="description" content="팀 목표를 취합해 사업부·부문 목표로 삼는 방식이 왜 AX에서 실패하는지, 부문·사업부·실·팀·그룹·파트가 각자 무엇을 목표로 가져야 하는지, 캐치볼과 공동 목표, 지표 설계, 증거 사다리에 기반한 성과 평가와 보상 운영까지 계층별 AX 목표 체계를 설계한다.">
 <link rel="canonical" href="https://axbook.euiyun.com/chapters/goals.html">
 <meta property="og:type" content="article">
 <meta property="og:site_name" content="AXBook">
@@ -75,6 +75,10 @@
   .ct-detail dl { margin: 0; display: grid; grid-template-columns: 84px 1fr; gap: 4px 10px; }
   .ct-detail dt { color: var(--text-dim); font-size: 13px; }
   .ct-detail dd { margin: 0; }
+  /* 성과 신뢰도 점검기 */
+  .ev-out { margin-top: 12px; padding: 12px 14px; border-radius: 10px; background: var(--surface); border: 1px solid var(--border); font-size: 14px; }
+  .ev-out h4 { margin: 0 0 6px; font-size: 15.5px; }
+  .ev-out ul { margin: 6px 0 0; padding-left: 18px; }
 </style>
 <!-- Cloudflare Web Analytics -->
 <script type='module' src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "3d6151a0abc94ede89285d462527fa80"}'></script>
@@ -88,9 +92,10 @@
     <p class="lead">많은 대기업 제조사에서 AX 목표는 팀 단위로만 세워지고 관리된다. 실·사업부·부문은 팀 목표를 모아 더한 표를 자기 목표라고 부른다. 그런데 AX가 만드는 가치의 상당 부분은 팀과 팀 사이, 여러 팀이 함께 쓰는 데이터와 표준, 예산과 사람을 옮기는 결정에서 나온다. 이것들은 팀 목표를 아무리 더해도 나오지 않는다. 이 장은 취합형 목표가 왜 실패하는지 보이고, 각 계층이 <strong>그 계층만 할 수 있는 일</strong>을 목표로 갖는 체계를 설계한다.</p>
     <ul class="objectives">
       <li>취합형 AX 목표가 실패하는 여섯 가지 기제(합≠전체, 중복, 활동 지표 표류, 시간 지평 불일치, 기여 귀속, 본업 단절)를 설명할 수 있다.</li>
-      <li>부문·사업부·실·팀·그룹·파트를 결정권·범위·시간 지평으로 정의하고, 계층별 목표 유형(결과·기반·확산·역량·가드레일) 구성을 설계할 수 있다.</li>
+      <li>부문·사업부·실·팀·그룹·파트를 결정권·범위·시간 지평으로 정의하고, 계층별 목표 유형(결과·기반·확산·역량·가드레일) 구성과 각 계층이 AX를 말하는 언어(사업 가치에서 구체적 작업까지)를 설계할 수 있다.</li>
       <li>캐스케이드, 캐치볼, 공동 목표, 매트릭스 목표, 기여 귀속 규칙으로 하나의 사업부 결과 목표를 파트까지 연결할 수 있다.</li>
-      <li>활동 지표를 결과·채택 지표로 바꾸고, 기준선과 측정 정의가 있는 다년 목표와 분기 점검·평가 체계를 운영할 수 있다.</li>
+      <li>활동 지표를 결과·채택 지표로 바꾸고, 기준선과 측정 정의가 있는 다년 목표와 분기 점검 체계를 운영할 수 있다.</li>
+      <li>증거 사다리(주장 → 산출물 → 사용 기록 → 전후 비교 → 비교군 → 독립 확인)로 보고된 성과의 신뢰 수준을 판정하고, 취합이 아니라 업무 시스템의 증거로 평가할 수 있다.</li>
     </ul>
   </header>
 
@@ -150,7 +155,7 @@
       <figcaption><b>그림 12-1.</b> 다섯 팀을 거치는 클레임 초기 대응 흐름. 팀 목표를 모두 달성해도 팀 사이의 인계·대기·재입력은 줄지 않는다. 취합형 목표 체계에서 이 구간은 구조적으로 "주인 없는 영역"이 된다. 수치는 예시다.</figcaption>
     </figure>
 
-    <p>이 장면은 특정 회사의 이야기가 아니다. 목표 관리(MBO) 체계를 팀 단위로 운영하는 조직이라면 AX 목표도 자연스럽게 팀 단위로 내려가고, 상위 조직은 이를 모으는 역할만 하게 된다. 목표 양식이 그렇게 생겼기 때문이다. 이 장은 그 양식을 바꾸는 이야기다.</p>
+    <p>목표 관리(MBO)를 팀 단위로 운영하는 조직이라면 AX 목표도 자연스럽게 팀 단위로 내려가고, 상위 조직은 모으는 역할만 하게 된다. 목표 양식이 그렇게 생겼기 때문이다. 이 장은 그 양식을 바꾸는 이야기다.</p>
     <div class="callout">
       <strong>이 장에서 쓰는 조직 계층</strong>
       <p>부문(또는 전사) &gt; 사업부 &gt; 실 &gt; 팀 &gt; 그룹 &gt; 파트. 회사마다 이름과 크기가 다르다. 어떤 회사의 "본부"가 다른 회사의 "사업부"이고, 그룹이 없는 회사도 많다. 그래서 이 장은 계층을 인원수가 아니라 <strong>결정권</strong>(무엇을 바꿀 수 있나), <strong>범위</strong>(어디까지 걸쳐 있나), <strong>시간 지평</strong>(얼마나 먼 미래를 책임지나)으로 정의한다. 자기 조직에 맞춰 읽으면 된다.</p>
@@ -170,8 +175,7 @@
       <div class="card"><span class="k">⑥ SEPARATE BOX</span><h4>본업 KPI와 단절</h4><p>AX 목표가 "AX 항목"이라는 별도 칸에 있으면 본업 KPI(리드타임, 품질 비용, 수율)와 연결되지 않는다. AX는 연말에 몰아서 채우는 부가 업무가 된다.</p></div>
     </div>
     <h3>굿하트의 법칙: 측정치가 목표가 될 때</h3>
-    <p>영국 경제학자 찰스 굿하트<span class="en">(Charles Goodhart)</span>가 1975년 통화정책 맥락에서 지적한 현상은, 오늘날 인류학자 마릴린 스트래선<span class="en">(Marilyn Strathern)</span>이 정리한 문장으로 더 널리 알려져 있다. <strong>"측정치가 목표가 되면 더 이상 좋은 측정치가 아니게 된다."</strong> AX 과제 수는 원래 조직이 AI를 얼마나 시도하는지 보여 주는 괜찮은 신호였다. 그러나 과제 수가 평가 항목이 되면 하나의 과제가 셋으로 쪼개지고, 이미 하던 엑셀 매크로 개선이 "AI 과제"로 이름을 바꾼다. 숫자는 오르고 신호는 사라진다.</p>
-    <p>그렇다고 활동 지표를 버리라는 말은 아니다. 활동 지표는 <strong>진단용</strong>으로 보고, <strong>평가용</strong> 목표는 결과와 실제 채택으로 잡으라는 것이다. 이 구분은 <a href="#metrics">지표 설계</a>에서 다시 다룬다.</p>
+    <p>영국 경제학자 찰스 굿하트<span class="en">(Charles Goodhart)</span>가 1975년 통화정책 맥락에서 지적한 현상은 인류학자 마릴린 스트래선<span class="en">(Marilyn Strathern)</span>의 문장으로 더 널리 알려져 있다. <strong>"측정치가 목표가 되면 더 이상 좋은 측정치가 아니게 된다."</strong> AX 과제 수는 원래 괜찮은 신호였지만, 평가 항목이 되면 과제 하나가 셋으로 쪼개지고 엑셀 매크로 개선이 "AI 과제"로 이름을 바꾼다. 숫자는 오르고 신호는 사라진다. 활동 지표를 버리라는 말은 아니다. 활동 지표는 <strong>진단용</strong>으로 보고, <strong>평가용</strong> 목표는 결과와 실제 채택으로 잡는다(<a href="#metrics">지표 설계</a>). 보고된 성과 숫자의 신뢰 문제는 <a href="#review">평가·보상 운영</a>의 증거 사다리에서 다룬다.</p>
 
     <h3>얼마나 손해인가: 단순 모델로 보기</h3>
     <p>취합형과 계층형의 차이를 숫자 감각으로 보기 위해 아주 단순한 모델을 만들었다. 사업부가 AX로 얻을 수 있는 잠재 가치(월 100으로 지수화)를 <strong>팀 안에서 완결되는 가치</strong>와 <strong>팀 간 흐름·공유 기반이 있어야 나오는 가치</strong>로 나눈다. 취합형에서는 팀 간 가치를 거의 얻지 못하고, 중복 구축의 운영비와 통합 부채(팀마다 다른 포맷·도구가 쌓여 나중에 유지·통합을 어렵게 만드는 끌림)가 붙는다. 계층형에서는 사업부·실이 기반 목표를 갖고 초기 기반 비용을 치르는 대신, 기반이 완성된 뒤 팀 간 가치를 얻고 중복이 줄어든다.</p>
@@ -199,7 +203,7 @@
         <div class="stat"><span class="k">누적 역전 시점</span><span class="v" id="tr-o3">—</span></div>
         <div class="stat"><span class="k">취합형 중복 비용 누계</span><span class="v" id="tr-o4">—</span></div>
       </div>
-      <div class="sim-note">교육용 예시 모델이다. 해볼 것: ① s와 중복률 d를 모두 10% 이하로 낮춰 보자. 두 곡선의 차이가 거의 사라지고, 기반 완성 기간 L까지 길면 취합형이 오히려 앞선다. 팀 안에서 끝나는 업무라면 팀 목표로 충분하다. ② s를 50% 이상, L을 18개월 이상으로 올리면 계층형은 1년 넘게 뒤처진다. MBO 1년만 보는 조직이 기반 공사를 시작하지 못하는 이유다. ③ 중복률을 올리면 취합형 곡선이 아래로 휜다. 통합 부채는 시간이 갈수록 커진다.</div>
+      <div class="sim-note">교육용 예시 모델이다. 해볼 것: ① s와 중복률 d를 모두 10% 이하로 낮춰 보자. 두 곡선의 차이가 거의 사라지고, L까지 길면 취합형이 앞선다. 팀 안에서 끝나는 업무라면 팀 목표로 충분하다. ② s를 50% 이상, L을 18개월 이상으로 올리면 계층형은 1년 넘게 뒤처진다. MBO 1년만 보는 조직이 기반 공사를 시작하지 못하는 이유다. ③ 중복률을 올리면 취합형 곡선이 아래로 휜다. 통합 부채는 시간이 갈수록 커진다.</div>
     </div>
     <div class="callout warn">
       <strong>"그럼 팀 목표를 없애자"가 아니다</strong>
@@ -293,6 +297,33 @@
       </div>
       <div class="sim-note">목표 문장과 수치는 모두 예시다. 해볼 것: 같은 계층에서 취합형과 계층형을 번갈아 눌러 보자. 취합형 시트는 계층이 달라도 거의 같은 모양(과제 수·교육·사용자 수)이고 숫자 크기만 다르다. 계층형 시트는 계층마다 모양 자체가 다르다. 그것이 "각 계층이 자기 일을 한다"는 뜻이다.</div>
     </div>
+
+    <h3>아래로 내려올수록 AX는 작업의 언어가 된다</h3>
+    <p>"AX"라는 한 단어가 내려오면 팀과 개인은 막막하다. 팀도 사업 가치를 금액으로 계산해야 하나? 개인이 AX를 "기획"해야 하나? 고도의 원칙을 언어에 적용하면 답이 나온다. <strong>AX는 위에서 쓰는 우산이고, 아래로 내려올수록 구체적인 작업의 언어로 바뀌어야 한다.</strong></p>
+    <figure class="diagram">
+      <svg viewBox="0 0 800 300" role="img" aria-label="계층별 AX의 언어">
+        <path d="M330 20 H470 L520 70 H280 Z" class="f-acc"/>
+        <text x="400" y="52" text-anchor="middle" class="t" style="fill:var(--bg);font-weight:700">AX · 사업 가치</text>
+        <path d="M280 74 H520 L570 124 H230 Z" class="f-acc-soft"/>
+        <text x="400" y="104" text-anchor="middle" class="t">사업 KPI · 흐름 KPI(리드타임·품질 비용)</text>
+        <path d="M230 128 H570 L620 178 H180 Z" class="f-acc2-soft"/>
+        <text x="400" y="158" text-anchor="middle" class="t">운영 지표 + 기반 산출물(표준 코드·데이터 계약)</text>
+        <path d="M180 182 H620 L670 232 H130 Z" class="f-surface"/>
+        <text x="400" y="212" text-anchor="middle" class="t">디지털화 · 표준화 · 자동화 · 연결(API) · AI 활용</text>
+        <path d="M130 236 H670 L700 280 H100 Z" class="f-elev"/>
+        <text x="400" y="263" text-anchor="middle" class="t-dim">개인: 반복 작업 하나 없애기, 기록 하나 구조화하기</text>
+        <text x="60" y="52" class="t-sm">부문·사업부</text>
+        <text x="60" y="104" class="t-sm">사업부·실</text>
+        <text x="60" y="158" class="t-sm">실·팀</text>
+        <text x="60" y="212" class="t-sm">팀·파트</text>
+        <text x="20" y="263" class="t-sm">개인</text>
+        <text x="740" y="52" text-anchor="end" class="t-sm">₩로 말한다</text>
+        <text x="740" y="263" text-anchor="end" class="t-sm">작업으로 말한다</text>
+      </svg>
+      <figcaption><b>그림 13-3.</b> 계층별 AX의 언어. 위는 사업 가치(금액)로 말하고, 아래로 내려올수록 운영 지표와 구체적인 작업으로 말한다. 각 층은 바로 위층의 숫자와 "연결선"만 있으면 된다.</figcaption>
+    </figure>
+    <p>금액 환산도 계층의 일이다. 투자와 인력 배분을 바꾸는 부문·사업부는 금액으로 말하고, 실은 흐름 KPI를 사업부와 함께 환산한다. 팀은 위의 어느 KPI에 기여하는지 <strong>연결선</strong>만 있으면 되고, 파트와 개인은 무엇이 없어졌는지(시간·단계·오류)로 충분하다. 팀마다 "절감 시간 × 인건비"로 금액을 만들어 올리면 숫자는 커지지만 아무도 믿지 않는다. 절감 시간은 현금이 되지 않는 경우가 많고 여러 팀에서 중복 계산되기 때문이다(<a href="#review">증거 사다리</a>).</p>
+    <p>팀·파트의 AX는 새로운 것이 아니다. 디지털화(종이·메일을 레코드로), 표준화(양식·코드 맞추기), 자동화(반복 작업 없애기), 연결(API·데이터 계약)이다. 생성형 AI 덕분에 예전엔 개발 요청을 해야 했던 일 상당수를 팀이 직접 할 수 있게 되었을 뿐이다. 위의 몫은 "AX 기획"을 요구하는 것이 아니라 <strong>이 작업을 할 시간과 도구와 인정을 주는 것</strong>이다. 팀 사이의 인터페이스와 금액 환산의 주체는 <a href="system.html">14장</a>에서 다룬다.</p>
   </section>
 
   <!-- ============================================================ 4 -->
@@ -343,8 +374,7 @@
     <h3>호신 칸리의 캐치볼</h3>
     <p><span class="term">호신 칸리</span><span class="en">(Hoshin Kanri, 方針管理, 정책 전개)</span>는 일본 제조업에서 발전한 목표 전개 방식이다. 핵심 장치가 <span class="term">캐치볼</span><span class="en">(catchball)</span>이다. 상위 조직이 "무엇을" 달성할지 초안을 내려보내면, 하위 조직은 "어떻게" 할지와 그 과정에서 보이는 제약·필요 자원을 올려 보낸다. 몇 번 공을 주고받은 뒤 확정한다. 상위의 수단이 하위의 목표가 되는 구조라서, 사업부의 "클레임 흐름 표준화"라는 수단이 실의 "클레임 데이터 표준 확정"이라는 목표가 된다. 목표와 수단, 담당, 지표를 한 장에 교차해 보는 X-매트릭스 양식이 흔히 쓰인다.</p>
     <h3>OKR의 정렬: 위에서 절반, 아래에서 절반</h3>
-    <p><span class="term">OKR</span><span class="en">(Objectives and Key Results)</span>은 앤디 그로브<span class="en">(Andy Grove)</span>가 체계화하고 존 도어<span class="en">(John Doerr)</span>가 『Measure What Matters』(2018)로 널리 알린 목표 방식이다. OKR 실무에서 자주 강조되는 원칙은 정렬<span class="en">(alignment)</span>이 위에서만 내려오지 않는다는 것이다. 상위 목표에 연결되는 하향 목표와 함께, 현장이 스스로 제안하는 상향 목표를 상당 부분 허용한다. AX에서는 이것이 특히 중요하다. 어디에 AI를 쓸 수 있는지는 현장이 가장 잘 알기 때문이다(<a href="usecases.html">7장</a>의 업무 분해).</p>
-    <p>OKR과 MBO 중 무엇을 택하느냐는 이 장의 핵심이 아니다. 피터 드러커<span class="en">(Peter Drucker)</span>가 『경영의 실제<span class="en">(The Practice of Management)</span>』(1954)에서 제시한 MBO도 원래는 상하가 함께 목표를 정하는 방식이었다. 어떤 틀을 쓰든 <strong>상위 조직이 자기 목표를 가질 것, 그리고 위아래와 옆으로 주고받을 것</strong> 두 가지만 지키면 된다.</p>
+    <p><span class="term">OKR</span><span class="en">(Objectives and Key Results)</span>은 앤디 그로브<span class="en">(Andy Grove)</span>가 체계화하고 존 도어<span class="en">(John Doerr)</span>가 『Measure What Matters』(2018)로 널리 알린 목표 방식이다. OKR 실무는 정렬<span class="en">(alignment)</span>이 위에서만 내려오지 않는다고 강조한다. 하향 목표와 함께 현장이 제안하는 상향 목표를 상당 부분 허용한다. 어디에 AI를 쓸 수 있는지는 현장이 가장 잘 알기 때문에 AX에서 특히 중요하다(<a href="usecases.html">7장</a>의 업무 분해). 피터 드러커<span class="en">(Peter Drucker)</span>가 『경영의 실제<span class="en">(The Practice of Management)</span>』(1954)에서 제시한 MBO도 원래 상하가 함께 목표를 정하는 방식이었다. 어떤 틀을 쓰든 <strong>상위 조직이 자기 목표를 가질 것, 그리고 위아래와 옆으로 주고받을 것</strong> 두 가지만 지키면 된다.</p>
 
     <h3>공동 목표와 매트릭스 목표</h3>
     <p>팀 사이의 흐름처럼 어느 한 팀이 책임질 수 없는 결과는 두 가지 방식으로 시트에 넣는다.</p>
@@ -392,7 +422,7 @@
   <!-- ============================================================ 5 -->
   <section id="metrics">
     <h2>지표 설계: 활동이 아니라 결과와 채택을</h2>
-    <p>계층별 목표를 정했으면 각 목표에 지표를 붙인다. <a href="usecases.html">7장</a>에서 유스케이스 하나의 KPI와 기준선을 다뤘다면, 여기서는 <strong>목표 체계 전체</strong>에서 지표가 어떻게 맞물리는지를 본다.</p>
+    <p><a href="usecases.html">7장</a>이 유스케이스 하나의 KPI와 기준선을 다뤘다면, 여기서는 <strong>목표 체계 전체</strong>에서 지표가 어떻게 맞물리는지를 본다.</p>
     <h3>선행 지표와 후행 지표</h3>
     <p>카플란과 노턴<span class="en">(Robert Kaplan · David Norton)</span>이 균형성과표<span class="en">(Balanced Scorecard)</span>에서 강조한 구분이 여기서도 유용하다. <span class="term">후행 지표</span><span class="en">(lagging)</span>는 결과 그 자체(리드타임, COPQ)라서 늦게 움직이고, <span class="term">선행 지표</span><span class="en">(leading)</span>는 결과에 앞서 움직이는 신호(표준 코드 적용률, 도구 경유 처리 비율)다. 기반 공사가 1년 넘게 걸리는 AX에서 후행 지표만 보면 첫해는 늘 "미달성"이고, 선행 지표만 보면 결과 없이 활동만 늘어난다. 두 가지를 <strong>사슬로 묶어</strong> 함께 둔다.</p>
 
@@ -430,7 +460,7 @@
     </figure>
 
     <h3>기준선이 먼저다</h3>
-    <p>"리드타임 50% 단축"은 지금 리드타임을 모르면 의미가 없다. 그런데 취합형 체계에서 가장 흔히 빠지는 것이 기준선이다. 팀 사이를 흐르는 리드타임은 어느 팀도 재지 않았기 때문이다. 계층형 목표의 첫 분기 목표는 종종 <strong>"측정 가능하게 만들기"</strong> 그 자체다. 이슈 카드나 이벤트 로그로 접수·인계·완료 시각을 남기는 것(<a href="process.html">3장</a>의 프로세스 마이닝)이 사업부 목표의 첫 마일스톤이 된다.</p>
+    <p>"리드타임 50% 단축"은 지금 리드타임을 모르면 의미가 없다. 취합형 체계에서는 팀 사이를 흐르는 리드타임을 어느 팀도 재지 않아 기준선이 흔히 빠진다. 계층형 목표의 첫 분기 목표는 종종 <strong>"측정 가능하게 만들기"</strong> 그 자체다. 이슈 카드나 이벤트 로그로 접수·인계·완료 시각을 남기는 것(<a href="process.html">3장</a>의 프로세스 마이닝)이 사업부 목표의 첫 마일스톤이 된다.</p>
     <p>지표마다 <strong>측정 정의</strong>를 한 줄로 고정한다. 이름, 정의(시작·끝 시각), 계산식(중앙값인가 평균인가), 데이터 원천, 집계 주기, 기준선과 측정 기간, 오너. 같은 "리드타임"을 팀마다 다르게 계산하면 목표 체계가 통째로 흔들린다(<a href="semantics.html">4장</a>의 KPI 정의 통일).</p>
 
     <h3>활동 지표의 함정과 바꾸는 법</h3>
@@ -484,15 +514,15 @@
 
   <!-- ============================================================ 6 -->
   <section id="review">
-    <h2>평가·보상 운영: 목표는 연말이 아니라 분기에 산다</h2>
+    <h2>평가·보상 운영: 분기마다, 증거로</h2>
     <p>목표 체계를 잘 짜도 평가 방식이 그대로면 사람들은 예전처럼 행동한다. 계층형 AX 목표를 굴리는 운영 장치를 여섯 가지로 정리한다.</p>
     <ol class="ladder">
-      <li><b>분기 점검, 연 1회 평가</b>연말 한 번의 MBO 평가만으로는 기반 목표의 지연, 공동 목표의 병목이 너무 늦게 보인다. 분기마다 계층별로 "지표가 움직였나, 막힌 곳은 어디인가, 위아래로 무엇을 요청할 것인가"를 30분 안에 점검한다. 점검은 평가가 아니라 캐치볼의 연장이다.</li>
-      <li><b>반기 조정 창구</b>AX 환경은 빠르게 바뀐다. 상반기 말에 목표를 공식적으로 조정할 수 있는 창구를 둔다. 단, 조정 사유(전제 변화, 의존 목표 지연)와 조정 전후 숫자를 기록해 하향 조정이 습관이 되지 않게 한다.</li>
-      <li><b>기반 작업과 레거시 퇴역을 보상</b>데이터 정리, 표준 코드 적용, 엑셀 양식 폐기, 중복 도구 통합은 눈에 띄지 않는 일이다. 이것들을 목표 시트의 정식 항목으로 올리고, 기여 귀속 규칙(이중 인정)으로 결과 목표에도 이름을 올린다. "없앤 것"을 성과로 인정하는 문화가 AX를 가볍게 만든다.</li>
-      <li><b>샌드배깅과 PoC 성과화 방지</b>쉽게 달성할 목표를 고르는 샌드배깅<span class="en">(sandbagging)</span>은 기준선과 측정 정의를 상위와 함께 확정하면 상당 부분 막힌다. PoC 완료는 성과가 아니라 결정 시점이다. 평가에서는 "운영 전환 또는 중단 결정을 기한 내 내렸는가"를 본다. 근거 있는 중단도 좋은 성과다.</li>
+      <li><b>기준은 연초에, 점검은 분기마다</b>측정 정의와 기준선은 연초에 상위와 함께 등록한다. 연말 평가만으로는 기반 목표의 지연, 공동 목표의 병목이 너무 늦게 보인다. 분기마다 "지표가 움직였나, 어디가 막혔나, 위아래로 무엇을 요청할까"를 30분 안에 점검한다. 점검은 캐치볼의 연장이다.</li>
+      <li><b>반기 조정 창구</b>상반기 말에 목표를 공식적으로 조정할 수 있는 창구를 둔다. 단, 조정 사유(전제 변화, 의존 목표 지연)와 조정 전후 숫자를 기록해 하향 조정이 습관이 되지 않게 한다.</li>
+      <li><b>기반·재사용·퇴역을 보상</b>데이터 정리, 표준 코드 적용, 엑셀 양식 폐기, 중복 도구 통합, 다른 팀이 가져다 쓴 부품은 눈에 띄지 않는 성과다. 목표 시트의 정식 항목으로 올리고, 기여 귀속 규칙(이중 인정)으로 결과 목표에도 이름을 올린다.</li>
+      <li><b>샌드배깅을 막고 정직한 중단에 가점</b>쉽게 달성할 목표를 고르는 샌드배깅<span class="en">(sandbagging)</span>은 기준선을 상위와 함께 확정하면 상당 부분 막힌다. PoC 완료는 성과가 아니라 결정 시점이다. 기한 내 근거 있는 전환·중단 결정을 보고, 빨리 접은 과제는 자원을 아낀 성과로 인정한다. 중단 보고에 불이익을 주면 다음 해부터 모든 과제가 성공하고, 아무것도 바뀌지 않는다.</li>
       <li><b>공동 목표는 공동 평가</b>공동 목표를 가진 팀들은 같은 숫자로 함께 평가받는다. 한 팀의 지연이 다른 팀 점수를 깎는 것이 불공정해 보이지만, 그래야 서로 돕는다. 팀별 기여 목표(입력 완전성, 인계 시간)를 함께 두면 무임승차도 보인다.</li>
-      <li><b>실험과 운영을 분리</b>학습용 실험은 실패해도 되는 별도 트랙으로 관리하고, 운영 중인 확산 과제는 결과 지표로 엄격하게 본다. 둘을 섞으면 실험은 위축되고 운영은 느슨해진다.</li>
+      <li><b>실험과 운영을 분리</b>학습용 실험은 실패해도 되는 별도 트랙으로, 운영 중인 확산 과제는 결과 지표로 엄격하게 본다. 둘을 섞으면 실험은 위축되고 운영은 느슨해진다.</li>
     </ol>
     <div class="table-wrap"><table>
       <thead><tr><th></th><th>실험 트랙 (탐색)</th><th>운영 트랙 (확산)</th></tr></thead>
@@ -504,13 +534,60 @@
         <tr><td><b>평가 비중(예시)</b></td><td>시트의 10~20%</td><td>나머지</td></tr>
       </tbody>
     </table></div>
-    <div class="callout">
-      <strong>리더의 목표에 무엇이 있는지가 메시지다</strong>
-      <p>사업부장의 목표 시트에 "AI 과제 87건"이 있으면 조직 전체가 과제 수를 센다. 사업부장의 시트에 "클레임 리드타임"과 "클레임 데이터 표준 확정"이 있으면 팀장들은 팀 사이의 인계와 데이터를 보기 시작한다. 상위 계층 목표를 바꾸는 것이 하위 계층 행동을 바꾸는 가장 빠른 길이다. 변화 관리의 강화 단계(<a href="people.html">11장</a>의 ADKAR)가 여기서 작동한다.</p>
+
+    <h3>취합이 아니라 증거로: 보고된 성과를 얼마나 믿을 수 있나</h3>
+    <p>연말에 성과를 다시 써서 올리고 위에서 점수를 매기는 방식은 비싸고, 보고서를 잘 쓰는 팀에게 유리하다. 숫자의 신뢰도 문제다. 팀 A는 "AI로 연 3,000시간 절감", 팀 B는 "보고서 작성 시간 70% 단축"이라고 보고한다. 한쪽은 설문으로 "체감 시간"을 물었고, 한쪽은 두 건을 재 보고 연간 건수를 곱했다. 상위 조직은 둘을 더해 "사업부 AX 성과"로 올린다. 하위 조직이 거짓말을 해서가 아니다. 측정 기준 없이 목표를 주면 모두가 자기에게 유리한 합리적 기준을 고른다. <a href="#why-fail">굿하트의 법칙</a>이 숫자의 신뢰 문제로 이어지는 지점이다. 해법은 하나다. <strong>성과도 기준을 선언하게 하고, 증거의 수준을 함께 보고하게 한다.</strong></p>
+    <ol class="ladder">
+      <li><b>주장</b>"많이 좋아졌다." 자기 보고, 체감 설문. 출발점으로는 괜찮지만 합산하면 안 된다.</li>
+      <li><b>산출물</b>데모, 화면, 만든 도구 목록. 만들었다는 증거지 쓰인다는 증거가 아니다.</li>
+      <li><b>사용 기록</b>로그로 본 주간 활성 사용자, 업무 건 중 도구를 거친 비율, 3개월 이상 유지 여부.</li>
+      <li><b>전후 비교</b>사전에 등록한 기준선과 같은 정의로 측정한 리드타임·재작업률·오류율의 변화. 합산 가능한 최소 수준이다.</li>
+      <li><b>비교군</b>단계적 도입(어떤 파트는 먼저, 어떤 파트는 나중)으로 같은 기간의 차이를 본다. 계절성·물량 변화를 걸러 낸다.</li>
+      <li><b>독립 확인</b>다른 조직(CoE, 품질, 재무)이 표본을 골라 현장에서 재확인한다. 감사가 아니라 교차 검증이다.</li>
+    </ol>
+
+    <div class="sim" id="sim-trust">
+      <div class="sim-head"><span class="sim-tag">INTERACTIVE</span><h3>성과 신뢰도 점검기: 보고된 절감 시간 중 얼마를 믿을 수 있나</h3></div>
+      <div class="sim-body side">
+        <div class="sim-view"><div class="sim-html">
+          <div id="ev-bars"></div>
+          <div class="ev-out" id="ev-out"></div>
+        </div></div>
+        <div class="sim-controls">
+          <label class="ctrl"><span>보고된 연간 절감 <output id="ev-h-out"></output></span><input type="range" id="ev-h" min="500" max="10000" step="500" value="3000"></label>
+          <label class="check"><input type="checkbox" id="ev-base"> 시작 전에 기준선을 등록했다</label>
+          <label class="check"><input type="checkbox" id="ev-def"> 측정 정의를 공용 레지스트리에서 썼다</label>
+          <label class="check"><input type="checkbox" id="ev-log"> 사용·처리 시간을 로그로 자동 측정한다</label>
+          <label class="check"><input type="checkbox" id="ev-keep"> 3개월 이상 사용이 유지되고 있다</label>
+          <label class="check"><input type="checkbox" id="ev-ctrl"> 비교군(단계적 도입)이 있다</label>
+          <label class="check"><input type="checkbox" id="ev-audit"> 다른 조직이 표본을 현장 확인했다</label>
+          <label class="check"><input type="checkbox" id="ev-use"> 절감 시간을 어디에 썼는지 기록했다</label>
+          <label class="check"><input type="checkbox" id="ev-fail"> 실패·중단 과제도 함께 보고한다</label>
+        </div>
+      </div>
+      <div class="sim-readout">
+        <div class="stat"><span class="k">증거 수준</span><span class="v" id="ev-o1">—</span></div>
+        <div class="stat"><span class="k">신뢰 가능한 추정치</span><span class="v" id="ev-o2">—</span></div>
+        <div class="stat"><span class="k">가장 큰 빈칸</span><span class="v" id="ev-o3" style="font-size:13px;font-weight:500">—</span></div>
+      </div>
+      <div class="sim-note">"신뢰 가능한 추정치"는 증거가 약할수록 보고치를 보수적으로 할인한다는 생각을 보인 교육용 계산이며, 할인율 자체는 예시다. 해볼 것: 체크를 하나도 하지 않고 보고치를 10,000시간으로 올려 보자. 숫자를 키우는 것보다 증거 한 줄을 더하는 것이 상위 조직에 더 큰 숫자로 전달된다.</div>
     </div>
-    <div class="callout tip">
-      <strong>평가하는 방식도 AX 대상이다</strong>
-      <p>목표를 계층별로 잘 설계해도, 평가를 연말 취합 PPT로 하면 현장의 시간은 다시 보고서에 들어간다. 증거를 업무 시스템과 성과 레지스트리에서 가져오고, 보고받는 조직이 먼저 보고 부담을 줄이는 방법은 <a href="reporting.html">13장</a>에서 다룬다.</p>
+
+    <p>평가 항목마다 증거를 어디서 가져올지 미리 정해 두면, 평가를 위해 새로 만드는 자료가 거의 없어진다. 증거는 취합 엑셀이 아니라 업무 시스템, 성과 레지스트리, 사용 로그에서 나온다.</p>
+    <div class="table-wrap"><table>
+      <thead><tr><th>평가 항목</th><th>보는 것</th><th>증거의 출처</th></tr></thead>
+      <tbody>
+        <tr><td><b>결과</b></td><td>사전 등록한 운영·사업 지표의 변화</td><td>업무 KPI 대시보드(기준선 대비)</td></tr>
+        <tr><td><b>기반</b></td><td>정리한 데이터·표준·연결, 폐기한 레거시</td><td>데이터 카탈로그, 기준 레지스트리, 시스템 변경 이력</td></tr>
+        <tr><td><b>확산·재사용</b></td><td>다른 팀이 가져다 쓴 것</td><td>성과 레지스트리의 재사용 기록, 플랫폼 사용 로그</td></tr>
+        <tr><td><b>학습</b></td><td>중단한 과제와 이유, 공유한 실패</td><td>레지스트리의 중단 항목</td></tr>
+        <tr><td><b>가드레일</b></td><td>보안·품질 기준 준수</td><td>AI 사용 등록부, 게이트웨이 로그(<a href="governance.html">10장</a>)</td></tr>
+      </tbody>
+    </table></div>
+    <p>레지스트리와 로그는 AI가 1차 요약하고, 평가자는 숫자의 맥락과 예외를 묻는 대화에 시간을 쓴다. 평가 준비 시간을 줄이는 것이 평가 조직 자신의 AX다(<a href="reporting.html#whose">13장</a>). 평가 체계도 매년 평가한다. 하위 조직이 평가 준비에 쓴 시간, 이의 제기 비율, 평가 후 행동 변화를 보고 고친다.</p>
+    <div class="callout">
+      <strong>리더의 목표와 평가가 메시지다</strong>
+      <p>사업부장의 목표 시트에 "AI 과제 87건"이 있으면 조직 전체가 과제 수를 센다. "클레임 리드타임"과 "클레임 데이터 표준 확정"이 있으면 팀장들은 팀 사이의 인계와 데이터를 보기 시작한다. 평가도 마찬가지다. 부풀린 큰 숫자보다 <strong>증거가 붙은 정직한 작은 숫자</strong>를 실제로 더 높게 평가하는 것을 보여 줘야 한다. 상위 계층의 목표와 평가를 바꾸는 것이 하위 계층 행동을 바꾸는 가장 빠른 길이다(<a href="people.html">11장</a>의 ADKAR 강화 단계).</p>
     </div>
   </section>
 
@@ -580,11 +657,12 @@
     <ol>
       <li>팀 목표를 더한 사업부·부문 목표는 팀 간 흐름, 공유 기반, 공통 표준, 자원 재배치, 규정 변경을 담지 못한다. 그 영역은 구조적으로 "누구의 목표도 아닌 것"이 된다.</li>
       <li>취합형은 국지 최적과 중복, 활동 지표 표류(굿하트의 법칙), 시간 지평 불일치, 기여 귀속 문제, 본업 KPI와의 단절로 실패한다.</li>
-      <li>고도의 원칙: 각 계층은 그 계층의 결정권으로만 바꿀 수 있는 것을 목표로 삼는다. 계층은 인원수가 아니라 결정권·범위·시간 지평으로 정의한다.</li>
+      <li>고도의 원칙: 각 계층은 그 계층의 결정권으로만 바꿀 수 있는 것을 목표로 삼는다. 계층은 인원수가 아니라 결정권·범위·시간 지평으로 정의한다. AX는 아래로 내려올수록 디지털화·표준화·자동화·연결 같은 작업의 언어가 되고, 금액 환산은 사업부 이상의 일이다. 아래는 위의 KPI와의 연결선이면 충분하다.</li>
       <li>목표는 결과·기반·확산·역량·가드레일 다섯 유형으로 나누고, 계층마다 비중을 다르게 둔다. 기반의 무게중심은 사업부와 실, 결과는 사업부(흐름 전체)와 팀(자기 구간)이다.</li>
       <li>목표는 캐치볼로 위아래·옆으로 주고받으며 잇는다. 팀 간 흐름은 공동 목표로, 기반은 매트릭스 목표로, 공은 이중 인정 + 단일 집계 + 기반 고유 지표로 나눈다.</li>
       <li>지표는 기준선과 측정 정의를 먼저 고정하고, 활동 지표는 진단용으로만 쓰며, 선행·후행 지표를 사슬로 묶은 다년 목표와 연간 마일스톤으로 운영한다.</li>
-      <li>분기 점검, 반기 조정, 기반·퇴역 작업 보상, PoC를 결정 시점으로 보는 평가, 공동 평가, 실험·운영 트랙 분리가 목표 체계를 살아 있게 한다.</li>
+      <li>연초 기준 등록과 분기 점검, 반기 조정, 기반·재사용·퇴역 작업 보상, PoC를 결정 시점으로 보고 정직한 중단에 가점을 주는 평가, 공동 평가, 실험·운영 트랙 분리가 목표 체계를 살아 있게 한다.</li>
+      <li>평가는 취합이 아니라 증거로 한다. 보고된 성과는 주장 → 산출물 → 사용 기록 → 전후 비교 → 비교군 → 독립 확인의 증거 사다리로 신뢰 수준을 판정하고, 전후 비교 이상만 합산한다. 증거는 업무 시스템에서 가져오고, AI는 요약을, 사람은 판단을 맡는다.</li>
     </ol>
   </section>
 
@@ -632,6 +710,13 @@
         <button class="opt" data-correct>PoC는 결정 시점이다. 기한 내에 확산·수정·중단을 근거 있게 결정했는지를 보고, 근거 있는 중단도 성과로 인정한다</button>
         <button class="opt">PoC는 평가 대상에서 완전히 제외한다</button>
       </div><div class="quiz-exp">PoC 건수를 성과로 보면 파일럿 연옥을 보상하게 된다. 실험 트랙에서는 기한 내 결정과 학습 공유를, 운영 트랙에서는 결과·채택 지표를 본다.</div></div>
+
+      <div class="quiz-q"><p>7. 팀 A는 설문으로 "연 3,000시간 절감", 팀 B는 두 건을 재 보고 연간 건수를 곱해 "70% 단축"을 보고했다. 사업부가 이를 합산하기 전에 가장 먼저 갖춰야 할 것은?</p><div class="opts">
+        <button class="opt">더 높은 목표치</button>
+        <button class="opt">보고 양식의 글꼴과 단위 통일</button>
+        <button class="opt" data-correct>과제 시작 때 등록한 기준선과 공통 측정 정의(최소한 증거 사다리의 "전후 비교" 수준)</button>
+        <button class="opt">성공 사례만 골라 보고받는 절차</button>
+      </div><div class="quiz-exp">측정 정의가 다르면 합산 자체가 의미 없다. 주장·산출물 수준의 숫자는 사례로만 공유하고, 같은 정의로 잰 전후 비교 이상부터 합산한다. 성공만 보고받으면 숫자는 커지지만 신뢰는 낮아진다.</div></div>
     </div>
   </section>
 </main>
@@ -941,6 +1026,48 @@
   });
   ctMode = AX.seg("ct-mode", ctRender);
   ctRender();
+
+  /* ================================================ E) 성과 신뢰도 점검기 */
+  var EV = [
+    { id: "base", w: 0.14, name: "기준선 사전 등록" },
+    { id: "def", w: 0.12, name: "공용 측정 정의" },
+    { id: "log", w: 0.12, name: "로그 기반 측정" },
+    { id: "keep", w: 0.08, name: "3개월 이상 사용 유지" },
+    { id: "ctrl", w: 0.12, name: "비교군(단계적 도입)" },
+    { id: "audit", w: 0.1, name: "다른 조직의 표본 확인" },
+    { id: "use", w: 0.05, name: "절감 시간의 사용처 기록" },
+    { id: "fail", w: 0.04, name: "실패·중단 과제 보고" }
+  ];
+  var evH = AX.range("ev-h", function (v) { return v.toLocaleString() + "시간"; }, evEval);
+  function evEval() {
+    var H = evH(), f = 0.15, have = {}, missing = [];
+    EV.forEach(function (t) { have[t.id] = document.getElementById("ev-" + t.id).checked; if (have[t.id]) f += t.w; else missing.push(t); });
+    f = Math.min(f, 0.95);
+    var level = "주장";
+    if (have.log || have.keep) level = "사용 기록";
+    if (have.base && have.def) level = "전후 비교";
+    if (level === "전후 비교" && have.ctrl) level = "비교군";
+    if (level === "비교군" && have.audit) level = "독립 확인";
+    var cred = Math.round(H * f / 10) * 10;
+    document.getElementById("ev-bars").innerHTML =
+      '<div class="bar-row"><span>보고치</span><span class="track"><i style="width:100%;background:var(--text-dim);opacity:.5"></i></span><span class="val">' + H.toLocaleString() + "</span></div>" +
+      '<div class="bar-row"><span>신뢰 가능 추정</span><span class="track"><i style="width:' + (f * 100).toFixed(1) + '%"></i></span><span class="val">' + cred.toLocaleString() + "</span></div>";
+    missing.sort(function (a, b) { return b.w - a.w; });
+    var tip = {
+      "주장": "아직 합산하지 말고 사례로만 공유한다. 측정 정의부터 맞춘다.",
+      "사용 기록": "쓰인다는 증거는 있다. 업무 결과가 바뀌었는지는 아직 모른다.",
+      "전후 비교": "합산 가능한 최소 수준. 계절성·물량 변화 가능성을 함께 적는다.",
+      "비교군": "경영 보고에 쓸 수 있는 수준. 표본 확인으로 한 단계 더 올릴 수 있다.",
+      "독립 확인": "재무·투자 판단의 근거로 쓸 수 있는 수준."
+    }[level];
+    document.getElementById("ev-out").innerHTML = "<h4>증거 수준: " + level + "</h4>" + esc(tip) +
+      (missing.length ? "<ul><li>다음에 채울 것: " + esc(missing.slice(0, 2).map(function (m) { return m.name; }).join(", ")) + "</li></ul>" : "");
+    AX.stat("ev-o1", level);
+    AX.stat("ev-o2", cred.toLocaleString() + "<small>시간 (" + Math.round(f * 100) + "%)</small>");
+    AX.stat("ev-o3", missing.length ? esc(missing[0].name) : "없음");
+  }
+  EV.forEach(function (t) { document.getElementById("ev-" + t.id).addEventListener("change", evEval); });
+  evEval();
 })();
 </script>
 </body>
