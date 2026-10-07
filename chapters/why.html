@@ -1,0 +1,653 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="icon" href="../favicon.ico" sizes="any">
+<link rel="icon" href="../favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="../apple-touch-icon.png">
+<title>왜 지금 AX인가 · AXBook</title>
+<meta name="description" content="디지털화·디지털라이제이션·DX·AX의 차이, 파일럿 연옥에 빠지는 이유, 데이터·프로세스·공통 언어·사람이라는 AX의 네 기반을 정리하고 우리 조직의 AX 성숙도를 직접 진단한다.">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+<link rel="stylesheet" href="../css/style.css">
+<script src="../js/common.js"></script>
+<style>
+  figure.diagram svg.mx { max-width: 680px; margin: 0 auto; }
+  .as-weak { color: var(--bad); font-weight: 700; }
+  .as-saved { font-size: 13px; color: var(--text-dim); }
+  #as-controls .ctrl > span small { color: var(--text-faint); font-size: 12px; }
+</style>
+<!-- Cloudflare Web Analytics -->
+<script type='module' src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "3d6151a0abc94ede89285d462527fa80"}'></script>
+<!-- End Cloudflare Web Analytics -->
+</head>
+<body data-chapter="why">
+<main class="chapter">
+  <header class="chapter-hero">
+    <div class="eyebrow">Chapter 01</div>
+    <h1>왜 지금 AX인가</h1>
+    <p class="lead">생성형 AI와 에이전트가 하루가 다르게 좋아지는 2026년, 많은 제조 조직이 "AI를 도입하라"는 지시를 받는다. 그런데 막상 시작하면 데이터는 메일과 개인 PC에 흩어져 있고, 같은 일을 팀마다 다르게 하고 있다. 이 장은 디지털 전환(DX)과 AI 전환(AX)이 무엇이 다른지, 왜 많은 시도가 파일럿에서 멈추는지, 그리고 AI가 효과를 내려면 무엇을 먼저 정리해야 하는지를 다룬다. 마지막에는 우리 조직의 현재 위치를 직접 진단해 본다.</p>
+    <ul class="objectives">
+      <li>디지털화(digitization)·디지털라이제이션(digitalization)·DX·AX를 구분하고, 자동화·증강·자율의 차이를 설명할 수 있다.</li>
+      <li>AX를 "도구 도입"이 아니라 "AI를 업무의 기본 구성요소로 넣어 일하는 방식을 다시 설계하는 것"으로 정의할 수 있다.</li>
+      <li>파일럿이 확산되지 못하는 다섯 가지 원인을 우리 조직의 사례에 대입해 볼 수 있다.</li>
+      <li>데이터·프로세스·공통 언어·사람이라는 네 기반을 기준으로 조직의 AX 성숙도를 진단하고 가장 약한 고리를 찾을 수 있다.</li>
+    </ul>
+  </header>
+
+  <!-- ============================================================ 1 -->
+  <section id="monday">
+    <h2>월요일 아침, "AI를 도입하라"는 메일</h2>
+    <p>A사(글로벌 전자부품 제조사)의 품질보증팀 파트장은 월요일 아침 경영기획에서 온 메일을 연다. 제목은 "부서별 생성형 AI 활용 과제 제출(금주 금요일까지)". 첨부된 양식에는 과제명, 기대 효과, 필요 예산을 적는 칸이 있다. 파트장은 팀원들과 짧게 회의를 하고 세 가지 아이디어를 적어 낸다. 고객 클레임 메일을 요약해 주는 챗봇, 8D 보고서 초안을 써 주는 도우미, 과거 불량 사례 검색.</p>
+    <p>석 달 뒤, 세 과제 중 하나가 데모까지 갔다. 그런데 데모에서 쓴 과거 불량 사례는 담당 선임이 2주 동안 공유 폴더와 메일함을 뒤져 손으로 모은 50건이었다. 실제 운영으로 넘기려 하자 질문이 쏟아진다. 나머지 수천 건의 사례는 어디에 있나? 팀마다 불량 이름이 다른데 어떻게 묶나? 고객사 이름이 들어간 문서를 외부 AI 서비스에 넣어도 되나? 이 도구가 정말 시간을 줄였는지는 무엇으로 재나? 데모는 박수를 받았지만, 과제는 "2단계 검토"라는 이름으로 서랍에 들어간다.</p>
+    <p>이 장면은 특정 회사의 이야기가 아니다. 많은 제조 조직에서 반복되는 패턴이다. 문제는 AI의 성능이 아니라 <strong>AI가 먹고 일할 바탕</strong>, 즉 데이터·프로세스·공통 언어·사람이 준비되지 않았다는 데 있다. 이 책 전체가 그 바탕을 정리하는 방법을 다룬다.</p>
+    <div class="callout">
+      <strong>이 책의 핵심 주장</strong>
+      <p>AI는 조직을 증폭한다. 정리된 조직은 더 빨라지고, 혼란스러운 조직은 혼란이 더 빨리, 더 그럴듯하게 퍼진다. 그래서 AX의 첫 작업은 모델 선택이 아니라 <strong>데이터·프로세스·언어·사람</strong>을 정리하는 일이다.</p>
+    </div>
+  </section>
+
+  <!-- ============================================================ 2 -->
+  <section id="terms">
+    <h2>디지털화에서 AX까지: 네 단어의 차이</h2>
+    <p>현장에서는 "디지털화", "DX", "스마트팩토리", "AX"가 섞여서 쓰인다. 말이 섞이면 목표도 섞인다. 이 책에서는 네 단어를 다음처럼 구분한다.</p>
+    <ul>
+      <li><span class="term">디지털화</span><span class="en">(digitization)</span> — 아날로그 정보를 디지털 형식으로 바꾸는 것. 종이 점검표를 스캔해 PDF로 올리거나, 수기 작업일지를 엑셀로 옮기는 일이다. 정보의 <em>형식</em>만 바뀐다.</li>
+      <li><span class="term">디지털라이제이션</span><span class="en">(digitalization)</span> — 디지털 기술로 <em>업무 절차</em>를 바꾸는 것. 점검표를 태블릿 앱으로 입력하고 결과가 바로 MES에 쌓이게 하는 것이다.</li>
+      <li><span class="term">디지털 전환</span><span class="en">(DX, Digital Transformation)</span> — 디지털을 전제로 사업과 조직의 운영 방식을 바꾸는 것. 시스템 통합, 데이터 기반 의사결정, 새로운 서비스 모델까지 포함한다.</li>
+      <li><span class="term">AI 전환</span><span class="en">(AX, AI Transformation)</span> — AI를 업무의 <em>기본 구성요소</em>로 넣어 일하는 방식을 다시 설계하는 것. 사람이 하던 판단·작성·검색·조정의 일부를 AI가 맡고, 사람은 목표 설정·검증·예외 처리에 집중하도록 역할을 다시 나눈다.</li>
+    </ul>
+    <figure class="diagram">
+      <svg class="mx" viewBox="0 0 640 300" role="img" aria-label="디지털화에서 AX까지 네 단계 계단">
+        <line x1="30" y1="270" x2="620" y2="270" class="s-axis"/>
+        <rect x="40" y="200" width="130" height="70" rx="8" class="f-surface"/>
+        <rect x="185" y="150" width="130" height="120" rx="8" class="f-surface"/>
+        <rect x="330" y="100" width="130" height="170" rx="8" class="f-acc2-soft"/>
+        <rect x="475" y="50" width="130" height="220" rx="8" class="f-acc-soft"/>
+        <text x="105" y="225" text-anchor="middle" class="t">디지털화</text>
+        <text x="105" y="243" text-anchor="middle" class="t-mono">digitization</text>
+        <text x="105" y="261" text-anchor="middle" class="t-dim">형식을 바꾼다</text>
+        <text x="250" y="175" text-anchor="middle" class="t">디지털라이제이션</text>
+        <text x="250" y="193" text-anchor="middle" class="t-mono">digitalization</text>
+        <text x="250" y="211" text-anchor="middle" class="t-dim">절차를 바꾼다</text>
+        <text x="395" y="125" text-anchor="middle" class="t">DX</text>
+        <text x="395" y="143" text-anchor="middle" class="t-mono">transformation</text>
+        <text x="395" y="161" text-anchor="middle" class="t-dim">운영 방식을 바꾼다</text>
+        <text x="540" y="75" text-anchor="middle" class="t-acc">AX</text>
+        <text x="540" y="93" text-anchor="middle" class="t-mono">AI transformation</text>
+        <text x="540" y="111" text-anchor="middle" class="t-dim">일의 주체·역할을</text>
+        <text x="540" y="128" text-anchor="middle" class="t-dim">다시 나눈다</text>
+        <path d="M60 40 C 200 30, 380 20, 590 22" class="s-line" stroke-dasharray="4 4"/>
+        <text x="60" y="30" class="t-mono">아래 계단이 비면 위 계단이 서지 않는다</text>
+      </svg>
+      <figcaption><b>그림 1-1.</b> 디지털화–디지털라이제이션–DX–AX. 각 단계는 앞 단계를 전제로 한다. 종이와 개인 엑셀에 있는 정보는 AI가 읽을 수 없고, 절차가 매번 다르면 AI에게 맡길 "일"의 정의 자체가 없다.</figcaption>
+    </figure>
+    <p>중요한 것은 이 단계들이 <strong>건너뛸 수 없는 계단</strong>이라는 점이다. 스캔 이미지로만 남은 점검표는 AI가 OCR로 읽을 수는 있어도, 항목 이름과 단위가 매번 다르면 비교할 수 없다. DX 과정에서 MES·ERP·PLM을 들여왔더라도 실제 판단 근거가 여전히 메일과 PPT에 있다면, AX는 그 메일과 PPT부터 다시 정리해야 한다.</p>
+    <div class="table-wrap"><table>
+      <thead><tr><th>구분</th><th>DX</th><th>AX</th></tr></thead>
+      <tbody>
+        <tr><td>핵심 질문</td><td>이 업무를 시스템으로 옮길 수 있는가?</td><td>이 업무의 어떤 판단·작성을 AI가 맡고, 사람은 무엇을 검증하는가?</td></tr>
+        <tr><td>다루는 데이터</td><td>정형 데이터 중심(ERP·MES 트랜잭션)</td><td>정형 + 비정형(메일, 보고서, 회의록, 매뉴얼, 이미지)</td></tr>
+        <tr><td>결과물</td><td>시스템, 화면, 대시보드</td><td>사람과 AI가 나눠 일하는 새 업무 흐름</td></tr>
+        <tr><td>성공의 척도</td><td>시스템 가동, 입력률</td><td>리드타임·품질·재작업 같은 업무 지표의 변화</td></tr>
+        <tr><td>흔한 실패</td><td>시스템은 있는데 아무도 안 씀</td><td>데모는 좋은데 운영으로 못 감(파일럿 연옥)</td></tr>
+      </tbody>
+    </table></div>
+  </section>
+
+  <!-- ============================================================ 3 -->
+  <section id="modes">
+    <h2>자동화, 증강, 자율: AI가 일에 들어오는 세 방식</h2>
+    <p>AI가 일에 들어오는 방식은 크게 셋이다. 같은 "8D 보고서" 업무로 비교해 보자.</p>
+    <div class="cards">
+      <div class="card"><span class="k">AUTOMATION</span><h4>자동화</h4><p>정해진 규칙을 사람 대신 실행한다. 고객 클레임 메일이 오면 제목에서 고객사·품번을 뽑아 이슈 대장에 자동 등록한다. 규칙이 명확할수록 잘 된다.</p></div>
+      <div class="card"><span class="k">AUGMENTATION</span><h4>증강</h4><p>사람이 판단하고 AI가 돕는다. 담당자가 D4 원인 분석을 쓸 때, AI가 과거 유사 불량 3건과 당시 대책을 근거와 함께 보여 준다. 최종 판단은 사람이 한다.</p></div>
+      <div class="card"><span class="k">AUTONOMY</span><h4>자율</h4><p>AI가 목표를 받아 여러 단계를 스스로 진행하고, 사람은 정해진 지점에서 승인한다. 에이전트가 이슈 접수부터 8D 초안·관련 부서 회람까지 진행하고 팀장이 승인한다.</p></div>
+    </div>
+    <figure class="diagram">
+      <svg class="mx" viewBox="0 0 640 230" role="img" aria-label="자동화, 증강, 자율에서 사람과 AI의 역할 비중">
+        <defs>
+          <linearGradient id="why-g1" x1="0" y1="0" x2="1" y2="0">
+            <stop offset="0" stop-color="var(--accent-2)" stop-opacity="0.55"/>
+            <stop offset="1" stop-color="var(--accent)" stop-opacity="0.55"/>
+          </linearGradient>
+        </defs>
+        <text x="20" y="28" class="t-dim">사람이 주도</text>
+        <text x="620" y="28" text-anchor="end" class="t-dim">AI가 주도</text>
+        <rect x="20" y="42" width="600" height="26" rx="13" fill="url(#why-g1)"/>
+        <line x1="120" y1="38" x2="120" y2="74" class="s-line"/>
+        <line x1="320" y1="38" x2="320" y2="74" class="s-line"/>
+        <line x1="520" y1="38" x2="520" y2="74" class="s-line"/>
+        <circle cx="120" cy="55" r="7" class="f-elev"/>
+        <circle cx="320" cy="55" r="7" class="f-elev"/>
+        <circle cx="520" cy="55" r="7" class="f-elev"/>
+        <rect x="45" y="92" width="150" height="120" rx="10" class="f-surface"/>
+        <rect x="245" y="92" width="150" height="120" rx="10" class="f-surface"/>
+        <rect x="445" y="92" width="150" height="120" rx="10" class="f-surface"/>
+        <text x="120" y="116" text-anchor="middle" class="t">자동화</text>
+        <text x="120" y="138" text-anchor="middle" class="t-dim">규칙이 명확한 반복</text>
+        <text x="120" y="158" text-anchor="middle" class="t-dim">사람: 규칙 정의</text>
+        <text x="120" y="178" text-anchor="middle" class="t-dim">AI/RPA: 실행</text>
+        <text x="120" y="200" text-anchor="middle" class="t-mono">예: 대장 자동 등록</text>
+        <text x="320" y="116" text-anchor="middle" class="t">증강</text>
+        <text x="320" y="138" text-anchor="middle" class="t-dim">판단이 필요한 일</text>
+        <text x="320" y="158" text-anchor="middle" class="t-dim">사람: 판단·결정</text>
+        <text x="320" y="178" text-anchor="middle" class="t-dim">AI: 검색·초안·제안</text>
+        <text x="320" y="200" text-anchor="middle" class="t-mono">예: 유사 사례 추천</text>
+        <text x="520" y="116" text-anchor="middle" class="t-acc">자율</text>
+        <text x="520" y="138" text-anchor="middle" class="t-dim">여러 단계의 흐름</text>
+        <text x="520" y="158" text-anchor="middle" class="t-dim">사람: 목표·승인</text>
+        <text x="520" y="178" text-anchor="middle" class="t-dim">AI: 계획·실행·보고</text>
+        <text x="520" y="200" text-anchor="middle" class="t-mono">예: 8D 초안 에이전트</text>
+      </svg>
+      <figcaption><b>그림 1-2.</b> 자동화–증강–자율. 오른쪽으로 갈수록 AI가 맡는 범위가 넓어지지만, 그만큼 입력 데이터와 업무 정의가 정리되어 있어야 한다. 자율 단계의 승인 지점 설계는 <a href="agents.html">8장</a>에서 다룬다.</figcaption>
+    </figure>
+    <p>제조 현장에서는 이 셋이 한 업무 안에 섞인다. 클레임 접수는 자동화, 원인 분석은 증강, 관련 부서 회람과 일정 관리는 자율에 가깝다. 따라서 "우리 팀에 AI를 도입한다"보다 "<strong>이 업무의 이 단계</strong>를 어떤 방식으로 바꾼다"로 말해야 과제가 구체적이 된다.</p>
+    <div class="callout tip">
+      <strong>현장 팁: 과제 이름을 바꿔 보라</strong>
+      <p>"품질 AI 챗봇 구축" 대신 "고객 클레임 접수–D3 임시 조치까지 리드타임을 줄이기 위해, 접수 분류를 자동화하고 유사 사례 검색으로 원인 분석을 증강한다"처럼 쓰면 필요한 데이터, 바뀌는 역할, 측정 지표가 함께 드러난다.</p>
+    </div>
+  </section>
+
+  <!-- ============================================================ 4 -->
+  <section id="define">
+    <h2>AX의 정의: 도구가 아니라 일하는 방식</h2>
+    <p>이 책에서 AX는 다음을 뜻한다.</p>
+    <div class="callout">
+      <strong>AX(AI 전환)</strong>
+      <p>AI를 업무의 기본 구성요소로 두고, 일의 흐름·역할·산출물·측정 방식을 다시 설계하는 것. 성공의 기준은 "AI 도구를 몇 개 도입했나"가 아니라 "업무 지표(리드타임, 품질, 재작업, 지식 재사용)가 얼마나 바뀌었나"다.</p>
+    </div>
+    <p>같은 고객 클레임 대응 업무를 놓고, 도구만 붙인 경우와 일하는 방식을 바꾼 경우를 비교하면 차이가 분명해진다.</p>
+    <div class="compare">
+      <div class="before"><h4>도구만 붙인 경우</h4><ul>
+        <li>메일 본문을 복사해 사내 AI 챗봇에 붙여 넣고 요약을 받는다.</li>
+        <li>요약은 각자 PC에 남고, 대응 결정은 여전히 메일 스레드에 묻힌다.</li>
+        <li>보고서 양식은 담당자마다 다르다. AI 초안도 매번 다른 모양이다.</li>
+        <li>다음 유사 클레임 때 이번 대응을 찾지 못한다.</li>
+      </ul></div>
+      <div class="after"><h4>일하는 방식을 바꾼 경우</h4><ul>
+        <li>클레임은 표준 <strong>이슈 카드</strong>로 등록되고 고객·품번·LOT·불량 코드가 구조화된다.</li>
+        <li>AI가 과거 이슈 카드에서 유사 사례와 당시 대책을 근거와 함께 제시한다.</li>
+        <li>8D 초안은 표준 양식으로 생성되고, 담당자는 검증과 판단에 시간을 쓴다.</li>
+        <li>종결된 카드가 다시 다음 검색의 근거가 된다. 지식이 쌓인다.</li>
+      </ul></div>
+    </div>
+    <p>오른쪽이 가능하려면 AI보다 먼저 <strong>이슈 카드라는 표준 양식</strong>(<a href="process.html">3장</a>), <strong>불량 코드라는 공통 언어</strong>(<a href="semantics.html">4장</a>), <strong>과거 이슈가 모여 있는 데이터</strong>(<a href="legacy.html">2장</a>, <a href="foundation.html">5장</a>)가 있어야 한다. AI 부분은 사실 가장 마지막에, 가장 작게 들어간다.</p>
+  </section>
+
+  <!-- ============================================================ 5 -->
+  <section id="purgatory">
+    <h2>파일럿 연옥: 왜 PoC는 확산되지 않는가</h2>
+    <p>개념 검증<span class="en">(PoC, Proof of Concept)</span>과 파일럿은 많이 하는데 정작 운영에서 쓰이는 것은 드문 상태를 흔히 <span class="term">파일럿 연옥</span><span class="en">(pilot purgatory)</span>이라고 부른다. 제조 조직에서 파일럿이 멈추는 이유는 대개 다음 다섯 가지 중 하나 이상이다.</p>
+    <div class="table-wrap"><table>
+      <thead><tr><th>원인</th><th>현장에서 보이는 모습</th><th>먼저 할 일</th></tr></thead>
+      <tbody>
+        <tr><td><strong>데이터 부재</strong></td><td>데모용 데이터는 담당자가 손으로 모은 것. 운영 데이터는 메일·개인 PC·스캔본에 흩어져 있다.</td><td>정보 인벤토리(<a href="legacy.html">2장</a>), 데이터 오너 지정(<a href="foundation.html">5장</a>)</td></tr>
+        <tr><td><strong>프로세스 비표준</strong></td><td>같은 이슈를 팀마다, 담당자마다 다르게 처리한다. AI에게 "어떤 절차"를 학습시킬지 정할 수 없다.</td><td>표준 대응 흐름·이슈 카드(<a href="process.html">3장</a>)</td></tr>
+        <tr><td><strong>현업 소외</strong></td><td>IT·혁신 조직이 과제를 정하고 만든다. 실제 사용자는 "또 하나의 입력 화면"으로 느낀다.</td><td>현업이 과제 오너가 되는 운영 모델(<a href="people.html">11장</a>)</td></tr>
+        <tr><td><strong>측정 부재</strong></td><td>"편해졌다"는 소감만 있고, 도입 전 기준선(baseline)이 없어 효과를 증명하지 못한다.</td><td>기준선과 KPI 정의(<a href="usecases.html">7장</a>)</td></tr>
+        <tr><td><strong>보안 우려</strong></td><td>고객 도면·공정 조건을 외부 AI에 넣어도 되는지 아무도 답하지 못해 결재가 멈춘다.</td><td>데이터 등급과 허용 매트릭스(<a href="governance.html">10장</a>)</td></tr>
+      </tbody>
+    </table></div>
+    <p>각 단계의 통과율이 아주 나쁘지 않아도, 단계가 여러 개 겹치면 최종적으로 확산되는 과제는 급격히 줄어든다. 아래 깔때기에서 직접 확인해 보자. 숫자는 모두 <strong>예시 수치</strong>이며, 여러분 조직의 실제 경험으로 바꿔 넣어 보는 것이 목적이다.</p>
+
+    <div class="sim" id="sim-funnel">
+      <div class="sim-head"><span class="sim-tag">INTERACTIVE</span><h3>파일럿 → 확산 깔때기</h3></div>
+      <div class="sim-body side">
+        <div class="sim-view"><canvas id="cv-funnel"></canvas></div>
+        <div class="sim-controls">
+          <div class="ctrl"><span>시나리오</span><div class="seg" id="fn-preset"><button data-value="base" class="on">현재(예시)</button><button data-value="fixed">기반 정비 후</button><button data-value="custom">직접 조정</button></div></div>
+          <label class="ctrl"><span>시작한 파일럿 수 <output id="fn-n-out"></output></span><input type="range" id="fn-n" min="5" max="60" step="1" value="30"></label>
+          <label class="ctrl"><span>① 기술 검증 통과율 <output id="fn-p1-out"></output></span><input type="range" id="fn-p1" min="10" max="100" step="5" value="70"></label>
+          <label class="ctrl"><span>② 현업 채택률 <output id="fn-p2-out"></output></span><input type="range" id="fn-p2" min="10" max="100" step="5" value="50"></label>
+          <label class="ctrl"><span>③ 운영 이관(보안·IT·데이터 연결) <output id="fn-p3-out"></output></span><input type="range" id="fn-p3" min="10" max="100" step="5" value="40"></label>
+          <label class="ctrl"><span>④ 다른 팀·사업장 확산 <output id="fn-p4-out"></output></span><input type="range" id="fn-p4" min="10" max="100" step="5" value="40"></label>
+        </div>
+      </div>
+      <div class="sim-readout">
+        <div class="stat"><span class="k">최종 확산 과제</span><span class="v" id="fn-o1">—</span></div>
+        <div class="stat"><span class="k">전체 통과율</span><span class="v" id="fn-o2">—</span></div>
+        <div class="stat"><span class="k">멈춘 과제</span><span class="v" id="fn-o3">—</span></div>
+        <div class="stat"><span class="k">가장 큰 손실 단계</span><span class="v" id="fn-o4">—</span></div>
+      </div>
+      <div class="sim-note">해볼 것: 파일럿 수를 두 배로 늘리는 것과, 가장 낮은 통과율 하나를 20%p 올리는 것 중 어느 쪽이 확산 과제를 더 늘리는가? 곱셈 구조에서는 <strong>가장 약한 단계</strong>를 고치는 것이 대개 더 싸고 효과가 크다. "기반 정비 후"는 데이터·프로세스·거버넌스를 먼저 정리했을 때를 가정한 예시다.</div>
+    </div>
+
+    <div class="formula">$$N_{\text{확산}} = N_{\text{파일럿}} \times p_1 \times p_2 \times p_3 \times p_4$$<div class="where">여기서 \(p_i\)는 각 단계의 통과율. 단계마다 50%만 되어도 네 단계를 지나면 \(0.5^4 \approx 6\%\)만 남는다.</div></div>
+  </section>
+
+  <!-- ============================================================ 6 -->
+  <section id="foundations">
+    <h2>AX의 네 기반: 데이터·프로세스·공통 언어·사람</h2>
+    <p>파일럿 연옥의 원인을 거꾸로 뒤집으면 AX가 서기 위한 기반이 보인다. 이 책은 그것을 네 개의 기둥으로 정리한다. 그 위에 AI가 지붕처럼 올라가고, 거버넌스가 기초가 된다.</p>
+    <figure class="diagram">
+      <svg class="mx" viewBox="0 0 640 330" role="img" aria-label="AX의 네 기반: 데이터, 프로세스, 공통 언어, 사람 위에 AI가 올라가는 집 구조">
+        <path d="M60 110 L320 28 L580 110 Z" class="f-acc-soft"/>
+        <text x="320" y="80" text-anchor="middle" class="t-acc">AI · 에이전트 · 유스케이스</text>
+        <text x="320" y="100" text-anchor="middle" class="t-dim">검색 · 요약 · 작성 · 예측 · 자동화</text>
+        <rect x="80" y="122" width="105" height="140" rx="6" class="f-surface"/>
+        <rect x="205" y="122" width="105" height="140" rx="6" class="f-surface"/>
+        <rect x="330" y="122" width="105" height="140" rx="6" class="f-surface"/>
+        <rect x="455" y="122" width="105" height="140" rx="6" class="f-surface"/>
+        <text x="132" y="150" text-anchor="middle" class="t">데이터</text>
+        <text x="132" y="175" text-anchor="middle" class="t-dim">어디에 있나</text>
+        <text x="132" y="193" text-anchor="middle" class="t-dim">믿을 수 있나</text>
+        <text x="132" y="211" text-anchor="middle" class="t-dim">누가 책임지나</text>
+        <text x="132" y="248" text-anchor="middle" class="t-mono">2장 · 5장 · 6장</text>
+        <text x="257" y="150" text-anchor="middle" class="t">프로세스</text>
+        <text x="257" y="175" text-anchor="middle" class="t-dim">같은 일은</text>
+        <text x="257" y="193" text-anchor="middle" class="t-dim">같은 흐름과</text>
+        <text x="257" y="211" text-anchor="middle" class="t-dim">같은 양식으로</text>
+        <text x="257" y="248" text-anchor="middle" class="t-mono">3장</text>
+        <text x="382" y="150" text-anchor="middle" class="t">공통 언어</text>
+        <text x="382" y="175" text-anchor="middle" class="t-dim">용어 · 코드</text>
+        <text x="382" y="193" text-anchor="middle" class="t-dim">단위 · ID</text>
+        <text x="382" y="211" text-anchor="middle" class="t-dim">기준정보</text>
+        <text x="382" y="248" text-anchor="middle" class="t-mono">4장</text>
+        <text x="507" y="150" text-anchor="middle" class="t">사람·조직</text>
+        <text x="507" y="175" text-anchor="middle" class="t-dim">현업 오너십</text>
+        <text x="507" y="193" text-anchor="middle" class="t-dim">역량 · 역할</text>
+        <text x="507" y="211" text-anchor="middle" class="t-dim">변화 관리</text>
+        <text x="507" y="248" text-anchor="middle" class="t-mono">11장</text>
+        <rect x="60" y="272" width="520" height="40" rx="6" class="f-acc2-soft"/>
+        <text x="320" y="297" text-anchor="middle" class="t">거버넌스 · 보안 · 리더십 (10장 · 12장)</text>
+      </svg>
+      <figcaption><b>그림 1-3.</b> AX의 집. 지붕(AI)은 가장 눈에 띄지만 가장 나중에 올린다. 기둥 하나가 짧으면 지붕이 기운다. 대부분의 파일럿 실패는 지붕 문제가 아니라 기둥 문제다.</figcaption>
+    </figure>
+    <div class="cards">
+      <div class="card"><span class="k">DATA</span><h4>데이터</h4><p>정보가 실제로 어디에 사는지 알고, 필요한 곳에서 꺼내 쓸 수 있고, 믿을 만한 품질이며, 책임자가 있다.</p></div>
+      <div class="card"><span class="k">PROCESS</span><h4>프로세스</h4><p>같은 종류의 일은 같은 흐름과 같은 산출물로 처리된다. 그래야 AI에게 "이 단계"를 맡길 수 있다.</p></div>
+      <div class="card"><span class="k">LANGUAGE</span><h4>공통 언어</h4><p>불량명·설비명·부품번호·단위가 팀마다 다르면 데이터를 합칠 수도, AI가 비교할 수도 없다.</p></div>
+      <div class="card"><span class="k">PEOPLE</span><h4>사람·조직</h4><p>현업이 과제의 주인이고, AI를 쓸 줄 알며, 바뀐 일하는 방식이 평가와 보상에 반영된다.</p></div>
+    </div>
+  </section>
+
+  <!-- ============================================================ 7 -->
+  <section id="amplifier">
+    <h2>AI는 증폭기다</h2>
+    <p>AI를 "부족한 것을 메워 주는 도구"로 기대하는 경우가 많다. 데이터가 엉망이어도 AI가 알아서 정리해 주고, 절차가 없어도 AI가 알아서 판단해 줄 것이라는 기대다. 실제로는 반대에 가깝다. 생성형 AI는 주어진 자료를 바탕으로 <em>그럴듯한</em> 결과를 빠르게 만든다. 자료가 정리되어 있으면 좋은 결과가 빨리 나오고, 자료가 서로 모순되면 모순된 결과가 빨리, 그리고 자신 있는 문장으로 나온다.</p>
+    <ul>
+      <li>팀마다 다른 불량 코드가 섞인 데이터로 "최근 불량 추이"를 요약시키면, AI는 같은 불량을 서로 다른 불량으로 세어 그럴듯한 추세를 만든다.</li>
+      <li><code>최종_v3</code>과 <code>최종_v3_수정</code>이 같은 폴더에 있으면, AI 검색은 둘 다 근거로 가져온다. 어느 쪽이 맞는지는 AI도 모른다.</li>
+      <li>절차가 없는 업무에 에이전트를 붙이면, 에이전트는 매번 다른 경로로 일을 처리하고 그 결과를 검증할 기준도 없다.</li>
+    </ul>
+    <p>아래 시뮬레이터는 이 관계를 단순한 <strong>교육용 예시 모델</strong>로 표현한 것이다. 기반(데이터 품질과 프로세스 표준화)이 일정 수준을 넘으면 AI 도입을 늘릴수록 효과가 커지고, 그 아래에서는 오히려 혼란과 검증 비용이 이득을 잡아먹는다.</p>
+
+    <div class="sim" id="sim-amp">
+      <div class="sim-head"><span class="sim-tag">INTERACTIVE</span><h3>"AI는 증폭기" 시뮬레이터</h3></div>
+      <div class="sim-body side">
+        <div class="sim-view"><canvas id="cv-amp"></canvas></div>
+        <div class="sim-controls">
+          <label class="ctrl"><span>데이터 품질 <output id="amp-q-out"></output></span><input type="range" id="amp-q" min="0" max="100" step="1" value="35"></label>
+          <label class="ctrl"><span>프로세스 표준화 <output id="amp-s-out"></output></span><input type="range" id="amp-s" min="0" max="100" step="1" value="30"></label>
+          <label class="ctrl"><span>AI 도입 강도 <output id="amp-x-out"></output></span><input type="range" id="amp-x" min="0" max="100" step="1" value="60"></label>
+          <label class="check"><input type="checkbox" id="amp-ref" checked> 기준 곡선(기반 낮음/높음) 표시</label>
+        </div>
+      </div>
+      <div class="sim-readout">
+        <div class="stat"><span class="k">기반 점수</span><span class="v" id="amp-o1">—</span></div>
+        <div class="stat"><span class="k">현재 순효과</span><span class="v" id="amp-o2">—</span></div>
+        <div class="stat"><span class="k">최적 도입 강도</span><span class="v" id="amp-o3">—</span></div>
+        <div class="stat"><span class="k">판정</span><span class="v" id="amp-o4">—</span></div>
+      </div>
+      <div class="sim-note">해볼 것: 데이터 품질과 표준화를 30 근처에 두고 AI 도입 강도를 올려 보라. 처음엔 약간 이득이지만 곧 아래로 꺾인다. 기반을 70 이상으로 올리면 같은 도입 강도에서 곡선이 위로 뻗는다. 모델 식: 이득 \(= 100\,f\,(1-e^{-3x})\), 혼란·검증 비용 \(= 70\,(1-f)\,x^{1.3}\), \(f\)는 기반 점수(0~1), \(x\)는 도입 강도(0~1). 수치는 개념 설명용이다.</div>
+    </div>
+
+    <div class="callout warn">
+      <strong>"AI가 정리해 주면 되지 않나?"</strong>
+      <p>AI는 정리 작업 자체를 크게 도울 수 있다. 메일에서 결정 사항을 뽑고, 서로 다른 불량명을 후보 코드로 묶어 준다(<a href="legacy.html">2장</a>, <a href="semantics.html">4장</a>). 하지만 어떤 코드를 표준으로 삼을지, 누가 그 코드를 관리할지는 사람이 정해야 한다. AI는 정리의 <em>속도</em>를 높이지, 정리의 <em>결정</em>을 대신하지 않는다.</p>
+    </div>
+  </section>
+
+  <!-- ============================================================ 8 -->
+  <section id="assess">
+    <h2>우리 조직은 어디에 있나: AX 성숙도 자가진단</h2>
+    <p>이제 우리 팀(또는 사업부)의 현재 위치를 진단해 보자. 여덟 개 차원 각각에 대해 1~5점을 매긴다. 정답은 없다. 중요한 것은 평균이 아니라 <strong>가장 약한 고리</strong>다. 기둥 하나가 짧으면 나머지가 아무리 높아도 집은 기운다. 그래서 아래 진단은 평균 점수가 높아도 가장 낮은 차원보다 한 단계 이상 높게 판정하지 않는다.</p>
+    <div class="table-wrap"><table>
+      <thead><tr><th>차원</th><th>1점에 가까운 모습</th><th>5점에 가까운 모습</th></tr></thead>
+      <tbody>
+        <tr><td>데이터</td><td>핵심 정보가 메일·개인 PC·공유 폴더에 흩어져 있고, 찾으려면 사람에게 물어야 한다.</td><td>핵심 데이터가 통합되어 있고 품질 기준과 데이터 오너가 있다.</td></tr>
+        <tr><td>프로세스</td><td>이슈마다 대응 절차와 보고서 양식이 새로 만들어진다.</td><td>표준 대응 흐름과 산출물 템플릿이 있고, 실제 흐름을 로그로 측정한다.</td></tr>
+        <tr><td>공통 언어</td><td>같은 불량·설비·부품을 팀마다 다른 이름과 코드로 부른다.</td><td>기준정보·용어 사전·코드 체계를 운영하고 시스템이 그것을 따른다.</td></tr>
+        <tr><td>도구·인프라</td><td>승인된 AI 도구가 없어 개인이 외부 서비스를 몰래 쓴다.</td><td>사내 AI 플랫폼이 있고 사내 데이터와 권한에 맞춰 연결되어 있다.</td></tr>
+        <tr><td>사람·역량</td><td>관심 있는 몇 사람만 AI를 써 본다.</td><td>전 직원이 기본 활용을 하고, 현업에 직접 만드는 사람(빌더)이 있다.</td></tr>
+        <tr><td>거버넌스</td><td>규칙이 없거나, 전면 금지라서 아무것도 못 한다.</td><td>데이터 등급별 허용 기준, 평가·감사 체계가 있다.</td></tr>
+        <tr><td>리더십</td><td>"AI 하라"는 구호만 있고 예산·목표·평가와 연결되지 않는다.</td><td>AX 목표가 사업 목표·예산·KPI에 반영되어 있다.</td></tr>
+        <tr><td>유스케이스</td><td>아이디어 목록 수준이고 효과를 재지 않는다.</td><td>가치와 실현성으로 우선순위를 정한 포트폴리오를 운영하고 효과를 측정한다.</td></tr>
+      </tbody>
+    </table></div>
+
+    <div class="sim" id="sim-assess">
+      <div class="sim-head"><span class="sim-tag">INTERACTIVE</span><h3>AX 성숙도 자가진단</h3></div>
+      <div class="sim-body side">
+        <div class="sim-view"><canvas id="cv-assess"></canvas></div>
+        <div class="sim-controls" id="as-controls">
+          <label class="ctrl"><span>데이터 <output id="as-data-out"></output></span><input type="range" id="as-data" min="1" max="5" step="1" value="3"></label>
+          <label class="ctrl"><span>프로세스 <output id="as-process-out"></output></span><input type="range" id="as-process" min="1" max="5" step="1" value="3"></label>
+          <label class="ctrl"><span>공통 언어 <output id="as-language-out"></output></span><input type="range" id="as-language" min="1" max="5" step="1" value="3"></label>
+          <label class="ctrl"><span>도구·인프라 <output id="as-tools-out"></output></span><input type="range" id="as-tools" min="1" max="5" step="1" value="3"></label>
+          <label class="ctrl"><span>사람·역량 <output id="as-people-out"></output></span><input type="range" id="as-people" min="1" max="5" step="1" value="3"></label>
+          <label class="ctrl"><span>거버넌스 <output id="as-governance-out"></output></span><input type="range" id="as-governance" min="1" max="5" step="1" value="3"></label>
+          <label class="ctrl"><span>리더십 <output id="as-leadership-out"></output></span><input type="range" id="as-leadership" min="1" max="5" step="1" value="3"></label>
+          <label class="ctrl"><span>유스케이스 <output id="as-usecase-out"></output></span><input type="range" id="as-usecase" min="1" max="5" step="1" value="3"></label>
+          <div class="ctrl-row"><button class="btn primary" id="as-save">결과 저장</button><button class="btn" id="as-reset">초기화</button></div>
+          <span class="as-saved" id="as-saved">아직 저장하지 않았다.</span>
+        </div>
+      </div>
+      <div class="sim-readout">
+        <div class="stat"><span class="k">평균 점수</span><span class="v" id="as-o1">—</span></div>
+        <div class="stat"><span class="k">판정 단계</span><span class="v" id="as-o2">—</span></div>
+        <div class="stat"><span class="k">가장 약한 고리</span><span class="v" id="as-o3">—</span></div>
+        <div class="stat"><span class="k">편차(최고−최저)</span><span class="v" id="as-o4">—</span></div>
+      </div>
+      <div class="sim-html" id="as-advice"></div>
+      <div class="sim-note">결과는 이 브라우저에만 저장되며(슬라이더를 움직이면 자동 저장), <a href="playbook.html">14장 플레이북</a>에서 불러와 90일 계획을 만드는 데 쓴다. 혼자 매기지 말고 팀원 3~4명이 각자 매긴 뒤 차이를 이야기해 보면 좋다. 점수가 크게 갈리는 차원이 곧 서로 다르게 보고 있는 문제다.</div>
+    </div>
+
+    <ol class="ladder">
+      <li><b>1단계 · 탐색</b>개인이 산발적으로 AI를 써 본다. 데이터·절차가 사람에게 묶여 있다.</li>
+      <li><b>2단계 · 실험</b>파일럿이 여럿 돌지만 대부분 데모에서 멈춘다. 데이터는 손으로 모은다.</li>
+      <li><b>3단계 · 정착</b>몇몇 업무에서 표준 흐름과 데이터가 갖춰져 AI가 운영에서 쓰인다.</li>
+      <li><b>4단계 · 확산</b>공통 플랫폼·용어·거버넌스 위에서 여러 조직으로 유스케이스가 퍼진다.</li>
+      <li><b>5단계 · 내재화</b>AI가 일의 기본 구성요소가 되어 새 업무를 설계할 때부터 AI와의 역할 분담을 전제한다.</li>
+    </ol>
+  </section>
+
+  <!-- ============================================================ 9 -->
+  <section id="map">
+    <h2>이 책을 읽는 법</h2>
+    <p>이 책은 <strong>레거시에서 출발해 AX에 도달하는 순서</strong>로 짜여 있다. 진단 결과에서 가장 약한 고리가 나온 차원부터 읽어도 좋다.</p>
+    <div class="table-wrap"><table>
+      <thead><tr><th>약한 고리</th><th>먼저 읽을 장</th><th>그 장에서 얻는 것</th></tr></thead>
+      <tbody>
+        <tr><td>데이터</td><td><a href="legacy.html">2장</a> · <a href="foundation.html">5장</a> · <a href="knowledge.html">6장</a></td><td>정보 인벤토리, 데이터 품질, 문서를 지식으로 바꾸는 RAG</td></tr>
+        <tr><td>프로세스</td><td><a href="process.html">3장</a></td><td>프로세스 마이닝, 표준 대응 흐름, 이슈 카드</td></tr>
+        <tr><td>공통 언어</td><td><a href="semantics.html">4장</a></td><td>기준정보, 용어 사전, ISA-95 계층, 정준 데이터 모델</td></tr>
+        <tr><td>도구·인프라</td><td><a href="agents.html">8장</a> · <a href="shopfloor.html">9장</a></td><td>코파일럿과 에이전트, 현장 데이터 연결</td></tr>
+        <tr><td>사람·역량</td><td><a href="people.html">11장</a></td><td>운영 모델, 역할, 확산과 변화 관리</td></tr>
+        <tr><td>거버넌스</td><td><a href="governance.html">10장</a></td><td>ISO/IEC 42001, NIST AI RMF 1.0, EU AI Act, 데이터 등급</td></tr>
+        <tr><td>리더십</td><td><a href="roadmap.html">12장</a></td><td>단계별 로드맵, 투자 배분, 등대 프로젝트</td></tr>
+        <tr><td>유스케이스</td><td><a href="usecases.html">7장</a> · <a href="cases.html">13장</a></td><td>가치–실현성 매트릭스, ROI, 가상 사례</td></tr>
+      </tbody>
+    </table></div>
+    <div class="callout deep">
+      <strong>등대공장이 보여 주는 것</strong>
+      <p>세계경제포럼(WEF)의 글로벌 등대 네트워크<span class="en">(Global Lighthouse Network)</span>에는 여러 나라의 다양한 업종 제조사가 선정되어 있다. 공개된 사례들을 읽어 보면 개별 AI 기술보다 데이터 연결, 표준화된 운영 방식, 현장 인력의 역량 개발을 함께 다루는 경우가 많다. 이 책이 기반을 강조하는 이유도 같다.</p>
+    </div>
+    <ul class="checklist">
+      <li>이번 주에 할 일: 자가진단을 팀원 3명 이상과 따로 해 보고 결과를 비교한다.</li>
+      <li>우리 팀 AI 과제 이름을 "어떤 업무의 어떤 단계를, 어떤 방식(자동화/증강/자율)으로"라는 문장으로 다시 쓴다.</li>
+      <li>진행 중인 파일럿 각각이 깔때기의 어느 단계에서 멈춰 있는지, 그 이유가 다섯 원인 중 무엇인지 적는다.</li>
+    </ul>
+  </section>
+
+  <section class="keypoints" id="summary">
+    <h2>핵심 정리</h2>
+    <ol>
+      <li>디지털화는 형식을, 디지털라이제이션은 절차를, DX는 운영 방식을, AX는 일의 주체와 역할을 바꾼다. 앞 계단이 비어 있으면 뒤 계단이 서지 않는다.</li>
+      <li>AI가 일에 들어오는 방식은 자동화(규칙 실행), 증강(사람의 판단 보조), 자율(여러 단계를 진행하고 사람이 승인)로 나뉘며, 한 업무 안에 섞여 있다.</li>
+      <li>AX는 도구 도입이 아니라 업무 흐름·역할·산출물·측정 방식을 다시 설계하는 것이고, 성공 척도는 업무 지표의 변화다.</li>
+      <li>파일럿 연옥의 주된 원인은 데이터 부재, 프로세스 비표준, 현업 소외, 측정 부재, 보안 우려다. 통과율이 곱해지므로 가장 약한 단계를 고치는 것이 효과가 크다.</li>
+      <li>AX의 네 기반은 데이터·프로세스·공통 언어·사람이며, 거버넌스와 리더십이 이를 받친다. AI는 그 위의 지붕이다.</li>
+      <li>AI는 증폭기다. 정리된 조직은 더 빨라지고, 혼란스러운 조직은 혼란이 더 빠르고 그럴듯하게 퍼진다.</li>
+      <li>성숙도 진단에서는 평균보다 가장 약한 고리가 중요하다. 진단 결과는 14장 플레이북으로 이어진다.</li>
+    </ol>
+  </section>
+
+  <section class="quiz-sec" id="quiz">
+    <h2>확인 퀴즈</h2>
+    <div class="quiz">
+      <div class="quiz-q"><p>1. 종이 설비 점검표를 스캔해 PDF로 공유 폴더에 올렸다. 이것은 어디에 해당하는가?</p><div class="opts">
+        <button class="opt" data-correct>디지털화(digitization)</button>
+        <button class="opt">디지털라이제이션(digitalization)</button>
+        <button class="opt">디지털 전환(DX)</button>
+        <button class="opt">AI 전환(AX)</button>
+      </div><div class="quiz-exp">정보의 형식만 아날로그에서 디지털로 바뀌었고 절차는 그대로다. 점검 항목이 앱으로 입력되어 MES에 바로 쌓이면 디지털라이제이션에 가깝다.</div></div>
+
+      <div class="quiz-q"><p>2. 담당자가 원인 분석을 쓰는 동안 AI가 과거 유사 불량과 당시 대책을 근거와 함께 보여 주고, 결정은 담당자가 한다. 어떤 방식인가?</p><div class="opts">
+        <button class="opt">자동화</button>
+        <button class="opt" data-correct>증강</button>
+        <button class="opt">자율</button>
+        <button class="opt">디지털화</button>
+      </div><div class="quiz-exp">사람이 판단하고 AI가 검색·제안으로 돕는 것은 증강이다. 자율이라면 AI가 여러 단계를 진행하고 사람은 정해진 지점에서 승인만 한다.</div></div>
+
+      <div class="quiz-q"><p>3. 파일럿 20개가 네 단계를 거치고 각 단계 통과율이 모두 50%라면, 확산되는 과제는 대략 몇 개인가?</p><div class="opts">
+        <button class="opt">10개</button>
+        <button class="opt">5개</button>
+        <button class="opt" data-correct>1~2개</button>
+        <button class="opt">0개</button>
+      </div><div class="quiz-exp">20 × 0.5⁴ = 1.25개. 단계 하나하나는 "절반은 통과"로 보이지만 곱하면 약 6%만 남는다. 이것이 파일럿 연옥의 산술이다.</div></div>
+
+      <div class="quiz-q"><p>4. 다음 중 "AI는 증폭기"라는 말의 의미에 가장 가까운 것은?</p><div class="opts">
+        <button class="opt">AI를 많이 도입할수록 효과는 항상 커진다.</button>
+        <button class="opt">AI는 데이터가 엉망이어도 스스로 정리해 좋은 결과를 낸다.</button>
+        <button class="opt" data-correct>정리된 기반 위에서는 효과를 키우고, 혼란스러운 기반 위에서는 혼란을 더 빠르고 그럴듯하게 퍼뜨린다.</button>
+        <button class="opt">AI의 효과는 모델 크기에만 달려 있다.</button>
+      </div><div class="quiz-exp">AI는 주어진 자료와 절차를 바탕으로 결과를 빠르게 만든다. 모순된 데이터와 비표준 절차 위에서는 모순된 결과가 자신 있는 문장으로 나온다.</div></div>
+
+      <div class="quiz-q"><p>5. 자가진단 결과가 데이터 4, 프로세스 4, 공통 언어 1, 나머지 4점이다. 가장 먼저 할 일로 적절한 것은?</p><div class="opts">
+        <button class="opt">평균이 높으므로 에이전트 도입을 바로 확대한다.</button>
+        <button class="opt" data-correct>팀마다 다른 용어·코드를 정리하는 기준정보와 용어 사전 작업을 먼저 시작한다.</button>
+        <button class="opt">AI 도구를 하나 더 도입한다.</button>
+        <button class="opt">점수가 낮은 차원은 무시하고 강점에 집중한다.</button>
+      </div><div class="quiz-exp">가장 약한 고리가 전체를 제한한다. 용어와 코드가 다르면 데이터를 합칠 수도, AI가 비교할 수도 없다. 4장에서 다룬다.</div></div>
+
+      <div class="quiz-q"><p>6. 파일럿의 효과를 경영진에게 증명하지 못해 확산 예산이 끊겼다. 다섯 원인 중 무엇에 해당하며, 무엇을 했어야 하는가?</p><div class="opts">
+        <button class="opt">보안 우려 — 외부 AI 사용을 전면 금지했어야 한다.</button>
+        <button class="opt">현업 소외 — IT 조직이 더 많이 개발했어야 한다.</button>
+        <button class="opt" data-correct>측정 부재 — 도입 전 기준선과 업무 KPI를 먼저 정의했어야 한다.</button>
+        <button class="opt">데이터 부재 — 더 큰 모델을 썼어야 한다.</button>
+      </div><div class="quiz-exp">"편해졌다"는 소감은 예산의 근거가 되지 못한다. 도입 전 리드타임·처리 건수·재작업률 같은 기준선을 재 두어야 효과를 비교할 수 있다. 7장에서 ROI와 KPI를 다룬다.</div></div>
+    </div>
+  </section>
+</main>
+<script>
+(function () {
+  "use strict";
+  function hexA(c, a) {
+    c = (c || "").trim();
+    if (c[0] === "#") {
+      var h = c.slice(1);
+      if (h.length === 3) h = h.split("").map(function (x) { return x + x; }).join("");
+      var n = parseInt(h.slice(0, 6), 16);
+      return "rgba(" + ((n >> 16) & 255) + "," + ((n >> 8) & 255) + "," + (n & 255) + "," + a + ")";
+    }
+    var m = c.match(/[\d.]+/g);
+    return m ? "rgba(" + m[0] + "," + m[1] + "," + m[2] + "," + a + ")" : c;
+  }
+  function font(px, mono, bold) { return (bold ? "600 " : "") + px + "px " + getComputedStyle(document.body).getPropertyValue(mono ? "--mono" : "--font"); }
+
+  /* ================================================ 1) 파일럿 깔때기 */
+  var FN_PRESETS = { base: [70, 50, 40, 40], fixed: [80, 75, 70, 65] };
+  var fnLock = false;
+  function fnUser() { if (!fnLock) fnPreset.set("custom", false); cvFn.redraw(); }
+  var fnN = AX.range("fn-n", function (v) { return v + "건"; }, fnUser);
+  var fnP = [1, 2, 3, 4].map(function (i) { return AX.range("fn-p" + i, function (v) { return v + "%"; }, fnUser); });
+  var fnPreset = AX.seg("fn-preset", function (v) {
+    if (!FN_PRESETS[v]) return;
+    fnLock = true;
+    FN_PRESETS[v].forEach(function (p, i) { fnP[i].set(p); });
+    fnLock = false;
+    cvFn.redraw();
+  });
+  var FN_LABELS = ["파일럿 시작", "① 기술 검증 통과", "② 현업 채택", "③ 운영 이관", "④ 확산"];
+  var cvFn = AX.canvas("#cv-funnel", function (ctx, w, h) {
+    var P = AX.palette(), N = fnN();
+    var vals = [N], i;
+    for (i = 0; i < 4; i++) vals.push(vals[i] * fnP[i]() / 100);
+    var rows = vals.length, top = 14, rowH = (h - top - 10) / rows, barH = Math.min(30, rowH * 0.5);
+    var maxW = w - 32, cx = w / 2;
+    for (i = 0; i < rows; i++) {
+      var y = top + i * rowH, bw = Math.max(2, maxW * vals[i] / N);
+      ctx.fillStyle = P.dim; ctx.font = font(12.5, false); ctx.textAlign = "center"; ctx.textBaseline = "top";
+      ctx.fillText(FN_LABELS[i] + "  ·  " + AX.fmt(vals[i], 3) + "건", cx, y);
+      var by = y + rowH - barH - 6;
+      if (i > 0) {
+        ctx.fillStyle = hexA(P.bad, 0.12);
+        var pw = maxW * vals[i - 1] / N;
+        ctx.fillRect(cx - pw / 2, by, pw, barH);
+      }
+      ctx.fillStyle = i === rows - 1 ? P.accent : hexA(P.accent, 0.35 + 0.12 * i);
+      ctx.beginPath();
+      if (ctx.roundRect) ctx.roundRect(cx - bw / 2, by, bw, barH, 5); else ctx.rect(cx - bw / 2, by, bw, barH);
+      ctx.fill();
+    }
+    ctx.font = font(11, false); ctx.fillStyle = P.faint; ctx.textAlign = "left"; ctx.textBaseline = "bottom";
+    ctx.fillText("옅은 붉은 영역 = 해당 단계에서 멈춘 과제", 12, h - 2);
+    var final = vals[4], worst = 0, worstLoss = -1;
+    for (i = 0; i < 4; i++) { var loss = vals[i] - vals[i + 1]; if (loss > worstLoss) { worstLoss = loss; worst = i; } }
+    AX.stat("fn-o1", AX.fmt(final, 3) + "<small>건</small>");
+    AX.stat("fn-o2", (final / N * 100).toFixed(1) + "<small>%</small>");
+    AX.stat("fn-o3", AX.fmt(N - final, 3) + "<small>건</small>");
+    AX.stat("fn-o4", ["기술 검증", "현업 채택", "운영 이관", "확산"][worst]);
+  }, { aspect: 0.62, minHeight: 280, maxHeight: 380 });
+
+  /* ================================================ 2) 증폭기 */
+  var ampQ = AX.range("amp-q", function (v) { return v; }, function () { cvAmp.redraw(); });
+  var ampS = AX.range("amp-s", function (v) { return v; }, function () { cvAmp.redraw(); });
+  var ampX = AX.range("amp-x", function (v) { return v + "%"; }, function () { cvAmp.redraw(); });
+  var ampRef = document.getElementById("amp-ref");
+  ampRef.addEventListener("change", function () { cvAmp.redraw(); });
+  function ampNet(f, x) { return 100 * f * (1 - Math.exp(-3 * x)) - 70 * (1 - f) * Math.pow(x, 1.3); }
+  function curve(f) { var d = []; for (var k = 0; k <= 100; k++) d.push([k, ampNet(f, k / 100)]); return d; }
+  var cvAmp = AX.canvas("#cv-amp", function (ctx, w, h) {
+    var P = AX.palette();
+    var f = (0.55 * ampQ() + 0.45 * ampS()) / 100, x = ampX();
+    var series = [];
+    if (ampRef.checked) {
+      series.push({ data: curve(0.2), color: P.bad, width: 1.3, dash: [5, 4] });
+      series.push({ data: curve(0.85), color: P.ok, width: 1.3, dash: [5, 4] });
+    }
+    series.push({ data: curve(f), color: P.accent, width: 2.8 });
+    var y = ampNet(f, x / 100);
+    var ch = AX.chart(ctx, { x: 52, y: 14, w: w - 52 - 14, h: h - 14 - 46 }, {
+      x: [0, 100], y: [-70, 100], xLabel: "AI 도입 강도 (%)", yLabel: "업무 순효과 (지수)",
+      bands: [], series: series,
+      hlines: [{ y: 0, color: P.axis, dash: [] }],
+      vlines: [{ x: x, color: P.warn }],
+      points: [{ x: x, y: y, color: y >= 0 ? P.ok : P.bad, r: 5.5 }],
+    });
+    ctx.font = font(11, false); ctx.textBaseline = "top"; ctx.textAlign = "left";
+    ctx.fillStyle = hexA(P.ok, 0.9); ctx.fillText("+ 증폭", ch.box.x + 6, ch.box.y + 4);
+    ctx.fillStyle = hexA(P.bad, 0.9); ctx.textBaseline = "bottom"; ctx.fillText("− 혼란 증폭", ch.box.x + 6, ch.box.y + ch.box.h - 4);
+    if (ampRef.checked) {
+      ctx.textAlign = "right"; ctx.textBaseline = "middle";
+      ctx.fillStyle = P.ok; ctx.fillText("기반 85", ch.box.x + ch.box.w - 4, ch.Y(ampNet(0.85, 1)) - 10);
+      ctx.fillStyle = P.bad; ctx.fillText("기반 20", ch.box.x + ch.box.w - 4, ch.Y(ampNet(0.2, 1)) + 10);
+    }
+    var best = 0, bestV = -1e9;
+    for (var k = 0; k <= 100; k++) { var v = ampNet(f, k / 100); if (v > bestV) { bestV = v; best = k; } }
+    AX.stat("amp-o1", Math.round(f * 100) + "<small>/100</small>");
+    AX.stat("amp-o2", (y >= 0 ? "+" : "") + y.toFixed(0));
+    AX.stat("amp-o3", best + "<small>%</small>");
+    var verdict = y >= 25 ? '<span class="chip ok">증폭</span>' : y >= 0 ? '<span class="chip warn">미미</span>' : '<span class="chip bad">역효과</span>';
+    AX.stat("amp-o4", verdict);
+  }, { aspect: 0.62, minHeight: 260, maxHeight: 380 });
+
+  /* ================================================ 3) 성숙도 자가진단 */
+  var DIMS = [
+    { key: "data", name: "데이터" },
+    { key: "process", name: "프로세스" },
+    { key: "language", name: "공통 언어" },
+    { key: "tools", name: "도구·인프라" },
+    { key: "people", name: "사람·역량" },
+    { key: "governance", name: "거버넌스" },
+    { key: "leadership", name: "리더십" },
+    { key: "usecase", name: "유스케이스" },
+  ];
+  var LEVEL = ["", "1 · 부재", "2 · 산발", "3 · 일부", "4 · 체계", "5 · 내재화"];
+  var STAGES = ["", "탐색", "실험", "정착", "확산", "내재화"];
+  var ADVICE = {
+    data: "정보 인벤토리부터 만든다. 핵심 정보가 어디에, 어떤 형식으로, 누구 손에 있는지 지도를 그리고 데이터 오너를 지정한다. → <a href=\"legacy.html\">2장</a>, <a href=\"foundation.html\">5장</a>",
+    process: "가장 자주 반복되는 이슈 유형 하나를 골라 표준 대응 흐름과 이슈 카드 양식을 정한다. → <a href=\"process.html\">3장</a>",
+    language: "가장 자주 섞이는 용어(불량명·설비명·부품번호) 하나부터 정준 코드와 용어 사전을 만든다. → <a href=\"semantics.html\">4장</a>",
+    tools: "승인된 사내 AI 도구와 사용 범위를 정해 섀도 AI를 양지로 끌어낸다. → <a href=\"agents.html\">8장</a>, <a href=\"governance.html\">10장</a>",
+    people: "팀마다 AX 챔피언을 두고 전 직원 기본 활용 교육을 시작한다. → <a href=\"people.html\">11장</a>",
+    governance: "데이터 등급과 배포 방식별 허용 기준을 한 장으로 정리해 결재가 멈추지 않게 한다. → <a href=\"governance.html\">10장</a>",
+    leadership: "AX 목표를 사업 KPI와 예산에 연결하고 로드맵을 단계로 나눈다. → <a href=\"roadmap.html\">12장</a>",
+    usecase: "아이디어를 가치–실현성으로 평가하고 기준선을 잰 퀵윈 하나를 고른다. → <a href=\"usecases.html\">7장</a>",
+  };
+  var saved = AX.store.get("assessment", null);
+  var asGet = {};
+  var dirty = false;
+  DIMS.forEach(function (d) {
+    var el = document.getElementById("as-" + d.key);
+    if (saved && saved.dims && saved.dims[d.key] >= 1 && saved.dims[d.key] <= 5) el.value = saved.dims[d.key];
+    asGet[d.key] = AX.range(el, function (v) { return LEVEL[v]; }, function () { dirty = true; asSave(true); cvAs.redraw(); });
+  });
+  function asScores() { var o = {}; DIMS.forEach(function (d) { o[d.key] = asGet[d.key](); }); return o; }
+  function stamp(ts) { var t = new Date(ts); return t.toLocaleDateString("ko-KR") + " " + t.toLocaleTimeString("ko-KR", { hour: "2-digit", minute: "2-digit" }); }
+  function asSave(auto) {
+    var rec = { dims: asScores(), ts: Date.now() };
+    AX.store.set("assessment", rec);
+    document.getElementById("as-saved").textContent = (auto ? "자동 저장됨 · " : "저장됨 · ") + stamp(rec.ts);
+  }
+  if (saved && saved.ts) document.getElementById("as-saved").textContent = "이전 결과를 불러왔다 · " + stamp(saved.ts);
+  document.getElementById("as-save").addEventListener("click", function () { asSave(false); });
+  document.getElementById("as-reset").addEventListener("click", function () {
+    DIMS.forEach(function (d) { var el = document.getElementById("as-" + d.key); el.value = 3; el.dispatchEvent(new Event("input")); });
+    asSave(true);
+  });
+  function asEval() {
+    var s = asScores(), sum = 0, mn = 6, mx = 0;
+    DIMS.forEach(function (d) { sum += s[d.key]; mn = Math.min(mn, s[d.key]); mx = Math.max(mx, s[d.key]); });
+    var avg = sum / DIMS.length;
+    var stage = Math.max(1, Math.min(Math.floor(avg + 0.25), mn + 1, 5));
+    var weak = DIMS.filter(function (d) { return s[d.key] === mn; });
+    return { s: s, avg: avg, mn: mn, mx: mx, stage: stage, weak: weak };
+  }
+  var cvAs = AX.canvas("#cv-assess", function (ctx, w, h) {
+    var P = AX.palette(), E = asEval(), n = DIMS.length;
+    var narrow = w < 420, cx = w / 2, cy = h / 2 + 4, R = Math.min(w / 2 - (narrow ? 78 : 66), h / 2 - 34);
+    R = Math.max(60, R);
+    var ang = function (i) { return -Math.PI / 2 + i * 2 * Math.PI / n; };
+    var pt = function (i, v) { var a = ang(i), r = R * v / 5; return [cx + r * Math.cos(a), cy + r * Math.sin(a)]; };
+    var lv, i, p;
+    ctx.lineWidth = 1;
+    for (lv = 1; lv <= 5; lv++) {
+      ctx.strokeStyle = lv === 5 ? P.axis : P.grid;
+      ctx.beginPath();
+      for (i = 0; i < n; i++) { p = pt(i, lv); i ? ctx.lineTo(p[0], p[1]) : ctx.moveTo(p[0], p[1]); }
+      ctx.closePath(); ctx.stroke();
+    }
+    for (i = 0; i < n; i++) { p = pt(i, 5); ctx.strokeStyle = P.grid; ctx.beginPath(); ctx.moveTo(cx, cy); ctx.lineTo(p[0], p[1]); ctx.stroke(); }
+    ctx.fillStyle = P.faint; ctx.font = font(10, true); ctx.textAlign = "left"; ctx.textBaseline = "middle";
+    for (lv = 1; lv <= 5; lv++) ctx.fillText(String(lv), cx + 3, cy - R * lv / 5);
+    // 판정 단계 기준선 (stage)
+    ctx.setLineDash([4, 4]); ctx.strokeStyle = hexA(P.accent2, 0.8); ctx.beginPath();
+    for (i = 0; i < n; i++) { p = pt(i, E.stage); i ? ctx.lineTo(p[0], p[1]) : ctx.moveTo(p[0], p[1]); }
+    ctx.closePath(); ctx.stroke(); ctx.setLineDash([]);
+    // 점수 다각형
+    ctx.beginPath();
+    for (i = 0; i < n; i++) { p = pt(i, E.s[DIMS[i].key]); i ? ctx.lineTo(p[0], p[1]) : ctx.moveTo(p[0], p[1]); }
+    ctx.closePath(); ctx.fillStyle = hexA(P.accent, 0.22); ctx.fill(); ctx.strokeStyle = P.accent; ctx.lineWidth = 2.2; ctx.stroke();
+    for (i = 0; i < n; i++) {
+      var v = E.s[DIMS[i].key], isWeak = v === E.mn;
+      p = pt(i, v);
+      ctx.fillStyle = isWeak ? P.bad : P.accent; ctx.beginPath(); ctx.arc(p[0], p[1], isWeak ? 5.5 : 4, 0, Math.PI * 2); ctx.fill();
+      var a = ang(i), lx = cx + (R + 14) * Math.cos(a), ly = cy + (R + 14) * Math.sin(a);
+      ctx.textAlign = Math.abs(Math.cos(a)) < 0.2 ? "center" : Math.cos(a) > 0 ? "left" : "right";
+      ctx.textBaseline = Math.abs(Math.sin(a)) < 0.2 ? "middle" : Math.sin(a) > 0 ? "top" : "bottom";
+      ctx.font = font(narrow ? 11 : 12, false, isWeak); ctx.fillStyle = isWeak ? P.bad : P.text;
+      ctx.fillText(DIMS[i].name + " " + v, lx, ly);
+    }
+    ctx.font = font(11, false); ctx.fillStyle = P.dim; ctx.textAlign = "left"; ctx.textBaseline = "top";
+    ctx.fillText("점선: 판정 단계 " + E.stage, 10, 8);
+    AX.stat("as-o1", E.avg.toFixed(2) + "<small>/5</small>");
+    AX.stat("as-o2", E.stage + "<small>단계 · " + STAGES[E.stage] + "</small>");
+    var wn = E.weak.map(function (d) { return d.name; });
+    AX.stat("as-o3", '<span class="as-weak">' + (wn.length > 2 ? wn.slice(0, 2).join(", ") + " 외 " + (wn.length - 2) : wn.join(", ")) + "</span>");
+    AX.stat("as-o4", String(E.mx - E.mn));
+    var capped = Math.floor(E.avg + 0.25) > E.stage;
+    var html = "<p><b>판정: " + E.stage + "단계(" + STAGES[E.stage] + ")</b>" +
+      (capped ? " — 평균만 보면 한 단계 이상 높지만, 가장 약한 고리(" + E.mn + "점)가 전체를 제한한다." : "") + "</p><ul>";
+    E.weak.slice(0, 3).forEach(function (d) { html += "<li><b>" + d.name + "</b>: " + ADVICE[d.key] + "</li>"; });
+    html += "</ul>";
+    document.getElementById("as-advice").innerHTML = html;
+  }, { aspect: 0.86, minHeight: 300, maxHeight: 440 });
+})();
+</script>
+</body>
+</html>

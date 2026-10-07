@@ -1,0 +1,662 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="icon" href="../favicon.ico" sizes="any">
+<link rel="icon" href="../favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="../apple-touch-icon.png">
+<title>프로세스 부채 · AXBook</title>
+<meta name="description" content="이슈마다 달라지는 대응 절차와 보고서 양식이 쌓인 프로세스 부채를 진단한다. 표준이 닿지 않는 회색지대, 프로세스 마이닝, 8D, 이슈 카드, SIPOC·RACI로 같은 문제를 같은 흐름과 양식으로 처리하는 법.">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+<link rel="stylesheet" href="../css/style.css">
+<script src="../js/common.js"></script>
+<style>
+  figure.diagram svg.mx { max-width: 680px; margin: 0 auto; }
+  .pm-log { font-family: var(--mono); font-size: 12.5px; }
+  .pm-log td, .pm-log th { padding: 5px 10px; white-space: nowrap; }
+  .pm-cols { display: grid; gap: 16px; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); }
+  .pm-cols h4 { margin: 0 0 8px; font-size: 14px; }
+  .pm-var { font-family: var(--mono); font-size: 11.5px; color: var(--text-dim); margin: 0 0 2px; overflow-wrap: anywhere; }
+  .d8-strip { display: grid; grid-template-columns: repeat(9, minmax(0, 1fr)); gap: 3px; margin-bottom: 14px; }
+  .d8-strip i { height: 6px; border-radius: 3px; background: var(--surface-2); }
+  .d8-strip i.done { background: var(--accent-soft); }
+  .d8-strip i.cur { background: var(--accent); }
+  .d8-grid { display: grid; gap: 10px; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); }
+  .d8-grid > div { border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 10px 12px; background: var(--bg-elev); }
+  .d8-grid h5 { margin: 0 0 4px; font-size: 12.5px; color: var(--text-dim); font-weight: 600; letter-spacing: .02em; }
+  .d8-grid p { margin: 0; font-size: 14px; line-height: 1.6; }
+  .d8-grid .ai { border-color: var(--accent); background: var(--accent-soft); }
+  .d8-grid .ai h5 { color: var(--accent); }
+  .d8-grid .human h5 { color: var(--accent-2); }
+  #d8-seg { width: 100%; }
+  #d8-seg button { font-family: var(--mono); }
+</style>
+<!-- Cloudflare Web Analytics -->
+<script type='module' src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "3d6151a0abc94ede89285d462527fa80"}'></script>
+<!-- End Cloudflare Web Analytics -->
+</head>
+<body data-chapter="process">
+<main class="chapter">
+  <header class="chapter-hero">
+    <div class="eyebrow">Chapter 03</div>
+    <h1>프로세스 부채</h1>
+    <p class="lead">같은 종류의 품질 이슈인데 지난달에는 PPT 12장으로, 이번 달에는 엑셀 한 시트로, 다음 달에는 메일 본문으로 보고된다. 대응 순서도, 참여 부서도, 결재 경로도 매번 다르다. 이렇게 임시방편이 쌓여 생긴 변동성을 이 책은 프로세스 부채라고 부른다. 이 장은 프로세스 부채가 어디서 생기는지, 이벤트 로그로 실제 흐름을 어떻게 보는지, 그리고 "같은 문제는 같은 흐름과 같은 양식으로" 처리하도록 바꾸는 방법을 다룬다.</p>
+    <ul class="objectives">
+      <li>프로세스 부채를 정의하고, 우리 조직에서 그것이 쌓이는 회색지대(부서 간 인계, 임시 TF, 고객 대응 초기, 내부 보고)를 찾을 수 있다.</li>
+      <li>ISO 9001, IATF 16949, 8D, CAPA, FMEA가 덮는 범위와 덮지 못하는 범위를 구분할 수 있다.</li>
+      <li>이벤트 로그(케이스 ID, 활동, 타임스탬프)로 프로세스 변종·재작업·병목을 읽는 프로세스 마이닝의 원리를 설명할 수 있다.</li>
+      <li>표준 대응 흐름과 이슈 카드, SIPOC·RACI·프로세스 오너로 프로세스 부채를 갚는 순서를 설계할 수 있다.</li>
+    </ul>
+  </header>
+
+  <!-- ============================================================ 1 -->
+  <section id="debt">
+    <h2>같은 문제, 매번 다른 대응</h2>
+    <p>C사(정밀화학)의 한 분기를 들여다보자. 고객사로부터 "입고 원료의 수분 함량 규격 이탈" 클레임이 세 번 들어왔다.</p>
+    <ul>
+      <li><strong>1월 건</strong>: 영업 담당이 메일을 받아 품질팀장에게 전달했다. 팀장이 회의를 소집했고, 결과는 PPT 12장짜리 보고서로 정리되었다. 고객 회신까지 3주.</li>
+      <li><strong>2월 건</strong>: 고객이 품질 담당자에게 직접 전화했다. 담당자가 생산팀과 메신저로 원인을 확인하고, 엑셀 한 시트에 원인과 대책을 적어 회신했다. 고객 회신까지 4일. 생산팀장은 이 건을 나중에야 알았다.</li>
+      <li><strong>3월 건</strong>: 임원 보고가 먼저 이루어지면서 임시 TF가 꾸려졌다. TF는 자체 양식으로 8D를 썼다. 고객 회신은 빨랐지만 TF가 해산된 뒤 대책 이행 여부를 아무도 추적하지 않았다.</li>
+    </ul>
+    <p>세 건 모두 "어떻게든" 해결되었다. 그러나 세 건의 원인과 대책을 나란히 놓고 비교할 수 없다. 보고서 형식이 다르고, 원인 분류가 다르고, 대책 이행을 확인한 기록이 있는 건도 있고 없는 건도 있다. 4월에 같은 클레임이 다시 오면, 담당자는 또 처음부터 시작한다.</p>
+    <div class="callout">
+      <strong>프로세스 부채(process debt)</strong>
+      <p>당장의 문제를 해결하기 위한 임시방편 절차가 표준으로 정리되지 않은 채 쌓여서 생긴 <strong>변동성</strong>. 이슈마다 대응 순서·참여자·산출물이 달라지고, 그 결과 비교·학습·자동화가 불가능해진다. 소프트웨어의 기술 부채<span class="en">(technical debt)</span>처럼, 갚지 않으면 이자가 붙는다. 다음 이슈마다 "처음부터 다시 하는" 비용이 그 이자다.</p>
+    </div>
+    <figure class="diagram">
+      <svg class="mx" viewBox="0 0 640 280" role="img" aria-label="임시방편이 쌓이며 대응 방식의 변동이 커지는 프로세스 부채">
+        <line x1="50" y1="240" x2="620" y2="240" class="s-axis"/>
+        <line x1="50" y1="240" x2="50" y2="20" class="s-axis"/>
+        <text x="335" y="268" text-anchor="middle" class="t-dim">시간 (이슈가 반복될수록) →</text>
+        <text x="22" y="130" text-anchor="middle" class="t-dim" transform="rotate(-90 22 130)">대응 방식의 변동 폭</text>
+        <path d="M60 200 C 180 195, 300 170, 420 120 S 580 50, 610 40 L 610 236 C 580 236, 520 235, 420 230 S 180 220, 60 214 Z" style="fill:color-mix(in srgb, var(--bad) 13%, transparent)"/>
+        <path d="M60 207 C 200 205, 400 208, 610 206" class="s-acc"/>
+        <path d="M60 207 L 300 207" class="s-line" stroke-dasharray="4 4"/>
+        <g class="t-mono">
+          <text x="110" y="186">TF 양식</text>
+          <text x="210" y="168">메신저 처리</text>
+          <text x="330" y="138">PPT 12장</text>
+          <text x="430" y="98">엑셀 1시트</text>
+          <text x="520" y="64">메일 본문</text>
+        </g>
+        <circle cx="160" cy="195" r="4" style="fill:var(--bad)"/><circle cx="270" cy="180" r="4" style="fill:var(--bad)"/>
+        <circle cx="380" cy="148" r="4" style="fill:var(--bad)"/><circle cx="470" cy="108" r="4" style="fill:var(--bad)"/><circle cx="560" cy="74" r="4" style="fill:var(--bad)"/>
+        <text x="610" y="198" text-anchor="end" class="t-acc">표준 흐름 + 이슈 카드</text>
+        <text x="610" y="222" text-anchor="end" class="t-dim">변동이 좁은 띠로 수렴</text>
+        <text x="70" y="40" class="t">이자 = 매번 처음부터 다시 하는 비용</text>
+        <text x="70" y="60" class="t-dim">비교 불가 · 학습 불가 · 자동화 불가</text>
+      </svg>
+      <figcaption><b>그림 3-1.</b> 프로세스 부채의 모습(개념도). 붉은 영역은 이슈마다 대응 방식이 갈라지는 폭이다. 임시방편이 쌓일수록 폭이 넓어지고, 표준 흐름과 이슈 카드를 도입하면 좁은 띠로 수렴한다.</figcaption>
+    </figure>
+    <p>AX 관점에서 프로세스 부채가 특히 치명적인 이유는 단순하다. AI에게 일을 맡기려면 <strong>"이 단계에서 무엇을 입력받아 무엇을 내놓는가"</strong>가 정의되어 있어야 한다. 매번 다른 흐름에는 맡길 단계가 없고, 매번 다른 산출물로는 AI가 과거 사례를 학습하거나 비교할 수 없다.</p>
+  </section>
+
+  <!-- ============================================================ 2 -->
+  <section id="standards">
+    <h2>표준이 닿는 곳과 닿지 않는 곳</h2>
+    <p>제조 조직은 표준이 부족한 곳이 아니다. 품질경영시스템과 문제 해결 기법은 오래전부터 잘 정리되어 있다.</p>
+    <div class="table-wrap"><table>
+      <thead><tr><th>표준·기법</th><th>무엇을 다루나</th><th>잘 덮는 영역</th></tr></thead>
+      <tbody>
+        <tr><td><strong>ISO 9001</strong></td><td>품질경영시스템의 국제표준. 프로세스 접근법, 리스크 기반 사고, 문서화된 정보, 시정조치, 지속적 개선.</td><td>인증 범위 안의 핵심 프로세스와 그 문서</td></tr>
+        <tr><td><strong>IATF 16949</strong></td><td>자동차 산업 품질경영시스템 요구사항. ISO 9001을 기반으로 자동차 공급망 요구사항을 더한다.</td><td>APQP·PPAP·관리계획 등 자동차 부품 개발·양산 품질</td></tr>
+        <tr><td><strong>8D</strong></td><td>팀 기반 문제 해결 절차(D0~D8). 봉쇄 → 근본 원인 → 영구 대책 → 재발 방지.</td><td>고객 클레임, 중대 품질 문제</td></tr>
+        <tr><td><strong>CAPA</strong></td><td>시정 및 예방 조치(Corrective and Preventive Action). 의료기기·제약 등 규제 산업에서 특히 많이 쓰는 용어.</td><td>부적합의 원인 제거와 재발 방지 추적</td></tr>
+        <tr><td><strong>FMEA</strong></td><td>고장 모드 및 영향 분석. 자동차 업계에서는 AIAG-VDA FMEA 핸드북(2019)이 널리 쓰인다.</td><td>설계·공정의 잠재 고장 사전 분석</td></tr>
+      </tbody>
+    </table></div>
+    <p>그런데 이 표준들은 주로 <strong>공식적이고 반복되는 핵심 프로세스</strong>를 덮는다. 실제로 일이 무너지는 곳은 그 사이, 표준이 닿지 않는 <span class="term">회색지대</span>다.</p>
+    <figure class="diagram">
+      <svg class="mx" viewBox="0 0 640 300" role="img" aria-label="표준이 덮는 부서 내부 프로세스와 그 사이의 회색지대">
+        <rect x="20" y="20" width="600" height="260" rx="14" style="fill:color-mix(in srgb, var(--warn) 10%, transparent);stroke:var(--warn)" stroke-dasharray="6 5"/>
+        <text x="36" y="44" style="fill:var(--warn)" class="t">회색지대: 표준·시스템이 닿지 않는 곳</text>
+        <rect x="50" y="70" width="150" height="90" rx="10" class="f-acc-soft"/>
+        <rect x="245" y="70" width="150" height="90" rx="10" class="f-acc-soft"/>
+        <rect x="440" y="70" width="150" height="90" rx="10" class="f-acc-soft"/>
+        <text x="125" y="104" text-anchor="middle" class="t">생산</text><text x="125" y="126" text-anchor="middle" class="t-mono">MES · 작업표준</text>
+        <text x="320" y="104" text-anchor="middle" class="t">품질</text><text x="320" y="126" text-anchor="middle" class="t-mono">ISO 9001 · 8D</text>
+        <text x="515" y="104" text-anchor="middle" class="t">설계·개발</text><text x="515" y="126" text-anchor="middle" class="t-mono">PLM · FMEA</text>
+        <path d="M200 115 L245 115" class="s-line" stroke-dasharray="3 3"/>
+        <path d="M395 115 L440 115" class="s-line" stroke-dasharray="3 3"/>
+        <text x="222" y="150" text-anchor="middle" class="t-dim">인계</text>
+        <text x="417" y="150" text-anchor="middle" class="t-dim">인계</text>
+        <rect x="50" y="190" width="130" height="64" rx="10" class="f-elev"/>
+        <rect x="200" y="190" width="130" height="64" rx="10" class="f-elev"/>
+        <rect x="350" y="190" width="120" height="64" rx="10" class="f-elev"/>
+        <rect x="490" y="190" width="100" height="64" rx="10" class="f-elev"/>
+        <text x="115" y="216" text-anchor="middle" class="t">부서 간 인계</text><text x="115" y="238" text-anchor="middle" class="t-dim">메일·메신저</text>
+        <text x="265" y="216" text-anchor="middle" class="t">임시 TF</text><text x="265" y="238" text-anchor="middle" class="t-dim">자체 양식</text>
+        <text x="410" y="216" text-anchor="middle" class="t">고객 대응 초기</text><text x="410" y="238" text-anchor="middle" class="t-dim">전화·메일</text>
+        <text x="540" y="216" text-anchor="middle" class="t">내부 보고</text><text x="540" y="238" text-anchor="middle" class="t-dim">PPT</text>
+      </svg>
+      <figcaption><b>그림 3-2.</b> 표준이 덮는 섬과 그 사이의 바다. 부서 안의 핵심 프로세스는 표준과 시스템이 잘 덮지만, 부서 사이의 인계, 임시 TF, 고객 대응 초기, 내부 보고는 회색지대로 남는다. 프로세스 부채는 대부분 여기서 쌓인다.</figcaption>
+    </figure>
+    <ul>
+      <li><strong>부서 간 인계</strong>: 품질팀이 원인을 찾아 생산팀에 대책 이행을 요청하는 순간, 요청은 메일 한 통이 된다. 수락했는지, 언제까지 하는지, 했는지 확인하는 절차가 없다.</li>
+      <li><strong>임시 TF</strong>: 중대 이슈마다 TF가 꾸려지고 TF마다 자기 양식을 만든다. TF가 해산되면 산출물은 TF장의 PC에 남는다.</li>
+      <li><strong>고객 대응 초기</strong>: 공식 8D가 시작되기 전 며칠간, 고객과의 첫 통화·첫 메일에서 중요한 사실과 약속이 오가지만 기록 위치가 정해져 있지 않다.</li>
+      <li><strong>내부 보고</strong>: 같은 이슈를 팀장 보고용, 임원 보고용, 고객 회신용으로 각각 다시 만든다. 셋의 숫자가 미묘하게 다르다.</li>
+    </ul>
+    <div class="callout warn">
+      <strong>인증과 실제는 다르다</strong>
+      <p>ISO 9001이나 IATF 16949 인증을 받았다는 것은 정해진 범위의 프로세스가 요구사항을 충족한다는 뜻이지, 조직의 모든 일이 표준화되어 있다는 뜻이 아니다. 심사에서 보는 문서와 실제 일이 흘러가는 경로가 다른 경우도 흔하다. 다음 절의 프로세스 마이닝은 바로 그 차이를 보여 준다.</p>
+    </div>
+  </section>
+
+  <!-- ============================================================ 3 -->
+  <section id="mining">
+    <h2>프로세스 마이닝: 로그로 실제 흐름 보기</h2>
+    <p>프로세스를 개선하려면 먼저 실제로 일이 어떻게 흘러가는지 알아야 한다. 워크숍에서 화이트보드에 그린 흐름도는 "그래야 하는 흐름"이지 "실제 흐름"이 아니다. <span class="term">프로세스 마이닝</span><span class="en">(process mining)</span>은 시스템에 남은 기록으로 실제 흐름을 복원하는 기법이다. 필요한 것은 세 개의 열이 있는 <span class="term">이벤트 로그</span><span class="en">(event log)</span>다.</p>
+    <div class="table-wrap"><table>
+      <thead><tr><th>케이스 ID</th><th>활동</th><th>타임스탬프</th><th>(선택) 담당 조직</th></tr></thead>
+      <tbody>
+        <tr><td class="num">ISS-0412</td><td>접수</td><td class="num">2026-03-02 09:14</td><td>품질보증</td></tr>
+        <tr><td class="num">ISS-0412</td><td>원인분석</td><td class="num">2026-03-03 15:40</td><td>공정기술</td></tr>
+        <tr><td class="num">ISS-0412</td><td>자료요청</td><td class="num">2026-03-05 10:02</td><td>품질보증</td></tr>
+        <tr><td class="num">ISS-0412</td><td>원인분석</td><td class="num">2026-03-09 11:30</td><td>공정기술</td></tr>
+        <tr><td class="num">ISS-0412</td><td>대책수립</td><td class="num">2026-03-10 17:05</td><td>생산</td></tr>
+      </tbody>
+    </table></div>
+    <p>같은 케이스 ID의 활동을 시간순으로 늘어놓으면 그 케이스가 지나간 경로가 된다. 수백 개 케이스의 경로를 겹치면 다음이 보인다.</p>
+    <ul>
+      <li><span class="term">변종</span><span class="en">(variant)</span>: 활동 순서가 똑같은 케이스들의 묶음. 표준이 잘 지켜지면 소수의 변종에 대부분의 케이스가 몰리고, 프로세스 부채가 크면 변종 수가 케이스 수에 가까워진다.</li>
+      <li><span class="term">재작업 루프</span><span class="en">(rework loop)</span>: 같은 활동이 한 케이스에서 반복되는 것. 원인분석 → 자료요청 → 원인분석, 승인 → 반려 → 대책수립.</li>
+      <li><span class="term">병목</span><span class="en">(bottleneck)</span>: 활동 사이의 대기 시간이 길게 쌓이는 곳. 대부분 부서 간 인계 지점이다.</li>
+    </ul>
+    <p>제조 조직에서 이 로그를 얻는 것이 첫 번째 난관이다. 이슈 대응의 상당 부분이 메일과 메신저에서 일어나기 때문에 시스템에 타임스탬프가 남지 않는다. 그래서 <strong>프로세스 마이닝을 하려는 시도 자체가 "어떤 활동을 시스템에 남길 것인가"라는 표준화 질문</strong>으로 이어진다. 아래 시뮬레이터는 가상의 이슈 대응 로그를 생성해 표준화 수준에 따라 흐름이 어떻게 달라지는지 보여 준다.</p>
+
+    <div class="sim" id="sim-pm">
+      <div class="sim-head"><span class="sim-tag">INTERACTIVE</span><h3>프로세스 마이닝 체험: 이슈 대응 로그</h3></div>
+      <div class="sim-body side">
+        <div class="sim-view"><canvas id="cv-pm"></canvas></div>
+        <div class="sim-controls">
+          <label class="ctrl"><span>표준화 수준 <output id="pm-s-out"></output></span><input type="range" id="pm-s" min="0" max="100" step="5" value="25"></label>
+          <label class="ctrl"><span>케이스 수 <output id="pm-n-out"></output></span><input type="range" id="pm-n" min="50" max="500" step="10" value="200"></label>
+          <label class="check"><input type="checkbox" id="pm-hide" checked> 드문 경로(3% 미만) 흐리게</label>
+          <button class="btn primary" id="pm-run">로그 다시 생성</button>
+        </div>
+      </div>
+      <div class="sim-readout">
+        <div class="stat"><span class="k">변종 수</span><span class="v" id="pm-o1">—</span></div>
+        <div class="stat"><span class="k">최다 변종 비중</span><span class="v" id="pm-o2">—</span></div>
+        <div class="stat"><span class="k">평균 리드타임</span><span class="v" id="pm-o3">—</span></div>
+        <div class="stat"><span class="k">재작업률</span><span class="v" id="pm-o4">—</span></div>
+      </div>
+      <div class="sim-html">
+        <div class="pm-cols">
+          <div><h4>이벤트 로그 일부</h4><div class="table-wrap" style="margin:0"><table class="pm-log" id="pm-log"></table></div></div>
+          <div><h4>상위 변종</h4><div id="pm-var"></div></div>
+        </div>
+      </div>
+      <div class="sim-note">흐름도 읽는 법: 선의 굵기는 그 경로를 지나간 케이스 수, 초록 선은 표준 경로, 주황 선은 표준에서 벗어난 경로(건너뛰기·재작업·임시 회신)다. 모델(예시): 표준화가 낮을수록 분류 생략, 긴급회의, 자료요청 후 재분석, 대책 전 임시 회신, 승인 반려, 효과확인 생략이 일어날 확률과 부서 간 대기 시간이 커진다. 해볼 것: 표준화 수준을 0 → 100으로 올리며 변종 수와 최다 변종 비중이 어떻게 바뀌는지 보라. 100이면 모든 케이스가 하나의 변종으로 수렴한다.</div>
+    </div>
+    <div class="callout deep">
+      <strong>이벤트 로그 표준과 객체 중심 로그</strong>
+      <p>프로세스 마이닝 커뮤니티에는 이벤트 로그 교환 형식으로 IEEE 1849 XES(eXtensible Event Stream) 표준이 있다. 다만 제조 이슈는 하나의 케이스 ID로 깔끔하게 나뉘지 않는 경우가 많다. 하나의 클레임이 여러 LOT, 여러 설비, 여러 대책과 얽히기 때문이다. 이런 경우를 위해 여러 객체(이슈, LOT, 설비, 대책)를 함께 다루는 객체 중심 이벤트 로그<span class="en">(OCEL, Object-Centric Event Log)</span> 접근이 연구·도입되고 있다.</p>
+    </div>
+  </section>
+
+  <!-- ============================================================ 4 -->
+  <section id="eight-d">
+    <h2>8D를 다시 보기: 단계마다 무엇이 남아야 하나</h2>
+    <p>8D는 제조 현장에 가장 널리 퍼진 문제 해결 절차다. 그런데 많은 조직에서 8D는 "고객에게 제출하는 보고서 양식"으로만 쓰인다. 고객이 요구할 때 칸을 채우고, 칸을 채우는 데 필요한 정보는 메일과 엑셀에서 긁어모은다. 이렇게 쓰면 8D는 프로세스가 아니라 문서가 된다.</p>
+    <p>8D를 프로세스로 쓰려면 단계마다 <strong>무엇이 데이터로 남아야 하는지</strong>를 정해야 한다. 그래야 다음 이슈 때 과거 8D를 검색하고 비교할 수 있고, AI가 각 단계를 도울 수 있다. 아래에서 단계를 하나씩 눌러 보자.</p>
+
+    <div class="sim" id="sim-8d">
+      <div class="sim-head"><span class="sim-tag">INTERACTIVE</span><h3>8D 단계 탐색기: 산출물 · 데이터 · AI 지원 포인트</h3></div>
+      <div class="sim-body">
+        <div class="sim-controls" style="border-top:0">
+          <div class="ctrl"><span>단계 선택</span><div class="seg" id="d8-seg">
+            <button data-value="0" class="on">D0</button><button data-value="1">D1</button><button data-value="2">D2</button><button data-value="3">D3</button><button data-value="4">D4</button><button data-value="5">D5</button><button data-value="6">D6</button><button data-value="7">D7</button><button data-value="8">D8</button>
+          </div></div>
+        </div>
+        <div class="sim-view"><div class="sim-html" id="d8-out"></div></div>
+      </div>
+      <div class="sim-readout">
+        <div class="stat"><span class="k">현재 단계</span><span class="v" id="d8-o1">—</span></div>
+        <div class="stat"><span class="k">이 단계까지 구조화 필드</span><span class="v" id="d8-o2">—</span></div>
+        <div class="stat"><span class="k">AI 지원 유형</span><span class="v" id="d8-o3">—</span></div>
+      </div>
+      <div class="sim-note">"구조화 필드"는 이 책에서 제안하는 이슈 카드(다음 절)에 단계별로 남기는 항목 수의 예시다. 필드가 쌓일수록 과거 이슈와의 비교·검색·AI 초안 작성이 쉬워진다. AI 지원 방식(자동화/증강/자율)의 구분은 <a href="why.html">1장</a>을 참고.</div>
+    </div>
+    <div class="callout tip">
+      <strong>D3와 D4를 분리해서 기록하라</strong>
+      <p>현장에서 가장 흔한 문제는 임시 봉쇄(D3)와 근본 원인(D4)이 한 칸에 섞이는 것이다. "선별 후 출하, 설비 점검 완료"라고 쓰면 무엇이 임시이고 무엇이 근본인지 모른다. 이슈 카드에서 둘을 다른 필드로 나누기만 해도, 나중에 "임시 대책만 하고 끝난 이슈"를 검색으로 찾을 수 있다.</p>
+    </div>
+  </section>
+
+  <!-- ============================================================ 5 -->
+  <section id="explosion">
+    <h2>산출물 폭발: 양식은 어떻게 불어나는가</h2>
+    <p>프로세스 부채는 산출물 양식의 수로도 드러난다. 이슈 유형(품질, 설비, 공급, 고객 클레임, 안전…)마다, 팀마다, 담당자마다 양식이 조금씩 다르다. 여기에 "이번 건은 임원 보고가 필요하니까" 새로 만든 일회성 양식이 더해진다. 양식이 많으면 세 가지 비용이 생긴다.</p>
+    <ul>
+      <li><strong>작성 비용</strong>: 담당자는 매번 "이번엔 어떤 양식이지?"부터 묻는다.</li>
+      <li><strong>비교 불가</strong>: 서로 다른 양식으로 쓴 두 이슈는 같은 항목을 같은 이름으로 갖고 있지 않아 나란히 놓을 수 없다.</li>
+      <li><strong>AI 학습 불가</strong>: AI가 과거 보고서로 초안을 쓰려 해도 참고할 "같은 모양"의 사례가 적다.</li>
+    </ul>
+    <p>해결책은 모든 것을 하나로 통일하는 것이 아니라 <strong>공통 핵심 + 유형별 확장</strong>이다. 모든 이슈가 같은 핵심 필드(무엇이, 어디서, 언제, 얼마나, 누가, 상태)를 갖고, 유형별로 필요한 필드만 덧붙인다.</p>
+
+    <div class="sim" id="sim-exp">
+      <div class="sim-head"><span class="sim-tag">INTERACTIVE</span><h3>산출물 폭발 계산기</h3></div>
+      <div class="sim-body side">
+        <div class="sim-view"><canvas id="cv-exp"></canvas></div>
+        <div class="sim-controls">
+          <label class="ctrl"><span>이슈 유형 수 <output id="ex-t-out"></output></span><input type="range" id="ex-t" min="1" max="20" step="1" value="6"></label>
+          <label class="ctrl"><span>관련 팀 수 <output id="ex-k-out"></output></span><input type="range" id="ex-k" min="1" max="15" step="1" value="5"></label>
+          <label class="ctrl"><span>팀별 양식 변형 <output id="ex-v-out"></output></span><input type="range" id="ex-v" min="1" max="5" step="1" value="2"></label>
+          <label class="ctrl"><span>연간 이슈 수 <output id="ex-i-out"></output></span><input type="range" id="ex-i" min="10" max="500" step="10" value="120"></label>
+          <label class="ctrl"><span>새 양식을 만드는 이슈 비율 <output id="ex-a-out"></output></span><input type="range" id="ex-a" min="0" max="50" step="1" value="15"></label>
+        </div>
+      </div>
+      <div class="sim-readout">
+        <div class="stat"><span class="k">레거시 양식 수</span><span class="v" id="ex-o1">—</span></div>
+        <div class="stat"><span class="k">통합 템플릿 적용 후</span><span class="v" id="ex-o2">—</span></div>
+        <div class="stat"><span class="k">감소율</span><span class="v" id="ex-o3">—</span></div>
+        <div class="stat"><span class="k">같은 양식 이슈 쌍 비율</span><span class="v" id="ex-o4">—</span></div>
+      </div>
+      <div class="sim-note">모델(예시): 레거시 양식 수 = 유형 × 팀 × 변형 + 연간 이슈 × 새 양식 비율. 통합 후 = 공통 이슈 카드 1 + 유형별 확장 섹션(유형 수). "같은 양식 이슈 쌍 비율"은 이슈 두 건을 무작위로 골랐을 때 같은 양식일 확률의 근사(양식에 고르게 퍼진다고 가정)로, 레거시에서는 1/양식 수, 통합 후에는 공통 핵심 필드 덕분에 100%다. 해볼 것: 팀 수만 늘려도 레거시 곡선(로그 축)이 얼마나 빨리 올라가는지 보라.</div>
+    </div>
+  </section>
+
+  <!-- ============================================================ 6 -->
+  <section id="card">
+    <h2>표준 대응 흐름과 이슈 카드</h2>
+    <p>프로세스 부채를 갚는 핵심 도구는 두 가지다. 하나는 <strong>표준 대응 흐름</strong>(어떤 순서로, 누가, 어떤 관문을 거쳐 처리하나), 다른 하나는 <strong>표준 산출물</strong>(무엇을 남기나)이다. 이 책은 표준 산출물의 기본 단위를 <span class="term">이슈 카드</span>라고 부른다. 메일·PPT·엑셀에 흩어지던 이슈 정보를 한 장의 구조화된 기록으로 모은 것이다.</p>
+    <figure class="diagram">
+      <svg class="mx" viewBox="0 0 660 250" role="img" aria-label="접수에서 종결까지 표준 대응 흐름과 관문, 그리고 하나의 이슈 카드가 단계마다 채워지는 구조">
+        <defs><marker id="pr-arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0 0 L10 5 L0 10 z" style="fill:var(--text-dim)"/></marker></defs>
+        <g>
+          <rect x="10" y="30" width="96" height="46" rx="8" class="f-surface"/><text x="58" y="58" text-anchor="middle" class="t">접수·분류</text>
+          <rect x="140" y="30" width="96" height="46" rx="8" class="f-surface"/><text x="188" y="58" text-anchor="middle" class="t">봉쇄(D3)</text>
+          <rect x="270" y="30" width="96" height="46" rx="8" class="f-surface"/><text x="318" y="58" text-anchor="middle" class="t">원인(D4)</text>
+          <rect x="400" y="30" width="96" height="46" rx="8" class="f-surface"/><text x="448" y="58" text-anchor="middle" class="t">대책(D5·6)</text>
+          <rect x="530" y="30" width="120" height="46" rx="8" class="f-surface"/><text x="590" y="58" text-anchor="middle" class="t">재발방지·종결</text>
+          <path d="M106 53 L138 53" class="s-line" marker-end="url(#pr-arr)"/>
+          <path d="M236 53 L268 53" class="s-line" marker-end="url(#pr-arr)"/>
+          <path d="M366 53 L398 53" class="s-line" marker-end="url(#pr-arr)"/>
+          <path d="M496 53 L528 53" class="s-line" marker-end="url(#pr-arr)"/>
+          <g style="fill:var(--accent-2)">
+            <polygon points="122,22 128,16 134,22 128,28"/><polygon points="252,22 258,16 264,22 258,28"/><polygon points="382,22 388,16 394,22 388,28"/><polygon points="512,22 518,16 524,22 518,28"/>
+          </g>
+          <text x="10" y="14" class="t-mono">◆ 관문: 다음 단계로 가기 위한 최소 필드가 채워졌는가?</text>
+        </g>
+        <rect x="10" y="110" width="640" height="120" rx="10" class="f-acc-soft"/>
+        <text x="26" y="134" class="t-acc">이슈 카드 ISS-0412 (하나의 기록이 단계마다 채워진다)</text>
+        <g class="t-mono">
+          <text x="26" y="160">유형·고객·품번·LOT</text><text x="26" y="178">불량 코드·수량·발견처</text>
+          <text x="180" y="160">봉쇄 범위·수량</text><text x="180" y="178">선별 결과·기한</text>
+          <text x="318" y="160">발생 원인·유출 원인</text><text x="318" y="178">검증 근거(링크)</text>
+          <text x="470" y="160">대책·담당·기한</text><text x="470" y="178">효과 지표·결과</text>
+        </g>
+        <text x="26" y="210" class="t-dim">공통 핵심 필드는 모든 유형이 같고, 유형별 확장 필드만 다르다 → 검색·비교·AI 초안의 기반</text>
+        <path d="M58 76 L58 108" class="s-line" stroke-dasharray="3 3"/><path d="M188 76 L188 108" class="s-line" stroke-dasharray="3 3"/>
+        <path d="M318 76 L318 108" class="s-line" stroke-dasharray="3 3"/><path d="M448 76 L448 108" class="s-line" stroke-dasharray="3 3"/>
+        <path d="M590 76 L590 108" class="s-line" stroke-dasharray="3 3"/>
+      </svg>
+      <figcaption><b>그림 3-3.</b> 표준 대응 흐름과 이슈 카드. 흐름의 단계마다 관문(◆)을 두고, 관문 통과 조건을 "이슈 카드의 해당 필드가 채워졌는가"로 정의한다. 보고서는 이 카드를 보여 주는 뷰가 된다.</figcaption>
+    </figure>
+    <div class="mock">
+      <div class="mock-head">이슈 카드 · ISS-0412 · 유형: 고객 클레임(품질) · 상태: D4 진행 중 · 오너: 품질보증팀</div>
+      <div class="mock-body">
+        <b>무엇이</b> 커넥터 모듈 납땜 불량(불량 코드 <mark>SLD-03 미납</mark>) · <b>어디서</b> 고객사 X 수입검사 · <b>언제</b> 2026-03-04 접수 · <b>얼마나</b> <mark class="b">3 LOT, 고객 측 1.8%</mark><br>
+        <b>D3 봉쇄</b> 출하 보류 3 LOT, 재고 전수 선별 — 담당 생산2팀, 기한 <mark class="w">2026-03-06</mark>, 결과: (입력 대기)<br>
+        <b>D4 원인</b> 발생: 리플로 피크 온도 하한 부근(히터 존 교체 후) · 유출: 출하검사 샘플링에서 미검출 — 근거: 설비 로그 링크, 재현 시험 계획<br>
+        <b>관련 이슈</b> ISS-0198(유사 불량, 2025) · <b>연관 문서</b> 리플로 작업표준 Rev.7
+      </div>
+    </div>
+    <p>이슈 카드가 있으면 <a href="legacy.html">2장</a>에서 메일 스레드에 묻혀 있던 결정·수치·기한·담당·근거가 처음부터 제자리를 갖는다. 그리고 "같은 문제는 같은 양식으로"라는 원칙이 지켜지면, AI는 과거 카드에서 유사 사례를 찾고(<a href="knowledge.html">6장</a>), 8D 초안을 같은 모양으로 쓰고, 미완료 대책을 추적하는 일을 맡을 수 있다(<a href="agents.html">8장</a>).</p>
+    <ul class="checklist">
+      <li>공통 핵심 필드는 10개 안팎으로 시작한다. 많으면 아무도 채우지 않는다.</li>
+      <li>불량 코드·설비 ID·품번은 자유 입력이 아니라 기준정보에서 고르게 한다(<a href="semantics.html">4장</a>).</li>
+      <li>근거는 첨부가 아니라 원본 위치 링크로 남긴다. 첨부는 복사본을 만든다.</li>
+      <li>임원 보고·고객 회신 문서는 카드에서 생성한다. 숫자를 다시 타이핑하지 않는다.</li>
+      <li>카드의 상태 변경이 곧 이벤트 로그가 되도록 한다. 그러면 프로세스 마이닝이 저절로 가능해진다.</li>
+    </ul>
+  </section>
+
+  <!-- ============================================================ 7 -->
+  <section id="sipoc">
+    <h2>SIPOC, RACI, 프로세스 오너</h2>
+    <p>표준 흐름과 이슈 카드를 만들려면 먼저 프로세스의 경계와 책임을 정해야 한다. 이때 쓰는 가벼운 도구가 SIPOC과 RACI다.</p>
+    <h3>SIPOC: 프로세스의 경계를 한 장으로</h3>
+    <p><span class="term">SIPOC</span>은 공급자<span class="en">(Supplier)</span>–입력<span class="en">(Input)</span>–프로세스<span class="en">(Process)</span>–출력<span class="en">(Output)</span>–고객<span class="en">(Customer)</span>의 머리글자다. 프로세스를 5~7단계로만 요약하고, 무엇이 들어와 무엇이 나가는지를 적는다. 회색지대의 인계가 여기서 드러난다.</p>
+    <div class="table-wrap"><table>
+      <thead><tr><th>S 공급자</th><th>I 입력</th><th>P 프로세스</th><th>O 출력</th><th>C 고객</th></tr></thead>
+      <tbody>
+        <tr><td>고객사, 영업</td><td>클레임 통보, 불량 샘플·사진</td><td>1. 접수·분류</td><td>이슈 카드(핵심 필드)</td><td>품질보증팀</td></tr>
+        <tr><td>생산, 물류</td><td>재고·출하 현황</td><td>2. 봉쇄</td><td>보류·선별 결과</td><td>고객사, 생산</td></tr>
+        <tr><td>공정기술, 설비</td><td>설비 로그, 공정 조건, 검사 데이터</td><td>3. 원인 분석</td><td>발생·유출 원인과 근거</td><td>품질보증팀</td></tr>
+        <tr><td>공정기술, 생산</td><td>원인 분석 결과</td><td>4. 대책 수립·실행</td><td>대책, 변경된 작업표준</td><td>생산, 고객사</td></tr>
+        <tr><td>품질보증</td><td>대책 실행 결과, 공정 데이터</td><td>5. 효과 확인·종결</td><td>종결 카드, FMEA·관리계획 갱신</td><td>고객사, 전사</td></tr>
+      </tbody>
+    </table></div>
+    <h3>RACI: 누가 무엇을 책임지나</h3>
+    <p><span class="term">RACI</span>는 활동마다 실행 담당<span class="en">(Responsible)</span>, 최종 책임<span class="en">(Accountable)</span>, 사전 협의<span class="en">(Consulted)</span>, 사후 통보<span class="en">(Informed)</span>를 정하는 표다. 원칙은 <strong>활동마다 A는 정확히 한 명(한 조직)</strong>이다. A가 없거나 둘이면 그 활동이 회색지대다.</p>
+    <div class="table-wrap"><table>
+      <thead><tr><th>활동</th><th>품질보증</th><th>생산</th><th>공정기술</th><th>영업</th></tr></thead>
+      <tbody>
+        <tr><td>접수·분류</td><td><b>A</b>/R</td><td>I</td><td>I</td><td>C</td></tr>
+        <tr><td>봉쇄(D3)</td><td>A</td><td>R</td><td>C</td><td>I</td></tr>
+        <tr><td>원인 분석(D4)</td><td>A</td><td>C</td><td>R</td><td>I</td></tr>
+        <tr><td>대책 실행(D6)</td><td>C</td><td><b>A</b>/R</td><td>R</td><td>I</td></tr>
+        <tr><td>고객 회신</td><td>R</td><td>I</td><td>C</td><td><b>A</b></td></tr>
+      </tbody>
+    </table></div>
+    <h3>프로세스 오너</h3>
+    <p><span class="term">프로세스 오너</span><span class="en">(process owner)</span>는 개별 이슈가 아니라 <strong>프로세스 자체</strong>를 책임지는 사람이다. 이슈 담당자는 이번 건을 해결하고, 프로세스 오너는 "이슈 대응 프로세스가 잘 돌아가는가"를 지표(리드타임, 재작업률, 변종 수, 재발률)로 보고 흐름과 양식을 고친다. 회색지대가 생기는 가장 흔한 이유는 부서마다 자기 부분의 오너는 있는데 <strong>부서를 가로지르는 흐름 전체의 오너가 없기 때문</strong>이다.</p>
+    <div class="callout">
+      <strong>AX에서 프로세스 오너가 하는 일</strong>
+      <p>AI를 프로세스에 넣으면 프로세스 오너의 일이 하나 늘어난다. 어느 단계에서 AI가 무엇을 하고, 사람은 어디서 검증·승인하며, AI의 결과를 어떤 지표로 감시하는지 정하는 것이다. 이 역할이 비어 있으면 AI 도입은 다시 "누구 소관인지 모르는" 회색지대가 된다(<a href="people.html">11장</a>, <a href="governance.html">10장</a>).</p>
+    </div>
+  </section>
+
+  <!-- ============================================================ 8 -->
+  <section id="repay">
+    <h2>프로세스 부채 갚는 순서</h2>
+    <p>모든 프로세스를 한꺼번에 표준화하려는 시도는 대개 두꺼운 절차서만 남기고 끝난다. 부채는 이자가 가장 큰 것부터 갚는다.</p>
+    <ol class="ladder">
+      <li><b>가장 자주 반복되는 이슈 유형 하나 고르기</b>빈도 × 건당 처리 시간이 가장 큰 유형. 대개 고객 클레임이나 설비 고장 대응이다.</li>
+      <li><b>실제 흐름 보기</b>최근 20~30건을 골라 메일·메신저·문서에서 활동과 날짜를 뽑아 간이 이벤트 로그를 만든다. 변종과 대기 구간을 센다.</li>
+      <li><b>SIPOC와 RACI 한 장씩</b>경계와 책임을 정한다. A가 없는 활동부터 채운다. 흐름 전체의 프로세스 오너를 정한다.</li>
+      <li><b>이슈 카드와 관문</b>공통 핵심 필드 10개 안팎, 단계별 관문 조건을 정한다. 기존 양식은 카드의 뷰로 바꾼다.</li>
+      <li><b>카드 상태 = 이벤트 로그</b>카드를 시스템(또는 최소한 공용 목록)에 두어 상태 변경이 자동으로 기록되게 한다. 이제 프로세스 마이닝이 상시로 가능하다.</li>
+      <li><b>AI 넣기</b>정의된 단계에 AI를 넣는다. 접수 분류 자동화, 유사 이슈 추천, 8D 초안. 효과는 카드 로그의 리드타임·재작업률로 잰다.</li>
+    </ol>
+    <div class="compare">
+      <div class="before"><h4>부채가 쌓인 상태</h4><ul>
+        <li>이슈마다 대응 순서와 참여자가 다르다.</li>
+        <li>보고서 양식이 팀·담당자·이슈마다 다르다.</li>
+        <li>대책 이행 여부를 추적하는 사람이 없다.</li>
+        <li>실제 흐름은 아무도 모른다. 절차서와 다르다.</li>
+      </ul></div>
+      <div class="after"><h4>부채를 갚은 상태</h4><ul>
+        <li>같은 유형은 같은 흐름과 관문을 지난다.</li>
+        <li>모든 이슈가 같은 핵심 필드의 이슈 카드를 갖는다.</li>
+        <li>프로세스 오너가 지표로 흐름을 관리한다.</li>
+        <li>카드 로그로 실제 흐름이 늘 보이고, AI가 들어갈 자리가 명확하다.</li>
+      </ul></div>
+    </div>
+    <div class="callout warn">
+      <strong>표준화가 경직화가 되지 않게</strong>
+      <p>모든 이슈가 표준 흐름에 맞지는 않는다. 처음 보는 유형의 중대 사고는 여전히 TF가 필요하다. 그래서 표준 흐름에는 "예외 경로"를 명시적으로 두고, 예외로 처리된 이슈도 같은 이슈 카드에 기록하게 한다. 예외가 반복되면 그것이 새 표준 유형의 후보다.</p>
+    </div>
+  </section>
+
+  <section class="keypoints" id="summary">
+    <h2>핵심 정리</h2>
+    <ol>
+      <li>프로세스 부채는 임시방편 절차가 표준으로 정리되지 않고 쌓여 생긴 변동성이다. 이슈마다 다른 흐름과 산출물은 비교·학습·자동화를 막고, "매번 처음부터"라는 이자를 낸다.</li>
+      <li>ISO 9001, IATF 16949, 8D, CAPA, FMEA는 핵심 프로세스를 잘 덮지만, 부서 간 인계·임시 TF·고객 대응 초기·내부 보고 같은 회색지대는 남는다.</li>
+      <li>프로세스 마이닝은 케이스 ID·활동·타임스탬프로 된 이벤트 로그로 실제 흐름을 복원해 변종·재작업 루프·병목을 보여 준다. 로그를 얻으려는 시도 자체가 표준화 질문이다.</li>
+      <li>8D는 보고서 양식이 아니라 프로세스로 써야 한다. 단계마다 무엇이 데이터로 남는지 정해야 AI가 각 단계를 도울 수 있다.</li>
+      <li>산출물 양식은 유형 × 팀 × 변형 + 일회성으로 불어난다. 해법은 "공통 핵심 + 유형별 확장"의 이슈 카드다.</li>
+      <li>SIPOC으로 경계를, RACI로 책임(활동마다 A는 하나)을 정하고, 부서를 가로지르는 흐름 전체의 프로세스 오너를 둔다.</li>
+    </ol>
+  </section>
+
+  <section class="quiz-sec" id="quiz">
+    <h2>확인 퀴즈</h2>
+    <div class="quiz">
+      <div class="quiz-q"><p>1. 다음 중 프로세스 부채의 증상으로 가장 적절한 것은?</p><div class="opts">
+        <button class="opt">설비가 노후화되어 고장이 잦다.</button>
+        <button class="opt" data-correct>같은 유형의 클레임인데 건마다 대응 순서·참여 부서·보고서 양식이 다르다.</button>
+        <button class="opt">ERP 서버의 응답 속도가 느리다.</button>
+        <button class="opt">신규 설비 투자가 지연되고 있다.</button>
+      </div><div class="quiz-exp">프로세스 부채는 임시방편이 쌓여 생긴 변동성이다. 같은 문제를 매번 다르게 처리하면 비교·학습·자동화가 불가능해진다.</div></div>
+
+      <div class="quiz-q"><p>2. 프로세스 마이닝에 필요한 이벤트 로그의 최소 구성은?</p><div class="opts">
+        <button class="opt">담당자 이름, 부서, 직급</button>
+        <button class="opt">보고서 파일명, 작성일, 승인자</button>
+        <button class="opt" data-correct>케이스 ID, 활동, 타임스탬프</button>
+        <button class="opt">불량 코드, 수량, 금액</button>
+      </div><div class="quiz-exp">같은 케이스 ID의 활동을 타임스탬프 순으로 늘어놓으면 그 케이스의 경로가 된다. 담당 조직 같은 속성은 있으면 좋지만 필수는 아니다.</div></div>
+
+      <div class="quiz-q"><p>3. 표준화 수준이 높아지면 프로세스 마이닝 결과는 대체로 어떻게 바뀌는가?</p><div class="opts">
+        <button class="opt">변종 수가 늘고 최다 변종 비중이 줄어든다.</button>
+        <button class="opt" data-correct>변종 수가 줄고 최다 변종 비중이 커지며, 재작업률과 리드타임이 줄어든다.</button>
+        <button class="opt">변종 수는 그대로이고 리드타임만 줄어든다.</button>
+        <button class="opt">케이스 수가 줄어든다.</button>
+      </div><div class="quiz-exp">표준이 지켜지면 대부분의 케이스가 소수의 경로로 수렴한다. 건너뛰기·재작업·임시 경로가 줄어들어 리드타임도 짧아진다.</div></div>
+
+      <div class="quiz-q"><p>4. 8D에서 D3와 D4의 차이로 옳은 것은?</p><div class="opts">
+        <button class="opt">D3는 팀 구성, D4는 문제 기술이다.</button>
+        <button class="opt" data-correct>D3는 고객을 보호하기 위한 임시 봉쇄 조치, D4는 근본 원인(발생·유출 원인) 분석과 검증이다.</button>
+        <button class="opt">D3와 D4는 같은 내용이므로 한 칸에 적어도 된다.</button>
+        <button class="opt">D3는 재발 방지, D4는 팀 치하다.</button>
+      </div><div class="quiz-exp">D3는 문제가 고객에게 더 퍼지지 않도록 막는 임시 조치이고, D4는 왜 발생했고 왜 걸러지지 않았는지를 찾는 단계다. 둘을 섞어 쓰면 "임시 대책만 하고 끝난 이슈"를 찾을 수 없다.</div></div>
+
+      <div class="quiz-q"><p>5. RACI 표에서 어떤 활동에 A(최종 책임)가 두 조직으로 적혀 있다. 이것이 의미하는 것은?</p><div class="opts">
+        <button class="opt">책임이 분산되어 더 안전하다.</button>
+        <button class="opt">문제가 없다. A는 여럿일수록 좋다.</button>
+        <button class="opt" data-correct>사실상 책임자가 없는 회색지대일 가능성이 높으므로 A를 하나로 정해야 한다.</button>
+        <button class="opt">R을 없애야 한다.</button>
+      </div><div class="quiz-exp">RACI의 원칙은 활동마다 A가 정확히 하나라는 것이다. A가 둘이면 서로 상대가 할 것이라 여기다 아무도 하지 않는 일이 생긴다.</div></div>
+
+      <div class="quiz-q"><p>6. 산출물 양식이 많을 때 "공통 핵심 + 유형별 확장" 이슈 카드가 해결하는 가장 큰 문제는?</p><div class="opts">
+        <button class="opt">보고서의 디자인이 예뻐진다.</button>
+        <button class="opt">이슈 발생 건수 자체가 줄어든다.</button>
+        <button class="opt" data-correct>서로 다른 이슈를 같은 항목으로 비교·검색할 수 있게 되어, 학습과 AI 활용의 기반이 생긴다.</button>
+        <button class="opt">모든 예외 상황이 사라진다.</button>
+      </div><div class="quiz-exp">양식이 다르면 같은 항목을 같은 이름으로 갖고 있지 않아 비교가 불가능하다. 공통 핵심 필드가 있으면 모든 이슈가 같은 기준으로 비교되고, AI가 유사 사례를 찾고 초안을 같은 모양으로 쓸 수 있다. 예외는 여전히 생기지만 같은 카드에 기록된다.</div></div>
+    </div>
+  </section>
+</main>
+<script>
+(function () {
+  "use strict";
+  function hexA(c, a) {
+    c = (c || "").trim();
+    if (c[0] === "#") {
+      var h = c.slice(1);
+      if (h.length === 3) h = h.split("").map(function (x) { return x + x; }).join("");
+      var n = parseInt(h.slice(0, 6), 16);
+      return "rgba(" + ((n >> 16) & 255) + "," + ((n >> 8) & 255) + "," + (n & 255) + "," + a + ")";
+    }
+    var m = c.match(/[\d.]+/g);
+    return m ? "rgba(" + m[0] + "," + m[1] + "," + m[2] + "," + a + ")" : c;
+  }
+  function font(px, mono, bold) { return (bold ? "600 " : "") + px + "px " + getComputedStyle(document.body).getPropertyValue(mono ? "--mono" : "--font"); }
+  function mulberry32(a) { return function () { a |= 0; a = (a + 0x6D2B79F5) | 0; var t = Math.imul(a ^ (a >>> 15), 1 | a); t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t; return ((t ^ (t >>> 14)) >>> 0) / 4294967296; }; }
+
+  /* ================================================ 1) 프로세스 마이닝 */
+  var ACT = {
+    A: { name: "접수", x: 0.08, y: 0.16, d: 0.1 },
+    B: { name: "분류", x: 0.36, y: 0.16, d: 0.4 },
+    C: { name: "원인분석", x: 0.64, y: 0.16, d: 3 },
+    D: { name: "대책수립", x: 0.92, y: 0.16, d: 2 },
+    E: { name: "승인", x: 0.92, y: 0.84, d: 1 },
+    F: { name: "고객회신", x: 0.64, y: 0.84, d: 0.5 },
+    G: { name: "효과확인", x: 0.36, y: 0.84, d: 7 },
+    H: { name: "종결", x: 0.08, y: 0.84, d: 0.2 },
+    M: { name: "긴급회의", x: 0.22, y: 0.5, d: 0.5 },
+    R: { name: "자료요청", x: 0.64, y: 0.5, d: 2 },
+  };
+  var STD = { AB: 1, BC: 1, CD: 1, DE: 1, EF: 1, FG: 1, GH: 1 };
+  var PM = { seed: 11, data: null };
+  var pmS = AX.range("pm-s", function (v) { return v + "%"; }, pmRun);
+  var pmN = AX.range("pm-n", function (v) { return v + "건"; }, pmRun);
+  var pmHide = document.getElementById("pm-hide");
+  pmHide.addEventListener("change", function () { if (cvPm) cvPm.redraw(); });
+  document.getElementById("pm-run").addEventListener("click", function () { PM.seed = (PM.seed * 7919 + 13) % 100003 + 1; pmRun(); });
+  function pmGen() {
+    var rnd = mulberry32(PM.seed), u = 1 - pmS() / 100, N = pmN();
+    var cases = [];
+    var t0 = Date.UTC(2026, 0, 5, 8, 30);
+    for (var i = 0; i < N; i++) {
+      var seq = ["A"];
+      if (!(rnd() < 0.35 * u)) seq.push("B");
+      if (rnd() < 0.3 * u) seq.push("M");
+      seq.push("C");
+      for (var k = 0; k < 2 && rnd() < 0.45 * u; k++) { seq.push("R"); seq.push("C"); }
+      var early = rnd() < 0.35 * u;
+      if (early) seq.push("F");
+      seq.push("D"); seq.push("E");
+      for (k = 0; k < 2 && rnd() < 0.35 * u; k++) { seq.push("D"); seq.push("E"); }
+      if (!early || rnd() < 0.6) seq.push("F");
+      if (!(rnd() < 0.5 * u)) seq.push("G");
+      seq.push("H");
+      var t = t0 + i * 0.6 * 864e5 + rnd() * 4 * 36e5, ev = [];
+      seq.forEach(function (a, j) {
+        if (j > 0) t += -Math.log(1 - rnd()) * (0.3 + 1.5 * u) * 864e5; // 대기
+        t += ACT[a].d * (0.6 + 0.8 * rnd()) * 864e5;
+        ev.push({ a: a, t: t });
+      });
+      var counts = {}, rework = false;
+      seq.forEach(function (a) { counts[a] = (counts[a] || 0) + 1; if (counts[a] > 1 && a !== "F") rework = true; });
+      cases.push({ id: "ISS-" + String(1001 + i), seq: seq, ev: ev, lead: (ev[ev.length - 1].t - ev[0].t) / 864e5 + ACT.A.d, rework: rework });
+    }
+    var vmap = {}, edges = {}, nodes = {};
+    cases.forEach(function (c) {
+      var key = c.seq.join("");
+      vmap[key] = (vmap[key] || 0) + 1;
+      c.seq.forEach(function (a, j) { nodes[a] = (nodes[a] || 0) + 1; if (j > 0) { var e = c.seq[j - 1] + a; edges[e] = (edges[e] || 0) + 1; } });
+    });
+    var variants = Object.keys(vmap).map(function (k) { return { k: k, n: vmap[k] }; }).sort(function (a, b) { return b.n - a.n; });
+    return { cases: cases, variants: variants, edges: edges, nodes: nodes, N: N };
+  }
+  function fmtT(ms) { var d = new Date(ms); var p = function (x) { return String(x).padStart(2, "0"); }; return p(d.getUTCMonth() + 1) + "-" + p(d.getUTCDate()) + " " + p(d.getUTCHours()) + ":" + p(d.getUTCMinutes()); }
+  function pmRun() {
+    PM.data = pmGen();
+    var D = PM.data;
+    var lead = 0, rw = 0;
+    D.cases.forEach(function (c) { lead += c.lead; if (c.rework) rw++; });
+    AX.stat("pm-o1", D.variants.length + "<small>개</small>");
+    AX.stat("pm-o2", (D.variants[0].n / D.N * 100).toFixed(0) + "<small>%</small>");
+    AX.stat("pm-o3", (lead / D.N).toFixed(1) + "<small>일</small>");
+    AX.stat("pm-o4", (rw / D.N * 100).toFixed(0) + "<small>%</small>");
+    // 로그 일부: 두 케이스의 첫 이벤트들
+    var rows = [];
+    D.cases.slice(0, 2).forEach(function (c) { c.ev.slice(0, 4).forEach(function (e) { rows.push("<tr><td>" + c.id + "</td><td>" + ACT[e.a].name + "</td><td>" + fmtT(e.t) + "</td></tr>"); }); });
+    document.getElementById("pm-log").innerHTML = "<thead><tr><th>케이스 ID</th><th>활동</th><th>시각</th></tr></thead><tbody>" + rows.join("") + "</tbody>";
+    var vh = D.variants.slice(0, 5).map(function (v, i) {
+      var pct = v.n / D.N * 100;
+      return '<div class="bar-row"><span>변종 ' + (i + 1) + '</span><span class="track"><i style="width:' + pct.toFixed(1) + '%"></i></span><span class="val">' + pct.toFixed(0) + '%</span></div><p class="pm-var">' + v.k.split("").map(function (a) { return ACT[a].name; }).join(" → ") + "</p>";
+    }).join("");
+    if (D.variants.length > 5) vh += '<p class="pm-var">… 외 ' + (D.variants.length - 5) + "개 변종</p>";
+    document.getElementById("pm-var").innerHTML = vh;
+    if (cvPm) cvPm.redraw();
+  }
+  var cvPm = null;
+  pmRun();
+  cvPm = AX.canvas("#cv-pm", function (ctx, w, h) {
+    var P = AX.palette(), D = PM.data;
+    var narrow = w < 480;
+    var nw = narrow ? 58 : 76, nh = narrow ? 34 : 38;
+    var padX = nw / 2 + 8, padY = nh / 2 + 10;
+    // ACT 좌표 범위(x 0.08~0.92, y 0.16~0.84)를 캔버스 전체로 늘려 배치
+    var pos = function (a) { var x = (ACT[a].x - 0.08) / 0.84, y = (ACT[a].y - 0.16) / 0.68; return [padX + x * (w - 2 * padX), padY + y * (h - 2 * padY)]; };
+    var maxE = 1; Object.keys(D.edges).forEach(function (k) { maxE = Math.max(maxE, D.edges[k]); });
+    var keys = Object.keys(D.edges).sort(function (a, b) { return D.edges[a] - D.edges[b]; });
+    keys.forEach(function (k) {
+      var n = D.edges[k], share = n / D.N, a = k[0], b = k[1];
+      var faint = pmHide.checked && share < 0.03;
+      var p0 = pos(a), p1 = pos(b);
+      var dx = p1[0] - p0[0], dy = p1[1] - p0[1], L = Math.hypot(dx, dy) || 1;
+      var off = (a === b ? 0 : 0.16) * L;
+      var cx = (p0[0] + p1[0]) / 2 - dy / L * off, cy = (p0[1] + p1[1]) / 2 + dx / L * off;
+      var col = STD[k] ? P.accent : P.warn;
+      ctx.strokeStyle = hexA(col, faint ? 0.15 : 0.35 + 0.6 * n / maxE);
+      ctx.lineWidth = faint ? 1 : 1 + 7 * n / maxE;
+      ctx.beginPath(); ctx.moveTo(p0[0], p0[1]); ctx.quadraticCurveTo(cx, cy, p1[0], p1[1]); ctx.stroke();
+      // 화살촉: 곡선 끝 근처 접선 방향, 노드 경계에서 멈춤
+      var tt = 0.5, ex, ey;
+      for (var s = 1; s >= 0.5; s -= 0.02) {
+        ex = (1 - s) * (1 - s) * p0[0] + 2 * (1 - s) * s * cx + s * s * p1[0];
+        ey = (1 - s) * (1 - s) * p0[1] + 2 * (1 - s) * s * cy + s * s * p1[1];
+        if (Math.abs(ex - p1[0]) > nw / 2 + 2 || Math.abs(ey - p1[1]) > nh / 2 + 2) { tt = s; break; }
+      }
+      var tx = 2 * (1 - tt) * (cx - p0[0]) + 2 * tt * (p1[0] - cx), ty = 2 * (1 - tt) * (cy - p0[1]) + 2 * tt * (p1[1] - cy);
+      var ang = Math.atan2(ty, tx), ah = faint ? 5 : 7;
+      ctx.fillStyle = hexA(col, faint ? 0.25 : 0.95);
+      ctx.beginPath(); ctx.moveTo(ex, ey); ctx.lineTo(ex - ah * Math.cos(ang - 0.45), ey - ah * Math.sin(ang - 0.45)); ctx.lineTo(ex - ah * Math.cos(ang + 0.45), ey - ah * Math.sin(ang + 0.45)); ctx.closePath(); ctx.fill();
+      if (!faint && share >= 0.08 && !narrow) {
+        var mx = 0.25 * p0[0] + 0.5 * cx + 0.25 * p1[0], my = 0.25 * p0[1] + 0.5 * cy + 0.25 * p1[1];
+        ctx.font = font(10.5, true); ctx.fillStyle = P.dim; ctx.textAlign = "center"; ctx.textBaseline = "middle";
+        ctx.fillText(String(n), mx, my);
+      }
+    });
+    Object.keys(ACT).forEach(function (a) {
+      var p = pos(a), n = D.nodes[a] || 0, extra = a === "M" || a === "R";
+      if (!n && extra) { ctx.globalAlpha = 0.35; }
+      ctx.fillStyle = P.bg; ctx.strokeStyle = extra ? P.warn : P.accent; ctx.lineWidth = 1.5;
+      ctx.beginPath();
+      if (ctx.roundRect) ctx.roundRect(p[0] - nw / 2, p[1] - nh / 2, nw, nh, 7); else ctx.rect(p[0] - nw / 2, p[1] - nh / 2, nw, nh);
+      ctx.fill(); ctx.stroke();
+      ctx.fillStyle = hexA(extra ? P.warn : P.accent, 0.12); ctx.fill();
+      ctx.fillStyle = P.text; ctx.font = font(narrow ? 11 : 12, false, true); ctx.textAlign = "center"; ctx.textBaseline = "middle";
+      ctx.fillText(ACT[a].name, p[0], p[1] - 7);
+      ctx.fillStyle = P.dim; ctx.font = font(10, true);
+      ctx.fillText(String(n), p[0], p[1] + 8);
+      ctx.globalAlpha = 1;
+    });
+  }, { aspect: 0.62, minHeight: 300, maxHeight: 400 });
+
+  /* ================================================ 2) 산출물 폭발 */
+  function exRedraw() { if (cvEx) cvEx.redraw(); }
+  var exT = AX.range("ex-t", function (v) { return v + "개"; }, exRedraw);
+  var exK = AX.range("ex-k", function (v) { return v + "팀"; }, exRedraw);
+  var exV = AX.range("ex-v", function (v) { return v + "종"; }, exRedraw);
+  var exI = AX.range("ex-i", function (v) { return v + "건"; }, exRedraw);
+  var exA = AX.range("ex-a", function (v) { return v + "%"; }, exRedraw);
+  function legacy(T, K, V, I, A) { return T * K * V + Math.round(I * A); }
+  var cvEx = null;
+  cvEx = AX.canvas("#cv-exp", function (ctx, w, h) {
+    var P = AX.palette(), T = exT(), K = exK(), V = exV(), I = exI(), A = exA() / 100;
+    var leg = [], uni = [];
+    for (var k = 1; k <= 15; k++) { leg.push([k, legacy(T, k, V, I, A)]); uni.push([k, 1 + T]); }
+    var L = legacy(T, K, V, I, A), U = 1 + T;
+    AX.chart(ctx, { x: 52, y: 14, w: w - 52 - 16, h: h - 14 - 46 }, {
+      x: [1, 15], y: [1, 3000], logY: true, xLabel: "관련 팀 수", yLabel: "서로 다른 양식 수 (로그)",
+      xFmt: function (v) { return String(Math.round(v)); },
+      yFmt: function (v) { return v >= 1000 ? (v / 1000) + "k" : String(v); },
+      series: [{ data: leg, color: P.bad, width: 2.6 }, { data: uni, color: P.ok, width: 2.6 }],
+      vlines: [{ x: K, color: P.faint }],
+      points: [{ x: K, y: L, color: P.bad, r: 5, label: L.toLocaleString() + "종" }, { x: K, y: U, color: P.ok, r: 5, label: U + "종" }],
+    });
+    ctx.font = font(11.5, false); ctx.textAlign = "left"; ctx.textBaseline = "top";
+    ctx.fillStyle = P.bad; ctx.fillText("● 레거시(유형×팀×변형+일회성)", 60, 18);
+    ctx.fillStyle = P.ok; ctx.fillText("● 이슈 카드(공통 1 + 유형별 확장)", 60, 34);
+    AX.stat("ex-o1", L.toLocaleString() + "<small>종</small>");
+    AX.stat("ex-o2", U + "<small>종</small>");
+    AX.stat("ex-o3", (L > 0 ? Math.max(0, (1 - U / L) * 100) : 0).toFixed(0) + "<small>%</small>");
+    AX.stat("ex-o4", (100 / Math.max(1, L)).toFixed(L > 100 ? 2 : 1) + "<small>% → 100%</small>");
+  }, { aspect: 0.62, minHeight: 260, maxHeight: 380 });
+
+  /* ================================================ 3) 8D 탐색기 */
+  var D8 = [
+    { t: "D0 · 준비와 긴급 대응", goal: "8D가 필요한 문제인지 판단하고, 고객 보호를 위한 긴급 대응(ERA)을 즉시 취한다.", out: "8D 착수 여부 판단, 긴급 대응 조치 기록", data: "클레임 통보 원문, 고객·품번·LOT, 초기 수량", legacy: "영업이 받은 메일이 전달·재전달되며 착수 판단이 하루 이상 늦어진다.", ai: "클레임 메일에서 고객·품번·LOT·불량 현상을 추출해 이슈 카드 초안을 자동 생성하고, 과거 유사 이슈를 함께 띄운다.", mode: "자동화", human: "8D 착수 여부와 긴급 대응 범위 결정", f: 6 },
+    { t: "D1 · 팀 구성", goal: "문제 해결에 필요한 지식과 권한을 가진 교차기능 팀과 리더를 정한다.", out: "팀원·역할·리더(RACI)", data: "조직도, 과거 유사 이슈 참여자, 담당 설비·공정 오너", legacy: "늘 부르던 사람만 부른다. 실제 공정 담당이 빠져 원인 분석이 겉돈다.", ai: "품번·공정·설비 정보로 관련 공정 오너와 과거 유사 이슈 해결자를 추천한다.", mode: "증강", human: "팀 구성 확정, 리더 지정", f: 8 },
+    { t: "D2 · 문제 기술", goal: "5W2H, Is/Is Not 분석으로 문제를 사실 기반으로 정확히 정의한다.", out: "문제 기술서(무엇·어디·언제·얼마나), Is/Is Not 표", data: "불량 샘플·사진, 검사 데이터, 생산 이력(LOT 추적), 고객 사용 조건", legacy: "\"불량 다수 발생\"처럼 모호하게 쓰고, 불량명이 팀마다 달라 범위가 흔들린다.", ai: "LOT 추적 데이터에서 Is/Is Not 후보(같은 기간·다른 라인 등)를 정리하고, 불량명을 표준 불량 코드로 매핑해 제안한다.", mode: "증강", human: "문제 정의 확정, 불량 코드 확정", f: 13 },
+    { t: "D3 · 임시 봉쇄 조치", goal: "근본 원인을 찾는 동안 고객에게 문제가 더 퍼지지 않도록 봉쇄(ICA)한다.", out: "봉쇄 범위(재고·재공·운송 중·고객 재고), 선별 결과, 효과 확인", data: "재고·출하 현황, 선별 수량과 결과", legacy: "메일로 \"선별 부탁드립니다\"만 오가고 범위와 결과 수치가 기록되지 않는다.", ai: "LOT 계보로 영향 범위(재공·출하·고객 재고)를 계산하고 선별 결과 입력을 추적·독촉한다.", mode: "자동화", human: "봉쇄 범위 승인, 출하 재개 판단", f: 18 },
+    { t: "D4 · 근본 원인 분석", goal: "발생 원인과 유출 원인을 찾고, 재현·검증으로 확인한다.", out: "발생 원인·유출 원인, 검증 결과, 근거 데이터", data: "공정 조건·설비 로그, 변경점(4M), 검사 데이터, FMEA, 과거 유사 이슈", legacy: "가장 그럴듯한 가설 하나를 원인으로 적고 검증 없이 넘어간다. 근거는 회의에서 말로만 오간다.", ai: "변경점 이력·설비 로그·과거 이슈에서 후보 원인과 근거를 찾아 제시한다. 원인 후보마다 근거 링크를 붙인다.", mode: "증강", human: "원인 판단과 검증 설계 — AI 후보를 그대로 원인으로 확정하지 않는다", f: 24 },
+    { t: "D5 · 영구 시정 조치 선정", goal: "근본 원인을 제거할 영구 대책(PCA)을 고르고, 부작용 없이 효과가 있는지 검증한다.", out: "대책 후보와 선정 근거, 검증 계획·결과", data: "원인 분석 결과, 대책 비용·일정, 과거 대책의 효과", legacy: "\"작업자 교육 강화\"처럼 검증할 수 없는 대책이 반복된다.", ai: "과거 유사 원인에 쓰인 대책과 그 효과(재발 여부)를 비교표로 보여 준다.", mode: "증강", human: "대책 선정, 비용·일정 승인", f: 29 },
+    { t: "D6 · 시정 조치 실행과 효과 확인", goal: "영구 대책을 실행하고, 임시 봉쇄를 해제하며, 효과를 데이터로 확인한다.", out: "실행 기록, 효과 지표(전후 비교), 봉쇄 해제 기록", data: "대책 실행 일정·담당, 실행 후 공정·품질 데이터", legacy: "대책 실행은 다른 부서의 일이라 이행 확인이 빠진다. 효과 확인 기간이 정해져 있지 않다.", ai: "대책별 담당·기한을 추적하고, 실행 전후 지표를 자동으로 비교해 효과 확인 초안을 만든다.", mode: "자율", human: "효과 판정, 봉쇄 해제 승인", f: 35 },
+    { t: "D7 · 재발 방지", goal: "같은 문제가 다른 제품·라인·사업장에서도 생기지 않도록 시스템을 바꾼다.", out: "FMEA·관리계획·작업표준 갱신, 수평 전개 목록", data: "유사 공정·제품 목록, FMEA, 관리계획, 작업표준", legacy: "해당 라인만 고치고 끝난다. FMEA는 다음 개정 때로 미뤄진다.", ai: "같은 공정·설비·부품을 쓰는 다른 제품과 라인을 찾아 수평 전개 후보를 만들고, FMEA 갱신 초안을 제안한다.", mode: "증강", human: "수평 전개 범위 결정, 표준 개정 승인", f: 41 },
+    { t: "D8 · 팀 치하와 종결", goal: "팀의 기여를 인정하고, 배운 것을 기록해 종결한다.", out: "종결 승인, 교훈(lessons learned), 종결된 이슈 카드", data: "이슈 카드 전체, 리드타임, 비용", legacy: "PPT를 공유 폴더에 올리고 끝난다. 교훈은 다음 검색에 걸리지 않는다.", ai: "이슈 카드에서 교훈 요약을 만들고 지식 베이스에 등록해 다음 이슈의 검색 근거로 만든다.", mode: "자동화", human: "종결 승인, 교훈 확정", f: 45 },
+  ];
+  var MODECHIP = { "자동화": "ok", "증강": "acc", "자율": "warn" };
+  function d8Render(v) {
+    var i = Number(v), d = D8[i];
+    var strip = '<div class="d8-strip">' + D8.map(function (_, j) { return "<i class=\"" + (j < i ? "done" : j === i ? "cur" : "") + "\"></i>"; }).join("") + "</div>";
+    document.getElementById("d8-out").innerHTML = strip +
+      "<h4 style=\"margin:0 0 4px\">" + d.t + "</h4><p style=\"margin:0 0 12px;color:var(--text-dim)\">" + d.goal + "</p>" +
+      '<div class="d8-grid">' +
+      "<div><h5>산출물</h5><p>" + d.out + "</p></div>" +
+      "<div><h5>필요한 데이터</h5><p>" + d.data + "</p></div>" +
+      "<div><h5>레거시에서 흔한 모습</h5><p>" + d.legacy + "</p></div>" +
+      '<div class="ai"><h5>AI 지원 포인트 · ' + d.mode + "</h5><p>" + d.ai + "</p></div>" +
+      '<div class="human"><h5>사람의 판단 지점</h5><p>' + d.human + "</p></div>" +
+      "</div>";
+    AX.stat("d8-o1", "D" + i);
+    AX.stat("d8-o2", d.f + "<small>개</small>");
+    AX.stat("d8-o3", '<span class="chip ' + MODECHIP[d.mode] + '">' + d.mode + "</span>");
+  }
+  AX.seg("d8-seg", d8Render);
+  d8Render(0);
+})();
+</script>
+</body>
+</html>

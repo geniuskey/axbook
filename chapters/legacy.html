@@ -1,0 +1,645 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="icon" href="../favicon.ico" sizes="any">
+<link rel="icon" href="../favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="../apple-touch-icon.png">
+<title>레거시의 해부 · AXBook</title>
+<meta name="description" content="메일·메신저·개인 PC·공유 폴더·엑셀·PPT·스캔본, 그리고 사람 머릿속에 흩어진 다크 데이터를 해부하고, 정보 인벤토리로 우리 팀 정보의 실제 거주지 지도를 그린다.">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+<link rel="stylesheet" href="../css/style.css">
+<script src="../js/common.js"></script>
+<style>
+  figure.diagram svg.mx { max-width: 680px; margin: 0 auto; }
+  /* 메일 구조화 실습: 단계별 하이라이트 */
+  #ml-mail .x { border-radius: 4px; padding: 0 2px; transition: background .25s, box-shadow .25s; }
+  #ml-mail .x.on.k-dec { background: var(--accent-soft); box-shadow: inset 0 -2px 0 var(--accent); }
+  #ml-mail .x.on.k-num { background: var(--accent-2-soft); box-shadow: inset 0 -2px 0 var(--accent-2); }
+  #ml-mail .x.on.k-due { background: color-mix(in srgb, var(--warn) 18%, transparent); box-shadow: inset 0 -2px 0 var(--warn); }
+  #ml-mail .x.on.k-own { background: color-mix(in srgb, var(--ok) 16%, transparent); box-shadow: inset 0 -2px 0 var(--ok); }
+  #ml-mail .x.on.k-src { background: color-mix(in srgb, var(--blue) 16%, transparent); box-shadow: inset 0 -2px 0 var(--blue); }
+  #ml-mail .msg { border-top: 1px dashed var(--border); padding: 10px 0 4px; }
+  #ml-mail .msg:first-child { border-top: 0; padding-top: 0; }
+  #ml-mail .who { font-family: var(--mono); font-size: 12px; color: var(--text-dim); display: block; margin-bottom: 2px; }
+  #ml-mail .quote { color: var(--text-faint); font-size: 13px; }
+  .ml-legend { display: flex; flex-wrap: wrap; gap: 6px; }
+  #vc-files { font-family: var(--mono); font-size: 12.5px; line-height: 1.7; overflow-wrap: anywhere; }
+  #vc-files .fin { color: var(--warn); font-weight: 600; }
+</style>
+<!-- Cloudflare Web Analytics -->
+<script type='module' src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "3d6151a0abc94ede89285d462527fa80"}'></script>
+<!-- End Cloudflare Web Analytics -->
+</head>
+<body data-chapter="legacy">
+<main class="chapter">
+  <header class="chapter-hero">
+    <div class="eyebrow">Chapter 02</div>
+    <h1>레거시의 해부</h1>
+    <p class="lead">AI가 일하려면 정보를 읽을 수 있어야 한다. 그런데 제조 조직의 정보는 시스템보다 메일함, 공유 폴더의 엑셀, 보고용 PPT, 스캔본, 그리고 사람의 머릿속에 더 많이 산다. 이 장은 그 "레거시"를 해부한다. 정보가 실제로 어디에 사는지, 엑셀이 어떻게 시스템이 되는지, 메일 스레드 속 결정이 어떻게 사라지는지 보고, 우리 팀의 정보 인벤토리를 만드는 방법으로 마무리한다.</p>
+    <ul class="objectives">
+      <li>다크 데이터와 데이터 사일로를 설명하고, 우리 팀 정보의 실제 거주지를 나열할 수 있다.</li>
+      <li>엑셀이 사실상의 시스템이 되는 과정(EUC)과 그 위험(수식 오류, 숨은 매크로, 버전 분기)을 설명할 수 있다.</li>
+      <li>메일 스레드에서 결정·수치·기한·담당·근거를 찾아 구조화된 레코드로 바꿀 수 있다.</li>
+      <li>정보 인벤토리를 설계하고, 정보 가치와 접근성으로 정리 우선순위를 정할 수 있다.</li>
+    </ul>
+  </header>
+
+  <!-- ============================================================ 1 -->
+  <section id="where">
+    <h2>정보는 어디에 사는가</h2>
+    <p>B사(자동차 부품)의 입사 2년 차 품질 엔지니어가 팀장에게 지시를 받는다. "작년에 고객사에서 하우징 크랙 클레임 들어왔을 때 우리가 뭐라고 회신했는지 찾아서, 이번 건에도 같은 논리로 쓸 수 있는지 봐 줘." 그의 하루는 이렇게 흘러간다.</p>
+    <ol>
+      <li>품질 시스템의 클레임 대장을 검색한다. 접수일과 고객사, "종결" 상태만 있고 대응 내용은 없다.</li>
+      <li>공유 드라이브 <code>\\품질\고객\2025\클레임\</code> 폴더를 연다. 하위 폴더 이름이 담당자마다 다르다. <code>0412_크랙</code>, <code>하우징건</code>, <code>고객사 회신(최종)</code>.</li>
+      <li>그 안에 PPT 세 개와 엑셀 두 개가 있다. PPT는 경영진 보고용이라 결론만 있고, 엑셀은 측정 데이터인데 시트 이름이 <code>Sheet1(2)</code>다.</li>
+      <li>당시 담당자는 다른 사업부로 옮겼다. 메신저로 물어보니 "메일로 회신했던 것 같은데, 제 메일함 보관 기간이 지나서…"라는 답이 온다.</li>
+      <li>결국 당시 참조자였던 선배의 메일함에서 회신 메일을 찾는다. 오후 4시다.</li>
+    </ol>
+    <p>이 엔지니어가 게을러서가 아니다. 정보가 <strong>시스템이 아니라 사람과 파일을 따라 흩어져</strong> 있기 때문이다. 이런 정보를 흔히 <span class="term">다크 데이터</span><span class="en">(dark data)</span>라고 부른다. 조직이 업무 중에 만들고 저장하지만, 찾거나 분석하거나 재사용하지 못하는 정보다. 그리고 그 정보가 팀·시스템·개인별로 갇혀 서로 연결되지 않은 상태를 <span class="term">데이터 사일로</span><span class="en">(data silo)</span>라고 한다.</p>
+    <figure class="diagram">
+      <svg class="mx" viewBox="0 0 640 380" role="img" aria-label="정보 거주지를 접근성과 구조화 정도로 배치한 지도">
+        <line x1="60" y1="340" x2="620" y2="340" class="s-axis"/>
+        <line x1="60" y1="340" x2="60" y2="20" class="s-axis"/>
+        <text x="340" y="370" text-anchor="middle" class="t-dim">찾고 꺼내 쓰기 쉬움(접근성) →</text>
+        <text x="22" y="180" text-anchor="middle" class="t-dim" transform="rotate(-90 22 180)">구조화 정도 →</text>
+        <rect x="430" y="30" width="180" height="100" rx="10" class="f-acc-soft" stroke-dasharray="4 4"/>
+        <text x="520" y="50" text-anchor="middle" class="t-acc">AI가 바로 쓰는 영역</text>
+        <circle cx="545" cy="90" r="22" class="f-acc-soft"/><text x="545" y="94" text-anchor="middle" class="t">시스템</text>
+        <text x="545" y="124" text-anchor="middle" class="t-mono">MES·ERP·PLM</text>
+        <circle cx="300" cy="170" r="26" class="f-surface"/><text x="300" y="174" text-anchor="middle" class="t">엑셀</text>
+        <circle cx="400" cy="230" r="28" class="f-surface"/><text x="400" y="228" text-anchor="middle" class="t">공유</text><text x="400" y="244" text-anchor="middle" class="t">폴더</text>
+        <circle cx="330" cy="275" r="22" class="f-surface"/><text x="330" y="279" text-anchor="middle" class="t">PPT</text>
+        <circle cx="210" cy="255" r="30" class="f-acc2-soft"/><text x="210" y="252" text-anchor="middle" class="t">메일</text><text x="210" y="268" text-anchor="middle" class="t-dim">·첨부</text>
+        <circle cx="135" cy="268" r="18" class="f-surface"/><text x="135" y="272" text-anchor="middle" class="t-dim">메신저</text>
+        <circle cx="110" cy="200" r="20" class="f-surface"/><text x="110" y="196" text-anchor="middle" class="t-dim">개인</text><text x="110" y="210" text-anchor="middle" class="t-dim">PC</text>
+        <circle cx="200" cy="322" r="15" class="f-surface"/><text x="225" y="326" class="t-dim">종이·스캔</text>
+        <circle cx="95" cy="318" r="16" style="fill:color-mix(in srgb, var(--bad) 18%, transparent);stroke:var(--bad)"/>
+        <text x="117" y="323" class="t-dim">머릿속</text>
+        <path d="M250 250 C 330 200, 420 150, 500 110" class="s-acc" stroke-dasharray="5 5" marker-end="url(#lg-arr)"/>
+        <defs><marker id="lg-arr" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0 L10 5 L0 10 z" style="fill:var(--accent)"/></marker></defs>
+        <text x="380" y="160" class="t-mono" transform="rotate(-30 380 160)">AX가 옮기려는 방향</text>
+      </svg>
+      <figcaption><b>그림 2-1.</b> 정보의 거주지 지도(개념도). 원의 크기는 많은 조직에서 흔히 보이는 비중의 감을 표현한 것이며 측정값이 아니다. 왼쪽 아래(접근성도 구조도 낮은 곳)에 있는 정보일수록 AI가 쓰기 어렵다. AX의 정보 작업은 정보를 오른쪽 위로 옮기는 일이다.</figcaption>
+    </figure>
+    <p>정보의 거주지마다 성격이 다르다. 아래 표는 각 거주지가 AI 관점에서 어떤 특징을 갖는지 정리한 것이다.</p>
+    <div class="table-wrap"><table>
+      <thead><tr><th>거주지</th><th>주로 사는 정보</th><th>검색</th><th>권한·맥락</th><th>AI 준비도</th></tr></thead>
+      <tbody>
+        <tr><td>시스템(MES·ERP·PLM·QMS)</td><td>트랜잭션, 실적, BOM, 검사 결과</td><td>쉬움</td><td>권한 체계 있음</td><td><span class="chip ok">높음</span></td></tr>
+        <tr><td>공유 폴더 문서</td><td>절차서, 보고서, 회의록, 도면 사본</td><td>파일명 의존</td><td>폴더 권한이 거칠다</td><td><span class="chip warn">중간</span></td></tr>
+        <tr><td>엑셀(EUC)</td><td>집계, 관리 대장, 계산 로직, 측정값</td><td>파일 안은 어려움</td><td>버전·작성자 불명확</td><td><span class="chip warn">중간</span></td></tr>
+        <tr><td>PPT 보고서</td><td>결론, 차트 그림, 경영진 요약</td><td>텍스트만 일부</td><td>원 데이터와 끊김</td><td><span class="chip bad">낮음</span></td></tr>
+        <tr><td>메일·첨부</td><td>결정, 합의, 수치, 고객 요구</td><td>개인 메일함 안</td><td>참조자만 앎</td><td><span class="chip bad">낮음</span></td></tr>
+        <tr><td>메신저</td><td>빠른 확인, 현장 사진, 구두 합의</td><td>거의 불가</td><td>대화방에 갇힘</td><td><span class="chip bad">매우 낮음</span></td></tr>
+        <tr><td>개인 PC</td><td>작업 중 파일, 개인 정리본</td><td>본인만</td><td>퇴사·이동 시 소실</td><td><span class="chip bad">매우 낮음</span></td></tr>
+        <tr><td>종이·스캔</td><td>점검표, 서명 문서, 성적서</td><td>OCR 필요</td><td>보관 위치 의존</td><td><span class="chip bad">매우 낮음</span></td></tr>
+        <tr><td>사람 머릿속</td><td>노하우, 예외 처리, "왜 그렇게 했는지"</td><td>사람을 찾아야 함</td><td>퇴직 시 소실</td><td><span class="chip bad">없음</span></td></tr>
+      </tbody>
+    </table></div>
+  </section>
+
+  <!-- ============================================================ 2 -->
+  <section id="residence-sim">
+    <h2>우리 팀의 정보 거주지 지도 그려 보기</h2>
+    <p>우리 팀의 정보가 어디에 얼마나 사는지 감으로라도 적어 보면 대화가 달라진다. "데이터가 없다"는 막연한 불평이 "결정의 대부분이 메일에 있고, 측정값은 엑셀에 있다"는 구체적인 진단으로 바뀐다. 아래 슬라이더로 각 거주지의 상대 비중을 정해 보자(합계는 자동으로 100%로 맞춘다). 거주지별 AI 준비도와 건당 검색 시간은 <strong>교육용 가정값</strong>이며, 오른쪽 아래 메모에 적어 두었다.</p>
+
+    <div class="sim" id="sim-res">
+      <div class="sim-head"><span class="sim-tag">INTERACTIVE</span><h3>정보 거주지 지도</h3></div>
+      <div class="sim-body">
+        <div class="sim-view"><canvas id="cv-res"></canvas></div>
+        <div class="sim-controls" id="res-controls"></div>
+      </div>
+      <div class="sim-readout">
+        <div class="stat"><span class="k">AI-준비 비율</span><span class="v" id="res-o1">—</span></div>
+        <div class="stat"><span class="k">건당 평균 검색 시간</span><span class="v" id="res-o2">—</span></div>
+        <div class="stat"><span class="k">팀 연간 검색 시간</span><span class="v" id="res-o3">—</span></div>
+        <div class="stat"><span class="k">가장 큰 거주지</span><span class="v" id="res-o4">—</span></div>
+      </div>
+      <div class="sim-note">가정값(예시): AI 준비도 — 시스템 85%, 공유 폴더 45%, 엑셀 40%, PPT 25%, 메일 20%, 메신저 10%, 개인 PC 5%, 종이·스캔 5%, 머릿속 0%. 건당 검색 시간 — 3·12·10·15·18·20·25·30·40분. 연간 시간은 인원 × 하루 검색 횟수 × 평균 검색 시간 × 연 220 근무일로 계산한다. 해볼 것: 메일 비중을 줄이고 시스템 비중을 늘리면 두 지표가 얼마나 움직이는지 보라. 여러분 팀의 실측 검색 시간이 있다면 그것이 훨씬 좋은 근거다.</div>
+    </div>
+    <div class="callout tip">
+      <strong>실측하는 간단한 방법</strong>
+      <p>일주일 동안 팀원 각자가 "무언가를 찾느라 5분 이상 쓴 경우"를 포스트잇이나 간단한 양식에 적는다. 무엇을 찾았는지, 어디서 찾았는지, 몇 분 걸렸는지. 일주일이면 거주지 지도의 근거가 생기고, 가장 자주 찾는 정보가 첫 정리 대상이 된다.</p>
+    </div>
+  </section>
+
+  <!-- ============================================================ 3 -->
+  <section id="euc">
+    <h2>엑셀이 시스템이 될 때: EUC</h2>
+    <p>현업 사용자가 IT 부서를 거치지 않고 직접 만든 계산·관리 도구를 <span class="term">최종 사용자 컴퓨팅</span><span class="en">(EUC, End-User Computing)</span>이라고 한다. 제조 현장에서 대표적인 EUC는 엑셀이다. 엑셀이 시스템이 되는 과정은 대개 비슷하다.</p>
+    <ol class="ladder">
+      <li><b>개인 메모</b>설비 엔지니어가 정비 이력을 자기 PC 엑셀에 적기 시작한다.</li>
+      <li><b>팀 공유</b>편해 보여서 공유 폴더에 올리고 팀원들이 같이 쓴다. 열이 늘어난다.</li>
+      <li><b>로직 추가</b>MTBF 계산 수식, 조건부 서식, VLOOKUP으로 다른 파일 참조가 붙는다.</li>
+      <li><b>자동화</b>누군가 VBA 매크로로 월간 보고서 자동 생성 버튼을 만든다.</li>
+      <li><b>사실상의 시스템</b>월간 설비 회의가 이 파일 없이는 열리지 않는다. 만든 사람은 다른 팀으로 갔고, 매크로를 고칠 줄 아는 사람이 없다.</li>
+    </ol>
+    <p>EUC 자체가 나쁜 것은 아니다. 현업이 빠르게 필요를 해결한 결과이고, 오히려 <strong>어떤 데이터와 로직이 실제로 필요한지 알려 주는 귀중한 요구사항 문서</strong>다. 문제는 이것이 관리되지 않을 때 생기는 위험이다.</p>
+    <div class="cards">
+      <div class="card"><span class="k">FORMULA</span><h4>수식 오류</h4><p>범위를 한 행 덜 잡은 SUM, 절대·상대 참조 실수, 붙여넣기로 덮인 수식. 스프레드시트 오류 연구들은 실무 스프레드시트에서 오류가 드물지 않다고 반복해 보고해 왔다(유럽 스프레드시트 위험 연구회 EuSpRIG 등).</p></div>
+      <div class="card"><span class="k">MACRO</span><h4>숨은 로직</h4><p>판정 기준이 매크로 코드 안에 있다. 숫자 하나가 "왜 이 값인지" 아무도 설명하지 못한다. 보안 정책으로 매크로가 막히면 업무가 멈춘다.</p></div>
+      <div class="card"><span class="k">VERSION</span><h4>버전 분기</h4><p>메일 첨부로 돌고, 각자 저장하고, <code>최종_v3_수정_진짜최종.xlsx</code>가 생긴다. 어떤 파일이 기준인지 모른다.</p></div>
+      <div class="card"><span class="k">LINK</span><h4>끊어진 연결</h4><p>다른 파일을 참조하는 수식은 폴더 경로가 바뀌면 끊긴다. 값은 마지막으로 열었던 시점에 멈춘다.</p></div>
+    </div>
+    <figure class="diagram">
+      <svg class="mx" viewBox="0 0 640 260" role="img" aria-label="하나의 엑셀 파일이 메일 첨부와 개인 저장으로 여러 버전으로 갈라지는 나무">
+        <line x1="40" y1="236" x2="620" y2="236" class="s-axis"/>
+        <text x="40" y="254" class="t-mono">1주</text><text x="230" y="254" class="t-mono">2주</text><text x="420" y="254" class="t-mono">3주</text><text x="590" y="254" class="t-mono">4주</text>
+        <path d="M70 120 L200 120 L340 120 L480 120" class="s-acc"/>
+        <path d="M200 120 C 230 120, 240 60, 280 60 L 420 60" class="s-line"/>
+        <path d="M340 120 C 370 120, 380 180, 420 180 L 520 180" class="s-line"/>
+        <path d="M280 60 C 310 60, 320 30, 360 30" class="s-line"/>
+        <path d="M420 60 C 450 60, 460 90, 520 90" class="s-line" stroke-dasharray="4 4"/>
+        <circle cx="70" cy="120" r="7" class="f-acc"/>
+        <circle cx="200" cy="120" r="6" class="f-elev"/><circle cx="340" cy="120" r="6" class="f-elev"/><circle cx="480" cy="120" r="6" class="f-elev"/>
+        <circle cx="280" cy="60" r="6" class="f-elev"/><circle cx="420" cy="60" r="6" class="f-elev"/><circle cx="360" cy="30" r="6" class="f-elev"/>
+        <circle cx="420" cy="180" r="6" class="f-elev"/><circle cx="520" cy="180" r="6" class="f-elev"/><circle cx="520" cy="90" r="6" class="f-elev"/>
+        <text x="70" y="146" text-anchor="middle" class="t-mono">점검현황.xlsx</text>
+        <text x="480" y="144" text-anchor="middle" class="t-mono">점검현황_최종.xlsx</text>
+        <text x="370" y="22" class="t-mono">점검현황_김수정.xlsx</text>
+        <text x="420" y="50" text-anchor="middle" class="t-mono">점검현황_v2.xlsx</text>
+        <text x="520" y="206" text-anchor="middle" class="t-mono">점검현황_최종(1).xlsx</text>
+        <text x="528" y="94" class="t-mono">..._v2_최종.xlsx</text>
+        <text x="300" y="100" class="t-dim">메일 첨부로 수정</text>
+        <text x="350" y="160" class="t-dim">로컬 저장 후 수정</text>
+        <text x="510" y="132" style="fill:var(--warn)" class="t">"최종"이 세 개</text>
+      </svg>
+      <figcaption><b>그림 2-2.</b> 버전 분기. 공동 편집이 아니라 "복사본을 주고받는" 방식에서는 시간이 지날수록 갈라진 사본이 늘고, 사람마다 다른 파일을 "최종"이라고 믿게 된다. 이 상태의 폴더를 AI 검색에 넣으면 서로 다른 값이 모두 근거로 나온다.</figcaption>
+    </figure>
+    <p>버전 분기가 얼마나 빠르게 늘어나는지는 공유 방식과 참여 인원에 크게 좌우된다. 아래는 단순한 확률 모델로 그 감을 보여 주는 시뮬레이터다.</p>
+
+    <div class="sim" id="sim-ver">
+      <div class="sim-head"><span class="sim-tag">INTERACTIVE</span><h3>파일 버전 혼돈 시뮬레이터</h3></div>
+      <div class="sim-body side">
+        <div class="sim-view"><canvas id="cv-ver"></canvas><div class="sim-html" id="vc-files"></div></div>
+        <div class="sim-controls">
+          <div class="ctrl"><span>공유 방식</span><div class="seg" id="vc-mode"><button data-value="mail" class="on">메일 첨부</button><button data-value="folder">공유 폴더 복사</button><button data-value="coedit">공동 편집</button></div></div>
+          <label class="ctrl"><span>참여 인원 <output id="vc-n-out"></output></span><input type="range" id="vc-n" min="2" max="15" step="1" value="6"></label>
+          <label class="ctrl"><span>기간 <output id="vc-w-out"></output></span><input type="range" id="vc-w" min="2" max="12" step="1" value="8"></label>
+          <label class="ctrl"><span>주당 수정 확률(1인) <output id="vc-p-out"></output></span><input type="range" id="vc-p" min="10" max="100" step="5" value="60"></label>
+          <button class="btn primary" id="vc-run">다시 실행</button>
+        </div>
+      </div>
+      <div class="sim-readout">
+        <div class="stat"><span class="k">생긴 파일(사본) 수</span><span class="v" id="vc-o1">—</span></div>
+        <div class="stat"><span class="k">살아 있는 분기</span><span class="v" id="vc-o2">—</span></div>
+        <div class="stat"><span class="k">"최종"이 붙은 파일</span><span class="v" id="vc-o3">—</span></div>
+        <div class="stat"><span class="k">수동 병합 추정</span><span class="v" id="vc-o4">—</span></div>
+      </div>
+      <div class="sim-note">모델(예시): 매주 각 참여자가 확률 p로 파일을 수정한다. 수정할 때 새 사본이 생길 확률은 메일 첨부 70%, 공유 폴더 복사 30%, 공동 편집 3%이고, 메일 방식에서는 최신본이 아닌 예전 사본을 기준으로 고칠 가능성도 높다. 병합 시간은 살아 있는 분기 하나당 30분으로 가정했다. 해볼 것: 인원을 늘리면 분기가 선형보다 빠르게 늘어난다. 공동 편집으로 바꾸면 거의 한 줄로 수렴한다. 도구를 바꾸는 것이 곧 데이터 품질 대책이다.</div>
+    </div>
+  </section>
+
+  <!-- ============================================================ 4 -->
+  <section id="mail">
+    <h2>메일 스레드 해부: 결정은 어디에 묻히는가</h2>
+    <p>제조 조직에서 가장 중요한 결정의 상당수는 메일로 이루어진다. 출하 보류, 임시 대책, 고객 회신 일정, 특채 승인. 문제는 메일이 <strong>결정을 기록하는 도구가 아니라 대화를 나르는 도구</strong>라는 점이다. 스레드가 길어지면 다음 일이 생긴다.</p>
+    <ul>
+      <li><strong>갈라짐</strong>: 누군가 "전체 회신" 대신 일부에게만 회신하면서 스레드가 둘로 나뉜다. 한쪽에서 바뀐 결정을 다른 쪽은 모른다.</li>
+      <li><strong>참조자 변경</strong>: 중간에 참조가 추가·삭제되면서 뒤늦게 들어온 사람은 앞의 맥락을 모른다.</li>
+      <li><strong>수치의 표류</strong>: 첫 메일의 불량률 1.8%가 세 번째 메일에서 "약 2%"가 되고, 보고서에는 2.1%로 적힌다.</li>
+      <li><strong>모호한 기한</strong>: "다음 주 중", "가급적 빨리", "고객 확인 후". 아무도 날짜를 지키지 않아도 위반이 아니다.</li>
+      <li><strong>근거의 실종</strong>: "첨부 로그 참고"라고 썼지만 첨부는 회신 과정에서 빠졌다.</li>
+    </ul>
+    <p>아래는 A사(글로벌 전자부품 제조사)의 가상 고객 클레임 메일 스레드다. 버튼을 눌러 한 단계씩 결정·수치·기한·담당·근거를 찾아 표시하고, 마지막에 구조화된 레코드로 바꿔 보자.</p>
+
+    <div class="sim" id="sim-mail">
+      <div class="sim-head"><span class="sim-tag">INTERACTIVE</span><h3>메일 스레드 구조화 실습</h3></div>
+      <div class="sim-body">
+        <div class="sim-view">
+          <div class="sim-html">
+            <div class="mock" id="ml-mail" style="margin:0">
+              <div class="mock-head">Subject: RE: RE: FW: [긴급] 고객사 수입검사 납땜 불량 건 (LOT 2603-118 外)<br>참조: 품질보증팀, 생산2팀, 공정기술팀, 영업1팀</div>
+              <div class="mock-body">
+                <div class="msg"><span class="who">3/4(수) 09:12 · 품질보증팀 김 책임</span>
+                  고객사 수입검사에서 커넥터 모듈 납땜 불량 접수되었습니다. 대상은 <span class="x k-num" data-k="num" data-v="대상 LOT: 2603-118, 2603-121, 2603-125 (3개 LOT)">LOT 2603-118, 121, 125 세 개 LOT</span>이고, 고객 측 불량률은 <span class="x k-num" data-k="num" data-v="고객 수입검사 불량률 1.8%">1.8%(수입검사 기준)</span>입니다. 고객사는 <span class="x k-due" data-k="due" data-v="고객 1차 회신: 3/9(월) — 고객 요청">3/9(월)까지 1차 회신</span>을 요청했습니다. 고객 사진은 <span class="x k-src" data-k="src" data-v="고객 불량 사진(첨부1, 3/4 메일)">첨부1</span> 참고 바랍니다.</div>
+                <div class="msg"><span class="who">3/4(수) 14:40 · 공정기술팀 이 선임</span>
+                  해당 기간 리플로 설비 로그를 확인해 보니 피크 온도가 <span class="x k-num" data-k="num" data-v="리플로 피크 온도 실측 241~243℃ (기준 245±3℃)">241~243℃로 기준(245±3℃) 하한 부근</span>이었습니다. 3/1 히터 존 교체 이후로 보입니다. 원인으로 추정되며, 근거는 <span class="x k-src" data-k="src" data-v="리플로 설비 로그 캡처(3/1~3/3), 이 선임 메일 첨부">3/1~3/3 설비 로그 캡처</span>를 붙입니다. 프로파일 재설정은 <span class="x k-own" data-k="own" data-v="리플로 프로파일 재설정: 공정기술팀 이 선임">제가 진행</span>하겠습니다.</div>
+                <div class="msg"><span class="who">3/4(수) 17:05 · 생산2팀 박 파트장</span>
+                  <span class="x k-dec" data-k="dec" data-v="해당 3개 LOT 출하 보류 및 사내 재고 전수 선별">해당 LOT 출하 보류하고 사내 재고는 전수 선별</span>하겠습니다. 선별은 <span class="x k-own" data-k="own" data-v="재고 선별: 생산2팀 2라인 야간조">2라인 야간조</span>가 맡고 <span class="x k-due" data-k="due" data-v="재고 선별 완료: 3/6(금)">금요일(3/6)까지</span> 끝내겠습니다.
+                  <span class="quote"><br>&gt; 고객 측 불량률은 약 2% 수준…</span></div>
+                <div class="msg"><span class="who">3/5(목) 08:30 · 품질보증팀 최 팀장</span>
+                  확인했습니다. <span class="x k-dec" data-k="dec" data-v="고객 회신에 임시 대책(선별·프로파일 재설정) 포함">고객 회신에는 임시 대책까지 포함</span>하고, 회신은 <span class="x k-due" data-k="due" data-v="고객 회신: '다음 주 중' (날짜 불명확 — 고객 요청 3/9와 충돌 가능)" data-amb="1">다음 주 중</span>에 나가도록 합시다. 회신 초안은 <span class="x k-own" data-k="own" data-v="고객 회신 초안: 품질보증팀 김 책임 (명시적 지정 없음 — 추정)" data-amb="1">김 책임이</span> 정리 부탁해요. 근본 원인은 <span class="x k-dec" data-k="dec" data-v="근본 원인 확정은 프로파일 재설정 후 재검증 결과로 판단" >프로파일 재설정 후 결과를 보고</span> 판단합시다.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="sim-controls">
+          <div class="ctrl"><span>단계 <output id="ml-step-out">0 / 6</output></span>
+            <div class="ctrl-row"><button class="btn" id="ml-prev">◀ 이전</button><button class="btn primary" id="ml-next">다음 단계 ▶</button><button class="btn" id="ml-all">모두 보기</button><button class="btn" id="ml-reset">처음부터</button></div>
+          </div>
+          <div class="ctrl"><span>범례</span><div class="ml-legend"><span class="chip acc">결정</span><span class="chip" style="color:var(--accent-2)">수치</span><span class="chip warn">기한</span><span class="chip ok">담당</span><span class="chip" style="color:var(--blue)">근거</span></div></div>
+        </div>
+      </div>
+      <div class="sim-html" id="ml-out"></div>
+      <div class="sim-readout">
+        <div class="stat"><span class="k">추출 항목</span><span class="v" id="ml-o1">0</span></div>
+        <div class="stat"><span class="k">모호한 항목</span><span class="v" id="ml-o2">0</span></div>
+        <div class="stat"><span class="k">수치 불일치</span><span class="v" id="ml-o3">—</span></div>
+        <div class="stat"><span class="k">항목이 흩어진 메일 수</span><span class="v" id="ml-o4">0</span></div>
+      </div>
+      <div class="sim-note">관찰할 것: 결정 셋 중 둘은 서로 다른 사람의 메일에 있다. 고객이 요청한 회신 기한(3/9)과 팀장이 말한 "다음 주 중"은 충돌할 수 있다. 3/4 17:05 메일의 인용문에서는 1.8%가 "약 2%"로 바뀌었다. 이런 것을 사람이 매번 찾아내는 대신, 결정이 생기는 순간 이슈 카드에 기록되도록 바꾸는 것이 AX의 방향이다. AI는 메일에서 이 항목들을 추출하는 일을 잘 돕지만, 모호한 항목을 확정하는 것은 사람의 몫이다.</div>
+    </div>
+    <div class="callout warn">
+      <strong>메일을 AI에 그대로 넣기 전에</strong>
+      <p>메일 스레드를 통째로 AI 요약에 넣으면, 인용된 옛 수치와 최신 수치가 섞이고, 모호한 기한이 확정된 날짜처럼 요약될 수 있다. 메일을 근거로 쓰려면 최소한 (1) 스레드 단위로 묶고, (2) 인용문을 분리하고, (3) 추출한 항목마다 원본 메일 링크를 남겨야 한다. 문서를 지식으로 바꾸는 방법은 <a href="knowledge.html">6장</a>에서 자세히 다룬다.</p>
+    </div>
+  </section>
+
+  <!-- ============================================================ 5 -->
+  <section id="ppt">
+    <h2>보고서 PPT: 그림이 된 데이터</h2>
+    <p>제조 조직의 공식 기록 중 상당수가 보고용 PPT다. 주간 품질 회의, 월간 설비 리뷰, 경영진 보고. 그런데 PPT는 데이터를 <strong>그림으로 바꿔 저장하는 형식</strong>이다.</p>
+    <ul>
+      <li>엑셀 차트를 "그림으로 붙여넣기" 하면 원 숫자가 사라진다. 다음 달에 같은 차트를 다시 그리려면 원본 엑셀을 찾아야 한다.</li>
+      <li>슬라이드마다 표 구조가 다르다. 3월 보고서의 "불량 TOP5" 표와 4월 보고서의 표는 열 순서와 이름이 다르다.</li>
+      <li>결론("원인: 설비 노후")은 있지만 그 결론에 이른 근거와 기각된 가설은 없다. 회의에서 말로만 오갔다.</li>
+      <li>경영진 의견은 슬라이드 메모나 회의 후 메일에 남는다. PPT 파일만 보면 결정이 무엇이었는지 모른다.</li>
+    </ul>
+    <div class="compare">
+      <div class="before"><h4>지금: 보고서 = 산출물</h4><ul>
+        <li>매달 PPT를 새로 만든다. 작성에 하루 이상 걸린다.</li>
+        <li>숫자는 그림 안에 갇혀 재사용이 안 된다.</li>
+        <li>보고서 형식이 작성자마다 다르다.</li>
+      </ul></div>
+      <div class="after"><h4>바꾼 뒤: 데이터 = 산출물, 보고서 = 뷰</h4><ul>
+        <li>원 데이터는 표준 테이블·이슈 카드에 쌓인다.</li>
+        <li>보고서는 그 데이터를 보여 주는 화면(또는 자동 생성 초안)이다.</li>
+        <li>회의 결정은 슬라이드가 아니라 결정 기록으로 남긴다.</li>
+      </ul></div>
+    </div>
+    <p>생성형 AI는 PPT를 읽어 텍스트를 뽑고, 차트 이미지에서 숫자를 어느 정도 복원할 수도 있다. 그러나 이것은 어디까지나 <em>복구 작업</em>이다. 새로 만드는 보고서부터는 데이터를 먼저 남기고 그림은 나중에 만드는 쪽으로 순서를 바꾸는 것이 훨씬 싸다.</p>
+  </section>
+
+  <!-- ============================================================ 6 -->
+  <section id="inventory">
+    <h2>정보 인벤토리 만드는 법</h2>
+    <p><span class="term">정보 인벤토리</span><span class="en">(information inventory)</span>는 우리 팀이 일하면서 만들고 쓰는 정보가 무엇이고 어디에 있는지 적은 목록이다. 거창한 데이터 카탈로그가 아니라 엑셀 한 장으로 시작해도 된다. 핵심은 "어떤 정보가 있나"가 아니라 <strong>"어떤 업무 판단에 어떤 정보가 쓰이나"</strong>에서 출발하는 것이다.</p>
+    <div class="table-wrap"><table>
+      <thead><tr><th>열</th><th>질문</th><th>예시</th></tr></thead>
+      <tbody>
+        <tr><td>정보 항목</td><td>무엇인가?</td><td>고객 클레임 대응 이력</td></tr>
+        <tr><td>쓰이는 업무·판단</td><td>어떤 결정에 쓰이나?</td><td>유사 클레임 회신, 재발 여부 판단</td></tr>
+        <tr><td>거주지</td><td>지금 어디에 있나? (여러 곳이면 모두)</td><td>메일, 공유 폴더 PPT, 클레임 대장(상태만)</td></tr>
+        <tr><td>형식</td><td>어떤 형태인가?</td><td>메일 본문, PPT, 엑셀</td></tr>
+        <tr><td>생성자·관리자</td><td>누가 만들고 누가 책임지나?</td><td>품질보증팀 담당자별 / 관리자 없음</td></tr>
+        <tr><td>생성 빈도·양</td><td>얼마나 자주, 얼마나 생기나?</td><td>월 수 건~수십 건</td></tr>
+        <tr><td>사용자·사용 빈도</td><td>누가 얼마나 자주 찾나?</td><td>품질·영업, 주 수 회</td></tr>
+        <tr><td>민감도</td><td>고객·기술 기밀이 있나?</td><td>고객명, 도면 포함 — 높음</td></tr>
+        <tr><td>문제점</td><td>찾을 때 무엇이 어렵나?</td><td>담당자 이동 시 소실, 형식 제각각</td></tr>
+      </tbody>
+    </table></div>
+    <p>항목이 20~30개쯤 모이면, 각 정보에 대해 두 가지를 점수로 매긴다. <strong>정보 가치</strong>(이 정보가 있으면 판단이 얼마나 빨라지고 정확해지나)와 <strong>현재 접근성</strong>(지금 찾고 꺼내 쓰기 얼마나 쉬운가). 그리고 2×2로 나누면 정리 순서가 보인다.</p>
+    <figure class="diagram">
+      <svg class="mx" viewBox="0 0 600 340" role="img" aria-label="정보 가치와 접근성의 2x2 매트릭스">
+        <rect x="70" y="20" width="250" height="140" class="f-acc-soft"/>
+        <rect x="320" y="20" width="250" height="140" class="f-surface"/>
+        <rect x="70" y="160" width="250" height="140" class="f-surface"/>
+        <rect x="320" y="160" width="250" height="140" class="f-surface"/>
+        <text x="195" y="48" text-anchor="middle" class="t-acc">① 먼저 정리</text>
+        <text x="195" y="72" text-anchor="middle" class="t-dim">가치 높음 · 접근성 낮음</text>
+        <text x="195" y="100" text-anchor="middle" class="t-mono">클레임 대응 이력(메일)</text>
+        <text x="195" y="120" text-anchor="middle" class="t-mono">정비 노하우(머릿속)</text>
+        <text x="195" y="140" text-anchor="middle" class="t-mono">공정 조건 변경 근거</text>
+        <text x="445" y="48" text-anchor="middle" class="t">② 연결·활용</text>
+        <text x="445" y="72" text-anchor="middle" class="t-dim">가치 높음 · 접근성 높음</text>
+        <text x="445" y="100" text-anchor="middle" class="t-mono">MES 생산 실적</text>
+        <text x="445" y="120" text-anchor="middle" class="t-mono">검사 결과 DB</text>
+        <text x="195" y="188" text-anchor="middle" class="t">④ 보관만</text>
+        <text x="195" y="212" text-anchor="middle" class="t-dim">가치 낮음 · 접근성 낮음</text>
+        <text x="195" y="240" text-anchor="middle" class="t-mono">오래된 회의 사진</text>
+        <text x="445" y="188" text-anchor="middle" class="t">③ 정리 대상 아님</text>
+        <text x="445" y="212" text-anchor="middle" class="t-dim">가치 낮음 · 접근성 높음</text>
+        <text x="445" y="240" text-anchor="middle" class="t-mono">사내 공지 게시판</text>
+        <line x1="70" y1="300" x2="580" y2="300" class="s-axis"/>
+        <line x1="70" y1="300" x2="70" y2="14" class="s-axis"/>
+        <text x="320" y="326" text-anchor="middle" class="t-dim">현재 접근성 →</text>
+        <text x="40" y="160" text-anchor="middle" class="t-dim" transform="rotate(-90 40 160)">정보 가치 →</text>
+      </svg>
+      <figcaption><b>그림 2-3.</b> 정보 가치 × 접근성 매트릭스. 왼쪽 위(가치는 높은데 꺼내 쓰기 어려운 정보)가 AX 정보 작업의 첫 대상이다. 오른쪽 위는 이미 쓸 수 있으니 AI 유스케이스와 바로 연결한다.</figcaption>
+    </figure>
+    <ul class="checklist">
+      <li>업무 판단 5~10개를 먼저 적고, 각 판단에 필요한 정보를 거꾸로 찾는다.</li>
+      <li>"사람 머릿속"도 거주지로 적는다. 누구의 머릿속인지까지.</li>
+      <li>같은 정보가 여러 곳에 있으면 모두 적고, 어느 것이 기준(source of truth)인지 표시한다. 없으면 "없음"이라고 적는다.</li>
+      <li>민감도를 처음부터 함께 적는다. 나중에 AI에 넣을 수 있는지 판단하는 근거가 된다(<a href="governance.html">10장</a>).</li>
+      <li>완벽하게 만들려 하지 말고 2주 안에 1차본을 만든 뒤 분기마다 갱신한다.</li>
+    </ul>
+  </section>
+
+  <!-- ============================================================ 7 -->
+  <section id="next">
+    <h2>레거시를 대하는 태도: 버리지 말고 옮겨라</h2>
+    <p>레거시를 해부하다 보면 "전부 갈아엎자"는 결론에 이르기 쉽다. 하지만 레거시 파일과 메일에는 조직이 실제로 일해 온 방식과 판단 근거가 들어 있다. 갈아엎으면 그 지식도 함께 사라진다. 현실적인 순서는 다음과 같다.</p>
+    <ol class="ladder">
+      <li><b>새는 곳부터 막기</b>새로 생기는 정보부터 구조화한다. 다음 클레임부터는 이슈 카드로 받는다(<a href="process.html">3장</a>).</li>
+      <li><b>자주 찾는 것부터 옮기기</b>인벤토리에서 ① 영역의 정보를 골라 과거 자료를 옮긴다. AI가 메일·PPT에서 항목을 뽑는 작업을 돕고, 사람이 검수한다.</li>
+      <li><b>말 맞추기</b>옮기면서 불량명·설비명·부품번호를 공통 코드로 맞춘다(<a href="semantics.html">4장</a>).</li>
+      <li><b>EUC 승격 또는 정리</b>핵심 엑셀은 로직을 문서화하고, 오래 쓸 것은 시스템으로 승격하고, 아닌 것은 소유자와 기한을 붙여 관리한다.</li>
+      <li><b>나머지는 검색 가능하게</b>옮기지 못한 문서는 권한을 지키며 검색 색인에 넣는다(<a href="knowledge.html">6장</a>).</li>
+    </ol>
+    <div class="callout">
+      <strong>EUC를 다루는 실용 규칙</strong>
+      <p>팀에서 "이 파일 없으면 회의 못 한다"는 엑셀을 모두 목록으로 만들고, 파일마다 소유자, 기준 위치(하나), 수식·매크로 설명 한 단락, 검증 방법을 적는다. 이것만으로도 버전 혼돈과 숨은 로직의 위험이 크게 줄고, 나중에 시스템으로 옮길 때 요구사항 문서가 된다.</p>
+    </div>
+  </section>
+
+  <section class="keypoints" id="summary">
+    <h2>핵심 정리</h2>
+    <ol>
+      <li>다크 데이터는 업무 중에 만들고 저장하지만 찾거나 재사용하지 못하는 정보이고, 데이터 사일로는 그 정보가 팀·시스템·개인에 갇혀 연결되지 않은 상태다.</li>
+      <li>제조 조직의 정보는 시스템보다 메일·메신저·개인 PC·공유 폴더·엑셀·PPT·스캔본·사람 머릿속에 더 많이 산다. 거주지마다 AI 준비도가 다르다.</li>
+      <li>엑셀은 개인 메모에서 사실상의 시스템으로 자라며(EUC), 수식 오류·숨은 매크로·버전 분기·끊어진 링크의 위험을 갖는다. 동시에 귀중한 요구사항 문서이기도 하다.</li>
+      <li>메일 스레드는 결정을 기록하지 않고 대화를 나른다. 결정·수치·기한·담당·근거를 추출해 구조화하면 모호한 기한과 수치 표류가 드러난다.</li>
+      <li>보고서 PPT는 데이터를 그림으로 저장한다. 데이터를 먼저 남기고 보고서를 뷰로 만드는 순서로 바꿔야 한다.</li>
+      <li>정보 인벤토리는 업무 판단에서 출발해 거주지·형식·관리자·민감도를 적고, 가치 × 접근성으로 정리 순서를 정한다.</li>
+    </ol>
+  </section>
+
+  <section class="quiz-sec" id="quiz">
+    <h2>확인 퀴즈</h2>
+    <div class="quiz">
+      <div class="quiz-q"><p>1. 다음 중 "다크 데이터"의 예로 가장 적절한 것은?</p><div class="opts">
+        <button class="opt">MES에 실시간으로 쌓이는 설비 가동 실적</button>
+        <button class="opt" data-correct>전임 담당자의 메일함에만 남아 있는 고객 클레임 회신 내용</button>
+        <button class="opt">ERP의 구매 발주 데이터</button>
+        <button class="opt">사내 포털에 게시된 공지사항</button>
+      </div><div class="quiz-exp">다크 데이터는 업무 중에 생성·저장되었지만 찾거나 재사용할 수 없는 정보다. 개인 메일함의 회신은 다른 사람이 찾을 수 없고, 보관 기간이 지나면 사라진다.</div></div>
+
+      <div class="quiz-q"><p>2. EUC(End-User Computing)에 대한 설명으로 옳지 <em>않은</em> 것은?</p><div class="opts">
+        <button class="opt">현업이 IT 부서를 거치지 않고 만든 엑셀 도구 등을 말한다.</button>
+        <button class="opt">숨은 매크로와 수식 오류, 버전 분기의 위험이 있다.</button>
+        <button class="opt" data-correct>위험하므로 발견 즉시 모두 삭제하는 것이 원칙이다.</button>
+        <button class="opt">어떤 데이터와 로직이 실제로 필요한지 알려 주는 요구사항 문서 역할을 한다.</button>
+      </div><div class="quiz-exp">EUC는 현업의 실제 필요를 담고 있다. 삭제하면 업무가 멈추고 지식도 사라진다. 목록화하고 소유자·기준 위치·로직 설명을 붙인 뒤 승격하거나 정리한다.</div></div>
+
+      <div class="quiz-q"><p>3. 메일 스레드에서 "회신은 다음 주 중에 나가도록 합시다"라는 문장을 구조화할 때 가장 적절한 처리는?</p><div class="opts">
+        <button class="opt">"다음 주"의 월요일 날짜로 기한을 확정해 기록한다.</button>
+        <button class="opt">기한이 아니므로 무시한다.</button>
+        <button class="opt" data-correct>기한 항목으로 추출하되 "모호함"으로 표시하고, 담당자에게 날짜 확정을 요청한다.</button>
+        <button class="opt">AI 요약 결과를 그대로 기한으로 쓴다.</button>
+      </div><div class="quiz-exp">모호한 기한을 임의로 확정하면 잘못된 정보가 생긴다. 추출은 하되 모호하다고 표시하고 사람이 확정해야 한다. 고객이 요청한 기한과 충돌하는지도 함께 확인한다.</div></div>
+
+      <div class="quiz-q"><p>4. 공유 방식이 같을 때 참여 인원이 늘어나면 파일 버전 분기는 대체로 어떻게 되는가?</p><div class="opts">
+        <button class="opt">인원과 관계없이 일정하다.</button>
+        <button class="opt">인원이 늘수록 줄어든다.</button>
+        <button class="opt" data-correct>인원이 늘수록 빠르게 늘어나며, 공동 편집으로 바꾸면 크게 줄어든다.</button>
+        <button class="opt">메일 첨부 방식이 공동 편집보다 분기가 적다.</button>
+      </div><div class="quiz-exp">복사본을 주고받는 방식에서는 수정 기회마다 새 사본이 생기고, 예전 사본을 기준으로 고치는 일도 생긴다. 단일 원본을 공동 편집하면 분기가 거의 생기지 않는다.</div></div>
+
+      <div class="quiz-q"><p>5. 보고서 PPT를 AI가 재사용하기 어려운 가장 근본적인 이유는?</p><div class="opts">
+        <button class="opt">PPT 파일 크기가 크기 때문이다.</button>
+        <button class="opt" data-correct>데이터가 그림·자유 배치 텍스트로 저장되어 원 숫자·구조·근거가 끊어지기 때문이다.</button>
+        <button class="opt">AI는 PPT 파일 형식을 전혀 읽지 못하기 때문이다.</button>
+        <button class="opt">PPT에는 한국어가 들어가기 때문이다.</button>
+      </div><div class="quiz-exp">AI는 PPT에서 텍스트를 뽑을 수 있지만, 그림으로 붙인 차트의 원 숫자, 슬라이드마다 다른 표 구조, 회의에서 말로 오간 근거는 복구하기 어렵다. 데이터를 먼저 남기고 보고서를 뷰로 만들어야 한다.</div></div>
+
+      <div class="quiz-q"><p>6. 정보 인벤토리에서 가장 먼저 정리할 대상은?</p><div class="opts">
+        <button class="opt">가치 낮음 · 접근성 높음</button>
+        <button class="opt">가치 높음 · 접근성 높음</button>
+        <button class="opt" data-correct>가치 높음 · 접근성 낮음</button>
+        <button class="opt">가치 낮음 · 접근성 낮음</button>
+      </div><div class="quiz-exp">가치는 높은데 꺼내 쓰기 어려운 정보(메일 속 대응 이력, 머릿속 정비 노하우 등)를 옮기면 효과가 가장 크다. 가치·접근성이 모두 높은 정보는 이미 쓸 수 있으므로 바로 유스케이스와 연결한다.</div></div>
+    </div>
+  </section>
+</main>
+<script>
+(function () {
+  "use strict";
+  function hexA(c, a) {
+    c = (c || "").trim();
+    if (c[0] === "#") {
+      var h = c.slice(1);
+      if (h.length === 3) h = h.split("").map(function (x) { return x + x; }).join("");
+      var n = parseInt(h.slice(0, 6), 16);
+      return "rgba(" + ((n >> 16) & 255) + "," + ((n >> 8) & 255) + "," + (n & 255) + "," + a + ")";
+    }
+    var m = c.match(/[\d.]+/g);
+    return m ? "rgba(" + m[0] + "," + m[1] + "," + m[2] + "," + a + ")" : c;
+  }
+  function font(px, mono, bold) { return (bold ? "600 " : "") + px + "px " + getComputedStyle(document.body).getPropertyValue(mono ? "--mono" : "--font"); }
+  function mulberry32(a) { return function () { a |= 0; a = (a + 0x6D2B79F5) | 0; var t = Math.imul(a ^ (a >>> 15), 1 | a); t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t; return ((t ^ (t >>> 14)) >>> 0) / 4294967296; }; }
+
+  /* ================================================ 1) 정보 거주지 지도 */
+  // a: 접근성, s: 구조화(그림 위치), r: AI 준비도, m: 건당 검색 시간(분), w: 기본 비중
+  var RES = [
+    { id: "sys", name: "시스템", a: 0.88, s: 0.9, r: 0.85, m: 3, w: 15 },
+    { id: "fold", name: "공유 폴더", a: 0.62, s: 0.38, r: 0.45, m: 12, w: 15 },
+    { id: "xls", name: "엑셀", a: 0.45, s: 0.6, r: 0.40, m: 10, w: 15 },
+    { id: "ppt", name: "PPT", a: 0.5, s: 0.22, r: 0.25, m: 15, w: 10 },
+    { id: "mail", name: "메일", a: 0.3, s: 0.28, r: 0.20, m: 18, w: 20 },
+    { id: "msg", name: "메신저", a: 0.18, s: 0.12, r: 0.10, m: 20, w: 5 },
+    { id: "pc", name: "개인 PC", a: 0.1, s: 0.42, r: 0.05, m: 25, w: 8 },
+    { id: "paper", name: "종이·스캔", a: 0.24, s: 0.06, r: 0.05, m: 30, w: 4 },
+    { id: "head", name: "머릿속", a: 0.05, s: 0.02, r: 0.0, m: 40, w: 8 },
+  ];
+  var resBox = document.getElementById("res-controls");
+  var resHtml = RES.map(function (d) {
+    return '<label class="ctrl"><span>' + d.name + ' <output id="res-' + d.id + '-out"></output></span><input type="range" id="res-' + d.id + '" min="0" max="40" step="1" value="' + d.w + '"></label>';
+  }).join("");
+  resHtml += '<label class="ctrl"><span>팀 인원 <output id="res-n-out"></output></span><input type="range" id="res-n" min="3" max="60" step="1" value="15"></label>';
+  resHtml += '<label class="ctrl"><span>1인 하루 검색 횟수 <output id="res-k-out"></output></span><input type="range" id="res-k" min="1" max="15" step="1" value="4"></label>';
+  resBox.innerHTML = resHtml;
+  var resShares = function () {
+    var tot = 0; RES.forEach(function (d) { tot += d.get(); });
+    return RES.map(function (d) { return tot > 0 ? d.get() / tot : 1 / RES.length; });
+  };
+  function resPct(i) { return function () { return (resShares()[i] * 100).toFixed(0) + "%"; }; }
+  function resUpd() { RES.forEach(function (d, i) { var o = document.getElementById("res-" + d.id + "-out"); if (o) o.textContent = resPct(i)(); }); if (cvRes) cvRes.redraw(); }
+  RES.forEach(function (d) { d.get = AX.range("res-" + d.id, null, resUpd); });
+  var resN = AX.range("res-n", function (v) { return v + "명"; }, resUpd);
+  var resK = AX.range("res-k", function (v) { return v + "회"; }, resUpd);
+  var cvRes = null;
+  cvRes = AX.canvas("#cv-res", function (ctx, w, h) {
+    var P = AX.palette(), sh = resShares();
+    var pad = { l: 40, r: 14, t: 16, b: 34 };
+    var bw = w - pad.l - pad.r, bh = h - pad.t - pad.b;
+    var X = function (a) { return pad.l + a * bw; }, Y = function (s) { return pad.t + (1 - s) * bh; };
+    // AI 영역
+    ctx.fillStyle = hexA(P.accent, 0.08); ctx.fillRect(X(0.66), Y(1), X(1) - X(0.66), Y(0.62) - Y(1));
+    ctx.strokeStyle = hexA(P.accent, 0.5); ctx.setLineDash([4, 4]); ctx.strokeRect(X(0.66), Y(1), X(1) - X(0.66), Y(0.62) - Y(1)); ctx.setLineDash([]);
+    ctx.fillStyle = P.accent; ctx.font = font(11, false); ctx.textAlign = "right"; ctx.textBaseline = "top";
+    ctx.fillText("AI가 바로 쓰는 영역", X(1) - 4, Y(1) + 4);
+    // 축
+    ctx.strokeStyle = P.axis; ctx.beginPath(); ctx.moveTo(pad.l, pad.t); ctx.lineTo(pad.l, pad.t + bh); ctx.lineTo(pad.l + bw, pad.t + bh); ctx.stroke();
+    ctx.fillStyle = P.dim; ctx.font = font(12, false); ctx.textAlign = "center"; ctx.textBaseline = "top";
+    ctx.fillText("접근성 →", pad.l + bw / 2, pad.t + bh + 10);
+    ctx.save(); ctx.translate(14, pad.t + bh / 2); ctx.rotate(-Math.PI / 2); ctx.textBaseline = "middle"; ctx.fillText("구조화 정도 →", 0, 0); ctx.restore();
+    var narrow = w < 480, maxR = Math.min(bw, bh) * (narrow ? 0.13 : 0.18);
+    RES.forEach(function (d, i) {
+      var r = Math.max(3, maxR * Math.sqrt(sh[i] / 0.4));
+      var col = d.r >= 0.6 ? P.accent : d.r >= 0.3 ? P.warn : P.bad;
+      ctx.beginPath(); ctx.arc(X(d.a), Y(d.s), r, 0, Math.PI * 2);
+      ctx.fillStyle = hexA(col, 0.22); ctx.fill(); ctx.strokeStyle = col; ctx.lineWidth = 1.5; ctx.stroke();
+      ctx.fillStyle = P.text; ctx.font = font(narrow ? 10.5 : 11.5, false, true); ctx.textAlign = "center"; ctx.textBaseline = "middle";
+      var ly = Y(d.s) - r - 8; if (ly < pad.t + 6) ly = Y(d.s) + r + 8;
+      ctx.fillText(d.name + " " + Math.round(sh[i] * 100) + "%", X(d.a), ly);
+    });
+    var ready = 0, mins = 0, big = 0;
+    RES.forEach(function (d, i) { ready += sh[i] * d.r; mins += sh[i] * d.m; if (sh[i] > sh[big]) big = i; });
+    var yearH = resN() * resK() * mins * 220 / 60;
+    AX.stat("res-o1", (ready * 100).toFixed(0) + "<small>%</small>");
+    AX.stat("res-o2", mins.toFixed(1) + "<small>분</small>");
+    AX.stat("res-o3", Math.round(yearH).toLocaleString() + "<small>시간/년</small>");
+    AX.stat("res-o4", RES[big].name + "<small>" + Math.round(sh[big] * 100) + "%</small>");
+  }, { aspect: 0.62, minHeight: 320, maxHeight: 420 });
+  resUpd();
+
+  /* ================================================ 2) 버전 혼돈 */
+  var VC = { seed: 7, data: null };
+  var vcMode = AX.seg("vc-mode", vcRun);
+  var vcN = AX.range("vc-n", function (v) { return v + "명"; }, vcRun);
+  var vcW = AX.range("vc-w", function (v) { return v + "주"; }, vcRun);
+  var vcP = AX.range("vc-p", function (v) { return v + "%"; }, vcRun);
+  document.getElementById("vc-run").addEventListener("click", function () { VC.seed = (VC.seed * 9301 + 49297) % 233280 + 1; vcRun(); });
+  var MODE = { mail: { copy: 0.7, stale: 0.5 }, folder: { copy: 0.3, stale: 0.2 }, coedit: { copy: 0.03, stale: 0.0 } };
+  var PEOPLE = ["김", "이", "박", "최", "정", "강", "조", "윤", "장", "임", "한", "오", "서", "신", "권"];
+  function vcSim() {
+    var rnd = mulberry32(VC.seed), m = MODE[vcMode()], N = vcN(), W = vcW(), p = vcP() / 100;
+    var nodes = [{ id: 0, parent: -1, week: 0, lane: 0, name: "점검현황.xlsx" }];
+    var laneTip = [0];
+    var tips = { 0: true };
+    var steps = 4; // 주당 하위 시점
+    for (var wk = 1; wk <= W; wk++) {
+      for (var person = 0; person < N; person++) {
+        if (rnd() >= p) continue;
+        var t = wk - 1 + (person + 1) / (N + 1);
+        // 기준 사본 선택: 최신 분기 또는 예전 사본
+        var base;
+        var tipIds = Object.keys(tips).map(Number);
+        if (rnd() < m.stale && nodes.length > 1) base = nodes[Math.floor(rnd() * nodes.length)];
+        else base = nodes[tipIds[Math.floor(rnd() * tipIds.length)]];
+        if (rnd() < m.copy) {
+          var lane = laneTip[base.lane] === base.id ? base.lane : laneTip.length;
+          if (lane === laneTip.length) laneTip.push(-1);
+          var late = wk / W;
+          var suffix = rnd() < late * 0.8 ? (rnd() < 0.5 ? "_최종" : "_최종(" + (1 + Math.floor(rnd() * 3)) + ")") : (rnd() < 0.5 ? "_v" + (2 + Math.floor(rnd() * 4)) : "_" + PEOPLE[person] + "수정");
+          var nm = base.name.replace(/\.xlsx$/, "") + suffix + ".xlsx";
+          if (nm.length > 40) nm = "점검현황" + suffix + "_" + PEOPLE[person] + ".xlsx";
+          var node = { id: nodes.length, parent: base.id, week: t, lane: lane, name: nm };
+          nodes.push(node);
+          delete tips[base.id]; if (laneTip[base.lane] === base.id && lane !== base.lane) tips[base.id] = true;
+          tips[node.id] = true;
+          laneTip[lane] = node.id;
+        }
+      }
+    }
+    // 같은 분기에서 이어진 경우 부모는 tip이 아님
+    var hasChild = {}; nodes.forEach(function (n) { if (n.parent >= 0) hasChild[n.parent] = true; });
+    var leaves = nodes.filter(function (n) { return !hasChild[n.id]; });
+    return { nodes: nodes, lanes: laneTip.length, leaves: leaves, W: W };
+  }
+  function vcRun() { VC.data = vcSim(); if (cvVer) cvVer.redraw(); }
+  var cvVer = null;
+  vcRun();
+  cvVer = AX.canvas("#cv-ver", function (ctx, w, h) {
+    var P = AX.palette(), D = VC.data || vcSim();
+    var pad = { l: 16, r: 16, t: 14, b: 26 };
+    var bw = w - pad.l - pad.r, bh = h - pad.t - pad.b;
+    var L = Math.max(D.lanes, 4);
+    var X = function (t) { return pad.l + (t / D.W) * bw; };
+    var Y = function (lane) { return pad.t + (lane + 0.5) * bh / L; };
+    ctx.strokeStyle = P.grid; ctx.lineWidth = 1; ctx.fillStyle = P.dim; ctx.font = font(10.5, true); ctx.textAlign = "center"; ctx.textBaseline = "top";
+    for (var k = 0; k <= D.W; k++) { var x = X(k); ctx.beginPath(); ctx.moveTo(x, pad.t); ctx.lineTo(x, pad.t + bh); ctx.stroke(); if (k > 0 && (D.W <= 8 || k % 2 === 0)) ctx.fillText(k + "주", Math.min(x, w - 18), pad.t + bh + 6); }
+    var byId = D.nodes;
+    var leafSet = {}; D.leaves.forEach(function (n) { leafSet[n.id] = true; });
+    D.nodes.forEach(function (n) {
+      if (n.parent < 0) return;
+      var p = byId[n.parent];
+      ctx.strokeStyle = n.lane === 0 ? P.accent : hexA(P.dim, 0.8); ctx.lineWidth = n.lane === 0 ? 2.2 : 1.3;
+      ctx.beginPath(); ctx.moveTo(X(p.week), Y(p.lane));
+      var mx = (X(p.week) + X(n.week)) / 2;
+      ctx.bezierCurveTo(mx, Y(p.lane), mx, Y(n.lane), X(n.week), Y(n.lane)); ctx.stroke();
+    });
+    var r = Math.max(2.5, Math.min(5, bh / L / 3));
+    D.nodes.forEach(function (n) {
+      var fin = /최종/.test(n.name);
+      ctx.beginPath(); ctx.arc(X(n.week), Y(n.lane), n.id === 0 ? r + 1.5 : r, 0, Math.PI * 2);
+      ctx.fillStyle = n.id === 0 ? P.accent : fin ? P.warn : P.bg; ctx.fill();
+      ctx.strokeStyle = leafSet[n.id] ? P.text : P.dim; ctx.lineWidth = leafSet[n.id] ? 1.6 : 1; ctx.stroke();
+    });
+    ctx.font = font(11, false); ctx.fillStyle = P.faint; ctx.textAlign = "left"; ctx.textBaseline = "top";
+    ctx.fillText("● 노란 점 = 이름에 '최종'이 붙은 사본", pad.l, 2);
+    var finals = D.nodes.filter(function (n) { return /최종/.test(n.name); });
+    AX.stat("vc-o1", D.nodes.length + "<small>개</small>");
+    AX.stat("vc-o2", D.leaves.length + "<small>개</small>");
+    AX.stat("vc-o3", finals.length + "<small>개</small>");
+    AX.stat("vc-o4", (Math.max(0, D.leaves.length - 1) * 0.5).toFixed(1) + "<small>시간</small>");
+    var last = D.nodes.slice(-6).reverse();
+    document.getElementById("vc-files").innerHTML = "<b>공유 폴더 최근 파일</b><br>" + last.map(function (n) {
+      var nm = AX.esc(n.name); return /최종/.test(n.name) ? '<span class="fin">' + nm + "</span>" : nm;
+    }).join("<br>");
+  }, { aspect: 0.55, minHeight: 220, maxHeight: 340 });
+
+  /* ================================================ 3) 메일 스레드 구조화 */
+  var ML_STEPS = [
+    { k: null, title: "원문" },
+    { k: "dec", title: "결정" },
+    { k: "num", title: "수치" },
+    { k: "due", title: "기한" },
+    { k: "own", title: "담당" },
+    { k: "src", title: "근거" },
+    { k: "rec", title: "레코드" },
+  ];
+  var KNAME = { dec: "결정", num: "수치", due: "기한", own: "담당", src: "근거" };
+  var KCHIP = { dec: "acc", num: "", due: "warn", own: "ok", src: "" };
+  var mlStep = 0;
+  var spans = Array.prototype.slice.call(document.querySelectorAll("#ml-mail .x"));
+  function mlRender() {
+    var active = {};
+    for (var i = 1; i <= Math.min(mlStep, 5); i++) active[ML_STEPS[i].k] = true;
+    var items = [];
+    spans.forEach(function (s) {
+      var on = !!active[s.dataset.k];
+      s.classList.toggle("on", on);
+      if (on) {
+        var msg = s.closest(".msg"), who = msg ? msg.querySelector(".who").textContent : "";
+        items.push({ k: s.dataset.k, v: s.dataset.v, who: who, amb: s.dataset.amb === "1" });
+      }
+    });
+    document.getElementById("ml-step-out").textContent = mlStep + " / 6 · " + ML_STEPS[mlStep].title;
+    var order = ["dec", "num", "due", "own", "src"];
+    items.sort(function (a, b) { return order.indexOf(a.k) - order.indexOf(b.k); });
+    var out = document.getElementById("ml-out");
+    if (mlStep === 0) {
+      out.innerHTML = "<p style=\"margin:0;color:var(--text-dim)\">\"다음 단계\"를 누르면 메일에서 결정부터 차례로 찾아 표시한다.</p>";
+    } else if (mlStep < 6) {
+      out.innerHTML = "<p style=\"margin:0 0 6px\"><b>지금까지 찾은 항목</b> — " + items.map(function (it) {
+        return '<span class="chip ' + KCHIP[it.k] + '">' + KNAME[it.k] + "</span>";
+      }).join(" ") + "</p><p style=\"margin:0;color:var(--text-dim);font-size:13.5px\">" + ML_HINT[mlStep] + "</p>";
+    } else {
+      var rows = items.map(function (it) {
+        return "<tr><td>" + '<span class="chip ' + KCHIP[it.k] + '">' + KNAME[it.k] + "</span></td><td>" + AX.esc(it.v) + "</td><td style=\"font-size:12.5px;color:var(--text-dim)\">" + AX.esc(it.who.split("·")[1] || it.who) + "<br>" + AX.esc(it.who.split("·")[0]) + "</td><td>" + (it.amb ? '<span class="chip bad">모호 · 확정 필요</span>' : '<span class="chip ok">명확</span>') + "</td></tr>";
+      }).join("");
+      out.innerHTML = "<p style=\"margin:0 0 8px\"><b>구조화된 이슈 레코드</b> · 이슈 ID: CLM-2603-014(가상) · 고객: 고객사 X · 품목: 커넥터 모듈</p>" +
+        '<div class="table-wrap" style="margin:0"><table><thead><tr><th>유형</th><th>내용</th><th>출처</th><th>상태</th></tr></thead><tbody>' + rows + "</tbody></table></div>";
+    }
+    var amb = items.filter(function (it) { return it.amb; }).length;
+    AX.stat("ml-o1", String(items.length));
+    AX.stat("ml-o2", amb ? '<span style="color:var(--bad)">' + amb + "</span>" : "0");
+    var whoSet = {}; items.forEach(function (it) { whoSet[it.who] = 1; });
+    AX.stat("ml-o4", Object.keys(whoSet).length + "<small>/ 4통</small>");
+    AX.stat("ml-o3", mlStep >= 2 ? '<span style="color:var(--warn)">1.8% ↔ 약 2%</span>' : "—");
+    document.getElementById("ml-prev").disabled = mlStep === 0;
+    document.getElementById("ml-next").disabled = mlStep === 6;
+  }
+  var ML_HINT = ["",
+    "결정은 세 개다. 두 사람(생산 파트장, 품질 팀장)의 메일에 나뉘어 있고, 어느 것도 \"결정\"이라고 표시되어 있지 않다.",
+    "수치는 LOT 번호, 불량률, 온도다. 인용문 속 \"약 2%\"는 원래 수치(1.8%)와 다르다. 어느 쪽이 보고서에 들어갈까?",
+    "기한이 셋이다. 고객이 요청한 3/9(월)과 팀장이 말한 \"다음 주 중\"은 같은 날일 수도, 아닐 수도 있다.",
+    "담당자 중 한 명(회신 초안)은 이름만 불렸을 뿐 명시적으로 수락하지 않았다.",
+    "근거는 첨부 두 개다. 회신이 이어지며 첨부가 빠지면 근거도 사라진다.",
+  ];
+  document.getElementById("ml-next").addEventListener("click", function () { mlStep = Math.min(6, mlStep + 1); mlRender(); });
+  document.getElementById("ml-prev").addEventListener("click", function () { mlStep = Math.max(0, mlStep - 1); mlRender(); });
+  document.getElementById("ml-all").addEventListener("click", function () { mlStep = 6; mlRender(); });
+  document.getElementById("ml-reset").addEventListener("click", function () { mlStep = 0; mlRender(); });
+  mlRender();
+})();
+</script>
+</body>
+</html>
