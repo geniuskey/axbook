@@ -19,7 +19,7 @@
 <meta property="og:image:height" content="630">
 <meta property="og:locale" content="ko_KR">
 <meta name="twitter:card" content="summary_large_image">
-<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"TechArticle","headline":"현장 AI: 설비·공정·품질","name":"현장 AI: 설비·공정·품질 · AXBook","url":"https://axbook.euiyun.com/chapters/shopfloor.html","mainEntityOfPage":"https://axbook.euiyun.com/chapters/shopfloor.html","inLanguage":"ko","isAccessibleForFree":true,"learningResourceType":"interactive textbook chapter","position":9,"image":"https://axbook.euiyun.com/og.png","dateModified":"2026-10-07","isPartOf":{"@type":"Book","@id":"https://axbook.euiyun.com/#book","name":"AXBook — 제조 현장을 위한 인터랙티브 AI 전환 교과서","url":"https://axbook.euiyun.com/"},"publisher":{"@type":"Organization","name":"AXBook","url":"https://axbook.euiyun.com/"},"description":"PLC·SCADA·MES 데이터와 OT/IT 융합, SPC 관리도와 Cpk, 불균형 데이터의 이상 탐지와 오탐·미탐 비용, 예지 보전과 P-F 곡선, 비전 검사·가상 계측·디지털 트윈, 그리고 현장 AI가 실패하는 이유를 인터랙티브로 익힌다."},{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"AXBook","item":"https://axbook.euiyun.com/"},{"@type":"ListItem","position":2,"name":"09 현장 AI: 설비·공정·품질","item":"https://axbook.euiyun.com/chapters/shopfloor.html"}]}]}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"TechArticle","headline":"현장 AI: 설비·공정·품질","name":"현장 AI: 설비·공정·품질 · AXBook","url":"https://axbook.euiyun.com/chapters/shopfloor.html","mainEntityOfPage":"https://axbook.euiyun.com/chapters/shopfloor.html","inLanguage":"ko","isAccessibleForFree":true,"learningResourceType":"interactive textbook chapter","position":10,"image":"https://axbook.euiyun.com/og.png","dateModified":"2026-10-07","isPartOf":{"@type":"Book","@id":"https://axbook.euiyun.com/#book","name":"AXBook — 제조 현장을 위한 인터랙티브 AI 전환 교과서","url":"https://axbook.euiyun.com/"},"publisher":{"@type":"Organization","name":"AXBook","url":"https://axbook.euiyun.com/"},"description":"PLC·SCADA·MES 데이터와 OT/IT 융합, SPC 관리도와 Cpk, 불균형 데이터의 이상 탐지와 오탐·미탐 비용, 예지 보전과 P-F 곡선, 비전 검사·가상 계측·디지털 트윈, 그리고 현장 AI가 실패하는 이유를 인터랙티브로 익힌다."},{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"AXBook","item":"https://axbook.euiyun.com/"},{"@type":"ListItem","position":2,"name":"10 현장 AI: 설비·공정·품질","item":"https://axbook.euiyun.com/chapters/shopfloor.html"}]}]}</script>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
 <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
 <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
@@ -39,7 +39,7 @@
 <body data-chapter="shopfloor">
 <main class="chapter">
   <header class="chapter-hero">
-    <div class="eyebrow">Chapter 09</div>
+    <div class="eyebrow">Chapter 10</div>
     <h1>현장 AI: 설비·공정·품질</h1>
     <p class="lead">사무실의 AI가 문서와 메일을 다룬다면, 현장의 AI는 센서 신호·관리도·검사 이미지를 다룬다. 데이터는 더 많고 빠르지만, 틀렸을 때의 대가도 라인 정지와 불량 유출로 곧바로 나타난다. 이 장에서는 현장 데이터가 어디서 오는지부터 SPC와 이상 탐지, 예지 보전, 비전 검사까지 "현장에서 실제로 돌아가는 AI"의 조건을 살펴본다.</p>
     <ul class="objectives">
@@ -82,7 +82,7 @@
         <text x="300" y="294" text-anchor="middle" class="t" style="font-weight:700">Level 0 · 센서 · 액추에이터 · 카메라</text>
         <text x="300" y="311" text-anchor="middle" class="t-dim">진동 · 온도 · 압력 · 전류 · 이미지 (kHz 파형 포함)</text>
       </svg>
-      <figcaption><b>그림 9-1.</b> 공장 데이터의 계층(<a href="semantics.html">4장</a>의 ISA-95 계층). 아래로 갈수록 데이터는 빠르고 많아지며 의미(LOT, 제품, 작업자)와는 멀어진다. 현장 AI의 첫 과제는 아래층의 신호를 위층의 맥락(어느 LOT, 어느 레시피)과 시간으로 정확히 잇는 것이다.</figcaption>
+      <figcaption><b>그림 10-1.</b> 공장 데이터의 계층(<a href="semantics.html">4장</a>의 ISA-95 계층). 아래로 갈수록 데이터는 빠르고 많아지며 의미(LOT, 제품, 작업자)와는 멀어진다. 현장 AI의 첫 과제는 아래층의 신호를 위층의 맥락(어느 LOT, 어느 레시피)과 시간으로 정확히 잇는 것이다.</figcaption>
     </figure>
     <div class="table-wrap"><table>
       <thead><tr><th>데이터 원천</th><th>예</th><th>주기·형식</th><th>현장에서 흔한 문제</th></tr></thead>
@@ -228,7 +228,7 @@
         <path d="M300 240 H530" class="s-line" stroke-dasharray="4 3"/>
         <text x="294" y="244" text-anchor="end" class="t-dim">진동 감지 시점의 RUL</text>
       </svg>
-      <figcaption><b>그림 9-2.</b> P-F 곡선. 같은 열화라도 진동처럼 일찍 잡히는 신호를 쓰면 대응 시간이 길어지고, 성능 저하나 불량 증가로 알게 되면 이미 늦다. 예측의 가치는 "얼마나 일찍"과 "그 시간 안에 부품·인력을 준비할 수 있는가"의 함수다.</figcaption>
+      <figcaption><b>그림 10-2.</b> P-F 곡선. 같은 열화라도 진동처럼 일찍 잡히는 신호를 쓰면 대응 시간이 길어지고, 성능 저하나 불량 증가로 알게 되면 이미 늦다. 예측의 가치는 "얼마나 일찍"과 "그 시간 안에 부품·인력을 준비할 수 있는가"의 함수다.</figcaption>
     </figure>
     <p><span class="term">잔여 수명</span><span class="en">(RUL, Remaining Useful Life)</span>은 지금 시점부터 고장까지 남은 시간의 추정치다. 실무에서 중요한 것은 RUL의 점 추정보다 <strong>불확실성 구간</strong>이다. "12일 남음"보다 "90% 확률로 7~20일"이 정비 계획에 쓸모 있다. 그리고 그 경보 리드타임이 부품 조달·정비 인력 확보·생산계획 조정에 필요한 시간보다 짧으면, 예측이 맞아도 고장을 막지 못한다.</p>
 
@@ -290,7 +290,7 @@
         <text x="305" y="175" text-anchor="middle" class="t">라벨 축적 · 재학습 · 성능 모니터링</text>
         <text x="305" y="220" text-anchor="middle" class="t-dim">원본 이미지 · 판정 · 모델 버전 · 레시피 버전을 함께 저장</text>
       </svg>
-      <figcaption><b>그림 9-3.</b> 비전 검사의 운영 루프. 모델이 확신하지 못하는 "애매" 구간을 사람에게 보내고, 그 판정을 라벨로 되돌려 재학습한다. 원본 이미지를 지우면 이 루프가 끊긴다.</figcaption>
+      <figcaption><b>그림 10-3.</b> 비전 검사의 운영 루프. 모델이 확신하지 못하는 "애매" 구간을 사람에게 보내고, 그 판정을 라벨로 되돌려 재학습한다. 원본 이미지를 지우면 이 루프가 끊긴다.</figcaption>
     </figure>
     <h3>가상 계측, 레시피 최적화, 디지털 트윈</h3>
     <p><span class="term">가상 계측</span><span class="en">(VM, Virtual Metrology)</span>은 설비 센서 데이터로 계측값(막두께, 치수 등)을 예측하는 기술이다. 표본으로만 재던 특성을 모든 웨이퍼·제품에 대해 추정할 수 있게 되므로, 표본 사이에서 생긴 이상을 일찍 잡을 수 있다. <span class="term">레시피 최적화</span>는 공정 조건과 결과의 관계를 학습해 목표를 만족하는 조건을 찾는 일로, 실험계획법(DOE)과 베이지안 최적화 같은 기법이 쓰인다. <span class="term">디지털 트윈</span><span class="en">(digital twin)</span>은 실제 설비·공정과 데이터로 연결되어 상태를 반영하는 가상 모델이다. 제조용 디지털 트윈의 참조 틀로 ISO 23247 시리즈가 있다.</p>
@@ -310,7 +310,7 @@
     <h2>현장에 생성형 AI가 들어가는 자리</h2>
     <p>현장 AI라고 하면 센서·이미지 모델만 떠올리기 쉽지만, 생성형 AI가 즉시 쓸모를 보이는 곳은 오히려 신호와 사람 사이의 <strong>설명·기록·인계</strong>다. 예측 모델이 "이상 점수 0.92"를 내놓아도 현장 엔지니어에게 필요한 것은 "그래서 무엇을 봐야 하나"다.</p>
     <div class="cards">
-      <div class="card"><span class="k">ALARM</span><h4>알람 해설과 트리아지</h4><p>알람 코드, 매뉴얼, 최근 센서 추이, 과거 정비 이력을 묶어 원인 후보와 근거를 정리한다(<a href="agents.html">8장</a>의 트레이스).</p></div>
+      <div class="card"><span class="k">ALARM</span><h4>알람 해설과 트리아지</h4><p>알람 코드, 매뉴얼, 최근 센서 추이, 과거 정비 이력을 묶어 원인 후보와 근거를 정리한다(<a href="agents.html">9장</a>의 트레이스).</p></div>
       <div class="card"><span class="k">OCAP</span><h4>SPC 이탈 시 조치 안내</h4><p>관리도 규칙 위반이 생기면 해당 특성의 OCAP와 과거 유사 이탈 기록을 찾아 첫 조치를 안내한다.</p></div>
       <div class="card"><span class="k">LOG</span><h4>작업일지 구조화</h4><p>"이상 있어 조치함" 같은 자유 텍스트를 고장 부위·현상·원인·조치 코드로 바꿔 예지 보전의 라벨로 만든다.</p></div>
       <div class="card"><span class="k">SHIFT</span><h4>교대 인수인계</h4><p>MES 이벤트와 알람, 작업일지를 요약해 다음 교대에 넘길 메모 초안을 만든다.</p></div>

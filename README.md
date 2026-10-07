@@ -13,30 +13,30 @@ python3 -m http.server 8000   # → http://localhost:8000
 `index.html`을 브라우저로 바로 열어도 동작합니다. KaTeX와 폰트는 CDN에서 불러옵니다.
 
 ## 구성
-| 장 | 파일 | 주제 |
-|---|---|---|
-| 01 | chapters/why.html | DX와 AX의 차이, 파일럿 연옥, AX 성숙도 자가진단 |
-| 02 | chapters/legacy.html | 다크 데이터, 정보 거주지 지도, 메일 스레드 구조화, EUC 위험 |
-| 03 | chapters/process.html | 프로세스 부채, 프로세스 마이닝, 표준 대응 흐름과 8D |
-| 04 | chapters/semantics.html | 기준정보·용어 사전, ISA-95 계층, 정준 데이터 모델, 온톨로지 |
-| 05 | chapters/foundation.html | 데이터 품질 6차원, 오너·스튜어드, 데이터 계약, 메달리온 구조 |
-| 06 | chapters/knowledge.html | 문서 파싱·청킹·하이브리드 검색, RAG, 권한, 지식 그래프 |
-| 07 | chapters/usecases.html | 가치사슬별 유스케이스, 가치–실현성 매트릭스, ROI |
-| 08 | chapters/agents.html | 코파일럿과 에이전트, 자율성 단계, 오류 누적, 사람의 승인 |
-| 09 | chapters/shopfloor.html | OT/IT, SPC와 이상 탐지, 예지 보전, 비전 검사, 가상 계측 |
-| 10 | chapters/governance.html | ISO/IEC 42001, EU AI Act, NIST AI RMF, 섀도 AI와 기술 유출, 보안–가치 파레토 프런티어 |
-| 11 | chapters/people.html | CoE·허브-스포크, 역할과 역량, 확산 모델, 변화 관리 |
-| 12 | chapters/goals.html | 계층별 AX 목표 체계: 취합형 MBO의 함정, 부문·사업부·실·팀·파트별 목표 유형, 캐스케이드와 캐치볼 |
-| 13 | chapters/reporting.html | AX 시대의 보고와 평가: 보고 증폭 비용, 산출물의 소비자와 가치–비용, 데일리·주간 보고와 우선순위 부채, 목적별 보고 형태, 문서 작업의 적정선, 평가하는 조직의 AX, 증거 기반 목표 평가 |
-| 14 | chapters/system.html | 전체를 보는 AX: 팀 간 흐름과 산출물 계약·API, 팀에 요구하기 전 회사가 깔 인프라 바닥, 효율을 돈으로 바꾸는 가치 실현 결정, 컴퓨트·플랫폼·사람 투자의 균형, 역할의 조건 |
-| 15 | chapters/experiments.html | 기준이 바뀌는 실험 조직의 AX: AI-readable 데이터, 기준 레지스트리·실험 카드, AX 성과의 증거 사다리, FDE |
-| 16 | chapters/roadmap.html | 가시화→표준화→디지털화→데이터화→지능화→자율화 로드맵 |
-| 17 | chapters/cases.html | 가상 사례로 보는 레거시 방식 vs AX 방식 |
-| 18 | chapters/playbook.html | 우리 팀 90일 계획·유스케이스 캔버스 생성기 |
-| 19 | chapters/questions.html | AX에 대한 정직한 질문들: 유행인가, 기간, top-down/bottom-up, 자기 업무 개선, 표준과 창의성, 보안의 적정선, 숙련자 병목, 인재, 학습 |
-| 20 | chapters/glossary.html | 용어집, 종합 퀴즈 |
+| 부 | 장 | 파일 | 주제 |
+|---|---|---|---|
+| 1부 문제 인식 | 01 | chapters/why.html | DX와 AX의 차이, 파일럿 연옥, AX 성숙도 자가진단 |
+| | 02 | chapters/legacy.html | 다크 데이터, 정보 거주지 지도, 메일 스레드 구조화, EUC 위험 |
+| | 03 | chapters/process.html | 프로세스 부채, 프로세스 마이닝, 표준 대응 흐름과 8D |
+| 2부 데이터와 지식의 기반 | 04 | chapters/semantics.html | 기준정보·용어 사전, ISA-95 계층, 정준 데이터 모델, 온톨로지 |
+| | 05 | chapters/foundation.html | 데이터 품질 6차원, 오너·스튜어드, 데이터 계약, 메달리온 구조 |
+| | 06 | chapters/knowledge.html | 문서 파싱·청킹·하이브리드 검색, RAG, 권한, 지식 그래프 |
+| | 07 | chapters/experiments.html | 실험 데이터의 AX: AI 가독성 사다리, 기준 레지스트리(ID@버전), 실험 카드 |
+| 3부 AI 적용 | 08 | chapters/usecases.html | 가치사슬별 유스케이스, 가치–실현성 매트릭스, ROI |
+| | 09 | chapters/agents.html | 코파일럿과 에이전트, 자율성 단계, 오류 누적, 사람의 승인 |
+| | 10 | chapters/shopfloor.html | OT/IT, SPC와 이상 탐지, 예지 보전, 비전 검사, 가상 계측 |
+| 4부 거버넌스와 조직 | 11 | chapters/governance.html | ISO/IEC 42001, EU AI Act, NIST AI RMF, 섀도 AI와 기술 유출, 보안–가치 파레토 프런티어 |
+| | 12 | chapters/people.html | CoE·허브-스포크, FDE, 역할의 조건, 역량, 확산 모델, 변화 관리 |
+| | 13 | chapters/goals.html | 계층별 AX 목표와 평가: 취합형 MBO의 함정, 계층별 목표 유형과 언어, 캐치볼, 지표 설계, 증거 사다리와 증거 기반 평가 |
+| | 14 | chapters/reporting.html | AX 시대의 보고: 보고 증폭 비용, 목적별 보고 형태, 산출물의 소비자와 가치–비용, 우선순위 부채, 보고받는 조직의 AX |
+| | 15 | chapters/system.html | 전체를 보는 AX: 팀 간 흐름과 산출물 계약·API, 인프라 바닥, 가치 실현 결정 |
+| 5부 실행 | 16 | chapters/roadmap.html | 가시화→표준화→디지털화→데이터화→지능화→자율화 로드맵, 기반·유스케이스·컴퓨트·사람 투자 배분 |
+| | 17 | chapters/cases.html | 가상 사례로 보는 레거시 방식 vs AX 방식 |
+| | 18 | chapters/playbook.html | 우리 팀 90일 계획·유스케이스 캔버스 생성기, 영역별 90일 트랙 |
+| 부록 | 19 | chapters/questions.html | AX에 대한 정직한 질문들(짧은 답과 해당 장 안내) |
+| | 20 | chapters/glossary.html | 용어집, 종합 퀴즈 |
 
-공통 코드: `css/style.css`(디자인 토큰, 라이트/다크), `js/common.js`(내비게이션, 검색, 캔버스·차트 헬퍼, 전역 `AX`).
+공통 코드: `css/style.css`(디자인 토큰, 라이트/다크), `js/common.js`(장·부 목록, 내비게이션, 검색, 캔버스·차트 헬퍼, 전역 `AX`).
 챕터 작성 규칙은 [CONTRIBUTING.md](CONTRIBUTING.md), 편집 기준은 [docs/OUTLINE.md](docs/OUTLINE.md)를 참고하세요.
 챕터를 추가하거나 제목·설명을 바꾼 뒤에는 `python3 tools/seo.py`로 canonical/OG/JSON-LD 태그와 `sitemap.xml`을 다시 만듭니다.
 
