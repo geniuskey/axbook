@@ -6,8 +6,8 @@
 <link rel="icon" href="../favicon.ico" sizes="any">
 <link rel="icon" href="../favicon.svg" type="image/svg+xml">
 <link rel="apple-touch-icon" href="../apple-touch-icon.png">
-<title>실험하는 조직의 AX: 맥락 있는 데이터와 FDE · AXBook</title>
-<meta name="description" content="같은 DB와 양식을 쓰지만 팀마다, 실험마다 기준이 달라지는 연구·공정개발 조직의 AX. AI가 읽을 수 있는(AI-readable) 데이터의 단계, 기준 레지스트리와 실험 카드, 상위 조직이 하위 조직의 AX 성과를 신뢰하는 증거 사다리, 현장에 상주하는 FDE(Forward Deployed Engineer) 운영법을 다룬다.">
+<title>실험 데이터의 AX: 기준과 맥락이 있는 데이터 · AXBook</title>
+<meta name="description" content="같은 DB와 양식을 쓰지만 팀마다, 실험마다 기준이 달라지는 연구·공정개발 조직의 데이터. AI가 읽을 수 있는(AI-readable) 데이터의 여섯 단계, 기준을 고정하지 않고 선언·버전 관리하는 기준 레지스트리(ID@버전)와 실험 카드, 기준 드리프트가 만드는 조용한 오류를 다룬다.">
 <link rel="canonical" href="https://axbook.euiyun.com/chapters/experiments.html">
 <meta property="og:type" content="article">
 <meta property="og:site_name" content="AXBook">
@@ -26,13 +26,8 @@
 <link rel="stylesheet" href="../css/style.css">
 <script src="../js/common.js"></script>
 <style>
-  svg .s-bad { stroke: var(--bad); fill: none; stroke-width: 2; }
-  svg .s-acc2 { stroke: var(--accent-2); fill: none; stroke-width: 2; }
-  svg .f-bad-soft { fill: color-mix(in srgb, var(--bad) 12%, transparent); stroke: var(--bad); }
-  svg .f-ok-soft { fill: color-mix(in srgb, var(--ok) 12%, transparent); stroke: var(--ok); }
   svg .f-warn-soft { fill: color-mix(in srgb, var(--warn) 14%, transparent); stroke: var(--warn); }
   svg .t-bad { fill: var(--bad); font-family: var(--font); font-size: 13px; font-weight: 700; }
-  svg .t-ok { fill: var(--ok); font-family: var(--font); font-size: 13px; font-weight: 700; }
   svg .t-acc2 { fill: var(--accent-2); font-family: var(--font); font-size: 13px; font-weight: 700; }
   svg .t-sm { fill: var(--text-dim); font-family: var(--font); font-size: 11px; }
   .rec { font-family: var(--mono); font-size: 12.5px; line-height: 1.7; padding: 12px 14px; border-radius: 10px; border: 1px solid var(--border); background: var(--bg-elev); overflow-wrap: anywhere; }
@@ -42,9 +37,6 @@
   .qa { margin-top: 12px; display: grid; gap: 6px; }
   .qa div { display: grid; grid-template-columns: auto 1fr; gap: 8px; align-items: start; font-size: 13.5px; padding: 7px 10px; border-radius: 8px; border: 1px solid var(--border); background: var(--surface); }
   .qa small { display: block; color: var(--text-dim); font-size: 12px; }
-  .ev-out { margin-top: 12px; padding: 12px 14px; border-radius: 10px; background: var(--surface); border: 1px solid var(--border); font-size: 14px; }
-  .ev-out h4 { margin: 0 0 6px; font-size: 15.5px; }
-  .ev-out ul { margin: 6px 0 0; padding-left: 18px; }
 </style>
 <!-- Cloudflare Web Analytics -->
 <script type='module' src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "3d6151a0abc94ede89285d462527fa80"}'></script>
@@ -54,13 +46,13 @@
 <main class="chapter">
   <header class="chapter-hero">
     <div class="eyebrow">Chapter 15</div>
-    <h1>실험하는 조직의 AX: 맥락 있는 데이터와 FDE</h1>
-    <p class="lead">설비 데이터는 같은 센서가 같은 주기로 같은 단위를 쏟아 낸다. 데이터 레이크에 잘 쌓기만 하면 된다. 그런데 연구·공정개발·신뢰성·분석 조직은 다르다. 매번 기준이 바뀌고, 수많은 실험을 하고, 같은 DB와 같은 엑셀 양식을 쓰면서도 팀마다 다른 뜻으로 숫자를 채운다. 이런 조직에서 AX는 무엇을 뜻할까? 이 장은 "AI가 읽을 수 있는 데이터"의 정확한 의미, 바뀌는 기준을 다루는 법, 상위 조직이 AX 성과를 믿을 수 있게 하는 증거, 그리고 현장에 들어가 함께 만드는 FDE 모델을 다룬다.</p>
+    <h1>실험 데이터의 AX: 기준과 맥락이 있는 데이터</h1>
+    <p class="lead"><a href="foundation.html">5장</a>에서는 데이터 품질과 데이터 계약으로 믿을 수 있는 테이블을 만들었고, <a href="knowledge.html">6장</a>에서는 흩어진 문서를 RAG로 꺼내 쓰는 법을 보았다. 둘 다 "같은 열은 같은 뜻"이라는 전제 위에 서 있다. 이 전제가 가장 쉽게 무너지는 곳이 연구·공정개발·신뢰성·분석 조직이다. 설비 데이터는 같은 센서가 같은 주기로 같은 단위를 쏟아 내지만, 실험 데이터는 같은 DB와 같은 엑셀 양식을 쓰면서도 팀마다, 시기마다 다른 기준으로 숫자를 채운다. 이 장은 "AI가 읽을 수 있는 데이터"의 정확한 뜻을 단계로 나누고, 기준을 고정하지 않고 <strong>선언하고 버전 관리하는</strong> 기준 레지스트리와 실험 카드를 설계한다. 데이터 계약이 열의 형식을 약속한다면, 기준 레지스트리는 숫자의 뜻을 약속한다.</p>
     <ul class="objectives">
       <li>사람이 읽을 수 있는 데이터, 기계가 읽을 수 있는 데이터, AI가 맥락까지 이해할 수 있는 데이터의 차이를 설명할 수 있다.</li>
       <li>기준이 계속 바뀌는 조직에서 "기준을 고정"하는 대신 "기준을 선언하고 버전 관리"하는 방식(기준 레지스트리, 실험 카드)을 설계할 수 있다.</li>
-      <li>상위 조직이 하위 조직의 AX 성과를 판단할 때 쓸 증거의 단계와, 숫자를 부풀리지 않게 만드는 운영 장치를 제시할 수 있다.</li>
-      <li>FDE(Forward Deployed Engineer)가 무엇이고, 사내에서 어떻게 운영하며 어떤 지표로 평가하는지 설명할 수 있다.</li>
+      <li>기준 버전이 빠진 데이터가 분석과 RAG 검색에서 "조용한 오류"를 만드는 경로를 설명하고, 기록률을 높이는 장치를 제시할 수 있다.</li>
+      <li>실험 조직에서 기록 정리 → 검색·비교 → 추천 순서로 AI를 올려야 하는 이유를 설명할 수 있다.</li>
     </ul>
   </header>
 
@@ -77,6 +69,7 @@
     <div class="callout warn">
       <strong>"포맷 통일"은 "의미 통일"이 아니다</strong>
       <p>양식과 DB를 맞추는 일은 <a href="semantics.html">4장</a>에서 본 공통 언어 작업의 절반이다. 나머지 절반은 각 숫자가 <strong>어떤 기준, 어떤 조건, 어떤 방법</strong>으로 만들어졌는지를 데이터 옆에 함께 두는 일이다. 설비 데이터는 이 맥락이 거의 바뀌지 않아서 한 번 정하면 되지만, 실험 데이터는 맥락 자체가 계속 바뀐다. 실험 조직의 AX는 여기서 출발한다.</p>
+      <p>이 오류는 <a href="foundation.html">5장</a>의 품질 점검으로는 잡히지 않는다. 빈칸도 없고, 형식도 맞고, 범위도 정상이다. 완전성·유효성 검사를 모두 통과한 채로 뜻만 다르다. 이 데이터를 <a href="knowledge.html">6장</a>의 RAG에 그대로 연결하면, AI는 서로 다른 기준의 실험 보고서를 같은 질문의 근거로 함께 가져와 매끄러운 답을 만든다. 근거 링크까지 붙어 있으니 더 믿음직해 보인다.</p>
     </div>
   </section>
 
@@ -277,152 +270,36 @@
   </section>
 
   <!-- ============================================================ 5 -->
-  <section id="trust">
-    <h2>상위 조직은 하위 조직의 AX 성과를 어떻게 신뢰하나</h2>
-    <p>실험 데이터의 기준 문제는 AX 성과 보고에서도 똑같이 반복된다. 팀 A는 "AI로 연 3,000시간 절감", 팀 B는 "보고서 작성 시간 70% 단축"이라고 보고한다. 같은 양식의 보고서지만 측정 방법은 다르다. 한쪽은 설문으로 "체감 시간"을 물었고, 한쪽은 두 건을 재 보고 연간 건수를 곱했다. 상위 조직은 둘을 더해 "사업부 AX 성과"로 올린다. <a href="goals.html">12장</a>에서 본 취합형 목표의 함정이 숫자의 신뢰 문제로 이어지는 지점이다.</p>
-    <p>목표가 되는 순간 측정치는 좋은 측정치이기를 멈춘다는 <strong>굿하트의 법칙</strong><span class="en">(Goodhart's law)</span>은 AX에서도 예외가 없다. 하위 조직이 거짓말을 해서가 아니다. 측정 기준이 정해지지 않은 상태에서 목표를 주면, 모두가 자기에게 유리한 합리적 기준을 고른다. 해법은 실험 데이터와 같다. <strong>성과도 기준을 선언하게 하라.</strong></p>
-
-    <ol class="ladder">
-      <li><b>주장</b>"많이 좋아졌다." 자기 보고, 체감 설문. 출발점으로는 괜찮지만 합산하면 안 된다.</li>
-      <li><b>산출물</b>데모, 화면, 만든 도구 목록. 만들었다는 증거지 쓰인다는 증거가 아니다.</li>
-      <li><b>사용 기록</b>로그로 본 주간 활성 사용자, 업무 건 중 도구를 거친 비율, 3개월 이상 유지 여부.</li>
-      <li><b>전후 비교</b>사전에 등록한 베이스라인과 같은 정의로 측정한 리드타임·재작업률·오류율의 변화.</li>
-      <li><b>비교군</b>단계적 도입(어떤 파트는 먼저, 어떤 파트는 나중)으로 같은 기간의 차이를 본다. 계절성·물량 변화를 걸러 낸다.</li>
-      <li><b>독립 확인</b>다른 조직(CoE, 품질, 재무)이 표본을 골라 현장에서 재확인한다. 감사가 아니라 교차 검증.</li>
-    </ol>
-
-    <div class="sim" id="sim-trust">
-      <div class="sim-head"><span class="sim-tag">INTERACTIVE</span><h3>성과 신뢰도 점검기: 보고된 절감 시간 중 얼마를 믿을 수 있나</h3></div>
-      <div class="sim-body side">
-        <div class="sim-view"><div class="sim-html">
-          <div id="tr-bars"></div>
-          <div class="ev-out" id="tr-out"></div>
-        </div></div>
-        <div class="sim-controls">
-          <label class="ctrl"><span>보고된 연간 절감 <output id="tr-h-out"></output></span><input type="range" id="tr-h" min="500" max="10000" step="500" value="3000"></label>
-          <label class="check"><input type="checkbox" id="tr-base"> 시작 전에 베이스라인을 등록했다</label>
-          <label class="check"><input type="checkbox" id="tr-def"> 측정 정의를 공용 레지스트리에서 썼다</label>
-          <label class="check"><input type="checkbox" id="tr-log"> 사용·처리 시간을 로그로 자동 측정한다</label>
-          <label class="check"><input type="checkbox" id="tr-keep"> 3개월 이상 사용이 유지되고 있다</label>
-          <label class="check"><input type="checkbox" id="tr-ctrl"> 비교군(단계적 도입)이 있다</label>
-          <label class="check"><input type="checkbox" id="tr-audit"> 다른 조직이 표본을 현장 확인했다</label>
-          <label class="check"><input type="checkbox" id="tr-use"> 절감 시간을 어디에 썼는지 기록했다</label>
-          <label class="check"><input type="checkbox" id="tr-fail"> 실패·중단 과제도 함께 보고한다</label>
-        </div>
-      </div>
-      <div class="sim-readout">
-        <div class="stat"><span class="k">증거 수준</span><span class="v" id="tr-o1">—</span></div>
-        <div class="stat"><span class="k">신뢰 가능한 추정치</span><span class="v" id="tr-o2">—</span></div>
-        <div class="stat"><span class="k">가장 큰 빈칸</span><span class="v" id="tr-o3" style="font-size:13px;font-weight:500">—</span></div>
-      </div>
-      <div class="sim-note">"신뢰 가능한 추정치"는 증거가 약할수록 보고치를 보수적으로 할인한다는 생각을 보여 주는 교육용 계산이다. 할인율 자체에 근거가 있는 것은 아니다. 해볼 것: 체크를 하나도 하지 않고 보고치를 10,000시간으로 올려 보자. 숫자를 키우는 것보다 증거 한 줄을 더하는 것이 상위 조직에 더 큰 숫자로 전달된다.</div>
-    </div>
-
-    <div class="compare">
-      <div class="before"><h4>신뢰를 깎는 운영</h4><ul>
-        <li>"절감 시간" 목표를 먼저 주고 측정 방법은 각자 정하게 한다</li>
-        <li>성공 사례만 보고받는다(실패는 보고서에서 사라진다)</li>
-        <li>절감 시간 × 인건비를 그대로 재무 성과로 합산한다</li>
-        <li>연말에 한 번, 엑셀로 취합한다</li>
-      </ul></div>
-      <div class="after"><h4>신뢰를 쌓는 운영</h4><ul>
-        <li>측정 정의와 베이스라인을 과제 시작 때 등록한다</li>
-        <li>중단한 과제와 이유도 같은 양식으로 보고한다. 중단은 실패가 아니라 학습이다</li>
-        <li>절감 시간은 "그 시간에 무엇을 했나"와 함께 보고한다</li>
-        <li>로그 기반 지표는 대시보드로 상시 공개, 분기마다 표본 확인</li>
-      </ul></div>
-    </div>
-    <div class="callout tip">
-      <strong>상위 조직이 먼저 보여 줘야 할 것</strong>
-      <p>하위 조직의 숫자를 의심하기 전에, 상위 조직이 "부풀린 숫자보다 정직한 작은 숫자를 더 높게 평가한다"는 신호를 실제 평가로 보여 줘야 한다. 중단 보고를 한 팀이 불이익을 받으면, 다음 해부터 모든 과제가 성공한다. 그리고 아무것도 바뀌지 않는다.</p>
-    </div>
-  </section>
-
-  <!-- ============================================================ 6 -->
-  <section id="fde">
-    <h2>FDE: 현장에 들어가 함께 만드는 엔지니어</h2>
-    <p>여기까지 읽으면 한 가지 문제가 남는다. 기준과 맥락은 현장에만 있는데, AI를 만들 줄 아는 사람은 현장 밖(CoE, IT, 외부 업체)에 있다. 요구사항 문서로 이 간극을 메우려고 하면, 문서에는 "수율 데이터로 다음 조건 추천" 한 줄만 남고 "2팀은 작년 4월부터 수율 정의가 다르다"는 사실은 빠진다. 현장 사람은 그것이 중요한지 모르고, 개발자는 그런 것이 있는지 모른다.</p>
-    <p><strong>FDE</strong><span class="en">(Forward Deployed Engineer)</span>는 이 간극을 사람으로 메우는 방식이다. 원래는 일부 소프트웨어·AI 기업이 고객사 현장에 엔지니어를 보내 고객의 실제 데이터와 업무 위에서 직접 시스템을 만들게 하는 직무를 부르는 이름으로 알려졌다. 생성형 AI 이후 "모델은 있는데 현장에 붙지 않는다"는 문제가 커지면서, 이 방식을 채택하거나 비슷한 직무를 두는 기업이 늘었다. 사내 AX에서는 이렇게 번역할 수 있다. <strong>CoE의 엔지니어가 현업 팀에 일정 기간 상주하며, 그 팀의 실제 업무와 데이터 위에서 함께 만들고, 만든 것 중 일반화할 수 있는 것을 공통 플랫폼으로 되돌린다.</strong></p>
-
-    <figure class="diagram">
-      <svg viewBox="0 0 800 280" role="img" aria-label="FDE 순환 구조">
-        <rect x="300" y="20" width="200" height="54" rx="10" class="f-acc-soft"/>
-        <text x="400" y="44" text-anchor="middle" class="t-acc">① 상주</text>
-        <text x="400" y="62" text-anchor="middle" class="t-sm">업무를 옆에서 보고 같이 한다</text>
-        <rect x="560" y="110" width="200" height="54" rx="10" class="f-acc-soft"/>
-        <text x="660" y="134" text-anchor="middle" class="t-acc">② 함께 만들기</text>
-        <text x="660" y="152" text-anchor="middle" class="t-sm">실제 데이터로, 주 단위로</text>
-        <rect x="300" y="200" width="200" height="54" rx="10" class="f-acc2-soft"/>
-        <text x="400" y="224" text-anchor="middle" class="t-acc2">③ 일반화·환류</text>
-        <text x="400" y="242" text-anchor="middle" class="t-sm">재사용 부품을 플랫폼으로</text>
-        <rect x="40" y="110" width="200" height="54" rx="10" class="f-acc2-soft"/>
-        <text x="140" y="134" text-anchor="middle" class="t-acc2">④ 졸업·다음 팀</text>
-        <text x="140" y="152" text-anchor="middle" class="t-sm">팀이 스스로 운영</text>
-        <path d="M500 50 Q610 55 650 108" class="s-acc"/><path d="M642 100 L651 110 L638 108" class="s-acc"/>
-        <path d="M650 166 Q610 222 502 226" class="s-acc"/><path d="M510 220 L500 226 L510 232" class="s-acc"/>
-        <path d="M300 226 Q190 222 150 166" class="s-acc"/><path d="M146 176 L148 164 L158 172" class="s-acc"/>
-        <path d="M150 108 Q190 55 298 50" class="s-acc"/><path d="M288 44 L300 50 L289 56" class="s-acc"/>
-        <circle cx="400" cy="137" r="44" class="f-surface"/>
-        <text x="400" y="133" text-anchor="middle" class="t">공통</text>
-        <text x="400" y="151" text-anchor="middle" class="t">플랫폼</text>
-      </svg>
-      <figcaption><b>그림 15-3.</b> 사내 FDE의 순환. 핵심은 ③이다. 상주해서 만든 것이 그 팀만의 맞춤 도구로 끝나면 FDE는 비싼 외주 개발자와 다르지 않다. 두 번째 팀부터 같은 부품(기준 레지스트리 템플릿, 실험 카드 추출기, 평가 세트 양식)을 재사용할 수 있어야 한다.</figcaption>
-    </figure>
-
-    <div class="table-wrap"><table>
-      <thead><tr><th>방식</th><th>어디서 일하나</th><th>무엇을 남기나</th><th>잘 맞는 경우</th><th>한계</th></tr></thead>
-      <tbody>
-        <tr><td><b>사내·외부 강의</b></td><td>강의실</td><td>개념, 동기 부여</td><td>리터러시 확산 초기</td><td>업무에 붙지 않으면 곧 잊힌다</td></tr>
-        <tr><td><b>컨설팅</b></td><td>회의실</td><td>전략 문서, 로드맵</td><td>방향 설정, 투자 판단</td><td>실행과 운영은 남는 사람의 몫</td></tr>
-        <tr><td><b>SI·외주 개발</b></td><td>개발사</td><td>요구사항대로 만든 시스템</td><td>요건이 명확하고 안정적인 업무</td><td>요건이 계속 바뀌는 실험 업무에 약함</td></tr>
-        <tr><td><b>중앙 CoE 접수형</b></td><td>CoE</td><td>요청받은 도구</td><td>공통 플랫폼 구축</td><td>대기열 병목, 현장 맥락 손실</td></tr>
-        <tr><td><b>FDE 상주형</b></td><td>현업 팀 안</td><td>돌아가는 업무 + 팀의 역량 + 재사용 부품</td><td>맥락이 현장에 있고 자주 바뀌는 업무</td><td>인력이 귀하다. 환류가 없으면 맞춤 도구만 늘어난다</td></tr>
-      </tbody>
-    </table></div>
-
-    <h3>사내 FDE를 운영하는 법</h3>
-    <ul class="checklist">
-      <li><b>기간을 정한다.</b> 보통 수 주~한 분기 단위로 잡고, 시작할 때 졸업 조건을 함께 적는다. "FDE가 없어도 팀이 실험 카드 추출기를 운영하고 기준 레지스트리를 갱신한다."</li>
-      <li><b>팀에서도 한 명을 짝으로 붙인다.</b> FDE가 떠난 뒤 운영할 사람이다. 이 짝이 다음 단계의 AX 챔피언이 된다(<a href="people.html">11장</a>).</li>
-      <li><b>실제 업무 한 건을 끝까지 관통한다.</b> 데모가 아니라 이번 주 실험의 카드가 실제로 채워지고, 실제 비교 질문에 답해야 한다. 얇은 수직 슬라이스(<a href="roadmap.html">16장</a>).</li>
-      <li><b>환류를 의무로 만든다.</b> 상주 기간의 일정 부분은 만든 것을 일반화해 플랫폼으로 올리는 데 쓴다. 이것이 FDE의 성과 지표에 들어가야 한다.</li>
-      <li><b>FDE의 성과는 "떠난 뒤"로 잰다.</b> 졸업 3개월 후에도 쓰이는가, 팀이 스스로 확장했는가, 다음 팀이 재사용한 부품이 몇 개인가.</li>
-      <li><b>도메인 출신을 FDE로 키운다.</b> 외부 AI 개발자에게 공정을 가르치는 것보다, 공정을 아는 엔지니어에게 AI로 만드는 법을 가르치는 편이 빠른 경우가 많다. 현업 출신 빌더가 사내 FDE의 가장 좋은 후보다.</li>
-    </ul>
-    <div class="callout">
-      <strong>FDE는 직무명보다 일하는 방식이다</strong>
-      <p>조직에 FDE라는 직함을 만들 필요는 없다. 중요한 것은 "만드는 사람이 쓰는 사람 옆에 앉는다", "요구사항 문서가 아니라 실제 데이터로 시작한다", "한 팀에서 배운 것을 다음 팀이 재사용한다"는 세 가지다. 인원이 적은 조직이라면 CoE 엔지니어 한 명이 분기마다 한 팀씩 옮겨 다니는 것으로도 시작할 수 있다.</p>
-    </div>
-  </section>
-
-  <!-- ============================================================ 7 -->
   <section id="start">
-    <h2>실험 조직의 첫 90일</h2>
-    <p>위 내용을 한 번에 할 필요는 없다. 실험 조직이라면 다음 순서가 현실적이다. 앞부분은 AI 이전의 일처럼 보이지만, 이 작업 자체에 AI를 쓰는 것이 핵심이다.</p>
-    <div class="table-wrap"><table>
-      <thead><tr><th>기간</th><th>할 일</th><th>AI가 돕는 부분</th><th>졸업 조건</th></tr></thead>
-      <tbody>
-        <tr><td>1~3주</td><td>자주 비교되는 핵심 지표 5~10개를 골라 팀별 정의를 수집한다</td><td>과거 메일·회의록에서 "정의가 바뀐 흔적" 찾기</td><td>지표별 현재 정의와 오너가 표 하나에 있다</td></tr>
-        <tr><td>4~6주</td><td>기준 레지스트리 v0, 실험 카드 양식 v0를 만든다</td><td>실험 노트에서 카드 초안 자동 추출</td><td>이번 달 신규 실험 80% 이상이 카드를 가진다</td></tr>
-        <tr><td>7~9주</td><td>최근 1~2년 핵심 실험을 역으로 카드화한다(전부가 아니라 자주 찾는 것부터)</td><td>과거 문서에서 기준 버전 추정 + 사람 확인</td><td>"이건 해 봤나?" 질문에 근거와 함께 답한다</td></tr>
-        <tr><td>10~13주</td><td>실험 검색·비교 도우미를 운영하고 평가 세트를 만든다</td><td>RAG 검색, 비교 시 기준 불일치 경고</td><td>평가 세트 정답률과 실제 사용 빈도를 공개한다</td></tr>
-      </tbody>
-    </table></div>
+    <h2>실험 조직이 먼저 할 것</h2>
+    <p>위 내용을 한 번에 할 필요는 없다. 앞부분은 AI 이전의 일처럼 보이지만, 이 작업 자체에 AI를 쓰는 것이 핵심이다. 실험 조직이라면 다음 순서로 시작하자.</p>
+    <ul class="checklist">
+      <li><b>핵심 지표 5~10개의 팀별 정의를 모은다.</b> 자주 비교되는 지표부터. 과거 메일·회의록에서 "정의가 바뀐 흔적"을 찾는 일은 AI에게 맡긴다. 지표별 현재 정의와 오너가 표 하나에 있으면 된다.</li>
+      <li><b>기준 레지스트리 v0와 실험 카드 양식 v0를 만든다.</b> 공유된 표 하나로 충분하다. 신규 실험은 AI가 실험 노트에서 카드 초안을 뽑고 사람이 확인한다.</li>
+      <li><b>자주 찾는 과거 실험부터 역으로 카드화한다.</b> 전부가 아니라 "이건 해 봤나?"라는 질문이 자주 나오는 실험부터. 기준 버전은 AI가 추정하고 사람이 확정한다.</li>
+      <li><b>검색·비교 도우미와 평가 세트를 함께 연다.</b> 비교할 때 기준 버전이 다르면 경고를 띄우고, 평가 세트 정답률과 실제 사용 빈도를 공개한다.</li>
+      <li><b>추천·최적화는 그다음에 올린다.</b> 아래 경고를 보자.</li>
+    </ul>
+    <p>주차별 일정과 졸업 기준은 거버넌스·로드맵 트랙과 나란히 <a href="playbook.html">18장</a>의 영역별 90일 트랙에 모아 두었다.</p>
     <div class="callout warn">
       <strong>"다음 실험 추천 AI"는 마지막에</strong>
       <p>많은 실험 조직이 첫 과제로 실험 조건 추천이나 최적화 모델을 고른다. 눈에 띄기 때문이다. 하지만 기준이 섞인 데이터로 학습한 추천은 그럴듯하게 틀린다. 검색과 비교가 먼저다. 과거 실험을 올바르게 찾고 비교할 수 있게 되면, 추천은 그 위에 자연스럽게 올라간다. 순서를 바꾸면 "AI는 우리 일에 안 맞는다"는 결론만 남는다.</p>
+    </div>
+    <div class="callout">
+      <strong>이 장에서 다루지 않는 것</strong>
+      <p>기준을 선언해야 믿을 수 있는 것은 실험 데이터만이 아니다. 하위 조직이 보고한 AX 성과를 상위 조직이 어떻게 믿을지(증거 사다리)는 <a href="goals.html">12장</a>에서, 현장에 상주하며 실제 데이터 위에서 함께 만드는 FDE<span class="en">(Forward Deployed Engineer)</span> 운영법은 <a href="people.html">11장</a>에서 다룬다.</p>
     </div>
   </section>
 
   <section class="keypoints" id="summary">
     <h2>핵심 정리</h2>
     <ol>
-      <li>포맷과 DB를 통일해도 숫자의 뜻(기준·방법·장비)이 다르면 AI는 다른 것을 같은 것으로 비교한다. 이 조용한 오류가 실험 조직 AI 과제의 가장 흔한 실패 원인이다.</li>
+      <li>포맷과 DB를 통일해도 숫자의 뜻(기준·방법·장비)이 다르면 AI는 다른 것을 같은 것으로 비교한다. 이 조용한 오류는 품질 점검을 통과하고, RAG의 근거 링크를 달고 나타난다.</li>
       <li>실험 조직의 AX는 기준을 고정하는 것이 아니라, 기준을 선언하고 버전 관리해 모든 실험을 다시 찾고 올바르게 비교하고 재사용하게 만드는 것이다. "자유롭게 실험하되, 기록은 표준으로."</li>
       <li>AI-readable 데이터는 존재 → 접근 → 기계 판독 → 자기 서술 → 맥락 연결 → AI 활용 가능의 단계로 나뉜다. 단위·기준 버전이 빠지면 AI는 답을 못 하는 대신 자신 있게 틀린다.</li>
       <li>기준 레지스트리(ID@버전, 정의, 기간, 오너, 변경 사유, 변환 가능성)와 실험 카드(목적, 변수/고정 조건, 측정 기준, 결론, 실패)가 최소 장치다. 입력 부담은 AI 초안 추출로 줄인다.</li>
-      <li>AX 성과도 기준을 선언해야 믿을 수 있다. 주장 → 산출물 → 사용 기록 → 전후 비교 → 비교군 → 독립 확인의 증거 사다리를 쓰고, 중단 보고를 불이익 없이 받는다.</li>
-      <li>FDE는 만드는 사람이 쓰는 사람 옆에서 실제 데이터로 함께 만들고, 재사용 부품을 플랫폼으로 되돌리는 방식이다. 성과는 FDE가 떠난 뒤에도 남는 것으로 잰다.</li>
+      <li>기준을 통일하지 못해도 기준 버전의 기록률을 높이면 조용한 오류는 크게 준다. 비교할 수 없는 것은 "비교 불가"로 보이게 만드는 것이 목표다.</li>
+      <li>순서는 기록 정리 → 검색·비교 → 추천이다. 첫 성과는 기록 정리 자체에 AI를 쓰는 데서 나온다.</li>
     </ol>
   </section>
 
@@ -450,19 +327,19 @@
         <button class="opt">자동으로 기준을 찾아 보정한다</button>
       </div><div class="quiz-exp">AI는 주어진 숫자를 믿고 비교한다. "답 못 함"은 오히려 안전하다. 맥락이 빠진 데이터의 진짜 위험은 그럴듯하게 틀린 답이다.</div></div>
 
-      <div class="quiz-q"><p>4. 하위 조직들이 보고한 "AI 절감 시간"을 상위 조직이 합산하기 전에 가장 먼저 갖춰야 할 것은?</p><div class="opts">
-        <button class="opt">더 높은 목표치</button>
-        <button class="opt">보고 양식의 글꼴 통일</button>
-        <button class="opt" data-correct>과제 시작 때 등록한 베이스라인과 공통 측정 정의</button>
-        <button class="opt">성공 사례만 골라 보고받는 절차</button>
-      </div><div class="quiz-exp">측정 정의가 다르면 합산 자체가 의미 없다. 실험 데이터와 마찬가지로 성과 지표도 기준을 선언해야 한다. 성공만 보고받으면 숫자는 커지지만 신뢰는 낮아진다.</div></div>
+      <div class="quiz-q"><p>4. 2팀이 수율 정의를 YLD@v1에서 YLD@v2로 바꿨다. 기준 레지스트리에 새 버전을 등록할 때 과거 데이터를 살리기 위해 특히 남겨야 할 항목은?</p><div class="opts">
+        <button class="opt">새 기준을 만든 사람의 직급</button>
+        <button class="opt" data-correct>v1과의 관계(환산식이 있는지, 근사인지, 환산 불가인지)와 변경 사유</button>
+        <button class="opt">v1 데이터를 모두 삭제했다는 확인</button>
+        <button class="opt">새 기준이 더 우수하다는 근거 자료만</button>
+      </div><div class="quiz-exp">환산 가능성이 있어야 사람과 AI가 v1 데이터를 환산해 비교하거나, 불가하면 "비교 불가"로 경고할 수 있다. 변경 사유는 그 자체로 다음 사람이 쓸 지식이다.</div></div>
 
-      <div class="quiz-q"><p>5. 사내 FDE(Forward Deployed Engineer)의 성과 지표로 가장 적절한 것은?</p><div class="opts">
-        <button class="opt">상주 기간 동안 작성한 코드 줄 수</button>
-        <button class="opt">상주한 팀의 만족도 설문 점수만</button>
-        <button class="opt" data-correct>졸업 후에도 팀이 스스로 운영·확장하는지, 그리고 다음 팀이 재사용한 부품 수</button>
-        <button class="opt">만든 맞춤 도구의 개수</button>
-      </div><div class="quiz-exp">FDE의 목적은 팀을 스스로 움직이게 하고, 한 팀에서 배운 것을 플랫폼으로 되돌려 다음 팀을 빠르게 하는 것이다. 맞춤 도구 개수만 늘면 유지 부담만 커진다.</div></div>
+      <div class="quiz-q"><p>5. 기준 드리프트 시뮬레이터에서 팀마다 기준이 계속 바뀌는 상황(변경 확률을 0으로 만들기 어려움)일 때, 조용한 오류를 가장 크게 줄이는 손잡이는?</p><div class="opts">
+        <button class="opt">데이터를 모으는 기간을 늘린다</button>
+        <button class="opt">실험 데이터를 만드는 팀 수를 늘린다</button>
+        <button class="opt" data-correct>기준 버전 기록률을 높인다</button>
+        <button class="opt">시뮬레이터의 그래프 범위를 좁힌다</button>
+      </div><div class="quiz-exp">두 실험 모두 기준 버전이 기록되어 있으면 같은지 다른지 알 수 있다. 기준을 통일하지 못해도 기록률을 높이면 "같다고 가정한 비교"가 "확인된 비교" 또는 "보이는 차이"로 바뀐다. 기간이 길어질수록 오히려 오류는 늘어난다.</div></div>
 
       <div class="quiz-q"><p>6. 실험 조직의 첫 AI 과제로 가장 권장되는 순서는?</p><div class="opts">
         <button class="opt">다음 실험 조건 추천 모델 → 검색 → 기록 정리</button>
@@ -573,48 +450,6 @@
     AX.stat("dr-o2", '<span style="color:var(--bad)">' + ((1 - r2) * (1 - p24) * 100).toFixed(0) + "%</span>");
     AX.stat("dr-o3", (r2 * p24 * 100).toFixed(0) + "%");
   }, { aspect: 0.6, minHeight: 260, maxHeight: 400 });
-
-  /* ================================================ 3) 성과 신뢰도 */
-  var TR = [
-    { id: "base", w: 0.14, name: "베이스라인 사전 등록", lvl: 3 },
-    { id: "def", w: 0.12, name: "공용 측정 정의", lvl: 3 },
-    { id: "log", w: 0.12, name: "로그 기반 측정", lvl: 2 },
-    { id: "keep", w: 0.08, name: "3개월 이상 사용 유지", lvl: 2 },
-    { id: "ctrl", w: 0.12, name: "비교군(단계적 도입)", lvl: 4 },
-    { id: "audit", w: 0.1, name: "다른 조직의 표본 확인", lvl: 5 },
-    { id: "use", w: 0.05, name: "절감 시간의 사용처 기록", lvl: 1 },
-    { id: "fail", w: 0.04, name: "실패·중단 과제 보고", lvl: 1 }
-  ];
-  var trH = AX.range("tr-h", function (v) { return v.toLocaleString() + "시간"; }, trEval);
-  function trEval() {
-    var H = trH(), f = 0.15, have = {}, missing = [];
-    TR.forEach(function (t) { have[t.id] = document.getElementById("tr-" + t.id).checked; if (have[t.id]) f += t.w; else missing.push(t); });
-    f = Math.min(f, 0.95);
-    var level = "주장";
-    if (have.log || have.keep) level = "사용 기록";
-    if (have.base && have.def) level = "전후 비교";
-    if (level === "전후 비교" && have.ctrl) level = "비교군";
-    if (level === "비교군" && have.audit) level = "독립 확인";
-    var cred = Math.round(H * f / 10) * 10;
-    var html = '<div class="bar-row"><span>보고치</span><span class="track"><i style="width:100%;background:var(--text-dim);opacity:.5"></i></span><span class="val">' + H.toLocaleString() + "</span></div>" +
-      '<div class="bar-row"><span>신뢰 가능 추정</span><span class="track"><i style="width:' + (f * 100).toFixed(1) + '%"></i></span><span class="val">' + cred.toLocaleString() + "</span></div>";
-    document.getElementById("tr-bars").innerHTML = html;
-    missing.sort(function (a, b) { return b.w - a.w; });
-    var tip = {
-      "주장": "아직 합산하지 말고 사례로만 공유한다. 측정 정의부터 맞춘다.",
-      "사용 기록": "쓰인다는 증거는 있다. 업무 결과가 바뀌었는지는 아직 모른다.",
-      "전후 비교": "합산 가능한 최소 수준. 계절성·물량 변화 가능성을 함께 적는다.",
-      "비교군": "경영 보고에 쓸 수 있는 수준. 표본 확인으로 한 단계 더 올릴 수 있다.",
-      "독립 확인": "재무·투자 판단의 근거로 쓸 수 있는 수준."
-    }[level];
-    document.getElementById("tr-out").innerHTML = "<h4>증거 수준: " + level + "</h4>" + AX.esc(tip) +
-      (missing.length ? "<ul><li>다음에 채울 것: " + AX.esc(missing.slice(0, 2).map(function (m) { return m.name; }).join(", ")) + "</li></ul>" : "");
-    AX.stat("tr-o1", level);
-    AX.stat("tr-o2", cred.toLocaleString() + "<small>시간 (" + Math.round(f * 100) + "%)</small>");
-    AX.stat("tr-o3", missing.length ? AX.esc(missing[0].name) : "없음");
-  }
-  TR.forEach(function (t) { document.getElementById("tr-" + t.id).addEventListener("change", trEval); });
-  trEval();
 })();
 </script>
 </body>
