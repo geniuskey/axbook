@@ -159,6 +159,8 @@ body.drawer-open .sb-drawer-backdrop { opacity: 1; pointer-events: auto; }
 .sb-chlist a.active { background: var(--accent-soft); color: var(--accent); font-weight: 700; }
 .sb-chlist .num { font-family: var(--mono); font-size: 12px; color: var(--text-faint); width: 22px; flex: none; }
 .sb-chlist a.active .num { color: var(--accent); }
+.sb-chlist .sb-part { margin: 14px 10px 4px; font-size: 11.5px; font-weight: 700; letter-spacing: .06em; color: var(--text-faint); }
+.sb-chlist .sb-part:first-of-type { margin-top: 6px; }
 
 /* ------------------------------------------------------------------ Layout */
 .sb-layout { display: grid; grid-template-columns: minmax(0, 1fr); gap: 40px; max-width: 1240px; margin: 0 auto; padding: 0 16px; }
@@ -343,6 +345,9 @@ td.num, th.num { text-align: right; font-family: var(--mono); font-variant-numer
 .home-section { max-width: 1180px; margin: 0 auto; padding: 64px 16px; }
 .home-section h2 { font-size: 30px; letter-spacing: -0.02em; margin: 0 0 8px; }
 .home-section > p.sub { color: var(--text-dim); margin: 0 0 32px; }
+.ch-part { margin: 34px 0 14px; display: flex; align-items: baseline; gap: 10px; font-size: 18px; }
+.ch-part:first-child { margin-top: 0; }
+.ch-part small { font-family: var(--mono); font-size: 12px; color: var(--accent); font-weight: 600; letter-spacing: .08em; }
 .ch-grid { display: grid; gap: 16px; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); }
 .ch-card { display: flex; flex-direction: column; gap: 8px; padding: 20px; border-radius: var(--radius); border: 1px solid var(--border); background: var(--bg-elev); color: var(--text); transition: transform .15s, border-color .15s; min-height: 190px; }
 .ch-card:hover { text-decoration: none; border-color: var(--accent); transform: translateY(-2px); }

@@ -14,15 +14,15 @@
     { slug: "semantics",  num: "04", title: "공통 언어: 표준과 온톨로지",       desc: "팀마다 다른 용어·코드·포맷. 기준정보, 용어 사전, ISA-95 계층, 정준 데이터 모델로 말을 맞춘다.", tags: ["표준", "sim"] },
     { slug: "foundation", num: "05", title: "데이터 기반과 거버넌스",           desc: "데이터 품질 6차원, 데이터 계약, 오너·스튜어드, 브론즈–실버–골드 계층. AI가 먹을 수 있는 데이터 만들기.", tags: ["데이터", "sim"] },
     { slug: "knowledge",  num: "06", title: "문서를 지식으로: RAG와 지식 그래프", desc: "PDF·PPT·메일을 쪼개고 색인해 검색 증강 생성(RAG)으로 연결한다. 청킹, 메타데이터, 권한, 평가까지.", tags: ["생성형 AI", "sim"] },
-    { slug: "usecases",   num: "07", title: "유스케이스 발굴과 우선순위",       desc: "가치사슬 전체에서 AI 기회를 찾고, 가치–실현성 매트릭스와 ROI로 무엇부터 할지 정한다.", tags: ["전략", "sim"] },
-    { slug: "agents",     num: "08", title: "코파일럿에서 에이전트로",          desc: "LLM 도우미, 도구를 쓰는 에이전트, 자율성 단계와 사람의 승인 지점. 다단계 오류가 쌓이는 원리.", tags: ["생성형 AI", "sim"] },
-    { slug: "shopfloor",  num: "09", title: "현장 AI: 설비·공정·품질",          desc: "OT와 IT의 경계, SPC와 이상 탐지, 예지 보전, 비전 검사, 가상 계측과 디지털 트윈.", tags: ["제조", "sim"] },
-    { slug: "governance", num: "10", title: "AI 거버넌스·보안·리스크",          desc: "ISO/IEC 42001, EU AI Act, NIST AI RMF. 기술 유출, 섀도 AI, 환각과 책임 소재를 관리하는 체계.", tags: ["거버넌스", "sim"] },
-    { slug: "people",     num: "11", title: "사람과 조직: 변화 관리",            desc: "CoE와 허브-스포크, 도메인 전문가와 AI 엔지니어의 협업, 확산 곡선과 저항 관리, 역량 체계.", tags: ["조직", "sim"] },
-    { slug: "goals",      num: "12", title: "AX 목표 체계: 계층별 목표 설계",   desc: "팀 목표를 취합만 해서는 AX가 움직이지 않는다. 부문·사업부·실·팀·파트가 각자 '그 계층만 할 수 있는 일'을 목표로 삼는 법.", tags: ["경영", "sim"] },
-    { slug: "reporting",  num: "13", title: "AX 시대의 보고와 평가",              desc: "윗선의 질문 하나가 수십 명의 시간이 된다. 보고의 숨은 비용, AI 시대 보고의 형태, 보고받고 평가하는 조직이 먼저 해야 할 AX, 증거 기반 목표 평가.", tags: ["경영", "sim"] },
-    { slug: "system",     num: "14", title: "전체를 보는 AX: 인터페이스, 가치 실현, 투자", desc: "팀마다 목표를 달성해도 전체가 그대로인 이유. 팀 간 산출물 계약과 API, 효율을 돈으로 바꾸는 결정, 팀에 요구하기 전에 깔아야 할 인프라 바닥, 컴퓨트·플랫폼·사람에 대한 투자의 균형.", tags: ["전략", "sim"] },
-    { slug: "experiments", num: "15", title: "실험하는 조직의 AX: 맥락 있는 데이터와 FDE", desc: "같은 DB, 다른 기준. 기준이 매번 바뀌는 조직에서 AI가 읽을 수 있는 데이터를 만들고, AX 성과를 믿을 수 있게 하고, 현장에 상주해 함께 만드는 법.", tags: ["데이터", "sim"] },
+    { slug: "experiments", num: "07", title: "실험하는 조직의 AX: 맥락 있는 데이터와 FDE", desc: "같은 DB, 다른 기준. 기준이 매번 바뀌는 조직에서 AI가 읽을 수 있는 데이터를 만들고, AX 성과를 믿을 수 있게 하고, 현장에 상주해 함께 만드는 법.", tags: ["데이터", "sim"] },
+    { slug: "usecases",   num: "08", title: "유스케이스 발굴과 우선순위",       desc: "가치사슬 전체에서 AI 기회를 찾고, 가치–실현성 매트릭스와 ROI로 무엇부터 할지 정한다.", tags: ["전략", "sim"] },
+    { slug: "agents",     num: "09", title: "코파일럿에서 에이전트로",          desc: "LLM 도우미, 도구를 쓰는 에이전트, 자율성 단계와 사람의 승인 지점. 다단계 오류가 쌓이는 원리.", tags: ["생성형 AI", "sim"] },
+    { slug: "shopfloor",  num: "10", title: "현장 AI: 설비·공정·품질",          desc: "OT와 IT의 경계, SPC와 이상 탐지, 예지 보전, 비전 검사, 가상 계측과 디지털 트윈.", tags: ["제조", "sim"] },
+    { slug: "governance", num: "11", title: "AI 거버넌스·보안·리스크",          desc: "ISO/IEC 42001, EU AI Act, NIST AI RMF. 기술 유출, 섀도 AI, 환각과 책임 소재를 관리하는 체계.", tags: ["거버넌스", "sim"] },
+    { slug: "people",     num: "12", title: "사람과 조직: 변화 관리",            desc: "CoE와 허브-스포크, 도메인 전문가와 AI 엔지니어의 협업, 확산 곡선과 저항 관리, 역량 체계.", tags: ["조직", "sim"] },
+    { slug: "goals",      num: "13", title: "AX 목표 체계: 계층별 목표 설계",   desc: "팀 목표를 취합만 해서는 AX가 움직이지 않는다. 부문·사업부·실·팀·파트가 각자 '그 계층만 할 수 있는 일'을 목표로 삼는 법.", tags: ["경영", "sim"] },
+    { slug: "reporting",  num: "14", title: "AX 시대의 보고와 평가",              desc: "윗선의 질문 하나가 수십 명의 시간이 된다. 보고의 숨은 비용, AI 시대 보고의 형태, 보고받고 평가하는 조직이 먼저 해야 할 AX, 증거 기반 목표 평가.", tags: ["경영", "sim"] },
+    { slug: "system",     num: "15", title: "전체를 보는 AX: 인터페이스, 가치 실현, 투자", desc: "팀마다 목표를 달성해도 전체가 그대로인 이유. 팀 간 산출물 계약과 API, 효율을 돈으로 바꾸는 결정, 팀에 요구하기 전에 깔아야 할 인프라 바닥, 컴퓨트·플랫폼·사람에 대한 투자의 균형.", tags: ["전략", "sim"] },
     { slug: "roadmap",    num: "16", title: "단계별 로드맵: 레거시에서 AX까지",  desc: "가시화 → 표준화 → 디지털화 → 데이터화 → 지능화 → 자율화. 의존 관계를 지키며 순서를 짜는 법.", tags: ["실행", "sim"] },
     { slug: "cases",      num: "17", title: "사례로 보는 AX",                  desc: "품질 이슈 대응, 고객 클레임, 설비 보전, 설계 변경. 레거시 방식과 AX 방식을 같은 사건으로 비교한다.", tags: ["사례", "sim"] },
     { slug: "playbook",   num: "18", title: "AX 플레이북: 우리 팀 설계하기",     desc: "진단 결과를 입력해 우리 팀의 90일 실행 계획과 첫 유스케이스 캔버스를 만든다.", tags: ["종합", "sim"] },
@@ -30,8 +30,21 @@
     { slug: "glossary",   num: "20", title: "용어집 & 종합 퀴즈",               desc: "AX 핵심 용어를 검색하고, 종합 퀴즈로 실력을 점검하자.", tags: ["정리"] },
   ];
 
+  /* 부(part) 구성: from = 그 부의 첫 장 slug */
+  const PARTS = [
+    { from: "why",        label: "1부", title: "문제 인식" },
+    { from: "semantics",  label: "2부", title: "데이터와 지식의 기반" },
+    { from: "usecases",   label: "3부", title: "AI 적용" },
+    { from: "governance", label: "4부", title: "거버넌스와 조직" },
+    { from: "roadmap",    label: "5부", title: "실행" },
+    { from: "questions",  label: "부록", title: "질문과 정리" },
+  ];
+  const partOf = (slug) => { let cur = null; for (const c of CHAPTERS) { const p = PARTS.find((x) => x.from === c.slug); if (p) cur = p; if (c.slug === slug) return cur; } return null; };
+
   const SB = (window.AX = {});
   SB.CHAPTERS = CHAPTERS;
+  SB.PARTS = PARTS;
+  SB.partOf = partOf;
 
   /* ------------------------------------------------------------ math utils */
   SB.clamp = (x, a, b) => Math.min(b, Math.max(a, x));
@@ -447,7 +460,7 @@
     drawer.className = "sb-drawer";
     drawer.innerHTML = `<h4>Chapters</h4><ul class="sb-chlist">
       <li><a href="${href("")}" class="${curSlug ? "" : "active"}"><span class="num">00</span><span>홈 · 지도</span></a></li>
-      ${CHAPTERS.map((c) => `<li><a href="${href(c.slug)}" class="${c.slug === curSlug ? "active" : ""}"><span class="num">${c.num}</span><span>${c.title}</span></a></li>`).join("")}
+      ${CHAPTERS.map((c) => { const p = PARTS.find((x) => x.from === c.slug); return (p ? `<li class="sb-part">${p.label} · ${p.title}</li>` : "") + `<li><a href="${href(c.slug)}" class="${c.slug === curSlug ? "active" : ""}"><span class="num">${c.num}</span><span>${c.title}</span></a></li>`; }).join("")}
     </ul>`;
     const backdrop = document.createElement("div");
     backdrop.className = "sb-drawer-backdrop";
