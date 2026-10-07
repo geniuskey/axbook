@@ -7,7 +7,7 @@
 <link rel="icon" href="../favicon.svg" type="image/svg+xml">
 <link rel="apple-touch-icon" href="../apple-touch-icon.png">
 <title>단계별 로드맵: 레거시에서 AX까지 · AXBook</title>
-<meta name="description" content="가시화·표준화·디지털화·데이터화·지능화·자율화의 6단계 로드맵, 단계별 산출물과 졸업 기준, 등대 프로젝트와 얇은 수직 슬라이스, 30-60-90일 계획과 18개월 로드맵, 기반과 유스케이스의 투자 배분을 직접 짜 본다.">
+<meta name="description" content="가시화·표준화·디지털화·데이터화·지능화·자율화의 6단계 로드맵, 단계별 산출물과 졸업 기준, 등대 프로젝트와 얇은 수직 슬라이스, 18개월 로드맵 예시, 기반과 유스케이스의 투자 배분, 컴퓨트·플랫폼·사람 사이의 투자 균형을 직접 짜 본다.">
 <link rel="canonical" href="https://axbook.euiyun.com/chapters/roadmap.html">
 <meta property="og:type" content="article">
 <meta property="og:site_name" content="AXBook">
@@ -51,6 +51,10 @@
   .stg .check input { margin-top: 2px; flex: none; }
   .stg-out { margin-top: 12px; padding: 12px 14px; border-radius: 10px; background: var(--surface); border: 1px solid var(--border); font-size: 14.5px; }
   .stg-out ul { margin: 6px 0 0; padding-left: 18px; }
+  .bal-out { margin-top: 12px; padding: 12px 14px; border-radius: 10px; background: var(--surface); border: 1px solid var(--border); font-size: 14px; }
+  .bal-out h4 { margin: 0 0 6px; font-size: 15.5px; }
+  .bal-presets { display: flex; flex-wrap: wrap; gap: 6px; }
+  .bal-presets .btn { font-size: 12.5px; padding: 5px 10px; }
 </style>
 <!-- Cloudflare Web Analytics -->
 <script type='module' src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "3d6151a0abc94ede89285d462527fa80"}'></script>
@@ -61,12 +65,13 @@
   <header class="chapter-hero">
     <div class="eyebrow">Chapter 16</div>
     <h1>단계별 로드맵: 레거시에서 AX까지</h1>
-    <p class="lead">지금까지 정보의 거주지(2장), 프로세스(3장), 공통 언어(4장), 데이터 기반(5장), 생성형 AI와 에이전트(6~9장), 거버넌스와 사람(10~11장)을 따로따로 봤다. 이 장은 그것들을 <strong>순서</strong>로 엮는다. 무엇을 먼저 하고 무엇을 나중에 해야 하는지, 어떤 과제가 어떤 과제 없이는 실패하는지, 기반에 얼마를 쓰고 유스케이스에 얼마를 써야 하는지를 직접 배치하고 계산해 본다.</p>
+    <p class="lead">지금까지 정보의 거주지(2장), 프로세스(3장), 공통 언어(4장), 데이터 기반(5장), 생성형 AI와 에이전트(6~9장), 거버넌스와 사람(10~11장)을 따로따로 봤다. 이 장은 그것들을 <strong>순서</strong>로 엮는다. 무엇을 먼저 하고 무엇을 나중에 해야 하는지, 어떤 과제가 어떤 과제 없이는 실패하는지, 기반에 얼마를 쓰고 유스케이스에 얼마를 써야 하는지, 컴퓨트·플랫폼·사람 중 어디가 병목인지를 직접 배치하고 계산해 본다.</p>
     <ul class="objectives">
       <li>가시화–표준화–디지털화–데이터화–지능화–자율화 6단계의 산출물과 졸업 기준을 설명할 수 있다.</li>
       <li>등대 프로젝트와 "얇은 수직 슬라이스" 전략으로 한 업무를 끝까지 관통하는 첫 과제를 설계할 수 있다.</li>
       <li>과제 간 의존 관계(예: RAG 전에 문서 인벤토리와 권한 정리)를 지키는 18개월 로드맵을 짤 수 있다.</li>
       <li>기반 투자와 유스케이스 투자의 배분이 시간에 따른 누적 가치에 어떤 영향을 주는지 설명할 수 있다.</li>
+      <li>컴퓨트·플랫폼·사람 시간·전문 인력 중 가장 약한 고리가 성과를 정한다는 관점으로 투자 병목을 찾고, 우리 조직의 적정 투자선을 잡는 질문을 쓸 수 있다.</li>
     </ul>
   </header>
 
@@ -249,7 +254,7 @@
 
   <!-- ============================================================ 6 -->
   <section id="invest">
-    <h2>투자 배분: 기반 대 유스케이스</h2>
+    <h2>투자: 기반 대 유스케이스, 그리고 컴퓨트·플랫폼·사람</h2>
     <p>예산 회의에서 늘 같은 질문이 나온다. "데이터 플랫폼에 그렇게 쓰면 AI 성과는 언제 나옵니까?" 반대쪽 질문도 있다. "유스케이스만 계속 하는데 왜 확산이 안 됩니까?" 둘 다 맞는 질문이다. 기반에 전혀 투자하지 않으면 초기 유스케이스는 빨리 나오지만, 각 유스케이스가 자기만의 데이터 정리와 예외 처리를 떠안아 곧 확장이 멈춘다. 기반에만 투자하면 아무 성과 없이 시간이 간다.</p>
     <p>아래 모델은 이 긴장을 단순화한 것이다. 매달 같은 금액을 투자하고, 그중 기반 비중만큼이 "기반 준비도"를 쌓는다. 유스케이스 투자는 운영 중인 유스케이스를 늘리지만, 기반 준비도가 낮으면 확장할 수 있는 상한이 낮고 유스케이스당 가치도 작다. 수치는 모두 <strong>교육용 예시 모델</strong>이며 실제 값은 조직마다 다르다.</p>
     <div class="formula">$$ R(t) = 1 - e^{-\max(0,\,S(t) - \ell)/\tau}, \qquad V(t) = \sum_{k \le t} c_k \min\bigl(U(k),\ \text{cap}(R)\bigr)\,(a + bR) $$
@@ -280,46 +285,68 @@
       <strong>기반 투자를 유스케이스에 묶어서 집행하기</strong>
       <p>"데이터 플랫폼 구축"이라는 독립 과제는 성과를 설명하기 어렵다. 실무에서는 기반 투자를 유스케이스에 묶는 방식이 잘 통한다. "클레임 대응 슬라이스" 예산 안에 용어 사전·문서 저장소·품질 데이터 정제를 포함시키고, 그 기반을 공용으로 설계하는 것이다. 경영진은 유스케이스 성과로 보고받고, 기반은 슬라이스마다 넓어진다. 앞의 수직 슬라이스 전략과 같은 원리다.</p>
     </div>
+
+    <h3>무엇에 투자하나: 가장 약한 고리가 성과를 정한다</h3>
+    <p>기반과 유스케이스의 비중을 정해도 질문이 하나 남는다. 그 돈이 <strong>무엇</strong>에 가는가. AX 요청과 함께 흔히 들리는 세 가지 가정은 모두 절반만 맞고, 빠진 절반이 대개 투자다.</p>
+    <div class="table-wrap"><table>
+      <thead><tr><th>가정</th><th>맞는 부분</th><th>빠진 부분</th></tr></thead>
+      <tbody>
+        <tr><td><b>"AI 시대니까 저절로 효율화된다"</b></td><td>도구는 계속 좋아지고 싸진다</td><td>도구가 닿을 데이터·API·권한과 업무 재설계 시간이 없으면 효율은 개인의 손끝에서 멈춘다(<a href="why.html">1장</a>의 증폭기)</td></tr>
+        <tr><td><b>"교육하면 전문가가 된다"</b></td><td>현업 엔지니어가 AI 빌더가 되는 것은 가능하고 효과적이다</td><td>실습할 업무 시간, 실제 과제, 옆에서 함께 만드는 사람(<a href="people.html">11장</a>의 FDE), 실패할 여유</td></tr>
+        <tr><td><b>"역할을 부여하면 된다"</b></td><td>책임자가 정해져야 일이 움직인다</td><td>권한·시간·예산·지원·평가가 함께 와야 역할이다(<a href="people.html">11장</a>)</td></tr>
+      </tbody>
+    </table></div>
+    <p>GPU와 클라우드도 마찬가지다. 사내 호스팅이 필수인데 GPU가 모자라 대기열이 길거나, 응답이 느려 사용자가 떠나거나, 사용량 상한 때문에 쓰다 멈추거나, 대량 문서 색인을 돌릴 자원이 없다면 컴퓨트 투자가 가장 빠른 해법이다. 그러나 데이터가 메일·엑셀에 흩어져 있거나, 플랫폼 API가 없어 AI가 업무 시스템에 닿지 않거나, 만들 사람이 없거나, 업무 절차가 그대로인 곳에 자원만 늘리면 비싼 장비가 논다. 아래 시뮬레이터는 같은 예산을 다섯 곳에 나눌 때 어디가 병목이 되는지 보여 준다.</p>
+
+    <div class="sim" id="sim-balance">
+      <div class="sim-head"><span class="sim-tag">INTERACTIVE</span><h3>투자 균형 시뮬레이터: 가장 약한 고리가 성과를 정한다</h3></div>
+      <div class="sim-body side">
+        <div class="sim-view"><div class="sim-html">
+          <div id="bal-bars"></div>
+          <div class="bal-out" id="bal-out"></div>
+        </div></div>
+        <div class="sim-controls">
+          <div class="ctrl"><span>예시 배분</span><div class="bal-presets">
+            <button class="btn" data-p="gpu">GPU·클라우드 위주</button>
+            <button class="btn" data-p="edu">교육 위주</button>
+            <button class="btn" data-p="role">역할만 부여</button>
+            <button class="btn" data-p="bal">균형</button>
+          </div></div>
+          <label class="ctrl"><span>컴퓨트(GPU·클라우드·모델 사용료) <output id="bal-c-out"></output></span><input type="range" id="bal-c" min="0" max="100" step="5" value="25"></label>
+          <label class="ctrl"><span>플랫폼·데이터·API <output id="bal-p-out"></output></span><input type="range" id="bal-p" min="0" max="100" step="5" value="25"></label>
+          <label class="ctrl"><span>기존 인력의 시간(실습·업무 재설계) <output id="bal-t-out"></output></span><input type="range" id="bal-t" min="0" max="100" step="5" value="25"></label>
+          <label class="ctrl"><span>전문 인력(채용·FDE) <output id="bal-e-out"></output></span><input type="range" id="bal-e" min="0" max="100" step="5" value="15"></label>
+          <label class="ctrl"><span>강의형 교육 <output id="bal-l-out"></output></span><input type="range" id="bal-l" min="0" max="100" step="5" value="10"></label>
+        </div>
+      </div>
+      <div class="sim-readout">
+        <div class="stat"><span class="k">기대 성과 지수</span><span class="v" id="bal-o1">—</span></div>
+        <div class="stat"><span class="k">병목</span><span class="v" id="bal-o2" style="font-size:15px">—</span></div>
+        <div class="stat"><span class="k">놀고 있는 투자</span><span class="v" id="bal-o3" style="font-size:13px;font-weight:500">—</span></div>
+      </div>
+      <div class="sim-note">같은 예산을 다섯 곳에 나누는 교육용 모델이다(비중은 합이 100%가 되도록 자동 조정). 각 요소는 투자할수록 효과가 체감하며, 전체 성과는 요소들의 곱으로 정해져 가장 약한 요소가 상한을 만든다. 강의형 교육은 실습 시간과 함께일 때만 효과가 커지도록 했다. 해볼 것: 네 가지 예시 배분을 차례로 눌러 보자. 한 곳에 몰면 다른 곳이 병목이 되고, 그 한 곳의 투자는 놀게 된다.</div>
+    </div>
+
+    <h3>얼마가 적당한가</h3>
+    <p>모든 회사에 맞는 투자 비율은 없다. 업계 평균 같은 숫자를 가져오기보다 다음 질문으로 우리 조직의 적정선을 잡는 편이 낫다.</p>
+    <ol class="ladder">
+      <li><b>기대 효과에서 거꾸로 계산한다</b>"사업부 업무 시간의 10%를 바꾸겠다"는 목표라면 그 변화를 만들 실습·재설계 시간을 먼저 예산에 넣는다. 시간 투자 없는 효율 목표는 결국 야근으로 메워진다.</li>
+      <li><b>병목부터 산다</b>지금 가장 막힌 곳이 데이터·API·사람·컴퓨트 중 어디인지 확인하고 그곳부터 투자한다. 병목이 아닌 곳의 투자는 논다.</li>
+      <li><b>사람 시간은 명시적 예산이다</b>"업무 외 시간에 공부하라", "본업을 하면서 AX도 하라"는 투자가 아니다. 참여자의 업무 시간 일부를 공식 배정하고 그만큼 다른 일을 덜어 준다.</li>
+      <li><b>J-커브를 견딜 기간을 정한다</b>위 누적 가치 곡선처럼 기반 투자는 효과가 늦게 나온다(<a href="questions.html">19장</a>). 1년 안에 회수를 요구하면 퀵윈만 남으므로, 기반과 퀵윈의 비중과 재검토 시점을 미리 정한다.</li>
+      <li><b>투자도 증거 사다리로 관리한다</b>사용 기록 → 전후 비교 → 가치 실현 결정(<a href="system.html">14장</a>)으로 효과를 추적하고, 분기마다 다음 투자의 근거로 쓴다(<a href="experiments.html">15장</a>).</li>
+    </ol>
   </section>
 
   <!-- ============================================================ 7 -->
   <section id="plan">
-    <h2>30-60-90일 계획과 18개월 로드맵 예시</h2>
-    <p>로드맵이 정해졌으면 처음 90일은 주 단위로 쪼갠다. 첫 90일의 목표는 성과를 내는 것이 아니라 <strong>등대 프로젝트의 첫 수직 슬라이스가 ①~③을 통과하고, ⑤의 첫 버전이 현업 손에 들어가는 것</strong>이다.</p>
-
-    <figure class="diagram">
-      <svg viewBox="0 0 800 250" role="img" aria-label="30-60-90일 계획">
-        <line x1="40" y1="60" x2="760" y2="60" class="s-axis"/>
-        <g>
-          <circle cx="40" cy="60" r="6" class="f-acc"/><text x="40" y="40" text-anchor="middle" class="t-mono">D0</text>
-          <circle cx="280" cy="60" r="6" class="f-acc"/><text x="280" y="40" text-anchor="middle" class="t-mono">D30</text>
-          <circle cx="520" cy="60" r="6" class="f-acc"/><text x="520" y="40" text-anchor="middle" class="t-mono">D60</text>
-          <circle cx="760" cy="60" r="6" class="f-acc"/><text x="760" y="40" text-anchor="middle" class="t-mono">D90</text>
-        </g>
-        <rect x="50" y="80" width="220" height="150" rx="10" class="f-elev"/>
-        <text x="160" y="104" text-anchor="middle" class="t-acc">0~30일 · 보기</text>
-        <text x="66" y="130" class="t-sm">· 등대 업무 선정, 오너 지정</text>
-        <text x="66" y="150" class="t-sm">· 정보 인벤토리(해당 업무만)</text>
-        <text x="66" y="170" class="t-sm">· as-is 흐름과 기준선 KPI 측정</text>
-        <text x="66" y="190" class="t-sm">· AI 사용 기준·승인 도구 개방</text>
-        <text x="66" y="210" class="t-sm">· 평가 질문 50개 수집</text>
-        <rect x="290" y="80" width="220" height="150" rx="10" class="f-elev"/>
-        <text x="400" y="104" text-anchor="middle" class="t-acc">31~60일 · 맞추기</text>
-        <text x="306" y="130" class="t-sm">· 용어·코드 사전(해당 업무)</text>
-        <text x="306" y="150" class="t-sm">· 이슈 카드 표준 양식</text>
-        <text x="306" y="170" class="t-sm">· 문서 저장소 정리·등급 부여</text>
-        <text x="306" y="190" class="t-sm">· 첫 프로토타입(근거 표시)</text>
-        <text x="306" y="210" class="t-sm">· 챔피언 3~5명 지정</text>
-        <rect x="530" y="80" width="220" height="150" rx="10" class="f-acc-soft"/>
-        <text x="640" y="104" text-anchor="middle" class="t-acc">61~90일 · 쓰게 하기</text>
-        <text x="546" y="130" class="t-sm">· 실제 업무에 투입, 이중 작업 제거</text>
-        <text x="546" y="150" class="t-sm">· 평가 세트로 주간 측정</text>
-        <text x="546" y="170" class="t-sm">· 기준선 대비 KPI 비교</text>
-        <text x="546" y="190" class="t-sm">· 확산 여부·다음 슬라이스 결정</text>
-        <text x="546" y="210" class="t-sm">· 18개월 로드맵 갱신</text>
-      </svg>
-      <figcaption><b>그림 16-3.</b> 등대 프로젝트의 30-60-90일. 첫 30일에 기준선 KPI를 측정해 두지 않으면 90일 뒤 "얼마나 좋아졌는가"에 답할 수 없다. 90일 시점의 결정(확산·수정·중단)을 미리 일정에 넣어 두는 것이 파일럿 연옥을 피하는 장치다.</figcaption>
-    </figure>
+    <h2>첫 90일과 18개월 로드맵 예시</h2>
+    <p>로드맵이 정해졌으면 처음 90일은 주 단위로 쪼갠다. 첫 90일의 목표는 큰 성과가 아니라 <strong>등대 프로젝트의 첫 수직 슬라이스가 ①~③을 통과하고, ⑤의 첫 버전이 현업 손에 들어가는 것</strong>이다. 주 단위 계획과 양식은 <a href="playbook.html">18장</a>의 플레이북에서 직접 만든다. 여기서는 세 가지만 기억하자.</p>
+    <ul class="checklist">
+      <li><b>0~30일 · 보기:</b> 등대 업무와 오너를 정하고, 해당 업무의 정보 인벤토리와 <b>기준선 KPI</b>를 잰다. 기준선이 없으면 90일 뒤 "얼마나 좋아졌는가"에 답할 수 없다.</li>
+      <li><b>31~60일 · 맞추기:</b> 해당 업무의 용어·양식·저장소를 정리하고 근거를 보여 주는 첫 프로토타입을 만든다.</li>
+      <li><b>61~90일 · 쓰게 하기:</b> 실제 업무에 투입해 이중 작업을 없애고, 90일 시점의 확산·수정·중단 결정을 미리 일정에 넣는다.</li>
+    </ul>
 
     <h3>18개월 로드맵 예시</h3>
     <p>A사 품질 부문을 가정한 예시다. 분기마다 "기반"과 "성과"가 함께 있도록 짰다. 이 표는 위 빌더의 "기반 먼저" 예시안을 분기별로 읽은 것과 같다.</p>
@@ -365,7 +392,8 @@
       <li>얇은 수직 슬라이스는 업무 하나를 ①~⑤까지 관통해 빠른 성과와 재사용 가능한 기반을 동시에 만든다. 첫 슬라이스가 등대 프로젝트다.</li>
       <li>로드맵은 일정표가 아니라 의존성 지도다. RAG 앞에는 문서 인벤토리·권한·저장소가, 예지 보전 앞에는 데이터 플랫폼과 품질 규칙이 있다.</li>
       <li>기반 투자가 없으면 초기엔 빠르지만 확장이 멈추고, 기반만 하면 성과가 없다. 최적 배분은 출발점에 따라 다르며, 기반을 유스케이스에 묶어 집행하는 방식이 실무적으로 강하다.</li>
-      <li>첫 90일은 보기–맞추기–쓰게 하기. 기준선 KPI를 먼저 재고, 90일 시점의 확산·수정·중단 결정을 일정에 넣는다.</li>
+      <li>무엇에 투자하느냐도 중요하다. 컴퓨트·플랫폼·사람 시간·전문 인력 중 가장 약한 고리가 성과의 상한을 정하므로 병목부터 투자하고, 사람 시간은 명시적 예산으로 잡는다.</li>
+      <li>첫 90일은 보기–맞추기–쓰게 하기(자세한 계획은 18장). 기준선 KPI를 먼저 재고, 90일 시점의 확산·수정·중단 결정을 일정에 넣는다.</li>
       <li>로드맵은 주·월·분기·연 리듬으로 운영해야 살아 있다. 모든 과제에는 현업 오너와 첫 사용처가 있어야 한다.</li>
     </ol>
   </section>
@@ -408,7 +436,14 @@
         <button class="opt">비중과 관계없이 곡선이 같다</button>
       </div><div class="quiz-exp">기반 없이 만든 유스케이스는 빨리 나오지만, 각자 데이터 정리와 예외 처리를 떠안아 확장 상한이 낮다. 반대로 기반 비중이 너무 높으면 가치를 만들 유스케이스가 부족하다.</div></div>
 
-      <div class="quiz-q"><p>6. 등대 프로젝트의 첫 30일에 반드시 해야 할 일로 가장 중요한 것은?</p><div class="opts">
+      <div class="quiz-q"><p>6. 다음 중 GPU·클라우드 자원 투자만으로 해결될 가능성이 가장 높은 문제는?</p><div class="opts">
+        <button class="opt">실험 데이터의 기준이 팀마다 달라 비교할 수 없다</button>
+        <button class="opt">사내 플랫폼에 API가 없다</button>
+        <button class="opt" data-correct>사내 호스팅이 필수인데 GPU가 부족해 AI 서비스 대기열이 길다</button>
+        <button class="opt">AI 도구가 기존 업무 위에 얹혀 일이 늘었다</button>
+      </div><div class="quiz-exp">컴퓨트가 실제 병목일 때는 자원 투자가 가장 빠른 해법이다. 데이터·API·업무 절차가 병목인 곳에 자원만 늘리면 장비가 논다. 가장 약한 고리가 성과를 정한다.</div></div>
+
+      <div class="quiz-q"><p>7. 등대 프로젝트의 첫 30일에 반드시 해야 할 일로 가장 중요한 것은?</p><div class="opts">
         <button class="opt">최신 모델 벤치마크 비교</button>
         <button class="opt" data-correct>현재 업무의 기준선 KPI(리드타임, 재발률 등) 측정</button>
         <button class="opt">전사 홍보 영상 제작</button>
@@ -690,6 +725,46 @@
     AX.stat("iv-o3", be ? be[0] + "<small>개월</small>" : "36개월 내 없음");
     AX.stat("iv-o4", best + "%");
   }, { aspect: 0.58, minHeight: 260, maxHeight: 400 });
+
+  /* ================================================ 4) 투자 균형(가장 약한 고리) */
+  var BK = ["c", "p", "t", "e", "l"];
+  var BN = { c: "컴퓨트", p: "플랫폼·데이터·API", t: "인력 시간", e: "전문 인력", l: "강의형 교육" };
+  var BS = { c: 14, p: 18, t: 18, e: 12 };
+  var BW = { c: 0.2, p: 0.3, t: 0.3, e: 0.2 };
+  var BPRE = { gpu: { c: 70, p: 10, t: 5, e: 5, l: 10 }, edu: { c: 10, p: 5, t: 10, e: 5, l: 70 }, role: { c: 15, p: 10, t: 0, e: 0, l: 75 }, bal: { c: 20, p: 30, t: 30, e: 15, l: 5 } };
+  var blG = {};
+  BK.forEach(function (k) { blG[k] = AX.range("bal-" + k, function (v) { return v; }, blEval); });
+  [].forEach.call(document.querySelectorAll("#sim-balance .bal-presets .btn"), function (b) {
+    b.addEventListener("click", function () { var pr = BPRE[b.dataset.p]; BK.forEach(function (k) { blG[k].set(pr[k]); }); blEval(); });
+  });
+  function blEval() {
+    var sum = 0, x = {};
+    BK.forEach(function (k) { sum += blG[k](); });
+    BK.forEach(function (k) { x[k] = sum ? blG[k]() / sum * 100 : 20; document.getElementById("bal-" + k + "-out").textContent = Math.round(x[k]) + "%"; });
+    // 강의형 교육은 실습 시간이 있을 때만 '인력 시간'의 효과를 키운다
+    var tEff = x.t + x.l * Math.min(1, x.t / 20) * 0.6;
+    var f = {
+      c: 1 - Math.exp(-x.c / BS.c), p: 1 - Math.exp(-x.p / BS.p),
+      t: 1 - Math.exp(-tEff / BS.t), e: 1 - Math.exp(-x.e / BS.e)
+    };
+    var v = 100;
+    ["c", "p", "t", "e"].forEach(function (k) { v *= Math.pow(Math.max(f[k], 1e-3), BW[k]); });
+    var html = "", minK = "c";
+    ["c", "p", "t", "e"].forEach(function (k) {
+      if (f[k] < f[minK]) minK = k;
+      html += '<div class="bar-row"><span>' + BN[k] + '</span><span class="track"><i style="width:' + Math.max(1, f[k] * 100).toFixed(1) + "%" + '"></i></span><span class="val">' + Math.round(f[k] * 100) + "</span></div>";
+    });
+    document.getElementById("bal-bars").innerHTML = html;
+    var idle = [];
+    ["c", "p", "t", "e"].forEach(function (k) { if (k !== minK && f[k] > 0.9 && f[minK] < 0.6) idle.push(BN[k]); });
+    if (x.l > 30 && x.t < 15) idle.push("강의형 교육(실습 시간 부족)");
+    var tips = { c: "모델을 돌릴 자원이 부족하다. 사내 호스팅 필요 여부와 대기열을 확인하자.", p: "AI가 닿을 데이터와 API가 없다. 도구는 사람의 손끝에서 멈춘다.", t: "만들고 바꿀 사람의 시간이 없다. 교육과 역할만으로는 채워지지 않는다.", e: "함께 만들어 줄 사람(FDE·전문가)이 없다. 첫 관통 과제가 끝나지 않는다." };
+    document.getElementById("bal-out").innerHTML = "<h4>병목: " + BN[minK] + "</h4>" + AX.esc(tips[minK]);
+    AX.stat("bal-o1", Math.round(v));
+    AX.stat("bal-o2", BN[minK]);
+    AX.stat("bal-o3", idle.length ? AX.esc(idle.join(", ")) : "없음");
+  }
+  blEval();
 })();
 </script>
 </body>

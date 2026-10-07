@@ -7,7 +7,7 @@
 <link rel="icon" href="../favicon.svg" type="image/svg+xml">
 <link rel="apple-touch-icon" href="../apple-touch-icon.png">
 <title>사람과 조직: 변화 관리 · AXBook</title>
-<meta name="description" content="중앙 CoE·허브-스포크·연합형 운영 모델, 현업이 주인이 되는 역할 설계, AI 역량 피라미드, ADKAR와 코터 8단계, 저항의 진짜 원인, Bass 확산 모델로 보는 AI 도구 채택 곡선까지 제조 조직의 AX 변화 관리를 다룬다.">
+<meta name="description" content="중앙 CoE·허브-스포크·연합형 운영 모델, 현장에 상주해 함께 만드는 FDE, 현업이 주인이 되고 권한·시간·예산이 함께 오는 역할 설계, AI 역량 피라미드, ADKAR와 코터 8단계, 저항의 진짜 원인, Bass 확산 모델로 보는 AI 도구 채택 곡선까지 제조 조직의 AX 변화 관리를 다룬다.">
 <link rel="canonical" href="https://axbook.euiyun.com/chapters/people.html">
 <meta property="og:type" content="article">
 <meta property="og:site_name" content="AXBook">
@@ -48,10 +48,11 @@
   <header class="chapter-hero">
     <div class="eyebrow">Chapter 11</div>
     <h1>사람과 조직: 변화 관리</h1>
-    <p class="lead">AX가 실패하는 이유를 추적하면 마지막에는 거의 언제나 사람이 나온다. 모델이 나빠서가 아니라 아무도 쓰지 않아서, 쓰는 사람이 일만 늘었다고 느껴서, 현업이 "IT가 만든 것"이라고 선을 그어서 실패한다. 이 장은 AI 조직의 운영 모델과 역할, 전 직원 역량 체계, 저항의 원인과 변화 관리 프레임워크, 그리고 새 도구가 조직에 퍼지는 속도를 설명하는 확산 모델을 다룬다.</p>
+    <p class="lead">AX가 실패하는 이유를 추적하면 마지막에는 거의 언제나 사람이 나온다. 모델이 나빠서가 아니라 아무도 쓰지 않아서, 쓰는 사람이 일만 늘었다고 느껴서, 현업이 "IT가 만든 것"이라고 선을 그어서 실패한다. 이 장은 AI 조직의 운영 모델, 현장에 들어가 함께 만드는 FDE, 명함이 아니라 실제로 작동하는 역할, 전 직원 역량 체계, 저항의 원인과 변화 관리 프레임워크, 그리고 새 도구가 조직에 퍼지는 속도를 설명하는 확산 모델을 다룬다.</p>
     <ul class="objectives">
       <li>중앙 CoE, 허브-스포크, 연합형 운영 모델의 장단점을 비교하고 우리 조직의 단계에 맞는 모델을 고를 수 있다.</li>
-      <li>도메인 전문가·프로덕트 오너·데이터/AI 엔지니어·데이터 스튜어드·AX 챔피언의 역할과 "현업이 주인"이어야 하는 이유를 설명할 수 있다.</li>
+      <li>CoE 엔지니어가 현업 팀에 상주해 함께 만들고 재사용 부품을 플랫폼으로 되돌리는 FDE 방식을 운영하고, 그 성과를 "떠난 뒤"로 평가할 수 있다.</li>
+      <li>도메인 전문가·프로덕트 오너·데이터/AI 엔지니어·데이터 스튜어드·AX 챔피언의 역할과 "현업이 주인"이어야 하는 이유, 역할이 작동하는 다섯 조건(권한·시간·예산·지원·평가)을 설명할 수 있다.</li>
       <li>저항의 신호를 원인(불안·추가 업무·불신·평가)별로 진단하고 ADKAR, 코터 8단계로 대응을 설계할 수 있다.</li>
       <li>Bass 확산 모델의 혁신 계수 p와 모방 계수 q로 채택 곡선을 해석하고, 교육·챔피언·사용 마찰이 확산에 미치는 영향을 추정할 수 있다.</li>
     </ul>
@@ -158,9 +159,65 @@
     </div>
   </section>
 
+  <!-- ============================================================ 2b -->
+  <section id="fde">
+    <h2>FDE: 현장에 들어가 함께 만드는 엔지니어</h2>
+    <p>어느 운영 모델을 고르든 한 가지 간극이 남는다. 기준과 맥락은 현장에만 있는데, AI를 만들 줄 아는 사람은 현장 밖(CoE, IT, 외부 업체)에 있다. 요구사항 문서로 이 간극을 메우려 하면 문서에는 "수율 데이터로 다음 조건 추천" 한 줄만 남고, "2팀은 작년 4월부터 수율 정의가 다르다"는 사실은 빠진다. 현장 사람은 그것이 중요한지 모르고, 개발자는 그런 것이 있는지 모른다.</p>
+    <p><strong>FDE</strong><span class="en">(Forward Deployed Engineer)</span>는 이 간극을 사람으로 메우는 방식이다. 원래는 일부 소프트웨어·AI 기업이 고객사 현장에 엔지니어를 보내 실제 데이터와 업무 위에서 시스템을 만들게 하는 직무의 이름으로 알려졌다. 사내 AX에서는 이렇게 번역할 수 있다. <strong>CoE(허브)의 엔지니어가 현업 팀(스포크)에 일정 기간 상주하며, 그 팀의 실제 업무와 데이터 위에서 함께 만들고, 만든 것 중 일반화할 수 있는 것을 공통 플랫폼으로 되돌린다.</strong> 허브-스포크를 사람으로 잇는 방법이자, 앞의 "CoE는 스스로를 덜 필요하게 만든다"는 원칙을 실행하는 방법이다. 기준과 맥락이 자주 바뀌는 연구·실험 조직(<a href="experiments.html">15장</a>)에서 특히 효과가 크다.</p>
+
+    <figure class="diagram">
+      <svg viewBox="0 0 800 280" role="img" aria-label="FDE 순환 구조">
+        <rect x="300" y="20" width="200" height="54" rx="10" class="f-acc-soft"/>
+        <text x="400" y="44" text-anchor="middle" class="t-acc">① 상주</text>
+        <text x="400" y="62" text-anchor="middle" class="t-sm">업무를 옆에서 보고 같이 한다</text>
+        <rect x="560" y="110" width="200" height="54" rx="10" class="f-acc-soft"/>
+        <text x="660" y="134" text-anchor="middle" class="t-acc">② 함께 만들기</text>
+        <text x="660" y="152" text-anchor="middle" class="t-sm">실제 데이터로, 주 단위로</text>
+        <rect x="300" y="200" width="200" height="54" rx="10" class="f-acc2-soft"/>
+        <text x="400" y="224" text-anchor="middle" class="t-acc2">③ 일반화·환류</text>
+        <text x="400" y="242" text-anchor="middle" class="t-sm">재사용 부품을 플랫폼으로</text>
+        <rect x="40" y="110" width="200" height="54" rx="10" class="f-acc2-soft"/>
+        <text x="140" y="134" text-anchor="middle" class="t-acc2">④ 졸업·다음 팀</text>
+        <text x="140" y="152" text-anchor="middle" class="t-sm">팀이 스스로 운영</text>
+        <path d="M500 50 Q610 55 650 108" class="s-acc"/><path d="M642 100 L651 110 L638 108" class="s-acc"/>
+        <path d="M650 166 Q610 222 502 226" class="s-acc"/><path d="M510 220 L500 226 L510 232" class="s-acc"/>
+        <path d="M300 226 Q190 222 150 166" class="s-acc"/><path d="M146 176 L148 164 L158 172" class="s-acc"/>
+        <path d="M150 108 Q190 55 298 50" class="s-acc"/><path d="M288 44 L300 50 L289 56" class="s-acc"/>
+        <circle cx="400" cy="137" r="44" class="f-surface"/>
+        <text x="400" y="133" text-anchor="middle" class="t">공통</text>
+        <text x="400" y="151" text-anchor="middle" class="t">플랫폼</text>
+      </svg>
+      <figcaption><b>그림 15-3.</b> 사내 FDE의 순환. 핵심은 ③이다. 상주해서 만든 것이 그 팀만의 맞춤 도구로 끝나면 FDE는 비싼 외주 개발자와 다르지 않다. 두 번째 팀부터 같은 부품(이슈 카드 추출기, 기준 레지스트리 템플릿, 평가 세트 양식)을 재사용할 수 있어야 한다.</figcaption>
+    </figure>
+
+    <div class="table-wrap"><table>
+      <thead><tr><th>방식</th><th>어디서 일하나</th><th>무엇을 남기나</th><th>한계</th></tr></thead>
+      <tbody>
+        <tr><td><b>강의·컨설팅</b></td><td>강의실·회의실</td><td>개념, 동기, 전략 문서</td><td>업무에 붙지 않으면 잊히고, 실행은 남는 사람의 몫</td></tr>
+        <tr><td><b>SI·외주 개발</b></td><td>개발사</td><td>요구사항대로 만든 시스템</td><td>요건이 계속 바뀌는 업무에 약하다</td></tr>
+        <tr><td><b>중앙 CoE 접수형</b></td><td>CoE</td><td>요청받은 도구</td><td>대기열 병목, 현장 맥락 손실</td></tr>
+        <tr><td><b>FDE 상주형</b></td><td>현업 팀 안</td><td>돌아가는 업무 + 팀의 역량 + 재사용 부품</td><td>인력이 귀하다. 환류가 없으면 맞춤 도구만 늘어난다</td></tr>
+      </tbody>
+    </table></div>
+
+    <h3>사내 FDE를 운영하는 법</h3>
+    <ul class="checklist">
+      <li><b>기간과 졸업 조건을 먼저 정한다.</b> 수 주~한 분기 단위로 잡고, 시작할 때 "FDE 없이도 팀이 이 도구를 운영하고 기준을 갱신한다" 같은 졸업 조건을 적는다.</li>
+      <li><b>팀에서 짝을 한 명 붙인다.</b> FDE가 떠난 뒤 운영할 사람이고, 다음 단계의 AX 챔피언이 된다.</li>
+      <li><b>실제 업무 한 건을 끝까지 관통한다.</b> 데모가 아니라 이번 주의 실제 건이 처리되어야 한다(<a href="roadmap.html">16장</a>의 얇은 수직 슬라이스).</li>
+      <li><b>환류를 의무로 만든다.</b> 상주 기간의 일정 부분은 만든 것을 일반화해 플랫폼으로 올리는 데 쓰고, 이것을 FDE의 성과 지표에 넣는다.</li>
+      <li><b>성과는 "떠난 뒤"로 잰다.</b> 졸업 3개월 후에도 쓰이는가, 팀이 스스로 확장했는가, 다음 팀이 재사용한 부품이 몇 개인가.</li>
+      <li><b>도메인 출신을 FDE로 키운다.</b> 외부 개발자에게 공정을 가르치는 것보다 공정을 아는 엔지니어에게 AI로 만드는 법을 가르치는 편이 빠른 경우가 많다. 현업 출신 빌더가 가장 좋은 후보다.</li>
+    </ul>
+    <div class="callout">
+      <strong>FDE는 직무명보다 일하는 방식이다</strong>
+      <p>FDE라는 직함을 만들 필요는 없다. 중요한 것은 "만드는 사람이 쓰는 사람 옆에 앉는다", "요구사항 문서가 아니라 실제 데이터로 시작한다", "한 팀에서 배운 것을 다음 팀이 재사용한다"는 세 가지다. 인원이 적다면 CoE 엔지니어 한 명이 분기마다 한 팀씩 옮겨 다니는 것으로도 시작할 수 있다.</p>
+    </div>
+  </section>
+
   <!-- ============================================================ 3 -->
   <section id="roles">
-    <h2>역할: 왜 현업이 주인이어야 하는가</h2>
+    <h2>역할: 현업이 주인이고, 명함이 아니다</h2>
     <p>AI 유스케이스는 소프트웨어 프로젝트처럼 "요구사항을 주면 IT가 만들어 준다"로는 성공하지 않는다. 이유는 세 가지다. ① 정답을 아는 사람이 현업뿐이다. AI 출력이 맞는지 판단하고 평가 세트를 만드는 일은 도메인 전문가만 할 수 있다(<a href="governance.html">10장</a>). ② 업무 재설계 권한이 현업에 있다. 엑셀 양식을 없애고 결재 단계를 바꾸는 결정은 IT가 할 수 없다. ③ 운영 중 개선이 끝없이 필요하다. 만들고 넘기는 방식으로는 문서·공정·고객이 바뀔 때 따라가지 못한다.</p>
 
     <figure class="diagram">
@@ -202,13 +259,22 @@
       <div class="card"><span class="k">STEWARD</span><h4>데이터 스튜어드</h4><p>불량 코드·설비 명칭·단위 같은 기준정보의 관리자(<a href="foundation.html">5장</a>). AI 검색이 같은 불량을 다른 이름으로 놓치지 않게 한다.</p></div>
       <div class="card"><span class="k">CHAMPION</span><h4>AX 챔피언</h4><p>팀 안의 자발적 파워유저. 공식 교육보다 "옆자리 동료가 쓰는 걸 본 것"이 더 강하게 퍼진다. 챔피언에게는 시간과 인정을 공식적으로 줘야 한다.</p></div>
     </div>
-    <div class="callout tip">
-      <strong>허브와 스포크 사이를 사람으로 잇는 법: FDE</strong>
-      <p>허브의 엔지니어가 요청을 접수만 하면 현장의 맥락이 빠진다. 허브 엔지니어가 한 분기 정도 현업 팀에 상주해 실제 데이터와 업무 위에서 함께 만들고, 일반화할 수 있는 부품을 플랫폼으로 되돌리는 방식을 FDE<span class="en">(Forward Deployed Engineer)</span> 모델이라고 한다. 특히 기준과 맥락이 자주 바뀌는 연구·실험 조직에서 효과가 크다. 운영법과 평가 지표는 <a href="experiments.html">15장</a>에서 다룬다.</p>
-    </div>
+
+    <h3>역할은 명함이 아니다</h3>
+    <p>AX 조직을 만들 때 가장 쉬운 일은 이름을 붙이는 것이다. "AX 챔피언", "AI 리더", "데이터 오너". 이름을 받은 사람은 대개 본업을 그대로 하면서 역할을 하나 더 얹고, 몇 달 뒤 그 역할은 회의 참석과 취합 담당이 되어 있다. 위의 역할들이 실제로 작동하려면 다섯 가지가 함께 와야 한다.</p>
+    <div class="table-wrap"><table>
+      <thead><tr><th>요소</th><th>명함뿐인 역할</th><th>작동하는 역할</th></tr></thead>
+      <tbody>
+        <tr><td><b>권한</b></td><td>"추진해 주세요"</td><td>양식·업무 단계·우선순위를 바꿀 수 있는 범위가 문서로 정해져 있다</td></tr>
+        <tr><td><b>시간</b></td><td>본업 + 알파</td><td>업무 시간의 일정 비율이 공식 배정되고, 그만큼 본업이 줄어든다</td></tr>
+        <tr><td><b>예산</b></td><td>필요하면 품의</td><td>도구·컴퓨트·외부 지원에 쓸 작은 재량 예산이 있다</td></tr>
+        <tr><td><b>지원</b></td><td>"모르면 물어보세요"</td><td>FDE·CoE·플랫폼 조직이 함께 만들어 준다(앞 절)</td></tr>
+        <tr><td><b>평가</b></td><td>평가 항목에 없음</td><td>역할의 성과가 본인 평가에 들어가고, 상사도 그것을 안다</td></tr>
+      </tbody>
+    </table></div>
     <div class="callout warn">
-      <strong>역할 이름보다 먼저 정할 것</strong>
-      <p>위의 역할들은 이름만 붙여서는 작동하지 않는다. 각 역할에 권한·공식 배정된 시간·재량 예산·지원·평가 반영이 함께 와야 하고, 역할을 맡기는 만큼 덜어 줄 본업을 정해야 한다. 자세한 점검표는 <a href="system.html#roles">14장</a>에 있다.</p>
+      <strong>"누구든 역할을 주면 된다"가 위험한 이유</strong>
+      <p>역할을 주는 것은 비용이 들지 않아 보여서 가장 흔한 AX 투자 방식이 된다. 하지만 시간과 권한 없이 역할만 받은 사람은 본업을 희생하거나 역할을 형식적으로 수행하는 것 중 하나를 고른다. 어느 쪽이든 조직은 비용을 치른다. 역할을 하나 만들 때마다 "이 사람의 어떤 일을 덜어 줄 것인가"를 함께 정하자. 역할에 드는 사람 시간을 투자 예산의 한 항목으로 다루는 법은 <a href="roadmap.html">16장</a>에서 본다.</p>
     </div>
   </section>
 
@@ -399,7 +465,8 @@
     <ol>
       <li>AI 도구를 기존 업무 위에 얹으면 일이 늘어난다. 무엇을 없앨지 함께 설계하는 업무 재설계가 채택의 전제다.</li>
       <li>운영 모델은 중앙 CoE → 허브-스포크 → 연합형으로 성숙도에 따라 진화하는 경우가 많다. CoE의 성공은 현업이 CoE 없이 만든 성과로 측정한다.</li>
-      <li>프로덕트 오너와 도메인 전문가는 현업이어야 한다. 정답 판단, 평가 세트, 업무 재설계 권한이 현업에 있기 때문이다.</li>
+      <li>FDE는 CoE 엔지니어가 현업 팀에 상주해 실제 데이터로 함께 만들고, 재사용 부품을 플랫폼으로 되돌리는 방식이다. 성과는 FDE가 떠난 뒤에도 남는 것(팀의 자립, 다음 팀의 재사용)으로 잰다.</li>
+      <li>프로덕트 오너와 도메인 전문가는 현업이어야 한다. 정답 판단, 평가 세트, 업무 재설계 권한이 현업에 있기 때문이다. 역할은 권한·시간·예산·지원·평가가 함께 올 때만 작동하므로, 역할을 만들 때마다 덜어 줄 본업을 정한다.</li>
       <li>역량은 리터러시–파워유저–빌더–전문가의 층으로 설계하고, 교육 부담의 대부분은 넓은 바닥층과 실습 코호트 운영에서 생긴다.</li>
       <li>저항은 대부분 합리적 계산의 결과다. 추가 업무, 책임 불명확, 일자리 불안, 인센티브 부재, 사용 마찰을 각각 다르게 다룬다.</li>
       <li>ADKAR는 개인 변화의 순서(인식–욕구–지식–능력–강화), 코터 8단계는 조직 변화의 순서다.</li>
@@ -424,28 +491,35 @@
         <button class="opt">전량 외주</button>
       </div><div class="quiz-exp">희소한 인재와 표준·보안 통제를 한곳에 모으는 중앙 CoE가 초기에 유리하다. 다만 병목이 되지 않도록 현업 역량을 키워 허브-스포크로 옮겨 가는 계획을 함께 세운다.</div></div>
 
-      <div class="quiz-q"><p>3. ADKAR 모델의 다섯 단계를 순서대로 나열한 것은?</p><div class="opts">
+      <div class="quiz-q"><p>3. CoE 엔지니어를 한 분기 동안 품질팀에 FDE로 상주시켰다. 이 FDE의 성과 지표로 가장 적절한 것은?</p><div class="opts">
+        <button class="opt">상주 기간 동안 작성한 코드 줄 수</button>
+        <button class="opt">만든 맞춤 도구의 개수</button>
+        <button class="opt" data-correct>졸업 후에도 팀이 스스로 운영·확장하는지, 그리고 다음 팀이 재사용한 부품 수</button>
+        <button class="opt">상주한 팀의 만족도 설문 점수만</button>
+      </div><div class="quiz-exp">FDE의 목적은 팀을 스스로 움직이게 하고, 한 팀에서 배운 것을 플랫폼으로 되돌려 다음 팀을 빠르게 하는 것이다. 맞춤 도구 개수만 늘면 유지 부담만 커진다.</div></div>
+
+      <div class="quiz-q"><p>4. ADKAR 모델의 다섯 단계를 순서대로 나열한 것은?</p><div class="opts">
         <button class="opt">Knowledge → Ability → Awareness → Desire → Reinforcement</button>
         <button class="opt" data-correct>Awareness → Desire → Knowledge → Ability → Reinforcement</button>
         <button class="opt">Awareness → Knowledge → Desire → Action → Result</button>
         <button class="opt">Assess → Design → Kickoff → Adopt → Review</button>
       </div><div class="quiz-exp">인식(왜) → 욕구(나는 왜 참여하나) → 지식(어떻게) → 능력(실제로 할 수 있나) → 강화(계속하나) 순이다. 왜 해야 하는지 모르는 사람에게 사용법 교육부터 하는 것이 흔한 실수다.</div></div>
 
-      <div class="quiz-q"><p>4. Bass 확산 모델에서 모방 계수 q가 혁신 계수 p보다 훨씬 크다는 것이 시사하는 바는?</p><div class="opts">
+      <div class="quiz-q"><p>5. Bass 확산 모델에서 모방 계수 q가 혁신 계수 p보다 훨씬 크다는 것이 시사하는 바는?</p><div class="opts">
         <button class="opt">교육은 의미가 없다</button>
         <button class="opt">확산은 처음부터 선형으로 일어난다</button>
         <button class="opt" data-correct>동료의 사용(입소문)이 확산을 주로 이끌므로 챔피언과 가시적 성공 사례가 중요하다</button>
         <button class="opt">잠재 채택자 M이 무한대다</button>
       </div><div class="quiz-exp">q 항은 이미 채택한 비율 N/M에 비례하므로, 초반에는 작지만 사용자가 늘수록 커져 S자 곡선을 만든다. p는 출발을 만들고, q가 가속을 만든다. 교육은 p를 키우는 데 의미가 있다.</div></div>
 
-      <div class="quiz-q"><p>5. 다음 중 AX 프로그램의 KPI로 가장 부적절한 단독 지표는?</p><div class="opts">
+      <div class="quiz-q"><p>6. 다음 중 AX 프로그램의 KPI로 가장 부적절한 단독 지표는?</p><div class="opts">
         <button class="opt">클레임 회신 리드타임</button>
         <button class="opt">재발률</button>
         <button class="opt" data-correct>월간 로그인 횟수</button>
         <button class="opt">업무 건 중 도구를 거친 비율</button>
       </div><div class="quiz-exp">로그인 횟수는 업무가 바뀌었는지 보여 주지 못하는 허영 지표가 되기 쉽다. 채택 지표는 선행 지표로만 쓰고, 프로세스·사업 지표와 함께 봐야 한다.</div></div>
 
-      <div class="quiz-q"><p>6. "AI 쓰면 결국 사람 줄이는 거 아니냐"는 우려에 가장 효과적인 대응은?</p><div class="opts">
+      <div class="quiz-q"><p>7. "AI 쓰면 결국 사람 줄이는 거 아니냐"는 우려에 가장 효과적인 대응은?</p><div class="opts">
         <button class="opt">"그런 일은 없습니다"라는 공지를 낸다</button>
         <button class="opt">우려를 표한 직원을 프로젝트에서 제외한다</button>
         <button class="opt" data-correct>절감 시간을 어디에 쓸지(예: 재발 방지 분석) 구체적으로 정하고, 첫 사례에서 실제로 그렇게 운영해 보여 준다</button>
