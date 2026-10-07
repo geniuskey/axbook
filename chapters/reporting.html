@@ -1,0 +1,575 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="icon" href="../favicon.ico" sizes="any">
+<link rel="icon" href="../favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="../apple-touch-icon.png">
+<title>AX 시대의 보고와 평가 · AXBook</title>
+<meta name="description" content="현장은 AX로 바뀌는데 보고와 평가는 그대로라면? 윗선의 질문 하나가 여러 계층을 거치며 수십 명의 시간으로 증폭되는 구조, AI 시대 보고의 형태(질의형·대시보드·예외 보고·결정 메모), 보고서 작업의 적정선, 보고받고 평가하는 조직이 먼저 해야 할 AX, 팀·개인 단위 AX가 내려와야 할 구체적 언어, 증거 기반 목표 평가를 다룬다.">
+<link rel="canonical" href="https://axbook.euiyun.com/chapters/reporting.html">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="AXBook">
+<meta property="og:title" content="AX 시대의 보고와 평가 · AXBook">
+<meta property="og:description" content="현장은 AX로 바뀌는데 보고와 평가는 그대로라면? 윗선의 질문 하나가 여러 계층을 거치며 수십 명의 시간으로 증폭되는 구조, AI 시대 보고의 형태(질의형·대시보드·예외 보고·결정 메모), 보고서 작업의 적정선, 보고받고 평가하는 조직이 먼저 해야 할 AX, 팀·개인 단위 AX가 내려와야 할 구체적 언어, 증거 기반 목표 평가를 다룬다.">
+<meta property="og:url" content="https://axbook.euiyun.com/chapters/reporting.html">
+<meta property="og:image" content="https://axbook.euiyun.com/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:locale" content="ko_KR">
+<meta name="twitter:card" content="summary_large_image">
+<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"TechArticle","headline":"AX 시대의 보고와 평가","name":"AX 시대의 보고와 평가 · AXBook","url":"https://axbook.euiyun.com/chapters/reporting.html","mainEntityOfPage":"https://axbook.euiyun.com/chapters/reporting.html","inLanguage":"ko","isAccessibleForFree":true,"learningResourceType":"interactive textbook chapter","position":13,"image":"https://axbook.euiyun.com/og.png","dateModified":"2026-10-07","isPartOf":{"@type":"Book","@id":"https://axbook.euiyun.com/#book","name":"AXBook — 제조 현장을 위한 인터랙티브 AI 전환 교과서","url":"https://axbook.euiyun.com/"},"publisher":{"@type":"Organization","name":"AXBook","url":"https://axbook.euiyun.com/"},"description":"현장은 AX로 바뀌는데 보고와 평가는 그대로라면? 윗선의 질문 하나가 여러 계층을 거치며 수십 명의 시간으로 증폭되는 구조, AI 시대 보고의 형태(질의형·대시보드·예외 보고·결정 메모), 보고서 작업의 적정선, 보고받고 평가하는 조직이 먼저 해야 할 AX, 팀·개인 단위 AX가 내려와야 할 구체적 언어, 증거 기반 목표 평가를 다룬다."},{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"AXBook","item":"https://axbook.euiyun.com/"},{"@type":"ListItem","position":2,"name":"13 AX 시대의 보고와 평가","item":"https://axbook.euiyun.com/chapters/reporting.html"}]}]}</script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+<link rel="stylesheet" href="../css/style.css">
+<script src="../js/common.js"></script>
+<style>
+  svg .s-bad { stroke: var(--bad); fill: none; stroke-width: 2; }
+  svg .s-acc2 { stroke: var(--accent-2); fill: none; stroke-width: 2; }
+  svg .f-bad-soft { fill: color-mix(in srgb, var(--bad) 12%, transparent); stroke: var(--bad); }
+  svg .f-ok-soft { fill: color-mix(in srgb, var(--ok) 12%, transparent); stroke: var(--ok); }
+  svg .f-warn-soft { fill: color-mix(in srgb, var(--warn) 14%, transparent); stroke: var(--warn); }
+  svg .t-bad { fill: var(--bad); font-family: var(--font); font-size: 13px; font-weight: 700; }
+  svg .t-ok { fill: var(--ok); font-family: var(--font); font-size: 13px; font-weight: 700; }
+  svg .t-acc2 { fill: var(--accent-2); font-family: var(--font); font-size: 13px; font-weight: 700; }
+  svg .t-sm { fill: var(--text-dim); font-family: var(--font); font-size: 11px; }
+  .rp-out { margin-top: 12px; padding: 12px 14px; border-radius: 10px; background: var(--surface); border: 1px solid var(--border); font-size: 14px; }
+  .rp-out h4 { margin: 0 0 6px; font-size: 15.5px; }
+  .rp-out ul { margin: 6px 0 0; padding-left: 18px; }
+  .wiz { display: grid; gap: 8px; }
+  .wiz-q { display: grid; gap: 6px; padding: 9px 11px; border: 1px solid var(--border); border-radius: 10px; background: var(--bg-elev); }
+  .wiz-q > span { font-size: 13.5px; font-weight: 600; color: var(--text); }
+  .wiz-q .seg { flex-wrap: wrap; }
+  .wiz-q .seg button { font-size: 12px; padding: 4px 9px; }
+  .fmt-card { padding: 12px 14px; border-radius: 10px; border: 1px solid var(--border); background: var(--bg-elev); }
+  .fmt-card h4 { margin: 0 0 4px; font-size: 16px; color: var(--accent); }
+  .fmt-card .eg { margin-top: 8px; font-family: var(--mono); font-size: 12.5px; line-height: 1.6; padding: 8px 10px; border-radius: 8px; background: var(--surface); border: 1px dashed var(--border); white-space: pre-wrap; overflow-wrap: anywhere; }
+</style>
+<!-- Cloudflare Web Analytics -->
+<script type='module' src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "3d6151a0abc94ede89285d462527fa80"}'></script>
+<!-- End Cloudflare Web Analytics -->
+</head>
+<body data-chapter="reporting">
+<main class="chapter">
+  <header class="chapter-hero">
+    <div class="eyebrow">Chapter 13</div>
+    <h1>AX 시대의 보고와 평가</h1>
+    <p class="lead">현장은 AI로 보고서 초안을 쓰고 이슈를 자동 분류하는데, 그 성과를 위로 올리는 방식은 10년 전과 똑같다. 질문 하나가 내려오면 여러 계층이 회의를 열고, 자료를 취합하고, 보고서를 몇 번씩 고친다. 그리고 AX 목표의 평가는 취합 엑셀을 읽는 옛 방식으로 이루어진다. 이 장은 보고가 만드는 숨은 비용을 숫자로 보고, AI 시대에 보고가 어떤 모양이어야 하는지, 성과 인정을 위한 문서 작업은 어디까지가 적정한지, 그리고 왜 <strong>보고받고 평가하는 조직이 가장 먼저 AX를 해야 하는지</strong>를 다룬다.</p>
+    <ul class="objectives">
+      <li>위에서 내려온 질문 하나가 계층을 거치며 증폭되는 구조를 설명하고, 우리 조직의 보고 비용을 추정할 수 있다.</li>
+      <li>보고의 목적(결정 요청·상태 공유·위험 경보·성과 인정)별로 AI 시대에 맞는 형태를 고를 수 있다.</li>
+      <li>보고하고 평가하는 상위 조직의 AX가 무엇이고 어떤 지표로 재야 하는지 제시할 수 있다.</li>
+      <li>팀·개인 단위의 AX를 디지털화·표준화·자동화·연결 같은 구체적 언어로 바꾸고, 증거 기반으로 목표를 평가하는 원칙을 적용할 수 있다.</li>
+    </ul>
+  </header>
+
+  <!-- ============================================================ 1 -->
+  <section id="scene">
+    <h2>질문 한 줄, 보고서 일곱 버전</h2>
+    <p>D사(전자부품) 사업부장이 월요일 아침 회의에서 지나가듯 물었다. "요즘 AX 한다는데, 우리 사업부는 AI로 시간 얼마나 줄였어?" 단순한 궁금증이었다. 그 뒤로 일어난 일은 이렇다.</p>
+    <div class="mock">
+      <div class="mock-head">From: 사업부 기획 / Subject: [긴급] 사업부 AX 성과 현황 취합 요청 (회신: 수요일 12시)</div>
+      <div class="mock-body">각 실은 산하 팀의 AX 과제별 <mark>절감 시간, 적용 인원, 대표 사례</mark>를 첨부 양식에 맞춰 회신 바랍니다. 사업부장님 보고는 목요일 오전 예정이며, 화요일 오후에 <mark class="w">실장 사전 리뷰</mark>가 있습니다. 양식은 <mark class="b">지난 분기 양식과 다르니</mark> 유의 바랍니다.<br><br>
+      ↳ 실 기획: 팀별 회신 화요일 17시까지. 실장님 리뷰 전 팀장 사전 점검 필요.<br>
+      ↳ 팀장: 파트별로 과제 정리해서 오늘 중 공유. 절감 시간은 근거 있게.<br>
+      ↳ 파트장: (메신저) 다들 작년 과제 기억나? 절감 시간 어떻게 계산했었지?</div>
+    </div>
+    <p>목요일 보고까지 실장 리뷰 1회, 사업부 기획 리뷰 2회, 사업부장 사전 보고 1회가 있었고 보고서는 일곱 번 수정되었다. 관여한 사람은 파트원부터 실장까지 40여 명. 사업부장은 최종 보고서의 첫 장을 3분 동안 보고 말했다. "응, 생각보다 많이 했네. 수고했어요."</p>
+    <p>이 이야기에 악당은 없다. 사업부장은 궁금했을 뿐이고, 기획은 정확한 답을 드리려 했고, 실장은 틀린 숫자가 올라가는 것을 막으려 했고, 팀장과 파트장은 자기 팀이 제대로 평가받기를 원했다. 모두가 합리적으로 움직였고, <strong>그 합이 수십 명의 하루였다.</strong> 그리고 이 보고서에 쓰인 "절감 시간"은 또 각 팀이 제각각의 방식으로 계산한 숫자였다(<a href="experiments.html">14장</a>).</p>
+    <div class="callout warn">
+      <strong>현장이 AX를 해도 보고가 그대로면</strong>
+      <p>AI로 이슈 대응 시간을 줄인 팀이, 그 성과를 보고하는 데 줄인 시간의 상당 부분을 다시 쓴다. 현장의 AX가 위로 올라가는 순간 옛날 방식의 보고 체계를 통과하면서 효과가 깎인다. 이것이 많은 실무자가 느끼는 답답함의 정체다. 보고 체계는 AX의 "마지막 1마일"이 아니라, <strong>AX가 가장 먼저 닿아야 할 곳</strong>이다.</p>
+    </div>
+  </section>
+
+  <!-- ============================================================ 2 -->
+  <section id="cost">
+    <h2>보고의 숨은 비용: 질문은 내려가며 증폭된다</h2>
+    <p>보고 비용이 잘 보이지 않는 이유는 그것이 한 사람에게 모이지 않고 여러 계층에 얇게 퍼지기 때문이다. 질문은 위에서 한 줄로 시작하지만, 계층을 하나 내려갈 때마다 세 가지가 붙는다. 하위 조직 수만큼 <b>복제</b>되고, 각 계층이 자기 상사 앞에서 틀리지 않으려고 <b>사전 점검</b>을 하고, 위에서 수정 요청이 오면 그 수정이 다시 <b>아래로 전파</b>된다.</p>
+
+    <figure class="diagram">
+      <svg viewBox="0 0 800 330" role="img" aria-label="보고의 증폭: 푸시형과 풀형 비교">
+        <text x="200" y="22" text-anchor="middle" class="t-bad">푸시형: 질문이 내려가고 보고서가 올라온다</text>
+        <rect x="160" y="36" width="80" height="30" rx="6" class="f-bad-soft"/><text x="200" y="56" text-anchor="middle" class="t">사업부장</text>
+        <g class="s-line">
+          <path d="M200 66 L120 96 M200 66 L200 96 M200 66 L280 96"/>
+          <path d="M120 126 L80 156 M120 126 L120 156 M120 126 L160 156 M200 126 L200 156 M200 126 L240 156 M280 126 L280 156 M280 126 L320 156"/>
+        </g>
+        <rect x="90" y="96" width="60" height="30" rx="6" class="f-elev"/><text x="120" y="116" text-anchor="middle" class="t-sm">실 A</text>
+        <rect x="170" y="96" width="60" height="30" rx="6" class="f-elev"/><text x="200" y="116" text-anchor="middle" class="t-sm">실 B</text>
+        <rect x="250" y="96" width="60" height="30" rx="6" class="f-elev"/><text x="280" y="116" text-anchor="middle" class="t-sm">실 C</text>
+        <g>
+          <rect x="62" y="156" width="36" height="24" rx="5" class="f-surface"/><rect x="102" y="156" width="36" height="24" rx="5" class="f-surface"/><rect x="142" y="156" width="36" height="24" rx="5" class="f-surface"/>
+          <rect x="182" y="156" width="36" height="24" rx="5" class="f-surface"/><rect x="222" y="156" width="36" height="24" rx="5" class="f-surface"/>
+          <rect x="262" y="156" width="36" height="24" rx="5" class="f-surface"/><rect x="302" y="156" width="36" height="24" rx="5" class="f-surface"/>
+        </g>
+        <text x="200" y="198" text-anchor="middle" class="t-sm">팀 (각 팀 안에서 다시 파트로)</text>
+        <path d="M40 220 H360" class="s-line" stroke-dasharray="3 3"/>
+        <text x="50" y="244" class="t-sm">① 복제: 하위 조직 수만큼</text>
+        <text x="50" y="264" class="t-sm">② 사전 점검: 계층마다 리뷰 회의</text>
+        <text x="50" y="284" class="t-sm">③ 수정 전파: 위의 수정이 아래로 다시</text>
+        <text x="50" y="310" class="t-bad">비용 ≈ 하위 조직 수^계층 × 인원 × 시간 × 수정</text>
+
+        <line x1="400" y1="20" x2="400" y2="320" class="s-line" stroke-dasharray="4 4"/>
+
+        <text x="600" y="22" text-anchor="middle" class="t-ok">풀형: 묻는 사람이 직접 꺼내 본다</text>
+        <rect x="560" y="36" width="80" height="30" rx="6" class="f-ok-soft"/><text x="600" y="56" text-anchor="middle" class="t">사업부장</text>
+        <path d="M600 66 V100" class="s-acc"/><path d="M594 92 L600 102 L606 92" class="s-acc"/>
+        <rect x="480" y="102" width="240" height="44" rx="8" class="f-acc-soft"/>
+        <text x="600" y="122" text-anchor="middle" class="t-acc">AI 질의 · 대시보드</text>
+        <text x="600" y="139" text-anchor="middle" class="t-sm">기준이 선언된 업무 데이터 위에서</text>
+        <path d="M600 146 V176" class="s-acc"/>
+        <rect x="440" y="176" width="320" height="38" rx="8" class="f-surface"/>
+        <text x="600" y="200" text-anchor="middle" class="t">업무 시스템의 기록(이슈 카드·실험 카드·로그)</text>
+        <text x="600" y="244" text-anchor="middle" class="t-sm">보고서는 업무의 부산물로 생긴다</text>
+        <text x="600" y="264" text-anchor="middle" class="t-sm">사람은 "설명이 필요한 예외"에만 불려 온다</text>
+        <text x="600" y="310" text-anchor="middle" class="t-ok">비용 ≈ 묻는 사람의 시간 + 예외 설명</text>
+      </svg>
+      <figcaption><b>그림 13-1.</b> 푸시형 보고와 풀형 보고. 푸시형에서는 질문이 계층을 내려가며 복제·점검·수정 전파로 커진다. 풀형에서는 묻는 사람이 업무 데이터 위에서 직접 답을 꺼내고, 사람은 숫자만으로 설명되지 않는 예외에만 답한다. 풀형의 전제는 데이터가 정리되어 있다는 것이다(<a href="foundation.html">5장</a>·<a href="experiments.html">14장</a>).</figcaption>
+    </figure>
+
+    <div class="sim" id="sim-cost">
+      <div class="sim-head"><span class="sim-tag">INTERACTIVE</span><h3>보고 증폭 계산기: 질문 하나의 값</h3></div>
+      <div class="sim-body side">
+        <div class="sim-view"><div class="sim-html">
+          <div id="rc-bars"></div>
+          <div class="rp-out" id="rc-out"></div>
+        </div></div>
+        <div class="sim-controls">
+          <label class="ctrl"><span>보고가 거치는 계층 수 <output id="rc-l-out"></output></span><input type="range" id="rc-l" min="2" max="5" step="1" value="4"></label>
+          <label class="ctrl"><span>계층마다 관여하는 하위 조직 수 <output id="rc-f-out"></output></span><input type="range" id="rc-f" min="1" max="5" step="1" value="3"></label>
+          <label class="ctrl"><span>조직당 관여 인원 <output id="rc-n-out"></output></span><input type="range" id="rc-n" min="1" max="6" step="1" value="2"></label>
+          <label class="ctrl"><span>1인당 작업·회의 시간 <output id="rc-h-out"></output></span><input type="range" id="rc-h" min="0.5" max="6" step="0.5" value="2"></label>
+          <label class="ctrl"><span>수정 라운드 <output id="rc-r-out"></output></span><input type="range" id="rc-r" min="1" max="8" step="1" value="4"></label>
+          <label class="ctrl"><span>이런 요청의 월 건수 <output id="rc-m-out"></output></span><input type="range" id="rc-m" min="1" max="20" step="1" value="4"></label>
+          <label class="check"><input type="checkbox" id="rc-auto"> 보고 숫자를 업무 데이터에서 자동 생성</label>
+          <label class="check"><input type="checkbox" id="rc-cap"> 수정은 2라운드까지, 꾸미기 수정 금지</label>
+          <label class="check"><input type="checkbox" id="rc-dash"> 상태 공유는 대시보드로 대체</label>
+          <label class="check"><input type="checkbox" id="rc-pull"> 리더가 먼저 AI·데이터에 직접 물어본다</label>
+        </div>
+      </div>
+      <div class="sim-readout">
+        <div class="stat"><span class="k">질문 1건의 비용</span><span class="v" id="rc-o1">—</span></div>
+        <div class="stat"><span class="k">연간 보고 시간</span><span class="v" id="rc-o2">—</span></div>
+        <div class="stat"><span class="k">상근 인력 환산</span><span class="v" id="rc-o3">—</span></div>
+      </div>
+      <div class="sim-note">계층 k(맨 위가 1)에서 관여 조직 수는 (하위 조직 수)<sup>k−1</sup>로 늘어나고, 수정 라운드마다 작업의 40%가 다시 일어난다고 본 교육용 모델이다. 상근 인력 환산은 연 1,800시간 기준 예시다. 해볼 것: 아무 체크도 없이 계층을 4에서 5로 올려 보자. 비용이 계층의 수에 따라 곱으로 늘어난다. 그다음 네 가지 개선을 하나씩 켜 보자. 가장 큰 효과는 대개 "리더가 먼저 직접 물어본다"에서 나온다.</div>
+    </div>
+    <div class="callout tip">
+      <strong>"질문의 가격표"를 보여 주자</strong>
+      <p>리더 대부분은 자기 질문이 얼마나 비싼지 모른다. 보고 요청을 받으면 "이 보고는 약 몇 명이 며칠을 쓰게 됩니다. 지난달 대시보드의 이 숫자로 답이 될까요?"라고 되묻는 습관을 기획 조직이 가져야 한다. 가격을 알면 질문이 바뀐다. 실제로 많은 리더는 정밀한 보고서가 아니라 대략적인 감을 원했을 뿐이다.</p>
+    </div>
+  </section>
+
+  <!-- ============================================================ 3 -->
+  <section id="purpose">
+    <h2>보고는 무엇을 위한 것인가: 목적별로 형태가 다르다</h2>
+    <p>보고를 줄이자고 하면 "그럼 위에서는 어떻게 아느냐"는 반론이 나온다. 맞는 말이다. 보고 자체를 없애자는 것이 아니다. 보고에는 서로 다른 네 가지 목적이 섞여 있고, 목적마다 맞는 형태가 다르다. 문제는 네 가지를 모두 같은 형태, 즉 <strong>사람이 취합해 만든 PPT</strong>로 처리하는 데 있다.</p>
+    <div class="table-wrap"><table>
+      <thead><tr><th>목적</th><th>위가 실제로 필요한 것</th><th>옛 방식</th><th>AI 시대의 형태</th></tr></thead>
+      <tbody>
+        <tr><td><b>상태 공유</b></td><td>지금 어디쯤인지, 이상은 없는지</td><td>주간·월간 현황 보고서</td><td>상시 대시보드, 리더가 직접 묻는 AI 질의. 보고 회의 없음</td></tr>
+        <tr><td><b>위험 경보</b></td><td>문제가 생겼을 때 빨리 아는 것</td><td>정기 보고서에 묻힌 한 줄</td><td>기준을 넘으면 자동으로 가는 예외 알림 + 담당자의 짧은 설명</td></tr>
+        <tr><td><b>결정 요청</b></td><td>무엇을 결정해야 하고 선택지가 무엇인지</td><td>30장 PPT, 결론은 맨 뒤</td><td>1~2장 결정 메모: 요청 → 선택지 → 추천 → 근거 링크</td></tr>
+        <tr><td><b>성과 인정</b></td><td>누가 무엇을 바꿨는지 알고 공정하게 평가하는 것</td><td>연말 성과 취합 PPT</td><td>성과 레지스트리 항목: 무엇이 바뀌었나, 전후 수치, 증거 링크, 재사용</td></tr>
+      </tbody>
+    </table></div>
+    <p>이 중 사람의 손이 꼭 필요한 것은 <b>결정 요청</b>과 <b>예외의 설명</b>이다. 무엇을 선택할지, 숫자가 왜 이렇게 나왔는지는 사람이 판단해서 써야 한다. 반면 상태 공유와 성과 집계는 <strong>데이터가 정리되어 있다면</strong> 사람이 다시 만들 이유가 없다. AI 시대의 보고 원칙을 세 문장으로 줄이면 다음과 같다.</p>
+    <ol class="ladder">
+      <li><b>보고서는 업무의 부산물이다</b>보고를 위해 따로 만드는 데이터는 없어야 한다. 이슈 카드, 실험 카드, 업무 로그가 쌓이면 보고는 거기서 생긴다. 보고용 엑셀을 따로 만들고 있다면 업무 기록이 부족하다는 신호다.</li>
+      <li><b>밀어 올리지 말고 꺼내 보게 한다</b>정해진 주기로 올리는 보고(push)보다, 필요한 사람이 필요할 때 꺼내 보는 형태(pull)를 기본으로 한다. 정기 보고는 꺼내 볼 수 없는 것만 남긴다.</li>
+      <li><b>사람은 판단과 예외에 쓴다</b>사람이 쓰는 보고는 결정 요청과 "숫자만으로는 설명되지 않는 것"으로 좁힌다. 그 대신 그 부분은 제대로 쓴다.</li>
+    </ol>
+
+    <div class="cards">
+      <div class="fmt-card">
+        <h4>결정 메모</h4>
+        <p>결정이 필요할 때만. 결론을 맨 위에.</p>
+        <div class="eg">요청: 이슈 카드 의무화 범위를 실 전체로 확대
+선택지: A 전체 확대 / B 2개 팀 추가 / C 보류
+추천: B — 입력 품질 95% 확인 후 전체
+근거: 파일럿 리드타임 9.2→5.1일 [링크]
+필요한 결정: 4주 내, 팀장 2명 시간 배정</div>
+      </div>
+      <div class="fmt-card">
+        <h4>예외 알림</h4>
+        <p>기준을 넘었을 때만. 짧게, 담당자 설명과 함께.</p>
+        <div class="eg">[경보] 고객 클레임 초기 회신 리드타임
+이번 주 6.8일 (기준 5일 초과, 3주 연속)
+원인(담당자): 신규 고객사 양식 대응
+조치: 양식 매핑 추가, 다음 주 회복 예상
+대시보드 [링크]</div>
+      </div>
+      <div class="fmt-card">
+        <h4>성과 레지스트리 항목</h4>
+        <p>PPT 대신 다섯 줄. 연말에 다시 쓰지 않는다.</p>
+        <div class="eg">무엇: 8D 초안 작성을 AI 도우미로 전환
+전: 건당 4.1시간 / 후: 1.6시간 (로그, 12주)
+증거: 사용 로그·샘플 10건 [링크]
+재사용: 다른 2개 팀 적용 중
+절감 시간의 사용처: 재발 원인 추가 분석</div>
+      </div>
+    </div>
+
+    <div class="sim" id="sim-tri">
+      <div class="sim-head"><span class="sim-tag">INTERACTIVE</span><h3>이 보고, 어떤 형태여야 하나</h3></div>
+      <div class="sim-body side">
+        <div class="sim-view"><div class="sim-html"><div class="rp-out" id="tr-out" style="margin-top:0"></div></div></div>
+        <div class="sim-controls"><div class="wiz">
+          <div class="wiz-q"><span>요청의 목적</span><div class="seg" id="tr-p"><button data-value="curious" class="on">궁금함</button><button data-value="status">상태 확인</button><button data-value="risk">문제 확인</button><button data-value="decide">결정</button><button data-value="credit">성과 평가</button></div></div>
+          <div class="wiz-q"><span>답에 필요한 데이터</span><div class="seg" id="tr-d"><button data-value="sys">시스템에 있음</button><button data-value="part" class="on">일부만</button><button data-value="none">사람 머릿속·메일</button></div></div>
+          <div class="wiz-q"><span>필요한 정밀도</span><div class="seg" id="tr-a"><button data-value="rough" class="on">대략적인 감</button><button data-value="exact">정확한 숫자</button></div></div>
+          <div class="wiz-q"><span>기한</span><div class="seg" id="tr-t"><button data-value="now">오늘</button><button data-value="week" class="on">이번 주</button><button data-value="later">다음 정기</button></div></div>
+        </div></div>
+      </div>
+      <div class="sim-readout">
+        <div class="stat"><span class="k">권장 형태</span><span class="v" id="tr-o1" style="font-size:15px">—</span></div>
+        <div class="stat"><span class="k">관여 인원(예시)</span><span class="v" id="tr-o2">—</span></div>
+        <div class="stat"><span class="k">PPT 취합 대비</span><span class="v" id="tr-o3">—</span></div>
+      </div>
+      <div class="sim-note">기획·스태프 조직이 보고 요청을 받았을 때 쓰는 분류 규칙의 예시다. 해볼 것: "궁금함 + 대략적인 감"이면 대부분 사람 한 명의 답 한 줄로 충분하다. 같은 질문이라도 데이터가 "사람 머릿속"에 있으면 권장 형태 옆에 "기반 과제"가 따라붙는다. 반복되는 보고 요청은 데이터 정리 과제의 우선순위 목록이다.</div>
+    </div>
+  </section>
+
+  <!-- ============================================================ 4 -->
+  <section id="docs">
+    <h2>성과 인정을 위한 문서 작업, 어디까지가 적정한가</h2>
+    <p>"열심히 했는데 보고서를 못 만들어서 인정을 못 받는다", "보고서 만드는 시간이 개선한 시간보다 길다." 둘 다 현장에서 흔한 말이다. 문서 작업이 전혀 없을 수는 없다. 성과를 남이 알아볼 수 있게 기록하는 것은 필요한 일이다(<a href="questions.html">18장</a>의 "번역"). 문제는 그 기록이 <strong>보고받는 사람의 취향에 맞춘 재가공</strong>으로 변질될 때다.</p>
+    <div class="compare">
+      <div class="before"><h4>적정선을 넘은 문서 작업</h4><ul>
+        <li>같은 데이터를 위 계층마다 다른 양식으로 다시 만든다</li>
+        <li>글꼴·색·도형 배치 수정에 라운드를 쓴다</li>
+        <li>보고 전에 리허설 회의, 리허설 전에 사전 리뷰</li>
+        <li>연말에 1년치 성과를 기억에 의존해 다시 쓴다</li>
+        <li>"한 장으로 줄여 와" 다음에 "근거 자료 붙여 와"</li>
+      </ul></div>
+      <div class="after"><h4>적정한 문서 작업</h4><ul>
+        <li>일이 끝날 때 다섯 줄 레지스트리 항목을 쓴다(10~15분)</li>
+        <li>숫자는 업무 데이터에서 자동으로 채운다</li>
+        <li>근거는 첨부가 아니라 링크로</li>
+        <li>양식은 조직 전체에 하나, 연중 바꾸지 않는다</li>
+        <li>사람이 쓰는 부분은 "왜"와 "다음"에 집중</li>
+      </ul></div>
+    </div>
+    <p>실무에 쓸 수 있는 기준을 몇 가지 제안한다. 숫자는 예시이며, 조직이 합의해서 정하면 된다.</p>
+    <div class="table-wrap"><table>
+      <thead><tr><th>규칙</th><th>예시 기준</th><th>왜</th></tr></thead>
+      <tbody>
+        <tr><td><b>보고 예산</b></td><td>상위 조직이 하위 조직에 요구하는 보고 시간에 분기 상한을 둔다</td><td>보이지 않던 비용을 보이게 하고, 우선순위를 강제한다</td></tr>
+        <tr><td><b>수정 상한</b></td><td>내용 수정 2라운드, 형식 수정 0라운드</td><td>수정은 아래로 전파되며 곱으로 커진다</td></tr>
+        <tr><td><b>양식 동결</b></td><td>성과 양식은 연초에 정하고 1년간 유지</td><td>양식 변경은 전 조직의 재작업이다</td></tr>
+        <tr><td><b>한 번 쓰고 여러 번 보기</b></td><td>같은 성과는 레지스트리 한 곳에만. 위는 그것을 조회</td><td>계층마다 다시 쓰는 일을 없앤다</td></tr>
+        <tr><td><b>회의는 결정이 있을 때만</b></td><td>상태 공유만 하는 보고 회의는 문서 공유로 대체</td><td>"읽으면 되는 것"을 위해 모이지 않는다</td></tr>
+        <tr><td><b>보고 시간도 기록</b></td><td>큰 보고 건은 투입 인원·시간을 마지막 장에 적는다</td><td>질문의 가격을 리더가 알게 한다</td></tr>
+      </tbody>
+    </table></div>
+    <div class="callout">
+      <strong>AI로 보고서를 더 빨리 만드는 것은 반쪽짜리 답이다</strong>
+      <p>"보고서 작성에 AI를 쓰자"는 가장 흔한 AX 과제 중 하나다. 작성 시간은 분명 줄어든다. 하지만 보고 연쇄의 구조(복제, 사전 점검, 수정 전파)가 그대로면, AI는 더 많은 보고서를 더 빨리 만들게 할 뿐이다. 보고서가 싸지면 보고 요청도 늘어난다. 진짜 질문은 "이 보고서를 어떻게 빨리 만들까"가 아니라 <strong>"이 보고서가 왜 필요하고, 누가 데이터에서 직접 볼 수는 없는가"</strong>다.</p>
+    </div>
+  </section>
+
+  <!-- ============================================================ 5 -->
+  <section id="whose">
+    <h2>누구를 위한 AX인가: 보고받고 평가하는 조직의 AX</h2>
+    <p>AX가 전사 키워드가 되면 흔히 이런 장면이 생긴다. 현장 팀들은 새로운 도구를 배우고 업무를 바꾸느라 바쁜데, 그 목표를 정하고 평가하는 상위 조직의 일하는 방식은 그대로다. 양식을 내려보내고, 결과를 취합하고, 읽고, 점수를 매긴다. 실·사업부·부문 레벨로 올라갈수록 이 "취합하고 평가하는 일"의 비중이 커진다. 현장에서 보면 <strong>가장 AX가 덜 된 곳이 AX를 평가하고 있는</strong> 셈이다.</p>
+    <p>이것은 개인의 문제라기보다 구조의 문제다. 하위 조직을 조율하고 평가하는 스태프 기능은 큰 조직에 반드시 필요하다. 다만 그 기능이 하는 일, 즉 정보를 모으고, 요약하고, 비교하고, 이상한 것을 찾아내는 일은 <strong>바로 AI가 가장 잘 돕는 일</strong>이다. 다시 말해 스태프 조직은 AX의 대상에서 빠질 곳이 아니라, AX 효과가 가장 큰 곳 중 하나다.</p>
+
+    <div class="table-wrap"><table>
+      <thead><tr><th>상위·스태프 조직의 일</th><th>지금</th><th>AX 이후</th><th>재는 법</th></tr></thead>
+      <tbody>
+        <tr><td>현황 파악</td><td>하위 조직에 취합 요청</td><td>업무 데이터를 직접 조회, AI에 질의</td><td>하위 조직에 요청한 보고 시간(감소)</td></tr>
+        <tr><td>이상 징후 발견</td><td>월간 보고서를 읽다가 발견</td><td>예외 알림을 받고 담당자에게 바로 질문</td><td>문제 인지까지 걸린 시간</td></tr>
+        <tr><td>목표 평가</td><td>취합 엑셀과 PPT를 읽고 점수</td><td>성과 레지스트리와 로그 기반 증거, AI가 1차 요약</td><td>평가 준비에 든 하위 조직 시간, 이의 제기 비율</td></tr>
+        <tr><td>방향 제시</td><td>"올해 키워드는 AX" 공지</td><td>기반·권한·예산 같은 "아래가 혼자 못 하는 일"을 실행</td><td>상위 조직 자신의 기반 목표 달성(<a href="goals.html">12장</a>)</td></tr>
+        <tr><td>지식 확산</td><td>우수 사례 발표회</td><td>재사용 가능한 부품·템플릿의 중개</td><td>다른 조직의 재사용 건수</td></tr>
+      </tbody>
+    </table></div>
+
+    <div class="callout tip">
+      <strong>상위 조직의 첫 번째 AX 목표: 아래로 보내는 보고 부담 줄이기</strong>
+      <p>상위 조직의 AX 성과를 가장 정직하게 보여 주는 지표는 <b>보고 부담 지표</b>다. 하위 조직에 요구한 보고·취합·리뷰 시간의 합계가 분기마다 얼마나 줄었는가. 이 지표는 측정하기 쉽고, 현장이 바로 체감하며, 줄이려면 상위 조직이 스스로 데이터와 AI를 써야만 한다. "AX를 하라"는 지시보다, 위에서 이 숫자를 먼저 줄여 보이는 것이 조직 전체에 훨씬 강한 신호가 된다.</p>
+    </div>
+
+    <div class="sim" id="sim-staff">
+      <div class="sim-head"><span class="sim-tag">INTERACTIVE</span><h3>평가하는 조직의 AX 자가진단</h3></div>
+      <div class="sim-body side">
+        <div class="sim-view"><div class="sim-html">
+          <div id="sf-bars"></div>
+          <div class="rp-out" id="sf-out"></div>
+        </div></div>
+        <div class="sim-controls" id="sf-ctrl"></div>
+      </div>
+      <div class="sim-readout">
+        <div class="stat"><span class="k">점수</span><span class="v" id="sf-o1">—</span></div>
+        <div class="stat"><span class="k">유형</span><span class="v" id="sf-o2" style="font-size:15px">—</span></div>
+        <div class="stat"><span class="k">먼저 할 것</span><span class="v" id="sf-o3" style="font-size:13px;font-weight:500">—</span></div>
+      </div>
+      <div class="sim-note">실·사업부·부문의 기획·스태프 조직, 또는 AX 목표를 정하고 평가하는 조직이 스스로 점검하는 용도다. 항목과 가중치는 예시다. 현장 실무자라면 우리 상위 조직을 떠올리며 체크해 보고, 결과를 대화의 출발점으로 쓰자.</div>
+    </div>
+
+    <div class="callout deep">
+      <strong>평가자의 자격</strong>
+      <p>AX 과제를 평가하는 사람이 AI로 직접 무언가를 만들어 본 적이 없다면, 평가는 보고서의 완성도와 숫자의 크기로 흐르기 쉽다. 어떤 과제가 어려웠고 어떤 숫자가 부풀려졌는지 알아보려면 직접 해 본 경험이 필요하다. 평가 조직의 구성원부터 작은 업무 하나를 AI로 바꿔 보는 것, 즉 <strong>평가자의 AX</strong>를 평가 체계의 전제 조건으로 두기를 권한다.</p>
+    </div>
+  </section>
+
+  <!-- ============================================================ 6 -->
+  <section id="levels">
+    <h2>팀과 개인의 AX는 무엇으로 내려와야 하나</h2>
+    <p>위에서 "AX"라는 한 단어가 내려오면, 팀과 개인은 무엇을 해야 할지 막막하다. 팀 단위에서도 비즈니스 가치를 계산해야 하는가? 개인이 AX를 "기획"해야 하는가? 이 질문에 대한 이 책의 답은 분명하다. <strong>AX라는 말은 위에서 쓰는 우산이고, 아래로 내려올수록 구체적인 작업의 언어로 바뀌어야 한다.</strong></p>
+
+    <figure class="diagram">
+      <svg viewBox="0 0 800 300" role="img" aria-label="계층별 AX의 언어">
+        <path d="M330 20 H470 L520 70 H280 Z" class="f-acc"/>
+        <text x="400" y="52" text-anchor="middle" class="t" style="fill:var(--bg);font-weight:700">AX · 사업 가치</text>
+        <path d="M280 74 H520 L570 124 H230 Z" class="f-acc-soft"/>
+        <text x="400" y="104" text-anchor="middle" class="t">사업 KPI · 흐름 KPI(리드타임·품질 비용)</text>
+        <path d="M230 128 H570 L620 178 H180 Z" class="f-acc2-soft"/>
+        <text x="400" y="158" text-anchor="middle" class="t">운영 지표 + 기반 산출물(표준 코드·데이터 계약)</text>
+        <path d="M180 182 H620 L670 232 H130 Z" class="f-surface"/>
+        <text x="400" y="212" text-anchor="middle" class="t">디지털화 · 표준화 · 자동화 · 연결(API) · AI 활용</text>
+        <path d="M130 236 H670 L700 280 H100 Z" class="f-elev"/>
+        <text x="400" y="263" text-anchor="middle" class="t-dim">개인: 반복 작업 하나 없애기, 기록 하나 구조화하기</text>
+        <text x="60" y="52" class="t-sm">부문·사업부</text>
+        <text x="60" y="104" class="t-sm">사업부·실</text>
+        <text x="60" y="158" class="t-sm">실·팀</text>
+        <text x="60" y="212" class="t-sm">팀·파트</text>
+        <text x="20" y="263" class="t-sm">개인</text>
+        <text x="740" y="52" text-anchor="end" class="t-sm">₩로 말한다</text>
+        <text x="740" y="263" text-anchor="end" class="t-sm">작업으로 말한다</text>
+      </svg>
+      <figcaption><b>그림 13-2.</b> 계층별 AX의 언어. 위는 사업 가치(금액, 시장)로 말하고, 아래로 내려올수록 운영 지표와 구체적인 작업으로 말한다. 각 층은 바로 위층의 숫자와 "연결선"만 있으면 된다. 개인이나 팀이 금액 환산까지 할 필요는 없다.</figcaption>
+    </figure>
+
+    <div class="table-wrap"><table>
+      <thead><tr><th>층</th><th>AX가 무엇으로 바뀌나</th><th>좋은 목표 예시</th><th>금액 환산이 필요한가</th></tr></thead>
+      <tbody>
+        <tr><td><b>사업부·부문</b></td><td>사업 결과와 투자 배분</td><td>클레임 대응 품질 비용 예시 20% 절감, 공통 데이터 기반 투자</td><td>필요. 이 층의 일이다</td></tr>
+        <tr><td><b>실</b></td><td>여러 팀을 지나는 흐름</td><td>클레임 초기 회신 리드타임 10일 → 5일</td><td>사업부와 함께 환산</td></tr>
+        <tr><td><b>팀</b></td><td>운영 지표 + 기반 산출물</td><td>이슈 카드 전환율 100%, 불량 코드 표준 정착, 품질 DB와 MES 연결</td><td>불필요. 위의 어느 KPI에 기여하는지 연결선만</td></tr>
+        <tr><td><b>파트·개인</b></td><td>디지털화·표준화·자동화·연결·AI 활용</td><td>메일 첨부 엑셀 3종을 입력 화면으로 전환, 주간 보고 자동 생성, 반복 조회를 API로</td><td>불필요. 무엇이 없어졌는지(시간·단계·오류)로 충분</td></tr>
+      </tbody>
+    </table></div>
+    <p>그래서 팀과 개인 단위의 AX는 사실 새로운 것이 아니다. 종이와 메일을 레코드로 바꾸고(디지털화), 양식과 코드를 맞추고(표준화), 반복 작업을 없애고(자동화), 시스템 사이를 API와 데이터 계약으로 잇는 것(연결). 여기에 생성형 AI가 더해져, 예전 같으면 개발 요청을 해야 했던 일 상당수를 팀이 직접 할 수 있게 되었을 뿐이다. <strong>팀과 개인에게 "AX 기획"을 요구하지 말고, 이 구체적인 작업을 할 시간과 도구와 인정을 주는 것</strong>이 위의 몫이다. 계층별 목표 설계의 세부 방법은 <a href="goals.html">12장</a>에서 다뤘다.</p>
+    <div class="callout warn">
+      <strong>팀에 금액 환산을 강요하면 생기는 일</strong>
+      <p>팀마다 "절감 시간 × 시간당 인건비"로 금액을 만들어 올리면 숫자는 커지지만 아무도 믿지 않는다(<a href="experiments.html">14장</a>). 절감 시간은 실제로 현금이 되지 않는 경우가 많고, 같은 성과가 여러 팀에서 중복 계산되기도 한다. 금액 환산은 실제로 예산과 인력 배분을 바꿀 수 있는 사업부 이상에서, 일관된 기준으로 한 번 하는 것이 맞다.</p>
+    </div>
+  </section>
+
+  <!-- ============================================================ 7 -->
+  <section id="evaluate">
+    <h2>AI 시대의 목표 평가: 취합이 아니라 증거로</h2>
+    <p>목표 평가도 보고와 같은 원리로 바꿀 수 있다. 연말에 성과를 다시 써서 올리고, 위에서 읽고 점수를 매기는 방식은 평가받는 쪽과 평가하는 쪽 모두에게 비용이 크고, 결과도 보고서를 잘 쓰는 팀에게 유리하다. 다음 여섯 가지 원칙을 제안한다.</p>
+    <ol class="ladder">
+      <li><b>증거는 업무 시스템에서 가져온다</b>평가 근거는 취합 엑셀이 아니라 성과 레지스트리, 사용 로그, 업무 KPI 대시보드다. 평가를 위해 새로 만드는 자료가 없을수록 좋다.</li>
+      <li><b>기준은 연초에, 대화는 분기마다</b>측정 정의와 베이스라인을 연초에 등록하고(<a href="experiments.html">14장</a>의 증거 사다리), 분기마다 짧은 대화로 방향을 조정한다. 연말에 처음 숫자를 보는 평가는 없어야 한다.</li>
+      <li><b>결과·기반·재사용을 함께 본다</b>결과 지표만 보면 기반 작업을 한 팀이 손해를 본다. 다른 팀이 재사용한 것, 없앤 레거시 양식, 정리한 데이터도 성과다(<a href="goals.html">12장</a>의 목표 유형).</li>
+      <li><b>중단과 실패를 정직하게 보고한 것에 가점</b>"해 보니 안 되는 이유"를 빨리 찾아 접은 과제는 자원을 아낀 성과다. 모든 과제가 성공한 조직은 거짓말을 하고 있거나 도전하지 않은 것이다.</li>
+      <li><b>AI는 1차 요약, 판단은 사람</b>레지스트리와 로그를 AI가 요약해 평가 자료를 만들고, 평가자는 숫자의 맥락과 예외를 묻는 대화에 시간을 쓴다. 평가 준비 시간을 줄이는 것이 평가 조직 자신의 AX다.</li>
+      <li><b>평가 체계도 평가한다</b>평가 준비에 하위 조직이 쓴 시간, 평가 결과에 대한 이의 제기, 평가 후 행동 변화를 매년 점검하고 체계를 고친다.</li>
+    </ol>
+    <div class="table-wrap"><table>
+      <thead><tr><th>평가 항목</th><th>보는 것</th><th>증거의 출처</th></tr></thead>
+      <tbody>
+        <tr><td><b>결과</b></td><td>사전 등록한 운영·사업 지표의 변화</td><td>업무 KPI 대시보드(베이스라인 대비)</td></tr>
+        <tr><td><b>기반</b></td><td>정리한 데이터·표준·연결, 폐기한 레거시</td><td>데이터 카탈로그, 기준 레지스트리, 시스템 변경 이력</td></tr>
+        <tr><td><b>확산·재사용</b></td><td>다른 팀이 가져다 쓴 것</td><td>성과 레지스트리의 재사용 기록, 플랫폼 사용 로그</td></tr>
+        <tr><td><b>학습</b></td><td>중단한 과제와 이유, 공유한 실패</td><td>레지스트리의 중단 항목</td></tr>
+        <tr><td><b>가드레일</b></td><td>보안·품질 기준 준수</td><td>AI 사용 등록부, 게이트웨이 로그(<a href="governance.html">10장</a>)</td></tr>
+      </tbody>
+    </table></div>
+  </section>
+
+  <!-- ============================================================ 8 -->
+  <section id="start">
+    <h2>지금 할 수 있는 것: 위치별 첫걸음</h2>
+    <p>보고와 평가는 한 사람이 바꿀 수 있는 것이 아니다. 하지만 자기 자리에서 할 수 있는 일은 있다. 그리고 이 문제를 답답해하는 사람이 혼자가 아니라는 것도 기억하자. 보고 연쇄의 비용은 거의 모든 큰 조직에서 반복되는 구조적 문제이고, 그것을 불편해하는 감각은 조직이 바뀌어야 할 지점을 정확히 가리키는 신호다.</p>
+    <div class="table-wrap"><table>
+      <thead><tr><th>위치</th><th>이번 분기에 해 볼 것</th></tr></thead>
+      <tbody>
+        <tr><td><b>실무자</b></td><td>내가 매주 만드는 보고 하나를 업무 데이터에서 자동으로 생성되게 바꿔 본다. 큰 보고 건에 투입된 인원과 시간을 기록해 둔다. 내 개선은 다섯 줄 레지스트리 형식으로 남긴다.</td></tr>
+        <tr><td><b>파트장·팀장</b></td><td>위에서 온 보고 요청 중 반복되는 것 세 가지를 골라, 대시보드나 공유 문서 한 곳으로 대체하자고 제안한다. 팀 안의 보고 리허설 회의를 하나 없앤다.</td></tr>
+        <tr><td><b>기획·스태프</b></td><td>하위 조직에 요청하는 정기 보고의 목록과 소요 시간을 만든다. 보고 요청에 "질문의 가격"을 붙여 되묻는다. 평가 담당자부터 AI로 업무 하나를 바꿔 본다.</td></tr>
+        <tr><td><b>임원·리더</b></td><td>궁금한 것을 보고로 요청하기 전에 대시보드나 AI에 먼저 물어본다. 보고서의 형식이 아니라 내용에만 피드백한다. 자기 조직의 보고 부담 지표를 AX 목표로 삼는다.</td></tr>
+      </tbody>
+    </table></div>
+    <div class="callout tip">
+      <strong>리더가 할 수 있는 가장 강력한 한마디</strong>
+      <p>"이건 보고서로 만들지 말고, 지금 있는 자료로 다섯 줄만 보내 주세요." 리더가 이 말을 몇 번만 반복해도 아래의 보고 연쇄가 눈에 띄게 줄어든다. 보고 문화는 보고를 받는 사람이 바꿀 때 가장 빨리 바뀐다.</p>
+    </div>
+  </section>
+
+  <section class="keypoints" id="summary">
+    <h2>핵심 정리</h2>
+    <ol>
+      <li>위에서 내려온 질문은 계층을 지나며 복제·사전 점검·수정 전파로 증폭된다. 비용은 여러 계층에 얇게 퍼져 보이지 않을 뿐, 계층 수에 따라 곱으로 커진다.</li>
+      <li>보고의 목적은 상태 공유·위험 경보·결정 요청·성과 인정으로 나뉘고, 목적마다 맞는 형태(대시보드와 질의, 예외 알림, 결정 메모, 성과 레지스트리)가 다르다. 사람의 손은 결정과 예외 설명에 쓴다.</li>
+      <li>AI 시대의 보고 원칙: 보고서는 업무의 부산물이고, 밀어 올리지 말고 꺼내 보게 하며, 사람은 판단과 예외에 쓴다. 보고서를 AI로 빨리 만드는 것만으로는 구조가 바뀌지 않는다.</li>
+      <li>성과 인정을 위한 문서는 일이 끝날 때 쓰는 다섯 줄 기록과 링크된 증거로 충분하다. 보고 예산, 수정 상한, 양식 동결, 결정 있는 회의만 같은 규칙이 적정선을 지킨다.</li>
+      <li>보고받고 평가하는 상위·스태프 조직의 일(취합·요약·비교·이상 탐지)은 AI가 가장 잘 돕는 일이다. 상위 조직의 첫 AX 목표는 아래로 보내는 보고 부담을 줄이는 것이며, 평가자도 직접 AX를 해 봐야 한다.</li>
+      <li>AX는 위에서 쓰는 우산이고, 팀과 개인으로 내려오면 디지털화·표준화·자동화·연결·AI 활용 같은 구체적 작업으로 바뀐다. 금액 환산은 사업부 이상의 일이고, 아래는 위의 KPI와의 연결선이면 충분하다.</li>
+      <li>목표 평가는 취합이 아니라 증거로 한다. 업무 시스템의 증거, 연초 기준과 분기 대화, 결과·기반·재사용·학습·가드레일을 함께 보고, AI는 요약을, 사람은 판단을 맡는다.</li>
+    </ol>
+  </section>
+
+  <section class="quiz-sec" id="quiz">
+    <h2>확인 퀴즈</h2>
+    <div class="quiz">
+      <div class="quiz-q"><p>1. 사업부장의 단순한 질문 하나가 40여 명의 시간을 쓰게 된 가장 근본적인 원인은?</p><div class="opts">
+        <button class="opt">사업부장이 무리한 요구를 했다</button>
+        <button class="opt">보고서 작성자들의 PPT 실력이 부족했다</button>
+        <button class="opt" data-correct>답에 필요한 데이터가 업무 시스템에 정리되어 있지 않아, 질문이 계층을 내려가며 복제·사전 점검·수정 전파를 거쳤다</button>
+        <button class="opt">AI 보고서 작성 도구를 쓰지 않았다</button>
+      </div><div class="quiz-exp">모두가 합리적으로 움직였지만 구조가 비용을 키웠다. 데이터를 직접 꺼내 볼 수 있으면 질문은 한 사람의 시간으로 끝난다.</div></div>
+
+      <div class="quiz-q"><p>2. 다음 중 사람이 직접 써야 하는 보고로 가장 적절한 것은?</p><div class="opts">
+        <button class="opt">주간 과제 진행률 현황</button>
+        <button class="opt" data-correct>세 가지 선택지 중 무엇을 택할지 결정을 요청하는 메모</button>
+        <button class="opt">월간 AI 도구 사용자 수 집계</button>
+        <button class="opt">팀별 이슈 처리 건수 합계</button>
+      </div><div class="quiz-exp">상태 공유와 집계는 데이터가 정리되어 있다면 대시보드와 질의로 대체할 수 있다. 사람의 판단이 필요한 것은 결정 요청과 예외의 설명이다.</div></div>
+
+      <div class="quiz-q"><p>3. "보고서 작성에 AI를 도입해 작성 시간을 70% 줄였다"는 과제의 한계로 가장 적절한 것은?</p><div class="opts">
+        <button class="opt">AI가 쓴 보고서는 모두 틀리기 때문이다</button>
+        <button class="opt" data-correct>보고 연쇄의 구조가 그대로면 보고서가 싸진 만큼 보고 요청이 늘 수 있고, 복제·리뷰·수정 전파 비용은 남는다</button>
+        <button class="opt">작성 시간은 보고 비용과 무관하기 때문이다</button>
+        <button class="opt">AI는 PPT를 만들 수 없기 때문이다</button>
+      </div><div class="quiz-exp">작성 시간 단축은 도움이 되지만 반쪽짜리다. "이 보고가 왜 필요하고, 누가 데이터에서 직접 볼 수는 없는가"를 함께 물어야 한다.</div></div>
+
+      <div class="quiz-q"><p>4. 실·사업부 기획 조직의 AX 성과 지표로 가장 적절한 것은?</p><div class="opts">
+        <button class="opt">하위 조직에서 취합한 AX 과제 수</button>
+        <button class="opt">작성한 AX 보고서의 쪽수</button>
+        <button class="opt" data-correct>하위 조직에 요구한 보고·취합·리뷰 시간의 감소</button>
+        <button class="opt">AX 교육 공지 발송 횟수</button>
+      </div><div class="quiz-exp">보고 부담 지표는 측정하기 쉽고, 현장이 바로 체감하며, 줄이려면 상위 조직이 스스로 데이터와 AI를 써야만 한다.</div></div>
+
+      <div class="quiz-q"><p>5. 파트 단위의 AX 목표로 가장 적절한 것은?</p><div class="opts">
+        <button class="opt">파트의 AX로 연 3억 원 가치 창출(인건비 환산)</button>
+        <button class="opt">AI 과제 5건 기획</button>
+        <button class="opt" data-correct>메일 첨부 엑셀 3종을 입력 화면으로 전환하고, 주간 보고를 업무 데이터에서 자동 생성</button>
+        <button class="opt">전사 AX 비전 수립</button>
+      </div><div class="quiz-exp">아래로 내려올수록 AX는 디지털화·표준화·자동화·연결 같은 구체적 작업으로 바뀐다. 금액 환산은 사업부 이상에서 일관된 기준으로 한 번 하는 것이 맞다.</div></div>
+
+      <div class="quiz-q"><p>6. 증거 기반 목표 평가의 원칙과 거리가 먼 것은?</p><div class="opts">
+        <button class="opt">측정 정의와 베이스라인을 연초에 등록한다</button>
+        <button class="opt">다른 팀이 재사용한 기반 작업도 성과로 본다</button>
+        <button class="opt">중단한 과제와 이유를 정직하게 보고하면 가점을 준다</button>
+        <button class="opt" data-correct>연말에 각 팀이 1년 성과를 새 양식의 PPT로 정리해 제출하게 한다</button>
+      </div><div class="quiz-exp">평가를 위해 새로 만드는 자료가 많을수록 비용이 크고, 보고서를 잘 쓰는 팀에 유리해진다. 증거는 업무 시스템과 성과 레지스트리에서 가져온다.</div></div>
+    </div>
+  </section>
+</main>
+<script>
+(function () {
+  "use strict";
+
+  /* ================================================ 1) 보고 증폭 계산기 */
+  var rcUpd = function () { rcEval(); };
+  var rcL = AX.range("rc-l", function (v) { return v + "단계"; }, rcUpd);
+  var rcF = AX.range("rc-f", function (v) { return v + "개"; }, rcUpd);
+  var rcN = AX.range("rc-n", function (v) { return v + "명"; }, rcUpd);
+  var rcH = AX.range("rc-h", function (v) { return v + "시간"; }, rcUpd);
+  var rcR = AX.range("rc-r", function (v) { return v + "회"; }, rcUpd);
+  var rcM = AX.range("rc-m", function (v) { return v + "건"; }, rcUpd);
+  ["rc-auto", "rc-cap", "rc-dash", "rc-pull"].forEach(function (id) { document.getElementById(id).addEventListener("change", rcUpd); });
+  function perReq(L, f, n, h, r, auto) {
+    var tot = 0;
+    for (var k = 1; k <= L; k++) {
+      var orgs = Math.pow(f, k - 1);
+      var hh = h * (auto && k > 1 ? 0.45 : 1);               // 자동 생성: 아래 계층의 취합·작성 감소
+      tot += orgs * n * hh * (1 + 0.4 * (r - 1));
+    }
+    return tot;
+  }
+  function rcEval() {
+    var L = rcL(), f = rcF(), n = rcN(), h = rcH(), r = rcR(), m = rcM();
+    var auto = document.getElementById("rc-auto").checked, cap = document.getElementById("rc-cap").checked;
+    var dash = document.getElementById("rc-dash").checked, pull = document.getElementById("rc-pull").checked;
+    var before = perReq(L, f, n, h, r, false);
+    var after1 = perReq(L, f, n, h, cap ? Math.min(r, 2) : r, auto);
+    var mm = m * (dash ? 0.6 : 1) * (pull ? 0.55 : 1);       // 대시보드·직접 질의로 사라지는 요청
+    var yb = before * m * 12, ya = after1 * mm * 12 + (pull ? m * 12 * 0.45 * 0.5 : 0);
+    var any = auto || cap || dash || pull;
+    var mx = Math.max(yb, 1);
+    var html = '<div class="bar-row"><span>지금(시간/년)</span><span class="track"><i style="width:100%;background:var(--bad)"></i></span><span class="val">' + Math.round(yb).toLocaleString() + "</span></div>";
+    if (any) html += '<div class="bar-row"><span>개선 후</span><span class="track"><i style="width:' + Math.max(1, ya / mx * 100).toFixed(1) + '%;background:var(--ok)"></i></span><span class="val">' + Math.round(ya).toLocaleString() + "</span></div>";
+    document.getElementById("rc-bars").innerHTML = html;
+    var people = 0; for (var k = 1; k <= L; k++) people += Math.pow(f, k - 1) * n;
+    var msg = "<h4>질문 하나에 " + Math.round(people) + "명, " + Math.round(before) + "시간</h4>" +
+      "맨 아래 계층에서만 " + Math.round(Math.pow(f, L - 1) * n) + "명이 움직인다. 수정 라운드가 하나 늘 때마다 모든 계층의 작업이 다시 일어난다.";
+    if (any) msg += "<ul><li>개선 후 연간 " + Math.round(yb - ya).toLocaleString() + "시간(" + Math.round((1 - ya / yb) * 100) + "%) 감소</li></ul>";
+    document.getElementById("rc-out").innerHTML = msg;
+    AX.stat("rc-o1", Math.round(before) + "<small>시간</small>");
+    AX.stat("rc-o2", Math.round(any ? ya : yb).toLocaleString() + "<small>시간/년</small>");
+    AX.stat("rc-o3", ((any ? ya : yb) / 1800).toFixed(1) + "<small>명</small>");
+  }
+  rcEval();
+
+  /* ================================================ 2) 보고 형태 분류 */
+  var trUpd = function () { trEval(); };
+  var trP = AX.seg("tr-p", trUpd), trD = AX.seg("tr-d", trUpd), trA = AX.seg("tr-a", trUpd), trT = AX.seg("tr-t", trUpd);
+  function trEval() {
+    var p = trP(), d = trD(), a = trA(), t = trT();
+    var fmt, how, ppl, gain, extra = [];
+    if (p === "curious" || p === "status") {
+      if (d === "sys") { fmt = p === "status" ? "대시보드 링크" : "직접 질의(AI·데이터)"; how = "묻는 사람이 직접 꺼내 본다. 기획은 어디서 보는지만 안내한다."; ppl = "0~1명"; gain = "약 1/30"; }
+      else if (a === "rough") { fmt = "담당자 답 한 줄"; how = "가장 잘 아는 한 사람이 메신저나 메일로 대략의 답을 준다. 취합·양식·리뷰 없음."; ppl = "1명"; gain = "약 1/20"; }
+      else { fmt = "간단 메모(양식 자유)"; how = "아는 범위의 숫자와 출처, 모르는 부분을 명시한 메모. 정밀 취합이 정말 필요한지 되묻는다."; ppl = "1~3명"; gain = "약 1/5"; }
+    } else if (p === "risk") {
+      fmt = "예외 알림 + 담당자 설명"; how = "기준 초과 사실, 원인, 조치, 다음 확인 시점을 다섯 줄로. 보고 회의 대신 필요한 사람만 바로 연결."; ppl = "1~2명"; gain = "약 1/10";
+    } else if (p === "decide") {
+      fmt = "결정 메모(1~2장)"; how = "요청 → 선택지 → 추천 → 근거 링크 → 필요한 결정과 기한. 결론을 맨 위에."; ppl = "2~4명"; gain = "약 1/3";
+    } else {
+      fmt = "성과 레지스트리 조회"; how = "연중 기록된 다섯 줄 항목과 로그를 조회한다. 평가를 위해 새 자료를 만들지 않는다."; ppl = "0~1명"; gain = "약 1/15";
+    }
+    if (d === "none") extra.push("기반 과제: 이 답이 사람 머릿속·메일에 있다. 반복되는 질문이면 업무 기록부터 정리할 과제다.");
+    if (d === "part" && (p === "status" || p === "credit")) extra.push("반복 요청이라면 빠진 데이터를 시스템에 넣는 것이 다음 할 일이다.");
+    if (t === "now" && a === "exact") extra.push("오늘 안에 정확한 숫자: 정밀도와 기한 중 하나를 양보할 수 있는지 먼저 묻는다.");
+    if (t === "later" && (p === "curious")) extra.push("다음 정기 보고에 끼워 넣지 말고, 궁금한 그때 답 한 줄로 끝낸다.");
+    document.getElementById("tr-out").innerHTML = "<h4>" + fmt + "</h4>" + AX.esc(how) + (extra.length ? "<ul>" + extra.map(function (e) { return "<li>" + AX.esc(e) + "</li>"; }).join("") + "</ul>" : "");
+    AX.stat("tr-o1", AX.esc(fmt));
+    AX.stat("tr-o2", ppl);
+    AX.stat("tr-o3", gain + "<small>시간</small>");
+  }
+  trEval();
+
+  /* ================================================ 3) 평가하는 조직의 자가진단 */
+  var SF = [
+    { t: "하위 조직에 요청하는 정기 보고의 목록과 소요 시간을 알고 있다", w: 1.2, a: "보고 목록과 소요 시간 조사" },
+    { t: "같은 데이터를 다른 양식으로 다시 요청하지 않는다", w: 1.0, a: "양식 하나로 통일·동결" },
+    { t: "상태 정보는 대시보드·시스템에서 직접 본다", w: 1.2, a: "상태 보고 3종을 대시보드로 대체" },
+    { t: "평가 증거를 로그·시스템에서 가져온다(취합 엑셀이 아니라)", w: 1.2, a: "성과 레지스트리 도입" },
+    { t: "평가 담당자가 AI로 직접 업무 하나를 바꿔 본 경험이 있다", w: 1.0, a: "평가자부터 AI로 업무 하나 바꾸기" },
+    { t: "우리 조직 자신의 AX 목표가 있다(예: 보고 부담 감소)", w: 1.1, a: "보고 부담 지표를 자체 목표로" },
+    { t: "보고서 수정 라운드에 상한이 있고 형식 수정은 하지 않는다", w: 0.8, a: "수정 2라운드 상한, 형식 수정 금지" },
+    { t: "질문하기 전에 AI·데이터로 먼저 찾아본다", w: 0.9, a: "보고 요청 전 직접 조회 습관" },
+    { t: "중단·실패 보고에 불이익이 없다", w: 0.8, a: "중단 보고 가점 규칙" },
+    { t: "평가 기준을 연초에 공개하고 분기마다 대화한다", w: 0.8, a: "연초 기준 공개 + 분기 대화" }
+  ];
+  var ctrl = document.getElementById("sf-ctrl");
+  ctrl.innerHTML = SF.map(function (q, i) { return '<label class="check"><input type="checkbox" id="sf-' + i + '"> ' + AX.esc(q.t) + "</label>"; }).join("");
+  SF.forEach(function (q, i) { document.getElementById("sf-" + i).addEventListener("change", sfEval); });
+  function sfEval() {
+    var s = 0, mx = 0, miss = [];
+    SF.forEach(function (q, i) { mx += q.w; if (document.getElementById("sf-" + i).checked) s += q.w; else miss.push(q); });
+    var pct = Math.round(s / mx * 100);
+    var type, tip;
+    if (pct < 35) { type = "취합·관리형"; tip = "AX를 평가하지만 스스로는 옛 방식이다. 현장은 가장 먼저 이 차이를 느낀다."; }
+    else if (pct < 70) { type = "전환 중"; tip = "일부는 데이터로 보고 있다. 남은 취합과 재작성이 현장의 시간을 가장 많이 쓰는 곳이다."; }
+    else { type = "지원형"; tip = "보고받는 쪽이 먼저 AX를 하고 있다. 이제 하위 조직의 기반 작업을 돕는 데 시간을 쓸 수 있다."; }
+    document.getElementById("sf-bars").innerHTML = '<div class="bar-row"><span>평가 조직의 AX</span><span class="track"><i style="width:' + Math.max(2, pct) + '%"></i></span><span class="val">' + pct + "</span></div>";
+    miss.sort(function (a, b) { return b.w - a.w; });
+    document.getElementById("sf-out").innerHTML = "<h4>" + type + "</h4>" + AX.esc(tip) + (miss.length ? "<ul>" + miss.slice(0, 3).map(function (m) { return "<li>" + AX.esc(m.a) + "</li>"; }).join("") + "</ul>" : "");
+    AX.stat("sf-o1", pct);
+    AX.stat("sf-o2", type);
+    AX.stat("sf-o3", miss.length ? AX.esc(miss[0].a) : "유지·확산");
+  }
+  sfEval();
+})();
+</script>
+</body>
+</html>
