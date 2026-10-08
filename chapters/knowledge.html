@@ -19,7 +19,7 @@
 <meta property="og:image:height" content="630">
 <meta property="og:locale" content="ko_KR">
 <meta name="twitter:card" content="summary_large_image">
-<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"TechArticle","headline":"문서를 지식으로: RAG와 지식 그래프","name":"문서를 지식으로: RAG와 지식 그래프 · AXBook","url":"https://axbook.euiyun.com/chapters/knowledge.html","mainEntityOfPage":"https://axbook.euiyun.com/chapters/knowledge.html","inLanguage":"ko","isAccessibleForFree":true,"learningResourceType":"interactive textbook chapter","position":6,"image":"https://axbook.euiyun.com/og.png","dateModified":"2026-10-07","isPartOf":{"@type":"Book","@id":"https://axbook.euiyun.com/#book","name":"AXBook — 제조 현장을 위한 인터랙티브 AI 전환 교과서","url":"https://axbook.euiyun.com/"},"publisher":{"@type":"Organization","name":"AXBook","url":"https://axbook.euiyun.com/"},"description":"공유 폴더의 PDF·PPT·엑셀·HWP와 메일 첨부를 AI가 근거로 쓰는 지식으로 바꾸는 법. 파싱과 청킹, BM25와 임베딩의 하이브리드 검색, 권한(ACL)과 최신성, GraphRAG와 평가까지 브라우저 안의 미니 RAG로 직접 실험한다."},{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"AXBook","item":"https://axbook.euiyun.com/"},{"@type":"ListItem","position":2,"name":"06 문서를 지식으로: RAG와 지식 그래프","item":"https://axbook.euiyun.com/chapters/knowledge.html"}]}]}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"TechArticle","headline":"문서를 지식으로: RAG와 지식 그래프","name":"문서를 지식으로: RAG와 지식 그래프 · AXBook","url":"https://axbook.euiyun.com/chapters/knowledge.html","mainEntityOfPage":"https://axbook.euiyun.com/chapters/knowledge.html","inLanguage":"ko","isAccessibleForFree":true,"learningResourceType":"interactive textbook chapter","position":6,"image":"https://axbook.euiyun.com/og.png","dateModified":"2026-10-08","isPartOf":{"@type":"Book","@id":"https://axbook.euiyun.com/#book","name":"AXBook — 제조 현장을 위한 인터랙티브 AI 전환 교과서","url":"https://axbook.euiyun.com/"},"publisher":{"@type":"Organization","name":"AXBook","url":"https://axbook.euiyun.com/"},"description":"공유 폴더의 PDF·PPT·엑셀·HWP와 메일 첨부를 AI가 근거로 쓰는 지식으로 바꾸는 법. 파싱과 청킹, BM25와 임베딩의 하이브리드 검색, 권한(ACL)과 최신성, GraphRAG와 평가까지 브라우저 안의 미니 RAG로 직접 실험한다."},{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"AXBook","item":"https://axbook.euiyun.com/"},{"@type":"ListItem","position":2,"name":"06 문서를 지식으로: RAG와 지식 그래프","item":"https://axbook.euiyun.com/chapters/knowledge.html"}]}]}</script>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
 <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
 <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
@@ -270,7 +270,7 @@
       <div class="after"><h4>안전한 설계</h4><ul>
         <li>검색 단계에서 사용자 그룹으로 먼저 필터 → 볼 수 없는 청크는 후보에도 오르지 않음</li>
         <li>권한은 원본 시스템이 진실의 원천, 색인은 주기적으로 동기화</li>
-        <li>질문·검색 결과·답변을 감사 로그로 남김(<a href="governance.html">11장</a>)</li>
+        <li>질문·검색 결과·답변을 감사 로그로 남김(<a href="governance.html">12장</a>)</li>
       </ul></div>
     </div>
     <p>프롬프트로 "말하지 마"라고 지시하는 방식은 프롬프트 주입 같은 공격이나 모델의 실수에 취약하다. LLM에게 건네지 않은 정보는 새어 나갈 수 없다. 이것이 필터를 생성 뒤가 아니라 검색 앞에 두는 이유다.</p>
@@ -316,7 +316,7 @@
       </tbody>
     </table></div>
     <div class="callout tip"><strong>"지난 분기 불량 몇 건?"은 RAG에게 묻지 말 것</strong>
-      <p>RAG는 문서 조각을 찾아 읽는 방식이라 숫자를 세는 일에 약하다. 집계 질문은 정형 데이터(골드 테이블)에 대한 질의로 보내고, 문서 질문만 RAG로 보내는 라우팅이 필요하다. 에이전트가 이 판단을 하게 만드는 방법은 <a href="agents.html">9장</a>에서 다룬다.</p>
+      <p>RAG는 문서 조각을 찾아 읽는 방식이라 숫자를 세는 일에 약하다. 집계 질문은 정형 데이터(골드 테이블)에 대한 질의로 보내고, 문서 질문만 RAG로 보내는 라우팅이 필요하다. 에이전트가 이 판단을 하게 만드는 방법은 <a href="agents.html">10장</a>에서 다룬다.</p>
     </div>
   </section>
 

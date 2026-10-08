@@ -1,0 +1,492 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="icon" href="../favicon.ico" sizes="any">
+<link rel="icon" href="../favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="../apple-touch-icon.png">
+<title>AX 과제의 정량화 · AXBook</title>
+<meta name="description" content="'업무 효율 70% 향상'은 어떻게 쟀는가? AX 과제를 정량화하는 측정 사슬(사용→작업→품질→흐름→사업 가치), 과제 유형별 지표 메뉴, 로그·타임스터디·워크 샘플링 같은 측정 방법, 전후 비교의 함정과 비교군·이중차분, 표본 크기와 신뢰구간, 정성 효과와 기반 과제의 정량화, 금액 환산식, 한 장 측정 계획서를 다룬다.">
+<link rel="canonical" href="https://axbook.euiyun.com/chapters/measure.html">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="AXBook">
+<meta property="og:title" content="AX 과제의 정량화 · AXBook">
+<meta property="og:description" content="&#x27;업무 효율 70% 향상&#x27;은 어떻게 쟀는가? AX 과제를 정량화하는 측정 사슬(사용→작업→품질→흐름→사업 가치), 과제 유형별 지표 메뉴, 로그·타임스터디·워크 샘플링 같은 측정 방법, 전후 비교의 함정과 비교군·이중차분, 표본 크기와 신뢰구간, 정성 효과와 기반 과제의 정량화, 금액 환산식, 한 장 측정 계획서를 다룬다.">
+<meta property="og:url" content="https://axbook.euiyun.com/chapters/measure.html">
+<meta property="og:image" content="https://axbook.euiyun.com/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:locale" content="ko_KR">
+<meta name="twitter:card" content="summary_large_image">
+<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"TechArticle","headline":"AX 과제의 정량화: 무엇을, 어떻게, 얼마나 믿을 수 있게","name":"AX 과제의 정량화: 무엇을, 어떻게, 얼마나 믿을 수 있게 · AXBook","url":"https://axbook.euiyun.com/chapters/measure.html","mainEntityOfPage":"https://axbook.euiyun.com/chapters/measure.html","inLanguage":"ko","isAccessibleForFree":true,"learningResourceType":"interactive textbook chapter","position":9,"image":"https://axbook.euiyun.com/og.png","dateModified":"2026-10-08","isPartOf":{"@type":"Book","@id":"https://axbook.euiyun.com/#book","name":"AXBook — 제조 현장을 위한 인터랙티브 AI 전환 교과서","url":"https://axbook.euiyun.com/"},"publisher":{"@type":"Organization","name":"AXBook","url":"https://axbook.euiyun.com/"},"description":"'업무 효율 70% 향상'은 어떻게 쟀는가? AX 과제를 정량화하는 측정 사슬(사용→작업→품질→흐름→사업 가치), 과제 유형별 지표 메뉴, 로그·타임스터디·워크 샘플링 같은 측정 방법, 전후 비교의 함정과 비교군·이중차분, 표본 크기와 신뢰구간, 정성 효과와 기반 과제의 정량화, 금액 환산식, 한 장 측정 계획서를 다룬다."},{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"AXBook","item":"https://axbook.euiyun.com/"},{"@type":"ListItem","position":2,"name":"09 AX 과제의 정량화: 무엇을, 어떻게, 얼마나 믿을 수 있게","item":"https://axbook.euiyun.com/chapters/measure.html"}]}]}</script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+<link rel="stylesheet" href="../css/style.css">
+<script src="../js/common.js"></script>
+<style>
+  svg .s-bad { stroke: var(--bad); fill: none; stroke-width: 2; }
+  svg .s-acc2 { stroke: var(--accent-2); fill: none; stroke-width: 2; }
+  svg .f-bad-soft { fill: color-mix(in srgb, var(--bad) 12%, transparent); stroke: var(--bad); }
+  svg .f-ok-soft { fill: color-mix(in srgb, var(--ok) 12%, transparent); stroke: var(--ok); }
+  svg .f-warn-soft { fill: color-mix(in srgb, var(--warn) 14%, transparent); stroke: var(--warn); }
+  svg .t-bad { fill: var(--bad); font-family: var(--font); font-size: 13px; font-weight: 700; }
+  svg .t-ok { fill: var(--ok); font-family: var(--font); font-size: 13px; font-weight: 700; }
+  svg .t-acc2 { fill: var(--accent-2); font-family: var(--font); font-size: 13px; font-weight: 700; }
+  svg .t-sm { fill: var(--text-dim); font-family: var(--font); font-size: 11px; }
+  .ms-card { padding: 12px 14px; border-radius: 10px; background: var(--surface); border: 1px solid var(--border); font-size: 14px; }
+  .ms-card h4 { margin: 0 0 8px; font-size: 15.5px; }
+  .ms-card dl { margin: 0; display: grid; grid-template-columns: 7.5em 1fr; gap: 6px 10px; }
+  .ms-card dt { color: var(--text-dim); font-size: 13px; }
+  .ms-card dd { margin: 0; }
+  @media (max-width: 480px) { .ms-card dl { grid-template-columns: 1fr; } .ms-card dt { margin-top: 4px; } }
+  .wiz-q { display: grid; gap: 6px; padding: 9px 11px; border: 1px solid var(--border); border-radius: 10px; background: var(--bg-elev); }
+  .wiz-q > span { font-size: 13.5px; font-weight: 600; color: var(--text); }
+  .wiz-q .seg { flex-wrap: wrap; }
+  .wiz-q .seg button { font-size: 12px; padding: 4px 9px; }
+</style>
+<!-- Cloudflare Web Analytics -->
+<script type='module' src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "3d6151a0abc94ede89285d462527fa80"}'></script>
+<!-- End Cloudflare Web Analytics -->
+</head>
+<body data-chapter="measure">
+<main class="chapter">
+  <header class="chapter-hero">
+    <div class="eyebrow">Chapter 09</div>
+    <h1>AX 과제의 정량화: 무엇을, 어떻게, 얼마나 믿을 수 있게</h1>
+    <p class="lead">"AI 도입으로 업무 효율 70% 향상." 과제 보고서에서 흔히 보는 문장이다. 그런데 무엇의 70%인지, 어떻게 쟀는지, 그 기간에 다른 일은 없었는지 물으면 답이 흐려진다. 정량화는 숫자를 크게 만드는 기술이 아니라 <strong>숫자를 믿을 수 있게 만드는 기술</strong>이다. 이 장은 AX 과제를 무엇으로 재는지(측정 사슬과 지표 메뉴), 어떻게 재는지(측정 방법과 비교 설계), 얼마나 믿을 수 있는지(표본과 신뢰구간), 그리고 측정하기 어려운 정성 효과와 기반 과제는 어떻게 다루는지를 실무 순서대로 정리한다.</p>
+    <ul class="objectives">
+      <li>사용 → 작업 → 품질 → 흐름 → 사업 가치로 이어지는 측정 사슬에서 과제에 맞는 주 지표와 가드레일 지표를 고를 수 있다.</li>
+      <li>시스템 로그, 타임스터디, 워크 샘플링, 자기 기록, 설문의 신뢰도와 비용을 비교해 측정 방법을 정할 수 있다.</li>
+      <li>전후 비교의 함정을 설명하고, 비교군·단계적 도입·이중차분으로 효과를 분리할 수 있다.</li>
+      <li>필요한 표본 크기를 추정하고, 정성 효과·기반 과제·금액 환산을 한 장의 측정 계획서로 정리할 수 있다.</li>
+    </ul>
+  </header>
+
+  <!-- ============================================================ 1 -->
+  <section id="scene">
+    <h2>"효율 70% 향상"은 어떻게 쟀나</h2>
+    <p>F사(전자부품) AX 성과 발표회. 품질팀은 "8D 보고서 작성 효율 70% 향상", 설비팀은 "고장 대응 시간 40% 단축", 구매팀은 "견적 비교 업무 연 2,400시간 절감"을 발표했다. 발표가 끝난 뒤 재무 담당이 몇 가지를 물었다.</p>
+    <div class="mock">
+      <div class="mock-head">발표회 질의응답 메모</div>
+      <div class="mock-body">Q. 70%는 무엇을 기준으로 쟀나요? → A. 담당자 세 명에게 <mark class="w">체감을 물어</mark> 평균을 냈습니다.<br>
+      Q. 고장 대응 시간은 언제와 비교했나요? → A. 도입 전 <mark class="w">가장 바빴던 달</mark>과 비교했습니다. (그 뒤로 물량이 줄었다.)<br>
+      Q. 2,400시간은요? → A. 건당 <mark>2시간 절감 × 연 1,200건</mark>입니다. 건당 2시간은 <mark class="w">두 건을 재 본 결과</mark>입니다.<br>
+      Q. 세 팀의 숫자를 더할 수 있나요? → A. … <mark class="b">측정 방법이 다 달라서</mark> 잘 모르겠습니다.</div>
+    </div>
+    <p>세 팀 모두 거짓말을 하지는 않았다. 실제로 일이 나아졌을 가능성도 높다. 하지만 이 숫자들로는 무엇이 얼마나 나아졌는지 아무도 확신할 수 없고, 다음 투자 판단에 쓸 수도 없다. 체감 설문, 유리한 비교 시점, 너무 적은 표본, 서로 다른 정의. 정량화가 흔들리는 이유는 대부분 이 네 가지 안에 있다. 이 장은 이것들을 하나씩 고치는 방법을 다룬다.</p>
+    <div class="callout">
+      <strong>정량화의 목적은 셋이다</strong>
+      <p>① <b>판단</b>: 이 과제를 계속할지, 확산할지, 멈출지 정한다. ② <b>학습</b>: 무엇이 효과를 냈는지 알아 다음 과제에 쓴다. ③ <b>신뢰</b>: 다른 조직과 상위 조직이 숫자를 믿고 합칠 수 있게 한다(<a href="goals.html#review">14장</a>의 증거 사다리). 보고서용 큰 숫자는 이 셋 중 어느 것에도 쓸모가 없다.</p>
+    </div>
+  </section>
+
+  <!-- ============================================================ 2 -->
+  <section id="chain">
+    <h2>무엇을 재나: 측정 사슬</h2>
+    <p>AX 과제의 효과는 한 번에 돈으로 나타나지 않는다. 도구가 쓰이고, 작업이 빨라지거나 정확해지고, 그것이 업무 흐름의 결과를 바꾸고, 그 결과를 누군가 돈으로 실현하는 사슬을 거친다. 각 고리마다 재는 것이 다르다.</p>
+
+    <figure class="diagram">
+      <svg viewBox="0 0 800 260" role="img" aria-label="AX 효과의 측정 사슬">
+        <g>
+          <rect x="10" y="40" width="140" height="80" rx="10" class="f-surface"/>
+          <text x="80" y="66" text-anchor="middle" class="t-acc">① 사용</text>
+          <text x="80" y="88" text-anchor="middle" class="t-sm">쓰이는가</text>
+          <text x="80" y="106" text-anchor="middle" class="t-sm">처리 건 중 도구 경유율</text>
+          <rect x="167" y="40" width="140" height="80" rx="10" class="f-acc-soft"/>
+          <text x="237" y="66" text-anchor="middle" class="t-acc">② 작업</text>
+          <text x="237" y="88" text-anchor="middle" class="t-sm">빨라졌는가</text>
+          <text x="237" y="106" text-anchor="middle" class="t-sm">건당 작업 시간, 처리량</text>
+          <rect x="324" y="40" width="140" height="80" rx="10" class="f-acc-soft"/>
+          <text x="394" y="66" text-anchor="middle" class="t-acc">③ 품질</text>
+          <text x="394" y="88" text-anchor="middle" class="t-sm">정확해졌는가</text>
+          <text x="394" y="106" text-anchor="middle" class="t-sm">오류·재작업·수정률</text>
+          <rect x="481" y="40" width="140" height="80" rx="10" class="f-acc2-soft"/>
+          <text x="551" y="66" text-anchor="middle" class="t-acc2">④ 흐름 결과</text>
+          <text x="551" y="88" text-anchor="middle" class="t-sm">업무 결과가 바뀌었나</text>
+          <text x="551" y="106" text-anchor="middle" class="t-sm">리드타임, 재발률</text>
+          <rect x="638" y="40" width="152" height="80" rx="10" class="f-ok-soft"/>
+          <text x="714" y="66" text-anchor="middle" class="t-ok">⑤ 사업 가치</text>
+          <text x="714" y="88" text-anchor="middle" class="t-sm">돈이 되었나</text>
+          <text x="714" y="106" text-anchor="middle" class="t-sm">품질 비용, 매출, 외주비</text>
+        </g>
+        <g class="s-acc"><path d="M150 80 H165"/><path d="M307 80 H322"/><path d="M464 80 H479"/><path d="M621 80 H636"/></g>
+        <path d="M20 150 H780" class="s-axis"/>
+        <text x="20" y="172" class="t-sm">재기 쉽다 · 빨리 나온다 · 팀이 통제</text>
+        <text x="780" y="172" text-anchor="end" class="t-sm">재기 어렵다 · 늦게 나온다 · 여러 요인이 섞인다</text>
+        <text x="80" y="205" text-anchor="middle" class="t-dim">선행 지표</text>
+        <text x="714" y="205" text-anchor="middle" class="t-dim">후행 지표</text>
+        <text x="400" y="235" text-anchor="middle" class="t-mono">한 고리만 재면 속는다: ①만 보면 허영 지표, ⑤만 보면 원인을 모른다</text>
+      </svg>
+      <figcaption><b>그림 9-1.</b> AX 효과의 측정 사슬. 왼쪽 고리는 재기 쉽고 빨리 나오지만 결과를 보장하지 않고, 오른쪽 고리는 결과 그 자체지만 늦게 나오고 다른 요인이 섞인다. 과제마다 주 지표 하나를 ②~④에서 고르고, ①을 선행 확인용으로, ③을 가드레일로 함께 둔다. ⑤로의 환산은 <a href="system.html">16장</a>의 가치 실현 결정에서 한다.</figcaption>
+    </figure>
+
+    <p>실무 원칙은 단순하다. <strong>주 지표 하나, 가드레일 둘, 선행 지표 하나.</strong> 주 지표는 과제가 바꾸려는 것 자체다. 가드레일은 주 지표를 좋게 만들면서 다른 것을 망치지 않는지 감시한다. 예를 들어 작성 시간이 줄었는데 수정 요청이 늘었다면 효과가 아니라 비용 이전이다. 선행 지표는 주 지표가 움직이기 전에 과제가 제대로 굴러가는지 알려 준다. 유스케이스의 ROI와 KPI 정의는 <a href="usecases.html">8장</a>, 목표 체계 안에서의 지표 설계는 <a href="goals.html">14장</a>에 있다. 이 장은 그 지표를 <b>실제로 재는 방법</b>에 집중한다.</p>
+
+    <h3>과제 유형별 지표 메뉴</h3>
+    <div class="table-wrap"><table>
+      <thead><tr><th>과제 유형</th><th>작업·흐름 지표(주 지표 후보)</th><th>품질 가드레일</th><th>AI 자체의 품질</th></tr></thead>
+      <tbody>
+        <tr><td><b>검색·요약</b></td><td>정보를 찾는 데 걸린 시간, 재문의 건수</td><td>잘못된 정보로 인한 재작업</td><td>정답 문서 검색 재현율, 근거 제시율(<a href="knowledge.html">6장</a>)</td></tr>
+        <tr><td><b>작성·변환</b></td><td>건당 작성 시간, 초안에서 확정까지 시간</td><td>상위 검토 반려율, 고객 재문의</td><td>사람 수정 비율(수정한 글자·문장 비율)</td></tr>
+        <tr><td><b>분류·추출</b></td><td>건당 처리 시간, 수작업 입력 건수</td><td>오분류로 인한 재처리</td><td>정확도, 재현율, 사람 확인 필요 비율</td></tr>
+        <tr><td><b>예측</b></td><td>계획 변경 횟수, 재고·결품</td><td>예측 실패 시 비용</td><td>예측 오차(MAPE 등), 기준 모델 대비 개선</td></tr>
+        <tr><td><b>이상 탐지</b></td><td>문제 인지까지 걸린 시간, 다운타임</td><td>오탐으로 인한 불필요한 출동</td><td>정밀도·재현율(<a href="shopfloor.html">11장</a>)</td></tr>
+        <tr><td><b>에이전트·자동화</b></td><td>사람 손을 거치지 않고 끝난 비율, 리드타임</td><td>사람 개입 후 되돌린 건수, 사고</td><td>단계별 성공률, 승인 거절률(<a href="agents.html">10장</a>)</td></tr>
+        <tr><td><b>기반(데이터·표준·API)</b></td><td>이 기반을 쓰는 과제·팀 수, 우회 비용 감소</td><td>데이터 품질 점수 유지</td><td>— (아래 "기반 과제의 정량화" 참조)</td></tr>
+      </tbody>
+    </table></div>
+
+    <div class="sim" id="sim-design">
+      <div class="sim-head"><span class="sim-tag">INTERACTIVE</span><h3>지표 설계기: 우리 과제는 무엇으로 재나</h3></div>
+      <div class="sim-body side">
+        <div class="sim-view"><div class="sim-html"><div class="ms-card" id="ds-out"></div></div></div>
+        <div class="sim-controls" style="display:grid;gap:8px">
+          <div class="wiz-q"><span>과제 유형</span><div class="seg" id="ds-t"><button data-value="search">검색·요약</button><button data-value="write" class="on">작성·변환</button><button data-value="classify">분류·추출</button><button data-value="predict">예측</button><button data-value="anomaly">이상 탐지</button><button data-value="agent">에이전트</button><button data-value="base">기반</button></div></div>
+          <div class="wiz-q"><span>업무 영역</span><div class="seg" id="ds-a"><button data-value="quality" class="on">품질</button><button data-value="equip">설비</button><button data-value="prod">생산</button><button data-value="buy">구매</button><button data-value="rnd">R&amp;D</button><button data-value="staff">경영지원</button></div></div>
+          <div class="wiz-q"><span>업무 데이터가 시스템에 남는가</span><div class="seg" id="ds-l"><button data-value="yes">대부분</button><button data-value="some" class="on">일부</button><button data-value="no">거의 없음</button></div></div>
+          <div class="wiz-q"><span>도입 방식</span><div class="seg" id="ds-r"><button data-value="all">한 번에 전체</button><button data-value="stage" class="on">팀·파트 순차</button></div></div>
+        </div>
+      </div>
+      <div class="sim-note">과제 유형과 영역에 따라 측정 계획의 뼈대를 만들어 주는 예시 규칙이다. 그대로 쓰기보다 출발점으로 삼아 우리 업무의 정의로 바꿔 쓰자. 해볼 것: "업무 데이터가 시스템에 남는가"를 "거의 없음"으로 바꿔 보자. 측정 방법이 로그에서 타임스터디·워크 샘플링으로 바뀌고, 기록을 남기는 것 자체가 첫 과제가 된다.</div>
+    </div>
+  </section>
+
+  <!-- ============================================================ 3 -->
+  <section id="methods">
+    <h2>어떻게 재나: 측정 방법의 선택</h2>
+    <p>같은 "작업 시간"도 재는 방법에 따라 신뢰도가 크게 다르다. 가장 흔한 실수는 비용이 가장 싼 방법(체감 설문)으로 가장 큰 결정(투자 확대)을 내리는 것이다.</p>
+    <div class="table-wrap"><table>
+      <thead><tr><th>방법</th><th>어떻게</th><th>신뢰도</th><th>비용</th><th>주의</th></tr></thead>
+      <tbody>
+        <tr><td><b>시스템 로그</b></td><td>업무 시스템·AI 도구의 시작·종료·상태 변경 시각</td><td>높음</td><td>낮음(있다면)</td><td>"창을 열어 둔 시간"과 "일한 시간"은 다르다. 상태 변경 시각이 더 믿을 만하다</td></tr>
+        <tr><td><b>타임스터디</b></td><td>관찰자가 실제 작업을 처음부터 끝까지 잰다</td><td>높음</td><td>높음</td><td>관찰되면 평소보다 빨라진다(호손 효과). 여러 사람·여러 날로 나눈다</td></tr>
+        <tr><td><b>워크 샘플링</b></td><td>무작위 시각에 "지금 무엇을 하는가"를 기록해 시간 비중을 추정</td><td>중~높음</td><td>중간</td><td>긴 기간의 시간 배분(보고서 작성에 몇 %를 쓰나)을 볼 때 좋다</td></tr>
+        <tr><td><b>자기 기록</b></td><td>담당자가 건마다 걸린 시간을 적는다</td><td>중간</td><td>중간</td><td>기록 부담이 크면 대충 적는다. 기간을 2~4주로 짧게</td></tr>
+        <tr><td><b>체감 설문</b></td><td>"얼마나 빨라졌다고 느끼나"</td><td>낮음</td><td>낮음</td><td>새 도구에 대한 기대가 섞인다. 만족도 지표로는 쓰되 시간 추정에는 쓰지 않는다</td></tr>
+      </tbody>
+    </table></div>
+    <div class="callout tip">
+      <strong>베이스라인은 도입 전에, 같은 방법으로</strong>
+      <p>가장 흔한 정량화 실패는 도입 후에야 "전에는 얼마나 걸렸지?"를 묻는 것이다. 기억은 과거를 실제보다 나쁘게 기억하는 경향이 있다. 도입 2~4주 전부터 도입 후와 <b>같은 정의, 같은 방법</b>으로 기준선을 잰다. 로그가 없는 업무라면 이 기간에 최소한의 자기 기록이나 워크 샘플링이라도 한다. 기준선이 없으면 효과는 영원히 체감으로 남는다(<a href="goals.html">14장</a>의 "기준선이 먼저다").</p>
+    </div>
+  </section>
+
+  <!-- ============================================================ 4 -->
+  <section id="design">
+    <h2>무엇과 비교하나: 전후 비교의 함정과 비교 설계</h2>
+    <p>"도입 전 평균 120분, 도입 후 80분, 33% 단축." 이 계산은 도입 전후에 <b>다른 모든 것이 같았다</b>는 가정 위에 서 있다. 실제로는 그 사이에 물량이 줄거나, 숙련자가 들어오거나, 계절이 바뀌거나, 양식이 바뀐다. 전후 비교에 숨어드는 대표적인 함정은 다음과 같다.</p>
+    <div class="cards">
+      <div class="card"><span class="k">EXTERNAL</span><h4>외부 변화</h4><p>도입과 같은 시기에 물량 감소, 신제품 안정화, 인원 변동이 있었다. 효과의 일부(또는 전부)가 도구 덕이 아니다.</p></div>
+      <div class="card"><span class="k">REGRESSION</span><h4>평균으로의 회귀</h4><p>가장 나빴던 시기에 문제를 느껴 과제를 시작하면, 아무것도 안 해도 다음 기간은 대개 나아진다.</p></div>
+      <div class="card"><span class="k">HAWTHORNE</span><h4>관찰 효과</h4><p>측정되고 주목받는 동안 사람들은 평소보다 열심히 한다. 파일럿 기간의 숫자는 대개 실제보다 좋다.</p></div>
+      <div class="card"><span class="k">SELECTION</span><h4>선택 편향</h4><p>파일럿에 자원한 사람은 원래 빠르고 새 도구에 능숙하다. 그들의 결과는 전체로 일반화되지 않는다(<a href="people.html">13장</a>).</p></div>
+      <div class="card"><span class="k">LEARNING</span><h4>학습 곡선</h4><p>도입 직후에는 오히려 느려졌다가 몇 주 뒤에 빨라진다. 너무 일찍 재면 효과를 놓치고, 너무 늦게 재면 다른 변화가 섞인다.</p></div>
+      <div class="card"><span class="k">DOUBLE</span><h4>이중 계산</h4><p>같은 시간 절감을 여러 과제가 각자 자기 성과로 센다. 사업부에서 합치면 실제보다 커진다.</p></div>
+    </div>
+
+    <h3>비교군과 이중차분</h3>
+    <p>외부 변화를 걸러 내는 가장 실용적인 방법은 <strong>같은 기간에 도구를 쓰지 않은 비교군</strong>을 함께 보는 것이다. 도입팀의 변화에서 비교군의 변화를 빼면, 두 그룹에 똑같이 작용한 외부 변화가 상쇄된다. 이것을 이중차분<span class="en">(difference-in-differences)</span>이라고 한다.</p>
+    <div class="formula">$$\text{효과} = (\bar{T}_{\text{후}} - \bar{T}_{\text{전}}) - (\bar{C}_{\text{후}} - \bar{C}_{\text{전}})$$<div class="where">여기서 \(\bar{T}\)는 도입팀, \(\bar{C}\)는 비교팀의 평균(예: 건당 작업 시간)이다. 두 팀이 도입이 없었다면 비슷하게 움직였을 것이라는 가정(평행 추세)이 필요하므로, 도입 전 몇 주 동안 두 팀의 추세가 비슷했는지 먼저 확인한다.</div></div>
+    <p>비교군을 일부러 만들기 어렵다면 <b>단계적 도입</b>을 쓰자. 어차피 모든 팀에 한꺼번에 도입하기는 어렵다. 1파트, 2파트, 3파트 순서로 몇 주씩 간격을 두고 도입하면, 아직 도입하지 않은 파트가 자연스러운 비교군이 된다. 도입 순서를 추첨으로 정하면 선택 편향까지 줄일 수 있다. 조직에 부담 없이 측정의 질을 크게 올리는 방법이다.</p>
+
+    <div class="sim" id="sim-did">
+      <div class="sim-head"><span class="sim-tag">INTERACTIVE</span><h3>전후 비교와 이중차분: 외부 변화가 섞일 때</h3></div>
+      <div class="sim-body side">
+        <div class="sim-view"><canvas id="cv-did"></canvas></div>
+        <div class="sim-controls">
+          <label class="ctrl"><span>도구의 실제 효과(작업 시간 단축) <output id="dd-e-out"></output></span><input type="range" id="dd-e" min="0" max="50" step="5" value="15"></label>
+          <label class="ctrl"><span>같은 시기 외부 변화(작업 시간 증감) <output id="dd-s-out"></output></span><input type="range" id="dd-s" min="-20" max="30" step="5" value="15"></label>
+          <label class="ctrl"><span>그룹·기간당 측정 건수 <output id="dd-n-out"></output></span><input type="range" id="dd-n" min="3" max="200" step="1" value="60"></label>
+          <label class="ctrl"><span>건당 시간의 편차(변동계수) <output id="dd-v-out"></output></span><input type="range" id="dd-v" min="10" max="60" step="5" value="25"></label>
+          <button class="btn" id="dd-re">표본 다시 뽑기</button>
+        </div>
+      </div>
+      <div class="sim-readout">
+        <div class="stat"><span class="k">전후 비교 추정</span><span class="v" id="dd-o1">—</span></div>
+        <div class="stat"><span class="k">이중차분 추정</span><span class="v" id="dd-o2">—</span></div>
+        <div class="stat"><span class="k">실제 효과</span><span class="v" id="dd-o3">—</span></div>
+      </div>
+      <div class="sim-note">기준 작업 시간 120분에서 출발해, 도입팀과 비교팀의 건별 시간을 무작위로 뽑는 교육용 모델이다. 막대 끝의 선은 95% 신뢰구간이다. 외부 변화는 두 팀 모두에 같은 비율로 작용하고, 도구 효과는 도입팀에서만 기준 시간의 일정 비율을 줄인다고 보았다. 해볼 것: ① 외부 변화를 −15%로 두면 전후 비교는 효과를 두 배로 부풀린다. 이중차분은 실제 효과 근처에 있다. ② 측정 건수를 3건으로 줄이고 "다시 뽑기"를 여러 번 눌러 보자. 추정치가 크게 흔들리고 신뢰구간이 0을 넘나든다. 두 건을 재 보고 연간 효과를 곱하는 것이 위험한 이유다.</div>
+    </div>
+  </section>
+
+  <!-- ============================================================ 5 -->
+  <section id="sample">
+    <h2>얼마나 믿을 수 있나: 표본 크기와 신뢰구간</h2>
+    <p>사무·지식 업무의 건당 작업 시간은 편차가 크다. 같은 8D 보고서라도 단순한 건은 1시간, 복잡한 건은 하루가 걸린다. 그래서 몇 건만 재면 평균이 우연에 크게 흔들린다. 필요한 표본 수는 편차의 크기와 원하는 정밀도로 대략 계산할 수 있다.</p>
+    <div class="formula">$$n \approx \left(\frac{z \cdot CV}{E}\right)^{2}$$<div class="where">여기서 \(CV\)는 건당 시간의 변동계수(표준편차 ÷ 평균), \(E\)는 허용 오차(평균 대비 비율), \(z\)는 신뢰수준에 따른 값(95%면 약 1.96)이다. 예: 변동계수 40%, 허용 오차 ±10%면 약 61건이 필요하다.</div></div>
+    <p>효과가 있는지 없는지를 두 그룹 비교로 판단하려면 더 많은 표본이 필요하다. 효과가 작을수록, 편차가 클수록 필요한 건수는 제곱으로 늘어난다. 그래서 작은 효과를 정밀하게 증명하려 애쓰기보다, <b>로그로 모든 건을 자동 측정</b>할 수 있게 만드는 편이 대개 더 싸다.</p>
+
+    <div class="sim" id="sim-n">
+      <div class="sim-head"><span class="sim-tag">INTERACTIVE</span><h3>표본 크기 계산기</h3></div>
+      <div class="sim-body side">
+        <div class="sim-view"><canvas id="cv-n"></canvas></div>
+        <div class="sim-controls">
+          <div class="ctrl"><span>목적</span><div class="seg" id="sn-m"><button data-value="est" class="on">평균 추정</button><button data-value="cmp">효과 검증(두 그룹)</button></div></div>
+          <label class="ctrl"><span>건당 시간의 변동계수 <output id="sn-cv-out"></output></span><input type="range" id="sn-cv" min="10" max="80" step="5" value="40"></label>
+          <label class="ctrl"><span>허용 오차(평균 추정) <output id="sn-e-out"></output></span><input type="range" id="sn-e" min="3" max="30" step="1" value="10"></label>
+          <label class="ctrl"><span>검출하려는 효과(효과 검증) <output id="sn-d-out"></output></span><input type="range" id="sn-d" min="5" max="50" step="5" value="20"></label>
+          <div class="ctrl"><span>신뢰수준</span><div class="seg" id="sn-z"><button data-value="1.645">90%</button><button data-value="1.96" class="on">95%</button></div></div>
+        </div>
+      </div>
+      <div class="sim-readout">
+        <div class="stat"><span class="k">필요한 건수</span><span class="v" id="sn-o1">—</span></div>
+        <div class="stat"><span class="k">하루 5건 처리 시</span><span class="v" id="sn-o2">—</span></div>
+        <div class="stat"><span class="k">해석</span><span class="v" id="sn-o3" style="font-size:13px;font-weight:500">—</span></div>
+      </div>
+      <div class="sim-note">평균 추정은 \(n = (z \cdot CV / E)^2\), 효과 검증은 두 그룹 각각 \(n = 2(z + 0.84)^2 CV^2 / d^2\)(검정력 80%)로 계산한 근사치다. 실제 분포가 한쪽으로 치우쳐 있으면 더 많은 표본이 필요할 수 있다. 해볼 것: 효과 검증에서 검출하려는 효과를 20%에서 10%로 줄여 보자. 필요한 건수가 네 배가 된다.</div>
+    </div>
+    <div class="callout warn">
+      <strong>보고할 때는 하나의 숫자 대신 범위로</strong>
+      <p>"연 2,400시간 절감"보다 "연 1,500~3,000시간(95% 신뢰구간), 중앙 추정 2,300시간"이 더 정직하고 더 쓸모 있다. 범위가 넓다면 그것 자체가 정보다. 더 재야 한다는 뜻이다. 상위 조직은 범위로 보고한 팀을 불리하게 평가하지 않아야 한다. 그래야 다음 해에도 범위가 올라온다.</p>
+    </div>
+  </section>
+
+  <!-- ============================================================ 6 -->
+  <section id="soft">
+    <h2>측정하기 어려운 것들: 정성 효과와 기반 과제</h2>
+    <h3>정성 효과는 대리 지표로</h3>
+    <p>"업무 스트레스가 줄었다", "지식 공유가 잘 된다", "신입이 빨리 적응한다" 같은 효과는 중요하지만 직접 재기 어렵다. 억지로 점수를 매기기보다, 그 효과가 있다면 <b>행동으로 나타날 흔적</b>을 찾는다.</p>
+    <div class="table-wrap"><table>
+      <thead><tr><th>정성 효과</th><th>대리 지표(예)</th><th>출처</th></tr></thead>
+      <tbody>
+        <tr><td>업무 부담 감소</td><td>초과근무 시간, 주말 처리 건수, 반복 문의 건수</td><td>근태 시스템, 업무 로그</td></tr>
+        <tr><td>지식 공유</td><td>같은 질문의 재문의율, 숙련자에게 가는 질문 수(<a href="knowledge.html">6장</a>)</td><td>메신저·티켓 통계, 검색 로그</td></tr>
+        <tr><td>신입 적응</td><td>혼자 처리할 수 있게 되기까지 걸린 주 수, 초기 반려율</td><td>업무 로그, 리뷰 기록</td></tr>
+        <tr><td>의사결정 속도</td><td>결정 요청부터 결정까지의 시간, 회의 횟수</td><td>결재·이슈 시스템</td></tr>
+        <tr><td>만족도</td><td>분기 1문항 설문(같은 문항 반복), 자발적 재사용률</td><td>설문, 사용 로그</td></tr>
+      </tbody>
+    </table></div>
+
+    <h3>기반 과제의 정량화</h3>
+    <p>데이터 정리, 표준 코드, API, 기준 레지스트리 같은 기반 과제는 그 자체로는 리드타임을 줄이지 않는다. 그래서 정량화 경쟁에서 늘 불리하고, 결국 아무도 하지 않게 된다(<a href="goals.html">14장</a>의 기여 귀속 문제). 기반 과제는 네 가지 숫자로 잰다.</p>
+    <ol class="ladder">
+      <li><b>상태</b>기반 자체의 수준. 데이터 품질 점수, 표준 코드 정착률, 핵심 시스템의 API 제공률, 기준 버전이 기록된 데이터 비율(<a href="foundation.html">5장</a>·<a href="experiments.html">7장</a>).</li>
+      <li><b>사용</b>이 기반 위에서 돌아가는 과제·팀·에이전트의 수, 조회·호출 건수. 아무도 쓰지 않는 기반은 비용일 뿐이다.</li>
+      <li><b>회피 비용</b>기반이 없었다면 들었을 비용의 감소. 팀마다 만들던 우회(화면 자동화, 수작업 변환)의 유지 시간, 데이터 정합 확인에 쓰던 시간(<a href="system.html">16장</a>).</li>
+      <li><b>기여 분배</b>이 기반을 쓴 과제들의 효과 중 기반 몫. 사전에 합의한 기여 귀속 규칙(예: 효과의 일정 비율)으로 기반을 만든 조직에 돌린다.</li>
+    </ol>
+  </section>
+
+  <!-- ============================================================ 7 -->
+  <section id="money">
+    <h2>금액으로 바꿀 때: 경로별 환산식</h2>
+    <p>금액 환산은 측정의 마지막 단계이며, <a href="system.html">16장</a>에서 본 것처럼 그 효과를 실제로 실현하는 결정이 있을 때만 의미가 있다. 환산 경로마다 식과 주의점이 다르다. 사업부 안에서는 경로별 환산 기준을 하나로 정해 모든 과제가 같은 식을 쓰게 한다.</p>
+    <div class="table-wrap"><table>
+      <thead><tr><th>경로</th><th>환산식(예)</th><th>주의</th></tr></thead>
+      <tbody>
+        <tr><td><b>시간 → 인건비</b></td><td>절감 시간 × 시간당 인건비 × 실현률</td><td>실현률은 가치 실현 결정에서 나온다. 결정이 없으면 장부상 가치</td></tr>
+        <tr><td><b>품질 비용</b></td><td>(전 불량·클레임 건수 − 후) × 건당 품질 비용</td><td>건당 품질 비용(COPQ)의 정의를 재무와 맞춘다</td></tr>
+        <tr><td><b>리드타임 → 재고·현금</b></td><td>단축 일수 × 일평균 재고 금액 × 자본 비용률</td><td>리드타임이 실제 재고 정책을 바꿨는지 확인</td></tr>
+        <tr><td><b>외주·초과근무</b></td><td>실제로 줄어든 외주비·초과근무 수당</td><td>가장 확실한 경로. 다른 요인(물량 변화)을 분리</td></tr>
+        <tr><td><b>리스크 회피</b></td><td>사고 확률 감소 × 사고 시 손실(기대값)</td><td>확률 추정의 근거를 명시. 큰 숫자가 나오기 쉬우니 별도 표기</td></tr>
+        <tr><td><b>매출 기여</b></td><td>응답 속도·품질 개선 → 수주율 변화 × 평균 수주액</td><td>여러 요인이 섞인다. 비교군 없이는 기여분을 주장하기 어렵다</td></tr>
+      </tbody>
+    </table></div>
+    <div class="callout tip">
+      <strong>세 가지 숫자로 보고하자: 보수·기준·낙관</strong>
+      <p>금액 환산에는 가정이 많다. 가정을 하나의 숫자 뒤에 숨기지 말고, 보수 추정(확실한 경로만), 기준 추정, 낙관 추정을 함께 적고 각 가정을 한 줄로 밝힌다. 투자 판단은 보수 추정으로 하고, 낙관 추정은 가능성으로 읽는다.</p>
+    </div>
+  </section>
+
+  <!-- ============================================================ 8 -->
+  <section id="plan">
+    <h2>한 장 측정 계획서</h2>
+    <p>지금까지의 내용을 과제 시작 때 등록하는 한 장으로 정리한다. 이 한 장이 있으면 과제가 끝날 때 숫자를 "만들" 필요가 없고, 상위 조직은 측정 방법이 같은 과제끼리 합칠 수 있다. <a href="reporting.html">15장</a>의 성과 레지스트리와 <a href="goals.html#review">14장</a>의 증거 사다리가 이 계획서 위에서 작동한다.</p>
+    <div class="mock">
+      <div class="mock-head">측정 계획서 / 과제: 고객 클레임 8D 초안 AI 도우미 (품질 2파트)</div>
+      <div class="mock-body">
+        <b>질문</b> AI 초안이 8D 작성 시간을 줄이면서 품질을 유지하는가?<br>
+        <b>주 지표</b> 건당 D2~D4 작성 시간 = (D4 확정 시각 − 이슈 카드 배정 시각) 중 작성 상태 시간, 단위: 시간<br>
+        <b>가드레일</b> ① 품질팀장 반려율 ② 고객 재문의율<br>
+        <b>선행 지표</b> 신규 클레임 중 도우미 경유 비율(목표: 8주 내 80%)<br>
+        <b>AI 품질</b> 초안 대비 사람 수정 비율, 평가 세트 30건 정답률<br>
+        <b>데이터 출처</b> 이슈 카드 시스템 상태 로그(전 건 자동), 수정 비율은 도우미 로그<br>
+        <b>기준선</b> 도입 전 4주, 같은 정의로 로그 측정<br>
+        <b>비교 설계</b> 2파트 먼저, 3파트는 6주 뒤 도입(단계적 도입), 이중차분<br>
+        <b>표본</b> 파트당 주 8~12건, 변동계수 약 45% 가정 → 8주 누적으로 ±12% 정밀도<br>
+        <b>보고</b> 범위(95% 신뢰구간)로, 2주마다 대시보드 갱신<br>
+        <b>금액 환산</b> 시간 → 인건비(실현률은 사업부 분기 결정), 품질 비용(재문의 감소분)<br>
+        <b>오너</b> 2파트장(측정), 품질 기획(정의 관리), CoE(로그 지원)
+      </div>
+    </div>
+    <ul class="checklist">
+      <li>주 지표의 정의가 식으로 적혀 있고, 다른 팀과 같은 과제라면 같은 정의를 쓰는가?</li>
+      <li>기준선은 도입 전에, 같은 방법으로 쟀는가?</li>
+      <li>외부 변화를 걸러 낼 비교군이나 단계적 도입이 있는가?</li>
+      <li>표본이 충분한가? 아니면 로그로 전 건을 잴 수 있는가?</li>
+      <li>가드레일 지표가 있어, 한쪽을 줄이고 다른 쪽을 늘리는 것을 잡아내는가?</li>
+      <li>금액 환산 경로와 실현을 결정할 사람이 정해져 있는가?</li>
+      <li>결과를 범위로 보고하고, 효과가 없다는 결과도 같은 양식으로 보고하는가?</li>
+    </ul>
+  </section>
+
+  <section class="keypoints" id="summary">
+    <h2>핵심 정리</h2>
+    <ol>
+      <li>정량화의 목적은 큰 숫자가 아니라 판단·학습·신뢰다. 체감 설문, 유리한 비교 시점, 너무 적은 표본, 서로 다른 정의가 숫자를 흔든다.</li>
+      <li>효과는 사용 → 작업 → 품질 → 흐름 결과 → 사업 가치의 사슬을 거친다. 과제마다 주 지표 하나, 가드레일 둘, 선행 지표 하나를 두고, 과제 유형별 지표 메뉴에서 고른다.</li>
+      <li>측정 방법은 로그 > 타임스터디 > 워크 샘플링 > 자기 기록 > 체감 설문 순으로 믿을 만하다. 기준선은 도입 전에 같은 정의와 같은 방법으로 잰다.</li>
+      <li>전후 비교에는 외부 변화, 평균 회귀, 관찰 효과, 선택 편향, 학습 곡선, 이중 계산이 섞인다. 비교군과 이중차분, 추첨 순서의 단계적 도입으로 효과를 분리한다.</li>
+      <li>사무 업무의 작업 시간은 편차가 커서 몇 건으로는 믿을 수 없다. 필요한 표본은 (z·CV/E)²로 추정하고, 결과는 하나의 숫자 대신 범위로 보고한다.</li>
+      <li>정성 효과는 행동의 흔적(대리 지표)으로, 기반 과제는 상태·사용·회피 비용·기여 분배로 잰다. 금액은 경로별 같은 환산식으로, 보수·기준·낙관 세 숫자로 적는다.</li>
+      <li>이 모든 것을 과제 시작 때 한 장 측정 계획서로 등록하면, 끝날 때 숫자를 만들 필요가 없다.</li>
+    </ol>
+  </section>
+
+  <section class="quiz-sec" id="quiz">
+    <h2>확인 퀴즈</h2>
+    <div class="quiz">
+      <div class="quiz-q"><p>1. "8D 작성 시간 단축"이 주 지표인 과제에서 가드레일 지표로 가장 적절한 것은?</p><div class="opts">
+        <button class="opt">AI 도우미 로그인 횟수</button>
+        <button class="opt" data-correct>품질팀장의 반려율과 고객 재문의율</button>
+        <button class="opt">교육 이수자 수</button>
+        <button class="opt">초안의 글자 수</button>
+      </div><div class="quiz-exp">가드레일은 주 지표를 좋게 만들면서 다른 것을 망치지 않는지 감시한다. 작성 시간이 줄었는데 반려와 재문의가 늘었다면 효과가 아니라 비용 이전이다.</div></div>
+
+      <div class="quiz-q"><p>2. 도입 전 가장 바빴던 달과 도입 후 한 달을 비교해 "40% 단축"을 보고했다. 가장 의심해야 할 것은?</p><div class="opts">
+        <button class="opt">AI 모델의 크기</button>
+        <button class="opt" data-correct>물량 변화 같은 외부 요인과 평균으로의 회귀</button>
+        <button class="opt">보고서 양식</button>
+        <button class="opt">교육 시간</button>
+      </div><div class="quiz-exp">가장 나빴던 시기와 비교하면 아무것도 하지 않아도 개선되어 보이기 쉽다. 같은 기간의 비교군과 함께 보거나, 여러 주의 기준선을 써야 한다.</div></div>
+
+      <div class="quiz-q"><p>3. 도입팀 평균 작업 시간이 120분에서 90분으로, 같은 기간 비교팀은 120분에서 110분으로 바뀌었다. 이중차분으로 추정한 도구 효과는?</p><div class="opts">
+        <button class="opt">30분 단축</button>
+        <button class="opt" data-correct>20분 단축</button>
+        <button class="opt">10분 단축</button>
+        <button class="opt">40분 단축</button>
+      </div><div class="quiz-exp">(90 − 120) − (110 − 120) = −30 − (−10) = −20분. 두 팀에 똑같이 작용한 10분의 외부 변화를 빼야 도구의 효과가 남는다.</div></div>
+
+      <div class="quiz-q"><p>4. 건당 작업 시간의 변동계수가 40%일 때, 평균을 ±10% 정밀도(95%)로 추정하려면 대략 몇 건이 필요한가?</p><div class="opts">
+        <button class="opt">약 2건</button>
+        <button class="opt">약 15건</button>
+        <button class="opt" data-correct>약 60건</button>
+        <button class="opt">약 1,000건</button>
+      </div><div class="quiz-exp">n ≈ (1.96 × 0.4 / 0.1)² ≈ 61. 두 건을 재 보고 연간 건수를 곱하는 계산은 우연에 크게 흔들린다.</div></div>
+
+      <div class="quiz-q"><p>5. 표준 불량 코드 체계를 정리한 기반 과제의 성과를 재는 방법으로 가장 적절한 묶음은?</p><div class="opts">
+        <button class="opt">작업한 엑셀 파일 수</button>
+        <button class="opt">팀원의 체감 만족도</button>
+        <button class="opt" data-correct>표준 코드 정착률(상태), 이 코드를 쓰는 과제·팀 수(사용), 수작업 매핑 시간 감소(회피 비용), 합의된 기여 분배</button>
+        <button class="opt">관련 회의 횟수</button>
+      </div><div class="quiz-exp">기반 과제는 직접 리드타임을 줄이지 않으므로 상태·사용·회피 비용·기여 분배로 잰다. 그래야 기반을 만드는 일이 정량화 경쟁에서 밀리지 않는다.</div></div>
+
+      <div class="quiz-q"><p>6. 측정 결과를 상위 조직에 보고하는 방식으로 가장 바람직한 것은?</p><div class="opts">
+        <button class="opt">가장 좋은 주의 숫자 하나를 보고한다</button>
+        <button class="opt" data-correct>중앙 추정과 신뢰구간(또는 보수·기준·낙관)을 함께, 가정과 측정 방법을 밝혀 보고한다</button>
+        <button class="opt">효과가 없으면 보고하지 않는다</button>
+        <button class="opt">팀마다 편한 방법으로 잰 숫자를 그대로 합산한다</button>
+      </div><div class="quiz-exp">범위와 가정을 밝힌 숫자만 판단과 합산에 쓸 수 있다. 효과가 없다는 결과도 같은 양식으로 보고해야 조직이 배운다.</div></div>
+    </div>
+  </section>
+</main>
+<script>
+(function () {
+  "use strict";
+  function font(px, bold) { return (bold ? "700 " : "") + px + "px " + getComputedStyle(document.body).getPropertyValue("--font"); }
+
+  /* ================================================ 1) 지표 설계기 */
+  var TYPES = {
+    search: { main: "정보를 찾는 데 걸린 시간(질문~답 확인)", guard: ["잘못된 정보로 인한 재작업 건수", "같은 질문의 재문의율"], lead: "업무 중 검색 도우미 경유 비율", ai: "평가 세트 정답 문서 검색 재현율, 근거 제시율", money: "시간 → 인건비(실현률은 사업부 결정)" },
+    write: { main: "건당 작성 시간(배정~확정 중 작성 상태 시간)", guard: ["상위 검토 반려율", "고객·수신자 재문의율"], lead: "신규 건 중 AI 초안 경유 비율", ai: "초안 대비 사람 수정 비율", money: "시간 → 인건비, 품질 비용(재문의 감소분)" },
+    classify: { main: "건당 처리 시간, 수작업 입력 건수", guard: ["오분류로 인한 재처리 건수", "누락 건수"], lead: "자동 분류 경유 비율", ai: "정확도·재현율, 사람 확인 필요 비율", money: "시간 → 인건비, 오분류 재처리 비용" },
+    predict: { main: "계획 변경 횟수 또는 재고·결품 지표", guard: ["예측 실패 시 긴급 대응 건수", "계획 담당 수작업 조정 시간"], lead: "예측값이 실제 계획에 반영된 비율", ai: "예측 오차(MAPE 등), 기존 방식 대비 개선", money: "리드타임·재고 → 자본 비용, 결품 손실 감소" },
+    anomaly: { main: "문제 인지까지 걸린 시간, 다운타임", guard: ["오탐으로 인한 불필요 출동", "미탐 사고 건수"], lead: "알람 확인·조치 기록 비율", ai: "정밀도·재현율(기간별)", money: "다운타임 → 생산 손실, 리스크 회피(기대값)" },
+    agent: { main: "사람 손을 거치지 않고 끝난 비율, 흐름 리드타임", guard: ["사람이 되돌린 건수", "승인 거절률·사고 건수"], lead: "에이전트가 처리 시도한 건 비율", ai: "단계별 성공률, 평가 세트 통과율", money: "시간 → 인건비, 리드타임 → 재고·고객" },
+    base: { main: "이 기반을 쓰는 과제·팀 수, 우회 비용 감소", guard: ["데이터 품질 점수 유지", "표준 이탈 건수"], lead: "기반 상태 지표(정착률·API 제공률)", ai: "해당 없음(상태·사용·회피 비용·기여 분배로 측정)", money: "회피 비용 + 합의된 기여 분배" }
+  };
+  var AREA = { quality: "클레임 회신 리드타임, 재발률, 품질 비용(COPQ)", equip: "설비 다운타임, 평균 수리 시간(MTTR)", prod: "생산 리드타임, 계획 준수율", buy: "견적·발주 리드타임, 협력사 회신 시간", rnd: "실험 반복 횟수, 개발 리드타임", staff: "요청 처리 리드타임, 재작업률" };
+  var dsT = AX.seg("ds-t", dsEval), dsA = AX.seg("ds-a", dsEval), dsL = AX.seg("ds-l", dsEval), dsR = AX.seg("ds-r", dsEval);
+  function dsEval() {
+    var t = TYPES[dsT()], a = dsA(), l = dsL(), r = dsR();
+    var method = l === "yes" ? "시스템 로그로 전 건 자동 측정" : l === "some" ? "로그 + 빠진 단계는 2~4주 자기 기록" : "타임스터디·워크 샘플링으로 시작. 기록을 남기는 것 자체를 첫 과제로";
+    var base = l === "no" ? "도입 전 2~4주, 같은 방법(관찰·샘플링)으로 기준선 확보" : "도입 전 4주, 같은 정의로 로그 측정";
+    var design = r === "stage" ? "단계적 도입(추첨 순서) + 이중차분" : "도입 전 다수 주 추세 + 유사 업무 팀을 비교군으로";
+    var dl = [
+      ["주 지표", t.main], ["흐름·사업 지표", AREA[a]], ["가드레일", t.guard.join(" / ")], ["선행 지표", t.lead], ["AI 품질", t.ai],
+      ["측정 방법", method], ["기준선", base], ["비교 설계", design], ["금액 환산", t.money]
+    ];
+    document.getElementById("ds-out").innerHTML = "<h4>측정 계획 뼈대</h4><dl>" + dl.map(function (x) { return "<dt>" + x[0] + "</dt><dd>" + AX.esc(x[1]) + "</dd>"; }).join("") + "</dl>";
+  }
+  dsEval();
+
+  /* ================================================ 2) 이중차분 */
+  var seed = 7;
+  function rng() { seed = (seed + 0x6D2B79F5) | 0; var t = seed; t = Math.imul(t ^ (t >>> 15), t | 1); t ^= t + Math.imul(t ^ (t >>> 7), t | 61); return ((t ^ (t >>> 14)) >>> 0) / 4294967296; }
+  function nrm() { var u = 0, v = 0; while (!u) u = rng(); while (!v) v = rng(); return Math.sqrt(-2 * Math.log(u)) * Math.cos(2 * Math.PI * v); }
+  var cvD = null, baseSeed = 7;
+  var ddUpd = function () { if (cvD) cvD.redraw(); };
+  var ddE = AX.range("dd-e", function (v) { return v + "%"; }, ddUpd);
+  var ddS = AX.range("dd-s", function (v) { return (v > 0 ? "−" : v < 0 ? "+" : "") + Math.abs(v) + "%"; }, ddUpd);
+  var ddN = AX.range("dd-n", function (v) { return v + "건"; }, ddUpd);
+  var ddV = AX.range("dd-v", function (v) { return v + "%"; }, ddUpd);
+  document.getElementById("dd-re").addEventListener("click", function () { baseSeed = (baseSeed * 7919 + 13) % 1000003; ddUpd(); });
+  function sample(mu, cv, n) {
+    var xs = [], s = 0, ss = 0;
+    for (var i = 0; i < n; i++) { var x = Math.max(5, mu * (1 + cv * nrm())); xs.push(x); s += x; }
+    var m = s / n; xs.forEach(function (x) { ss += (x - m) * (x - m); });
+    return { m: m, v: ss / Math.max(1, n - 1) / n };
+  }
+  cvD = AX.canvas("#cv-did", function (ctx, w, h) {
+    var P = AX.palette();
+    var e = ddE() / 100, s = ddS() / 100, n = ddN(), cv = ddV() / 100, mu = 120;
+    seed = baseSeed;
+    var Tb = sample(mu, cv, n), Ta = sample(mu * (1 - s) - mu * e, cv, n), Cb = sample(mu, cv, n), Ca = sample(mu * (1 - s), cv, n);
+    var naive = (Tb.m - Ta.m) / Tb.m, nSe = Math.sqrt(Tb.v + Ta.v) / Tb.m;
+    var did = ((Tb.m - Ta.m) - (Cb.m - Ca.m)) / Tb.m, dSe = Math.sqrt(Tb.v + Ta.v + Cb.v + Ca.v) / Tb.m;
+    var truth = e;
+    var rows = [["실제 효과", truth, 0, P.dim], ["전후 비교", naive, nSe, P.warn], ["이중차분", did, dSe, P.accent]];
+    var lo = -0.4, hi = 0.9;
+    rows.forEach(function (r) { lo = Math.min(lo, r[1] - 1.96 * r[2] - 0.05); hi = Math.max(hi, r[1] + 1.96 * r[2] + 0.05); });
+    var x0 = Math.min(110, w * 0.25), x1 = w - 20, X = function (v) { return x0 + (v - lo) / (hi - lo) * (x1 - x0); };
+    var bh = Math.min(30, (h - 70) / 4), gap = (h - 60 - 3 * bh) / 3;
+    ctx.strokeStyle = P.grid; ctx.fillStyle = P.dim; ctx.font = "11px " + getComputedStyle(document.body).getPropertyValue("--mono"); ctx.textAlign = "center"; ctx.textBaseline = "top";
+    for (var t = Math.ceil(lo * 10) / 10; t <= hi + 1e-9; t += 0.2) { var px = X(t); ctx.beginPath(); ctx.moveTo(px, 10); ctx.lineTo(px, h - 40); ctx.stroke(); ctx.fillText(Math.round(t * 100) + "%", px, h - 34); }
+    ctx.strokeStyle = P.axis; ctx.beginPath(); ctx.moveTo(X(0), 10); ctx.lineTo(X(0), h - 40); ctx.stroke();
+    ctx.setLineDash([4, 4]); ctx.strokeStyle = P.dim; ctx.beginPath(); ctx.moveTo(X(truth), 10); ctx.lineTo(X(truth), h - 40); ctx.stroke(); ctx.setLineDash([]);
+    rows.forEach(function (r, i) {
+      var y = 16 + i * (bh + gap);
+      ctx.font = font(12, true); ctx.fillStyle = P.text; ctx.textAlign = "right"; ctx.textBaseline = "middle"; ctx.fillText(r[0], x0 - 8, y + bh / 2);
+      ctx.fillStyle = r[3]; ctx.globalAlpha = 0.8; ctx.fillRect(Math.min(X(0), X(r[1])), y, Math.abs(X(r[1]) - X(0)), bh); ctx.globalAlpha = 1;
+      if (r[2] > 0) {
+        var a = X(r[1] - 1.96 * r[2]), b = X(r[1] + 1.96 * r[2]), yy = y + bh / 2;
+        ctx.strokeStyle = P.text; ctx.lineWidth = 1.5; ctx.beginPath(); ctx.moveTo(a, yy); ctx.lineTo(b, yy); ctx.moveTo(a, yy - 6); ctx.lineTo(a, yy + 6); ctx.moveTo(b, yy - 6); ctx.lineTo(b, yy + 6); ctx.stroke(); ctx.lineWidth = 1;
+      }
+    });
+    ctx.fillStyle = P.dim; ctx.font = font(11.5, false); ctx.textAlign = "center"; ctx.textBaseline = "bottom"; ctx.fillText("작업 시간 단축률(오른쪽일수록 효과 큼)", (x0 + x1) / 2, h - 2);
+    function f(v, se) { return Math.round(v * 100) + "%" + (se ? "<small> ±" + Math.round(1.96 * se * 100) + "%p</small>" : ""); }
+    AX.stat("dd-o1", '<span style="color:' + (Math.abs(naive - truth) > 0.08 ? "var(--bad)" : "var(--text)") + '">' + f(naive, nSe) + "</span>");
+    AX.stat("dd-o2", f(did, dSe));
+    AX.stat("dd-o3", Math.round(truth * 100) + "%");
+  }, { aspect: 0.5, minHeight: 240, maxHeight: 320 });
+
+  /* ================================================ 3) 표본 크기 */
+  var cvN = null;
+  var snUpd = function () { if (cvN) cvN.redraw(); };
+  var snM = AX.seg("sn-m", snUpd), snZ = AX.seg("sn-z", snUpd);
+  var snCv = AX.range("sn-cv", function (v) { return v + "%"; }, snUpd);
+  var snE = AX.range("sn-e", function (v) { return "±" + v + "%"; }, snUpd);
+  var snD = AX.range("sn-d", function (v) { return v + "%"; }, snUpd);
+  function nEst(z, cv, e) { return Math.ceil(Math.pow(z * cv / e, 2)); }
+  function nCmp(z, cv, d) { return Math.ceil(2 * Math.pow(z + 0.84, 2) * cv * cv / (d * d)); }
+  cvN = AX.canvas("#cv-n", function (ctx, w, h) {
+    var P = AX.palette();
+    var m = snM(), z = Number(snZ()), cv = snCv() / 100, e = snE() / 100, d = snD() / 100;
+    var data = [], cur, xs, xl;
+    if (m === "est") { for (var x = 3; x <= 30; x += 0.5) data.push([x, nEst(z, cv, x / 100)]); cur = [e * 100, nEst(z, cv, e)]; xl = "허용 오차(±%)"; xs = [3, 30]; }
+    else { for (var x2 = 5; x2 <= 50; x2 += 0.5) data.push([x2, nCmp(z, cv, x2 / 100)]); cur = [d * 100, nCmp(z, cv, d)]; xl = "검출하려는 효과(%)"; xs = [5, 50]; }
+    var ymax = Math.max(50, Math.min(2000, cur[1] * 3));
+    AX.chart(ctx, null, { x: xs, y: [1, Math.max(10, data[0][1])], logY: true, xLabel: xl, yLabel: m === "est" ? "필요한 건수" : "그룹당 필요한 건수",
+      series: [{ data: data, color: P.accent, width: 2.5 }], points: [{ x: cur[0], y: cur[1], r: 6, color: P.accent2, label: cur[1] + "건" }] });
+    var n = cur[1], tot = m === "est" ? n : n * 2;
+    AX.stat("sn-o1", n.toLocaleString() + "<small>건" + (m === "cmp" ? " × 2그룹" : "") + "</small>");
+    AX.stat("sn-o2", Math.ceil(n / 5) + "<small>영업일" + (m === "cmp" ? "(그룹별 동시)" : "") + "</small>");
+    AX.stat("sn-o3", n <= 30 ? "몇 주의 기록으로 충분하다" : n <= 150 ? "로그가 없다면 측정 기간을 길게 잡아야 한다" : "수작업 측정으로는 무리. 로그 자동 측정을 먼저 만들자");
+  }, { aspect: 0.55, minHeight: 240, maxHeight: 360 });
+})();
+</script>
+</body>
+</html>

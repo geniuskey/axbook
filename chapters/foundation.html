@@ -19,7 +19,7 @@
 <meta property="og:image:height" content="630">
 <meta property="og:locale" content="ko_KR">
 <meta name="twitter:card" content="summary_large_image">
-<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"TechArticle","headline":"데이터 기반과 거버넌스","name":"데이터 기반과 거버넌스 · AXBook","url":"https://axbook.euiyun.com/chapters/foundation.html","mainEntityOfPage":"https://axbook.euiyun.com/chapters/foundation.html","inLanguage":"ko","isAccessibleForFree":true,"learningResourceType":"interactive textbook chapter","position":5,"image":"https://axbook.euiyun.com/og.png","dateModified":"2026-10-07","isPartOf":{"@type":"Book","@id":"https://axbook.euiyun.com/#book","name":"AXBook — 제조 현장을 위한 인터랙티브 AI 전환 교과서","url":"https://axbook.euiyun.com/"},"publisher":{"@type":"Organization","name":"AXBook","url":"https://axbook.euiyun.com/"},"description":"결측·중복·단위 혼재로 가득한 공장 데이터를 AI가 쓸 수 있게 만드는 법. 데이터 품질 6차원(DAMA-DMBOK, ISO 8000), 오너·스튜어드·커스터디언, 데이터 계약과 리니지, 메달리온 아키텍처와 데이터 메시를 인터랙티브로 익힌다."},{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"AXBook","item":"https://axbook.euiyun.com/"},{"@type":"ListItem","position":2,"name":"05 데이터 기반과 거버넌스","item":"https://axbook.euiyun.com/chapters/foundation.html"}]}]}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"TechArticle","headline":"데이터 기반과 거버넌스","name":"데이터 기반과 거버넌스 · AXBook","url":"https://axbook.euiyun.com/chapters/foundation.html","mainEntityOfPage":"https://axbook.euiyun.com/chapters/foundation.html","inLanguage":"ko","isAccessibleForFree":true,"learningResourceType":"interactive textbook chapter","position":5,"image":"https://axbook.euiyun.com/og.png","dateModified":"2026-10-08","isPartOf":{"@type":"Book","@id":"https://axbook.euiyun.com/#book","name":"AXBook — 제조 현장을 위한 인터랙티브 AI 전환 교과서","url":"https://axbook.euiyun.com/"},"publisher":{"@type":"Organization","name":"AXBook","url":"https://axbook.euiyun.com/"},"description":"결측·중복·단위 혼재로 가득한 공장 데이터를 AI가 쓸 수 있게 만드는 법. 데이터 품질 6차원(DAMA-DMBOK, ISO 8000), 오너·스튜어드·커스터디언, 데이터 계약과 리니지, 메달리온 아키텍처와 데이터 메시를 인터랙티브로 익힌다."},{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"AXBook","item":"https://axbook.euiyun.com/"},{"@type":"ListItem","position":2,"name":"05 데이터 기반과 거버넌스","item":"https://axbook.euiyun.com/chapters/foundation.html"}]}]}</script>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
 <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
 <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
@@ -296,7 +296,7 @@ change_policy: 열 추가는 통지, 열 이름·형식·단위 변경은 2주 �
       </svg>
       <figcaption><b>그림 5-3.</b> 중앙 집중형과 데이터 메시. 메시에서 도메인은 서로의 "데이터 제품"을 직접 소비하고, 공통 규칙은 플랫폼이 강제한다.</figcaption>
     </figure>
-    <p>대기업 제조사에서 순수한 메시를 그대로 적용하는 경우는 드물다. 현실적인 형태는 <strong>중앙 플랫폼 + 핵심 도메인 몇 곳의 데이터 제품화</strong>다. 품질·보전처럼 AI 과제 수요가 많은 도메인부터 오너와 스튜어드를 세우고, 그 도메인이 자기 골드 테이블을 책임지게 한다. 조직 운영 모델에 대해서는 <a href="people.html">12장</a>에서 더 다룬다.</p>
+    <p>대기업 제조사에서 순수한 메시를 그대로 적용하는 경우는 드물다. 현실적인 형태는 <strong>중앙 플랫폼 + 핵심 도메인 몇 곳의 데이터 제품화</strong>다. 품질·보전처럼 AI 과제 수요가 많은 도메인부터 오너와 스튜어드를 세우고, 그 도메인이 자기 골드 테이블을 책임지게 한다. 조직 운영 모델에 대해서는 <a href="people.html">13장</a>에서 더 다룬다.</p>
   </section>
 
   <!-- ============================================================ 7 -->
@@ -331,7 +331,7 @@ change_policy: 열 추가는 통지, 열 이름·형식·단위 변경은 2주 �
       </div>
       <div class="sim-note">왼쪽: 학습 데이터(가로·세로축은 두 공정 변수를 표준화한 값). 채운 점은 라벨, 노란 고리는 라벨이 뒤집힌 점, 실선은 오류 라벨로 학습한 경계, 점선은 깨끗한 라벨로 학습한 경계. 오른쪽: 깨끗한 시험 데이터에서 측정한 성능(오류율별 5회 평균). 무작위 오류에서는 단순 모델이 꽤 버티지만, 체계적 오류에서는 정확도보다 불량 재현율이 먼저 무너진다. 불량 비율 40%의 교육용 합성 데이터다.</div>
     </div>
-    <p>실험이 보여 주는 교훈은 세 가지다. 첫째, 라벨 오류는 데이터 양으로 완전히 상쇄되지 않는다. 특히 체계적 오류는 데이터를 늘려도 편향이 그대로 남는다. 둘째, 복잡한(외우는) 모델일수록 잘못된 라벨까지 외워 무작위 오류에 더 민감하다. 셋째, <strong>정확도 하나만 보면 체계적 오류를 놓친다</strong>. 불량 재현율처럼 업무에 의미 있는 지표를 함께 봐야 한다. 이 지표 선택은 <a href="shopfloor.html">10장</a>의 오탐·미탐 비용 논의로 이어진다.</p>
+    <p>실험이 보여 주는 교훈은 세 가지다. 첫째, 라벨 오류는 데이터 양으로 완전히 상쇄되지 않는다. 특히 체계적 오류는 데이터를 늘려도 편향이 그대로 남는다. 둘째, 복잡한(외우는) 모델일수록 잘못된 라벨까지 외워 무작위 오류에 더 민감하다. 셋째, <strong>정확도 하나만 보면 체계적 오류를 놓친다</strong>. 불량 재현율처럼 업무에 의미 있는 지표를 함께 봐야 한다. 이 지표 선택은 <a href="shopfloor.html">11장</a>의 오탐·미탐 비용 논의로 이어진다.</p>
 
     <h3>AI-ready data 체크리스트</h3>
     <p>AI 과제를 시작하기 전에 대상 데이터에 대해 아래 질문에 "예"라고 답할 수 있는지 확인하자. 절반 이상이 "아니오"라면, 모델보다 데이터 기반 작업을 먼저 과제 범위에 넣는 것이 정직한 계획이다.</p>
@@ -344,7 +344,7 @@ change_policy: 열 추가는 통지, 열 이름·형식·단위 변경은 2주 �
       <li><b>충분한 기간·사례가 있다</b>: 드문 불량·고장의 사례 수가 학습·검증에 쓸 만큼 있다.</li>
       <li><b>원본이 보존된다</b>: 브론즈 층에 원본이 있어 규칙이 바뀌면 다시 처리할 수 있다.</li>
       <li><b>변경이 통지된다</b>: 상류 스키마·코드 변경이 데이터 계약에 따라 사전 통지된다.</li>
-      <li><b>접근 권한과 보안 등급이 정해져 있다</b>: 외부 AI 서비스에 보내도 되는지 판단할 수 있다(<a href="governance.html">11장</a>).</li>
+      <li><b>접근 권한과 보안 등급이 정해져 있다</b>: 외부 AI 서비스에 보내도 되는지 판단할 수 있다(<a href="governance.html">12장</a>).</li>
       <li><b>적시에 들어온다</b>: 모델이 예측해야 하는 시점보다 데이터가 먼저 도착한다.</li>
     </ul>
   </section>

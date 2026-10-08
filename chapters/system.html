@@ -19,7 +19,7 @@
 <meta property="og:image:height" content="630">
 <meta property="og:locale" content="ko_KR">
 <meta name="twitter:card" content="summary_large_image">
-<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"TechArticle","headline":"전체를 보는 AX: 인터페이스, 인프라 바닥, 가치 실현","name":"전체를 보는 AX: 인터페이스, 인프라 바닥, 가치 실현 · AXBook","url":"https://axbook.euiyun.com/chapters/system.html","mainEntityOfPage":"https://axbook.euiyun.com/chapters/system.html","inLanguage":"ko","isAccessibleForFree":true,"learningResourceType":"interactive textbook chapter","position":15,"image":"https://axbook.euiyun.com/og.png","dateModified":"2026-10-07","isPartOf":{"@type":"Book","@id":"https://axbook.euiyun.com/#book","name":"AXBook — 제조 현장을 위한 인터랙티브 AI 전환 교과서","url":"https://axbook.euiyun.com/"},"publisher":{"@type":"Organization","name":"AXBook","url":"https://axbook.euiyun.com/"},"description":"팀마다 AX 목표를 세웠는데 전체 리드타임은 그대로인 이유. 팀 간 산출물 계약과 플랫폼 API가 없는 AX의 한계, 하위 조직의 효율을 돈으로 바꾸는 책임은 누구에게 있는지, 팀에 AX를 요구하기 전에 회사가 깔아야 할 인프라 바닥은 무엇인지, 그리고 전체를 보는 사람이 분기마다 확인할 질문을 다룬다."},{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"AXBook","item":"https://axbook.euiyun.com/"},{"@type":"ListItem","position":2,"name":"15 전체를 보는 AX: 인터페이스, 인프라 바닥, 가치 실현","item":"https://axbook.euiyun.com/chapters/system.html"}]}]}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"TechArticle","headline":"전체를 보는 AX: 인터페이스, 인프라 바닥, 가치 실현","name":"전체를 보는 AX: 인터페이스, 인프라 바닥, 가치 실현 · AXBook","url":"https://axbook.euiyun.com/chapters/system.html","mainEntityOfPage":"https://axbook.euiyun.com/chapters/system.html","inLanguage":"ko","isAccessibleForFree":true,"learningResourceType":"interactive textbook chapter","position":16,"image":"https://axbook.euiyun.com/og.png","dateModified":"2026-10-08","isPartOf":{"@type":"Book","@id":"https://axbook.euiyun.com/#book","name":"AXBook — 제조 현장을 위한 인터랙티브 AI 전환 교과서","url":"https://axbook.euiyun.com/"},"publisher":{"@type":"Organization","name":"AXBook","url":"https://axbook.euiyun.com/"},"description":"팀마다 AX 목표를 세웠는데 전체 리드타임은 그대로인 이유. 팀 간 산출물 계약과 플랫폼 API가 없는 AX의 한계, 하위 조직의 효율을 돈으로 바꾸는 책임은 누구에게 있는지, 팀에 AX를 요구하기 전에 회사가 깔아야 할 인프라 바닥은 무엇인지, 그리고 전체를 보는 사람이 분기마다 확인할 질문을 다룬다."},{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"AXBook","item":"https://axbook.euiyun.com/"},{"@type":"ListItem","position":2,"name":"16 전체를 보는 AX: 인터페이스, 인프라 바닥, 가치 실현","item":"https://axbook.euiyun.com/chapters/system.html"}]}]}</script>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
 <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
 <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
@@ -46,7 +46,7 @@
 <body data-chapter="system">
 <main class="chapter">
   <header class="chapter-hero">
-    <div class="eyebrow">Chapter 15</div>
+    <div class="eyebrow">Chapter 16</div>
     <h1>전체를 보는 AX: 인터페이스, 인프라 바닥, 가치 실현</h1>
     <p class="lead">팀마다 AX 목표를 세우고 각자 성과를 냈다. 그런데 고객이 체감하는 리드타임은 그대로다. 사내 플랫폼은 API를 열어 주지 않고, 팀과 팀 사이를 오가는 산출물은 정의되어 있지 않은데, 각 팀은 자기 안의 효율만 계산한다. 부품 하나하나를 잘 설계한다고 좋은 시스템이 되지는 않는다. 이 장은 AX를 <strong>시스템 설계의 문제</strong>로 다시 본다. 팀 사이의 인터페이스는 누가 설계하는지, 아래에서 만든 효율을 돈으로 바꾸는 일은 누구의 몫인지, 그리고 팀에 AX를 요구하기 전에 회사가 먼저 깔아야 할 바닥은 무엇인지를 다룬다.</p>
     <ul class="objectives">
@@ -65,7 +65,7 @@
     <p>그런데 클레임 한 건이 접수부터 회신까지 걸리는 시간은 21일에서 19일로 줄었을 뿐이다. 실 기획이 한 건을 처음부터 끝까지 따라가 보고서야 이유가 보였다. 21일 중 팀 안에서 실제로 일하는 시간은 7일 남짓이었다. 나머지는 <strong>팀과 팀 사이</strong>에 있었다. 다음 팀이 메일을 확인할 때까지 기다리는 시간, 받은 자료의 양식이 맞지 않아 다시 요청하는 시간, 협력사 시스템과 사내 시스템을 사람이 옮겨 적는 시간. 다섯 팀이 각자 자기 부품을 빠르게 만들었지만, 부품 사이의 연결은 아무도 설계하지 않았다.</p>
     <div class="callout warn">
       <strong>부품 설계와 시스템 설계는 다른 일이다</strong>
-      <p>팀 단위 AX 목표는 각 팀을 하나의 부품처럼 다룬다. 부품마다 성능을 높이는 것은 필요하지만, 시스템의 성능은 부품 사이의 인터페이스와 흐름에서 결정되는 경우가 많다. 부품만 잘 설계해 본 사람에게 갑자기 시스템 전체를 맡기고 부품 단위 가치만 묻는 것과 같다. 전체를 보는 사람과 전체를 설계하는 권한이 없으면, 팀 목표의 합은 조직의 결과가 되지 않는다(<a href="goals.html">13장</a>의 "합은 전체가 아니다").</p>
+      <p>팀 단위 AX 목표는 각 팀을 하나의 부품처럼 다룬다. 부품마다 성능을 높이는 것은 필요하지만, 시스템의 성능은 부품 사이의 인터페이스와 흐름에서 결정되는 경우가 많다. 부품만 잘 설계해 본 사람에게 갑자기 시스템 전체를 맡기고 부품 단위 가치만 묻는 것과 같다. 전체를 보는 사람과 전체를 설계하는 권한이 없으면, 팀 목표의 합은 조직의 결과가 되지 않는다(<a href="goals.html">14장</a>의 "합은 전체가 아니다").</p>
     </div>
   </section>
 
@@ -134,7 +134,7 @@
         <text x="610" y="210" text-anchor="middle" class="t-dim">AI·자동화는 계약 위에서 흐름 전체를 잇는다</text>
         <text x="215" y="210" text-anchor="middle" class="t-dim">AI는 팀 안에만 붙는다</text>
       </svg>
-      <figcaption><b>그림 15-1.</b> 부품 최적화와 인터페이스 설계. 왼쪽은 팀마다 자기 안을 최적화했지만 팀 사이가 메일·엑셀·재입력으로 이어진 상태다. 오른쪽은 팀 사이에 산출물 계약과 공통 데이터, API가 있어 팀 안은 자유롭게 바뀌어도 흐름이 유지된다. <a href="questions.html">19장</a>의 "좁은 허리"가 팀 사이에 적용된 모습이다.</figcaption>
+      <figcaption><b>그림 16-1.</b> 부품 최적화와 인터페이스 설계. 왼쪽은 팀마다 자기 안을 최적화했지만 팀 사이가 메일·엑셀·재입력으로 이어진 상태다. 오른쪽은 팀 사이에 산출물 계약과 공통 데이터, API가 있어 팀 안은 자유롭게 바뀌어도 흐름이 유지된다. <a href="questions.html">20장</a>의 "좁은 허리"가 팀 사이에 적용된 모습이다.</figcaption>
     </figure>
 
     <h3>산출물 계약: 팀의 API</h3>
@@ -152,7 +152,7 @@
     </table></div>
 
     <h3>계층별 책임: 인터페이스는 위로 갈수록 커진다</h3>
-    <p>팀은 자기 팀 안을 설계할 수 있지만, 팀 사이의 계약은 양쪽 팀 위에 있는 사람이 정해야 한다. 이 원칙을 <a href="goals.html">13장</a>의 "각 계층은 그 계층만 할 수 있는 일을 목표로"와 겹쳐 보면 책임이 깔끔하게 나뉜다.</p>
+    <p>팀은 자기 팀 안을 설계할 수 있지만, 팀 사이의 계약은 양쪽 팀 위에 있는 사람이 정해야 한다. 이 원칙을 <a href="goals.html">14장</a>의 "각 계층은 그 계층만 할 수 있는 일을 목표로"와 겹쳐 보면 책임이 깔끔하게 나뉜다.</p>
     <div class="table-wrap"><table>
       <thead><tr><th>계층</th><th>설계 책임</th><th>AX 목표 예시</th></tr></thead>
       <tbody>
@@ -169,9 +169,9 @@
       <thead><tr><th>방법</th><th>장점</th><th>주의</th><th>성격</th></tr></thead>
       <tbody>
         <tr><td><b>화면 자동화(RPA)</b></td><td>당장 가능</td><td>화면이 바뀌면 깨진다. 권한·감사 추적이 약하다</td><td>임시 다리. 폐기 계획과 함께</td></tr>
-        <tr><td><b>정기 내보내기·읽기 전용 복제</b></td><td>분석·검색에는 충분</td><td>최신성 지연, 등급·권한 관리 필요(<a href="governance.html">11장</a>)</td><td>과도기 표준</td></tr>
+        <tr><td><b>정기 내보내기·읽기 전용 복제</b></td><td>분석·검색에는 충분</td><td>최신성 지연, 등급·권한 관리 필요(<a href="governance.html">12장</a>)</td><td>과도기 표준</td></tr>
         <tr><td><b>플랫폼 조직에 API 요청</b></td><td>정식·안정적</td><td>대기열이 길다. 요청이 쌓여야 우선순위가 오른다</td><td>목표 상태</td></tr>
-        <tr><td><b>AI 에이전트용 표준 커넥터</b></td><td>여러 AI 도구가 같은 방식으로 연결(<a href="agents.html">9장</a>의 MCP 같은 표준)</td><td>API가 먼저 있어야 한다. 권한 최소화 필수</td><td>API 위의 한 층</td></tr>
+        <tr><td><b>AI 에이전트용 표준 커넥터</b></td><td>여러 AI 도구가 같은 방식으로 연결(<a href="agents.html">10장</a>의 MCP 같은 표준)</td><td>API가 먼저 있어야 한다. 권한 최소화 필수</td><td>API 위의 한 층</td></tr>
       </tbody>
     </table></div>
     <div class="callout tip">
@@ -202,10 +202,10 @@
         <text x="315" y="210" text-anchor="middle" class="t-sm">이 상자가 비어 있으면</text>
         <text x="315" y="226" text-anchor="middle" class="t-sm">돈은 생기지 않는다</text>
       </svg>
-      <figcaption><b>그림 15-2.</b> 해방된 용량이 금액이 되는 경로. 위 두 경로는 비교적 직접 금액이 되고, 재배치는 새 일의 성과를 따로 측정해야 하며, 결정이 없으면 대부분 사라진다. 가운데 "결정"은 팀이나 취합 담당이 아니라 예산·인력·계획을 바꿀 수 있는 사람만 할 수 있다.</figcaption>
+      <figcaption><b>그림 16-2.</b> 해방된 용량이 금액이 되는 경로. 위 두 경로는 비교적 직접 금액이 되고, 재배치는 새 일의 성과를 따로 측정해야 하며, 결정이 없으면 대부분 사라진다. 가운데 "결정"은 팀이나 취합 담당이 아니라 예산·인력·계획을 바꿀 수 있는 사람만 할 수 있다.</figcaption>
     </figure>
 
-    <p>그래서 "아래의 효율을 돈으로 바꾸는 것은 누구의 몫인가"에 대한 이 책의 답은 이렇다. <strong>그 돈을 실제로 움직일 수 있는 결정권자의 몫이다.</strong> 보통은 인력 계획과 예산을 가진 사업부, 경우에 따라 예산을 가진 실이다. 팀이나 실의 취합 담당자는 절감 시간을 더할 수는 있지만 돈으로 바꿀 수는 없다. 더하기만 한 숫자를 돈으로 표기하면 장부상 가치만 커진다(<a href="goals.html#review">13장</a>의 증거 사다리).</p>
+    <p>그래서 "아래의 효율을 돈으로 바꾸는 것은 누구의 몫인가"에 대한 이 책의 답은 이렇다. <strong>그 돈을 실제로 움직일 수 있는 결정권자의 몫이다.</strong> 보통은 인력 계획과 예산을 가진 사업부, 경우에 따라 예산을 가진 실이다. 팀이나 실의 취합 담당자는 절감 시간을 더할 수는 있지만 돈으로 바꿀 수는 없다. 더하기만 한 숫자를 돈으로 표기하면 장부상 가치만 커진다(<a href="goals.html#review">14장</a>의 증거 사다리).</p>
     <div class="table-wrap"><table>
       <thead><tr><th>누가</th><th>무엇을 하나</th><th>하지 말아야 할 것</th></tr></thead>
       <tbody>
@@ -252,7 +252,7 @@
     <p>"각 팀에 AX를 요구하기 전에 회사가 인프라부터 갖춰야 하지 않나?" 이 질문에 대한 이 책의 답은 <strong>절반은 그렇다</strong>이다. 어느 절반이 맞는지 구분하는 것이 중요하다. 양쪽 극단이 모두 실패하기 때문이다.</p>
     <div class="compare">
       <div class="before"><h4>바닥 없이 팀에 요구할 때</h4><ul>
-        <li>승인된 도구가 없어 개인 계정으로 우회한다(섀도 AI, <a href="governance.html">11장</a>)</li>
+        <li>승인된 도구가 없어 개인 계정으로 우회한다(섀도 AI, <a href="governance.html">12장</a>)</li>
         <li>API가 없어 팀마다 화면 자동화를 만들고, 화면이 바뀔 때마다 깨진다</li>
         <li>팀마다 다른 도구와 데이터 사본이 생긴다</li>
         <li>시간 배정이 없어 결국 개인의 야근으로 메운다</li>
@@ -261,7 +261,7 @@
         <li>전사 플랫폼 구축에 수년이 걸리고 그동안 성과가 없다</li>
         <li>쓸 사람의 요구 없이 만든 플랫폼은 완성되어도 쓰이지 않는다</li>
         <li>완성 시점에는 기술이 이미 바뀌어 있다</li>
-        <li>현장은 기다리다 지쳐 각자 우회한다(<a href="roadmap.html">16장</a>의 수평 접근)</li>
+        <li>현장은 기다리다 지쳐 각자 우회한다(<a href="roadmap.html">17장</a>의 수평 접근)</li>
       </ul></div>
     </div>
     <p>해법은 인프라를 두 층으로 나누는 것이다. 아래층은 <strong>어느 팀도 혼자 만들 수 없고, 모든 팀이 공통으로 필요한 최소 바닥</strong>이다. 이것은 팀에 무엇인가를 요구하기 <b>전에</b> 회사가 먼저 깔아야 한다. 그 위층, 즉 특정 업무에 필요한 데이터 파이프라인, 연동, 전용 모델 같은 인프라는 등대 프로젝트와 <b>함께</b> 자라게 한다. 바닥은 먼저, 나머지는 쓰면서.</p>
@@ -289,7 +289,7 @@
         <path d="M230 30 C 420 30 560 60 700 140" class="s-acc2" stroke-dasharray="4 4"/>
         <text x="770" y="52" text-anchor="end" class="t-sm">과제가 만든 부품 중 공통인 것은 바닥으로 내려간다</text>
       </svg>
-      <figcaption><b>그림 15-3.</b> 두 층의 인프라. 아래 바닥은 팀에 AX를 요구하기 전에 회사가 깐다. 그 위의 인프라는 등대 프로젝트마다 필요한 만큼 만들고, 여러 과제가 공통으로 쓰게 된 부품(예: 이슈 카드 API, 기준 레지스트리)은 바닥으로 내려 다음 과제가 더 빨리 시작하게 한다.</figcaption>
+      <figcaption><b>그림 16-3.</b> 두 층의 인프라. 아래 바닥은 팀에 AX를 요구하기 전에 회사가 깐다. 그 위의 인프라는 등대 프로젝트마다 필요한 만큼 만들고, 여러 과제가 공통으로 쓰게 된 부품(예: 이슈 카드 API, 기준 레지스트리)은 바닥으로 내려 다음 과제가 더 빨리 시작하게 한다.</figcaption>
     </figure>
 
     <h3>최소 공통 바닥의 목록</h3>
@@ -301,12 +301,12 @@
         <tr><td><b>데이터 접근 경로</b></td><td>핵심 업무 시스템의 읽기 전용 조회 경로(복제본·조회 API)</td><td>엑셀 다운로드와 수작업 취합</td></tr>
         <tr><td><b>API·커넥터 표준</b></td><td>신규·개편 시스템은 API 제공을 필수로, AI 도구용 표준 커넥터 방식 결정</td><td>팀마다 화면 자동화, 깨지기 쉬운 연결</td></tr>
         <tr><td><b>컴퓨트와 사용 예산</b></td><td>사내 AI 서비스의 충분한 처리 용량, 팀별 사용량 상한과 증액 절차</td><td>느려서 안 쓰거나, 쓰다 막힌다</td></tr>
-        <tr><td><b>샌드박스</b></td><td>비민감 데이터로 누구나 만들어 볼 수 있는 공간과 졸업 경로(<a href="questions.html">19장</a>)</td><td>시도 자체가 승인 대상이 된다</td></tr>
-        <tr><td><b>지원 창구</b></td><td>막혔을 때 물어볼 CoE, 분기마다 상주하는 FDE(<a href="people.html">12장</a>)</td><td>잘하는 몇 사람에게 질문이 몰린다</td></tr>
+        <tr><td><b>샌드박스</b></td><td>비민감 데이터로 누구나 만들어 볼 수 있는 공간과 졸업 경로(<a href="questions.html">20장</a>)</td><td>시도 자체가 승인 대상이 된다</td></tr>
+        <tr><td><b>지원 창구</b></td><td>막혔을 때 물어볼 CoE, 분기마다 상주하는 FDE(<a href="people.html">13장</a>)</td><td>잘하는 몇 사람에게 질문이 몰린다</td></tr>
         <tr><td><b>시간</b></td><td>참여자 업무 시간의 공식 배정과 그만큼 덜어 준 일</td><td>"본업 + AX"가 야근이 된다</td></tr>
       </tbody>
     </table></div>
-    <p>목록을 보면 대부분 기술보다 <strong>정책과 결정</strong>에 가깝다는 것을 알 수 있다. 승인 도구를 정하는 일, 데이터 등급을 붙이는 규칙, "신규 시스템은 API 필수"라는 원칙, 시간 배정은 큰 돈보다 위에서의 결정이 필요하다. 그래서 "인프라가 없어서 못 한다"의 상당 부분은 사실 "결정이 없어서 못 한다"이다. 바닥에 드는 돈을 컴퓨트·플랫폼·사람 사이에 어떻게 나눌지는 <a href="roadmap.html">16장</a>, 바닥 위에서 일할 사람의 역할이 작동하는 조건(권한·시간·예산·지원·평가)은 <a href="people.html">12장</a>에서 다룬다.</p>
+    <p>목록을 보면 대부분 기술보다 <strong>정책과 결정</strong>에 가깝다는 것을 알 수 있다. 승인 도구를 정하는 일, 데이터 등급을 붙이는 규칙, "신규 시스템은 API 필수"라는 원칙, 시간 배정은 큰 돈보다 위에서의 결정이 필요하다. 그래서 "인프라가 없어서 못 한다"의 상당 부분은 사실 "결정이 없어서 못 한다"이다. 바닥에 드는 돈을 컴퓨트·플랫폼·사람 사이에 어떻게 나눌지는 <a href="roadmap.html">17장</a>, 바닥 위에서 일할 사람의 역할이 작동하는 조건(권한·시간·예산·지원·평가)은 <a href="people.html">13장</a>에서 다룬다.</p>
 
     <h3>요구는 바닥만큼만</h3>
     <p>회사가 팀에 요구하는 AX의 수준과, 회사가 깔아 준 바닥의 수준은 짝이 맞아야 한다. 바닥보다 높은 수준을 요구하면 그 차이는 현장의 우회와 야근으로 채워진다.</p>
@@ -316,12 +316,12 @@
         <tr><td><b>① 개인 업무에 AI 활용</b><br>문서 요약, 초안 작성, 검색</td><td>승인된 AI 도구, 데이터 등급별 사용 기준(한 줄 안내), 기본 교육</td></tr>
         <tr><td><b>② 팀 업무 자동화</b><br>반복 작업 제거, 팀 내 데이터 정리</td><td>① + 데이터 접근 경로, 샌드박스, 지원 창구, 공식 배정 시간</td></tr>
         <tr><td><b>③ 팀 간 흐름의 AX</b><br>인계 자동화, 흐름 리드타임 단축</td><td>② + 시스템 API, 산출물 계약 관리 주체(실), 플랫폼 조직의 API 목표</td></tr>
-        <tr><td><b>④ 에이전트에 의한 실행</b><br>시스템에 쓰고 행동하는 AI</td><td>③ + 최소 권한 설계, 감사 로그, 평가 세트와 모니터링, 사람의 승인 지점(<a href="agents.html">9장</a>·<a href="governance.html">11장</a>)</td></tr>
+        <tr><td><b>④ 에이전트에 의한 실행</b><br>시스템에 쓰고 행동하는 AI</td><td>③ + 최소 권한 설계, 감사 로그, 평가 세트와 모니터링, 사람의 승인 지점(<a href="agents.html">10장</a>·<a href="governance.html">12장</a>)</td></tr>
       </tbody>
     </table></div>
     <div class="callout tip">
       <strong>목표 시트에 "전제 조건" 칸을 두자</strong>
-      <p>팀의 AX 목표를 세울 때 "이 목표를 달성하려면 회사가 무엇을 먼저 제공해야 하는가"를 함께 적게 하자. 예: "클레임 데이터 조회 API(사업부, 2분기까지)". 전제 조건이 기한까지 제공되지 않으면 목표를 조정한다. 이렇게 하면 바닥의 공백이 현장의 실패로 기록되지 않고, 바닥을 깔 책임이 있는 조직의 과제로 드러난다. <a href="goals.html">13장</a>의 캐치볼에서 아래가 위에 요구할 수 있는 가장 구체적인 항목이 바로 이것이다.</p>
+      <p>팀의 AX 목표를 세울 때 "이 목표를 달성하려면 회사가 무엇을 먼저 제공해야 하는가"를 함께 적게 하자. 예: "클레임 데이터 조회 API(사업부, 2분기까지)". 전제 조건이 기한까지 제공되지 않으면 목표를 조정한다. 이렇게 하면 바닥의 공백이 현장의 실패로 기록되지 않고, 바닥을 깔 책임이 있는 조직의 과제로 드러난다. <a href="goals.html">14장</a>의 캐치볼에서 아래가 위에 요구할 수 있는 가장 구체적인 항목이 바로 이것이다.</p>
     </div>
     <div class="callout warn">
       <strong>바닥만 깔고 기다리는 것도 실패다</strong>
@@ -341,7 +341,7 @@
       <li>AX 참여자의 업무 시간 중 공식 배정된 비율은 얼마이고, 그만큼 덜어 준 일은 무엇인가?</li>
       <li>팀에 요구한 AX 수준에 맞는 바닥을 회사가 제공했는가? 팀 목표의 전제 조건 중 기한을 넘긴 것은 무엇인가?</li>
       <li>바닥을 깐 조직의 성과를 "구축 완료"가 아니라 사용률·재사용 건수·우회 비용 감소로 재고 있는가?</li>
-      <li>바닥의 가장 큰 공백(데이터·API·사람·컴퓨트)에 이번 분기 투자가 가는가(<a href="roadmap.html">16장</a>)? 새 역할마다 덜어 준 일이 있는가(<a href="people.html">12장</a>)?</li>
+      <li>바닥의 가장 큰 공백(데이터·API·사람·컴퓨트)에 이번 분기 투자가 가는가(<a href="roadmap.html">17장</a>)? 새 역할마다 덜어 준 일이 있는가(<a href="people.html">13장</a>)?</li>
     </ul>
   </section>
 
