@@ -146,7 +146,7 @@
         <div class="stat"><span class="k">Cpk 이상 전</span><span class="v" id="sp-o3">—</span></div>
         <div class="stat"><span class="k">Cpk 이상 후</span><span class="v" id="sp-o4">—</span></div>
       </div>
-      <div class="sim-note">관리 한계는 과거 안정 구간에서 구한 μ₀ = 0, σ₀ = 1로 고정했고, 규격은 ±4σ(이상 전 Cpk 1.33)로 두었다. 빨간 점이 규칙 위반, 점 위 숫자가 위반한 규칙 번호다. 해볼 것: 평균 이동 1σ에서 규칙 1만 켜면 탐지가 얼마나 늦어지는지, 규칙을 모두 켜면 오경보가 얼마나 늘어나는지 "새 데이터 생성"을 여러 번 눌러 비교하자.</div>
+      <div class="sim-note">관리 한계는 과거 안정 구간에서 구한 μ₀ = 0, σ₀ = 1로 고정했고, 규격은 ±4σ(이상 전 Cpk 1.33)로 두었다. 빨간 점은 해당 시점까지의 관측 창에서 규칙이 발동했음을 표시하며, 점 위 숫자는 규칙 번호다. 규칙 2·3에서는 마지막 점 자체가 2σ·1σ 밖이 아니어도 앞선 점들로 창 조건이 충족되면 신호가 나온다. 해볼 것: 평균 이동 1σ에서 규칙 1만 켜면 탐지가 얼마나 늦어지는지, 규칙을 모두 켜면 오경보가 얼마나 늘어나는지 "새 데이터 생성"을 여러 번 눌러 비교하자.</div>
     </div>
     <div class="callout">
       <strong>관리도는 사라지지 않는다</strong>
@@ -456,10 +456,10 @@
     for (i = 0; i < n; i++) {
       if (rules[0].checked && Math.abs(x[i]) > 3) flags[i].push(1);
       if (rules[1].checked && i >= 2) {
-        [1, -1].forEach(function (sg) { c = 0; for (j = i - 2; j <= i; j++) if (sg * x[j] > 2) c++; if (c >= 2 && sg * x[i] > 2) flags[i].push(2); });
+        [1, -1].forEach(function (sg) { c = 0; for (j = i - 2; j <= i; j++) if (sg * x[j] > 2) c++; if (c >= 2) flags[i].push(2); });
       }
       if (rules[2].checked && i >= 4) {
-        [1, -1].forEach(function (sg) { c = 0; for (j = i - 4; j <= i; j++) if (sg * x[j] > 1) c++; if (c >= 4 && sg * x[i] > 1) flags[i].push(3); });
+        [1, -1].forEach(function (sg) { c = 0; for (j = i - 4; j <= i; j++) if (sg * x[j] > 1) c++; if (c >= 4) flags[i].push(3); });
       }
       if (rules[3].checked && i >= 7) {
         [1, -1].forEach(function (sg) { c = 0; for (j = i - 7; j <= i; j++) if (sg * x[j] > 0) c++; if (c === 8) flags[i].push(4); });

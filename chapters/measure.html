@@ -208,7 +208,7 @@
         <div class="stat"><span class="k">이중차분 추정</span><span class="v" id="dd-o2">—</span></div>
         <div class="stat"><span class="k">실제 효과</span><span class="v" id="dd-o3">—</span></div>
       </div>
-      <div class="sim-note">기준 작업 시간 120분에서 출발해, 도입팀과 비교팀의 건별 시간을 무작위로 뽑는 교육용 모델이다. 막대 끝의 선은 95% 신뢰구간이다. 외부 변화는 두 팀 모두에 같은 비율로 작용하고, 도구 효과는 도입팀에서만 기준 시간의 일정 비율을 줄인다고 보았다. 해볼 것: ① 외부 변화를 −15%로 두면 전후 비교는 효과를 두 배로 부풀린다. 이중차분은 실제 효과 근처에 있다. ② 측정 건수를 3건으로 줄이고 "다시 뽑기"를 여러 번 눌러 보자. 추정치가 크게 흔들리고 신뢰구간이 0을 넘나든다. 두 건을 재 보고 연간 효과를 곱하는 것이 위험한 이유다.</div>
+      <div class="sim-note">기준 작업 시간 120분에서 출발해, 도입팀과 비교팀의 건별 시간을 무작위로 뽑는 교육용 모델이다. 막대 끝의 선은 독립 표본 평균에 대한 Welch 자유도의 t 근사 95% 구간이다. 모든 절감률은 표본 평균이 아닌 고정 기준 120분으로 나눈다. 건별 시간은 평균과 변동계수를 보존하는 양수 로그정규분포로 뽑는다. 소표본·큰 편차에서는 분포의 비대칭 때문에 t 근사도 부정확할 수 있어 추가 측정이 필요하다. 외부 변화는 두 팀 모두에 같은 비율로 작용하고, 도구 효과는 도입팀에서만 기준 시간의 일정 비율을 줄인다고 보았다. 해볼 것: ① 외부 변화를 −15%로 두면 전후 비교는 효과를 두 배로 부풀린다. 이중차분은 실제 효과 근처에 있다. ② 측정 건수를 3건으로 줄이고 "다시 뽑기"를 여러 번 눌러 보자. 추정치가 크게 흔들리고 신뢰구간이 0을 넘나든다. 두 건을 재 보고 연간 효과를 곱하는 것이 위험한 이유다.</div>
     </div>
   </section>
 
@@ -216,7 +216,7 @@
   <section id="sample">
     <h2>얼마나 믿을 수 있나: 표본 크기와 신뢰구간</h2>
     <p>사무·지식 업무의 건당 작업 시간은 편차가 크다. 같은 8D 보고서라도 단순한 건은 1시간, 복잡한 건은 하루가 걸린다. 그래서 몇 건만 재면 평균이 우연에 크게 흔들린다. 필요한 표본 수는 편차의 크기와 원하는 정밀도로 대략 계산할 수 있다.</p>
-    <div class="formula">$$n \approx \left(\frac{z \cdot CV}{E}\right)^{2}$$<div class="where">여기서 \(CV\)는 건당 시간의 변동계수(표준편차 ÷ 평균), \(E\)는 허용 오차(평균 대비 비율), \(z\)는 신뢰수준에 따른 값(95%면 약 1.96)이다. 예: 변동계수 40%, 허용 오차 ±10%면 약 61건이 필요하다.</div></div>
+    <div class="formula">$$n \approx \left(\frac{z \cdot CV}{E}\right)^{2}$$<div class="where">여기서 \(CV\)는 건당 시간의 변동계수(표준편차 ÷ 평균), \(E\)는 허용 오차(평균 대비 비율), \(z\)는 신뢰수준에 따른 값(95%면 약 1.96)이다. 예: 변동계수 40%, 허용 오차 ±10%면 올림하여 약 62건이 필요하다.</div></div>
     <p>효과가 있는지 없는지를 두 그룹 비교로 판단하려면 더 많은 표본이 필요하다. 효과가 작을수록, 편차가 클수록 필요한 건수는 제곱으로 늘어난다. 그래서 작은 효과를 정밀하게 증명하려 애쓰기보다, <b>로그로 모든 건을 자동 측정</b>할 수 있게 만드는 편이 대개 더 싸다.</p>
 
     <div class="sim" id="sim-n">
@@ -365,7 +365,7 @@
         <button class="opt">약 15건</button>
         <button class="opt" data-correct>약 60건</button>
         <button class="opt">약 1,000건</button>
-      </div><div class="quiz-exp">n ≈ (1.96 × 0.4 / 0.1)² ≈ 61. 두 건을 재 보고 연간 건수를 곱하는 계산은 우연에 크게 흔들린다.</div></div>
+      </div><div class="quiz-exp">n ≈ (1.96 × 0.4 / 0.1)² = 61.4656으로, 필요한 정수 건수는 올림해 62건이다. 두 건을 재 보고 연간 건수를 곱하는 계산은 우연에 크게 흔들린다.</div></div>
 
       <div class="quiz-q"><p>5. 표준 불량 코드 체계를 정리한 기반 과제의 성과를 재는 방법으로 가장 적절한 묶음은?</p><div class="opts">
         <button class="opt">작업한 엑셀 파일 수</button>
@@ -426,21 +426,36 @@
   document.getElementById("dd-re").addEventListener("click", function () { baseSeed = (baseSeed * 7919 + 13) % 1000003; ddUpd(); });
   function sample(mu, cv, n) {
     var xs = [], s = 0, ss = 0;
-    for (var i = 0; i < n; i++) { var x = Math.max(5, mu * (1 + cv * nrm())); xs.push(x); s += x; }
+    for (var i = 0; i < n; i++) { var sigma2 = Math.log1p(cv * cv); var x = mu * Math.exp(Math.sqrt(sigma2) * nrm() - sigma2 / 2); xs.push(x); s += x; }
     var m = s / n; xs.forEach(function (x) { ss += (x - m) * (x - m); });
     return { m: m, v: ss / Math.max(1, n - 1) / n };
+  }
+  // NIST t(.975) table for df<=30; large-df Cornish-Fisher approximation.
+  function t95(df) {
+    var nu = Math.max(1, Math.floor(df));
+    var table = [0,12.706,4.303,3.182,2.776,2.571,2.447,2.365,2.306,2.262,2.228,2.201,2.179,2.160,2.145,2.131,2.120,2.110,2.101,2.093,2.086,2.080,2.074,2.069,2.064,2.060,2.056,2.052,2.048,2.045,2.042];
+    if (nu <= 30) return table[nu];
+    var z = 1.959963984540054;
+    return z + (z*z*z+z)/(4*nu) + (5*Math.pow(z,5)+16*z*z*z+3*z)/(96*nu*nu) + (3*Math.pow(z,7)+19*Math.pow(z,5)+17*z*z*z-15*z)/(384*nu*nu*nu);
+  }
+  function meanContrast(groups, signs, n, baseline) {
+    var value = 0, variance = 0, dfDen = 0;
+    groups.forEach(function (g, i) { value += signs[i] * g.m; variance += g.v; dfDen += g.v * g.v / (n-1); });
+    var df = dfDen > 0 ? variance * variance / dfDen : Infinity;
+    return { value: value / baseline, half: t95(df) * Math.sqrt(variance) / baseline, df: df };
   }
   cvD = AX.canvas("#cv-did", function (ctx, w, h) {
     var P = AX.palette();
     var e = ddE() / 100, s = ddS() / 100, n = ddN(), cv = ddV() / 100, mu = 120;
     seed = baseSeed;
     var Tb = sample(mu, cv, n), Ta = sample(mu * (1 - s) - mu * e, cv, n), Cb = sample(mu, cv, n), Ca = sample(mu * (1 - s), cv, n);
-    var naive = (Tb.m - Ta.m) / Tb.m, nSe = Math.sqrt(Tb.v + Ta.v) / Tb.m;
-    var did = ((Tb.m - Ta.m) - (Cb.m - Ca.m)) / Tb.m, dSe = Math.sqrt(Tb.v + Ta.v + Cb.v + Ca.v) / Tb.m;
+    var naiveCI = meanContrast([Tb, Ta], [1, -1], n, mu), didCI = meanContrast([Tb, Ta, Cb, Ca], [1, -1, -1, 1], n, mu);
+    var naive = naiveCI.value, nHalf = naiveCI.half;
+    var did = didCI.value, dHalf = didCI.half;
     var truth = e;
-    var rows = [["실제 효과", truth, 0, P.dim], ["전후 비교", naive, nSe, P.warn], ["이중차분", did, dSe, P.accent]];
+    var rows = [["실제 효과", truth, 0, P.dim], ["전후 비교", naive, nHalf, P.warn], ["이중차분", did, dHalf, P.accent]];
     var lo = -0.4, hi = 0.9;
-    rows.forEach(function (r) { lo = Math.min(lo, r[1] - 1.96 * r[2] - 0.05); hi = Math.max(hi, r[1] + 1.96 * r[2] + 0.05); });
+    rows.forEach(function (r) { lo = Math.min(lo, r[1] - r[2] - 0.05); hi = Math.max(hi, r[1] + r[2] + 0.05); });
     var x0 = Math.min(110, w * 0.25), x1 = w - 20, X = function (v) { return x0 + (v - lo) / (hi - lo) * (x1 - x0); };
     var bh = Math.min(30, (h - 70) / 4), gap = (h - 60 - 3 * bh) / 3;
     ctx.strokeStyle = P.grid; ctx.fillStyle = P.dim; ctx.font = "11px " + getComputedStyle(document.body).getPropertyValue("--mono"); ctx.textAlign = "center"; ctx.textBaseline = "top";
@@ -452,14 +467,14 @@
       ctx.font = font(12, true); ctx.fillStyle = P.text; ctx.textAlign = "right"; ctx.textBaseline = "middle"; ctx.fillText(r[0], x0 - 8, y + bh / 2);
       ctx.fillStyle = r[3]; ctx.globalAlpha = 0.8; ctx.fillRect(Math.min(X(0), X(r[1])), y, Math.abs(X(r[1]) - X(0)), bh); ctx.globalAlpha = 1;
       if (r[2] > 0) {
-        var a = X(r[1] - 1.96 * r[2]), b = X(r[1] + 1.96 * r[2]), yy = y + bh / 2;
+        var a = X(r[1] - r[2]), b = X(r[1] + r[2]), yy = y + bh / 2;
         ctx.strokeStyle = P.text; ctx.lineWidth = 1.5; ctx.beginPath(); ctx.moveTo(a, yy); ctx.lineTo(b, yy); ctx.moveTo(a, yy - 6); ctx.lineTo(a, yy + 6); ctx.moveTo(b, yy - 6); ctx.lineTo(b, yy + 6); ctx.stroke(); ctx.lineWidth = 1;
       }
     });
-    ctx.fillStyle = P.dim; ctx.font = font(11.5, false); ctx.textAlign = "center"; ctx.textBaseline = "bottom"; ctx.fillText("작업 시간 단축률(오른쪽일수록 효과 큼)", (x0 + x1) / 2, h - 2);
-    function f(v, se) { return Math.round(v * 100) + "%" + (se ? "<small> ±" + Math.round(1.96 * se * 100) + "%p</small>" : ""); }
-    AX.stat("dd-o1", '<span style="color:' + (Math.abs(naive - truth) > 0.08 ? "var(--bad)" : "var(--text)") + '">' + f(naive, nSe) + "</span>");
-    AX.stat("dd-o2", f(did, dSe));
+    ctx.fillStyle = P.dim; ctx.font = font(11.5, false); ctx.textAlign = "center"; ctx.textBaseline = "bottom"; ctx.fillText("기준 120분 대비 단축률(오른쪽일수록 효과 큼)", (x0 + x1) / 2, h - 2);
+    function f(v, half) { return Math.round(v * 100) + "%" + (half ? "<small> ±" + Math.round(half * 100) + "%p</small>" : ""); }
+    AX.stat("dd-o1", '<span style="color:' + (Math.abs(naive - truth) > 0.08 ? "var(--bad)" : "var(--text)") + '">' + f(naive, nHalf) + "</span>");
+    AX.stat("dd-o2", f(did, dHalf));
     AX.stat("dd-o3", Math.round(truth * 100) + "%");
   }, { aspect: 0.5, minHeight: 240, maxHeight: 320 });
 
