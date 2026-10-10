@@ -458,3 +458,8 @@ td.num, th.num { text-align: right; font-family: var(--mono); font-variant-numer
   .sb-topbar, .sb-drawer, .sb-toc, .sb-pager, .sb-foot, .sim-controls, .no-print { display: none !important; }
   body { background: #fff; }
 }
+
+/* Shareable simulator anchor links */
+.sim-link { margin-left: auto; flex: 0 0 auto; font: 12px var(--mono); color: var(--text-faint); }
+.sim-link:hover, .sim-link:focus-visible { color: var(--accent); text-decoration: none; }
+.sim { scroll-margin-top: 1rem; }
